@@ -120,7 +120,7 @@
     .col-lbl {
       font-family: var(--f-ui);
       font-weight: 700;
-      font-size: 10px;
+      font-size: 15px;
       letter-spacing: .28em;
       text-transform: uppercase;
       color: var(--muted);
@@ -144,10 +144,7 @@
       background: transparent;
       border: none; outline: none;
       font-family: var(--f-prompt);
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--ink-warm);
-      resize: none;
+      font-size: 18px;
       line-height: 1.55;
       min-height: 22px;
       max-height: 140px;
@@ -241,11 +238,7 @@
     }
     .query-text {
       font-family: var(--f-prompt);
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.65;
-      color: var(--ink-warm);
-      white-space: pre-wrap;
+      font-size: 18px;
       word-break: break-word;
     }
 
@@ -253,11 +246,7 @@
 
     .resp {
       font-family: var(--f-reply);
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.74;
-      color: var(--ink);
-      word-break: break-word;
+      font-size: 18px;
     }
     .resp p            { margin-bottom: .75em; }
     .resp p:last-child { margin-bottom: 0; }
@@ -536,9 +525,9 @@
   const LS_KEY = "tsc_history";
 
   const MODELS = [
-    { id: "claude-sonnet-4-20250514",  label: "Claude Sonnet 4"  },
-    { id: "claude-opus-4-20250514",    label: "Claude Opus 4"    },
-    { id: "claude-haiku-4-5-20251001", label: "Claude Haiku 4.5" },
+    { id: "claude-sonnet-4-6",         label: "Claude Sonnet 4.6" },
+    { id: "claude-opus-4-6",           label: "Claude Opus 4.6"   },
+    { id: "claude-haiku-4-5-20251001", label: "Claude Haiku 4.5"  },
   ];
 
   function loadHistory() {
@@ -721,13 +710,7 @@
           </div>
         )}
 
-        {/* PERSISTENT COLUMN LABELS */}
-        <div className="col-labels">
-          <div className="col-label-q"><span className="col-lbl">Inquiry</span></div>
-          <div className="col-label-r"><span className="col-lbl">Response</span></div>
-        </div>
-
-        {/* INPUT AT TOP */}
+        {/* INPUT AT TOP — above column labels */}
         <div className="input-wrap">
           <div className="input-left">
             <textarea
@@ -746,6 +729,12 @@
               Send
             </button>
           </div>
+        </div>
+
+        {/* PERSISTENT COLUMN LABELS */}
+        <div className="col-labels">
+          <div className="col-label-q"><span className="col-lbl">Inquiry</span></div>
+          <div className="col-label-r"><span className="col-lbl">Response</span></div>
         </div>
 
         {/* CONVERSATION */}
