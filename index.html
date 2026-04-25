@@ -493,9 +493,8 @@
       flex-shrink: 0;
     }
     .arch-header-title {
-      font-family: var(--f-ui); font-weight: 700; font-size: 13px;
-      letter-spacing: .24em; text-transform: uppercase; color: var(--ink);
-      margin-bottom: 4px;
+      font-family: var(--f-heading); font-weight: 400; font-size: 22px;
+      letter-spacing: .06em; color: var(--ink); margin-bottom: 6px;
     }
     .arch-header-sub {
       font-family: var(--f-reply); font-size: 15px; font-style: italic;
@@ -523,9 +522,9 @@
       margin-bottom: 24px;
     }
     .arch-step-label {
-      font-family: var(--f-ui); font-weight: 700; font-size: 11px;
-      letter-spacing: .24em; text-transform: uppercase; color: var(--ink);
-      margin-bottom: 8px; display: block;
+      font-family: var(--f-heading); font-weight: 400; font-size: 18px;
+      letter-spacing: .06em; color: var(--ink);
+      margin-bottom: 6px; display: block; line-height: 1.2;
     }
     .arch-step-desc {
       font-family: var(--f-reply); font-size: 14px; color: var(--ink-light);
@@ -822,7 +821,192 @@
     "Query & Submission Strategy",
   ];
 
-  function loadHistory() {
+  // ── Architecture: topics relevant to each phase ──
+  const ARCH_TOPICS_BY_PHASE = {
+    "Pre-Design / Programming": [
+      "Building Codes & Zoning","Setbacks, Height & Massing",
+      "Client Communication & Presentation","Fee Proposals & Contracts",
+      "Project Scheduling","Cost Estimation & Value Engineering","Consultant Coordination",
+    ],
+    "Feasibility & Site Analysis": [
+      "Building Codes & Zoning","Setbacks, Height & Massing",
+      "Sustainability & Energy Performance","Historic Preservation & Secretary Standards",
+      "Cost Estimation & Value Engineering","Client Communication & Presentation",
+      "Accessibility / ADA Compliance",
+    ],
+    "Schematic Design": [
+      "Building Codes & Zoning","Setbacks, Height & Massing","Materials & Specifications",
+      "Structural Systems & Coordination","Sustainability & Energy Performance",
+      "Accessibility / ADA Compliance","Fire & Life Safety",
+      "Client Communication & Presentation","Cost Estimation & Value Engineering",
+      "Consultant Coordination","Historic Preservation & Secretary Standards",
+    ],
+    "Design Development": [
+      "Materials & Specifications","Exterior Envelope & Waterproofing",
+      "Structural Systems & Coordination","MEP Systems & Coordination",
+      "Sustainability & Energy Performance","Accessibility / ADA Compliance",
+      "Historic Preservation & Secretary Standards","Fire & Life Safety",
+      "Acoustic & Thermal Performance","Interior Finish & Millwork",
+      "Construction Detailing","Cost Estimation & Value Engineering","Consultant Coordination",
+    ],
+    "Construction Documents": [
+      "Materials & Specifications","Exterior Envelope & Waterproofing",
+      "Structural Systems & Coordination","MEP Systems & Coordination",
+      "Accessibility / ADA Compliance","Historic Preservation & Secretary Standards",
+      "Fire & Life Safety","Acoustic & Thermal Performance","Interior Finish & Millwork",
+      "Construction Detailing","Permit Application Strategy","Consultant Coordination",
+    ],
+    "Permit Review & Agency Approval": [
+      "Building Codes & Zoning","Accessibility / ADA Compliance","Fire & Life Safety",
+      "Historic Preservation & Secretary Standards","Permit Application Strategy",
+      "Client Communication & Presentation",
+    ],
+    "Bidding & Negotiation": [
+      "Materials & Specifications","Cost Estimation & Value Engineering",
+      "Fee Proposals & Contracts","Project Scheduling","Client Communication & Presentation",
+    ],
+    "Construction Administration": [
+      "Construction Administration Issues","Construction Detailing","Materials & Specifications",
+      "Exterior Envelope & Waterproofing","MEP Systems & Coordination",
+      "Client Communication & Presentation","Consultant Coordination",
+      "Project Scheduling","Cost Estimation & Value Engineering",
+    ],
+    "Post-Occupancy Evaluation": [
+      "Sustainability & Energy Performance","Client Communication & Presentation",
+      "Building Codes & Zoning","Acoustic & Thermal Performance",
+    ],
+  };
+
+  // Extra topics always added for specific project types
+  const ARCH_EXTRA_BY_TYPE = {
+    "Historic Renovation / Adaptive Reuse": ["Historic Preservation & Secretary Standards"],
+    "Institutional – Healthcare / Medical": ["Accessibility / ADA Compliance","Acoustic & Thermal Performance","MEP Systems & Coordination"],
+    "Residential – Custom Home": ["Exterior Envelope & Waterproofing","Interior Finish & Millwork","Materials & Specifications"],
+    "Residential – Renovation / Addition": ["Building Codes & Zoning","Setbacks, Height & Massing","Exterior Envelope & Waterproofing","Historic Preservation & Secretary Standards"],
+    "Religious / Worship": ["Acoustic & Thermal Performance","Accessibility / ADA Compliance"],
+    "Cultural – Museum / Gallery": ["Acoustic & Thermal Performance","Sustainability & Energy Performance","Accessibility / ADA Compliance"],
+  };
+
+  function getRelevantArchTopics(type, phase) {
+    const hasType = type !== PHASES[0] && type !== "— Select project type —";
+    const hasPhase = phase !== PHASES[0] && phase !== "— Select project phase —";
+    if (!hasType && !hasPhase) return TOPICS;
+    const phaseSet = hasPhase ? new Set(ARCH_TOPICS_BY_PHASE[phase] || TOPICS) : new Set(TOPICS);
+    const extras = hasType ? (ARCH_EXTRA_BY_TYPE[type] || []) : [];
+    extras.forEach(t => phaseSet.add(t));
+    return TOPICS.filter(t => phaseSet.has(t));
+  }
+
+  // ── Writing: topics by form category and stage ──
+  const WRITE_TOPICS_FOR_CATEGORY = {
+    Creative: new Set([
+      "Plot & Structure","Narrative Arc & Scene Sequencing","Character Development",
+      "Character Voice & Interiority","Point of View & Narrative Distance","Dialogue",
+      "Scene-Setting & Sensory Detail","Pacing & Tension","Opening / Hook","Endings & Resolution",
+      "Theme & Subtext","Time & Chronology","Voice & Style","Sentence Rhythm & Prose Style",
+      "Show vs. Tell","Figurative Language & Imagery","World-building","Research & Accuracy",
+      "Writer's Block & Generative Process","Feedback & Revision Strategy","Audience & Market",
+      "Query & Submission Strategy",
+    ]),
+    Reportage: new Set([
+      "Argument & Thesis","Evidence & Research Integration","Sourcing & Attribution",
+      "Objectivity & Fairness","Narrative Arc & Scene Sequencing","Voice & Style",
+      "Pacing & Tension","Opening / Hook","Endings & Resolution","Scene-Setting & Sensory Detail",
+      "Research & Accuracy","Audience & Market","Feedback & Revision Strategy",
+      "Query & Submission Strategy","Sentence Rhythm & Prose Style",
+    ]),
+    Technical: new Set([
+      "Argument & Thesis","Evidence & Research Integration","Sourcing & Attribution",
+      "Voice & Style","Sentence Rhythm & Prose Style","Audience & Market",
+      "Feedback & Revision Strategy","Show vs. Tell",
+    ]),
+  };
+
+  const WRITE_TOPICS_FOR_STAGE = {
+    "Brainstorming / Generating Ideas": new Set([
+      "Plot & Structure","Character Development","World-building","Theme & Subtext",
+      "Voice & Style","Writer's Block & Generative Process","Argument & Thesis",
+      "Narrative Arc & Scene Sequencing","Point of View & Narrative Distance",
+      "Opening / Hook","Research & Accuracy",
+    ]),
+    "Research & Reporting": new Set([
+      "Research & Accuracy","Sourcing & Attribution","Objectivity & Fairness",
+      "Evidence & Research Integration","Argument & Thesis","Audience & Market",
+    ]),
+    "Outlining / Structure": new Set([
+      "Plot & Structure","Narrative Arc & Scene Sequencing","Character Development",
+      "Point of View & Narrative Distance","Time & Chronology","Argument & Thesis",
+      "Theme & Subtext","Pacing & Tension","Endings & Resolution","Opening / Hook",
+    ]),
+    "First Draft": new Set([
+      "Voice & Style","Dialogue","Scene-Setting & Sensory Detail","Pacing & Tension",
+      "Show vs. Tell","Figurative Language & Imagery","Character Voice & Interiority",
+      "Sentence Rhythm & Prose Style","Writer's Block & Generative Process",
+      "Point of View & Narrative Distance",
+    ]),
+    "Revision — Big Picture (Story, Argument, Structure)": new Set([
+      "Plot & Structure","Narrative Arc & Scene Sequencing","Character Development",
+      "Pacing & Tension","Theme & Subtext","Endings & Resolution","Opening / Hook",
+      "Argument & Thesis","Evidence & Research Integration","Time & Chronology",
+      "Point of View & Narrative Distance","Feedback & Revision Strategy",
+    ]),
+    "Revision — Scene / Section Level": new Set([
+      "Scene-Setting & Sensory Detail","Dialogue","Pacing & Tension","Show vs. Tell",
+      "Character Voice & Interiority","Sentence Rhythm & Prose Style",
+      "Figurative Language & Imagery","Argument & Thesis",
+    ]),
+    "Line Editing": new Set([
+      "Sentence Rhythm & Prose Style","Voice & Style","Show vs. Tell",
+      "Figurative Language & Imagery","Dialogue","Feedback & Revision Strategy",
+    ]),
+    "Copy Editing / Proofreading": new Set([
+      "Sentence Rhythm & Prose Style","Voice & Style","Sourcing & Attribution",
+    ]),
+    "Query Letter / Pitch": new Set([
+      "Query & Submission Strategy","Audience & Market","Voice & Style",
+      "Plot & Structure","Argument & Thesis","Opening / Hook",
+    ]),
+    "Synopsis / Book Proposal": new Set([
+      "Plot & Structure","Character Development","Theme & Subtext","Audience & Market",
+      "Query & Submission Strategy","Argument & Thesis","Evidence & Research Integration",
+    ]),
+    "Submission & Publication": new Set([
+      "Query & Submission Strategy","Audience & Market","Feedback & Revision Strategy",
+    ]),
+  };
+
+  function getWriteCategory(form) {
+    for (const [cat, forms] of Object.entries(WRITE_CATEGORIES)) {
+      if (forms.includes(form)) return cat;
+    }
+    return null;
+  }
+
+  function getRelevantWriteTopics(form, stage) {
+    const cat = getWriteCategory(form);
+    const hasForm = cat !== null;
+    const hasStage = stage !== WRITE_STAGES[0];
+    if (!hasForm && !hasStage) return WRITE_TOPICS;
+    const catSet = hasForm ? WRITE_TOPICS_FOR_CATEGORY[cat] : null;
+    const stageSet = hasStage ? (WRITE_TOPICS_FOR_STAGE[stage] || null) : null;
+    return WRITE_TOPICS.filter(t => {
+      if (catSet && stageSet) {
+        // intersection — but fall back to stage-only if intersection is too small
+        return catSet.has(t) && stageSet.has(t);
+      }
+      if (catSet) return catSet.has(t);
+      if (stageSet) return stageSet.has(t);
+      return true;
+    }).length >= 3
+      ? WRITE_TOPICS.filter(t => {
+          if (catSet && stageSet) return catSet.has(t) && stageSet.has(t);
+          if (catSet) return catSet.has(t);
+          if (stageSet) return stageSet.has(t);
+          return true;
+        })
+      // If intersection < 3, use union
+      : WRITE_TOPICS.filter(t => (catSet?.has(t) || stageSet?.has(t)));
+  }
     try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
     catch { return []; }
   }
@@ -976,6 +1160,8 @@
       setArchResponse("");
     };
 
+    const relevantArchTopics = getRelevantArchTopics(archType, archPhase);
+
     const archValid = archType !== PROJECT_TYPES[0] && archPhase !== PHASES[0] && archTopics.length > 0 && archQuestion.trim().length > 0;
 
     const archPreview = () => {
@@ -1003,6 +1189,8 @@
       setWriteTopics(prev => prev.includes(t) ? prev.filter(x=>x!==t) : [...prev,t]);
       setWriteResponse("");
     };
+
+    const relevantWriteTopics = getRelevantWriteTopics(writeForm, writeStage);
 
     const writeValid = writeForm !== WRITE_FORMS[0] && writeStage !== WRITE_STAGES[0] && writeTopics.length > 0 && writeQuestion.trim().length > 0;
 
@@ -1171,7 +1359,7 @@
                     <span className="arch-step-label">01 · Project Type</span>
                     <p className="arch-step-desc">What category best describes this project?</p>
                     <select className="arch-select" value={archType}
-                      onChange={e=>{setArchType(e.target.value);setArchResponse("");}}>
+                      onChange={e=>{setArchType(e.target.value);setArchTopics([]);setArchResponse("");}}>
                       {PROJECT_TYPES.map(t=><option key={t} value={t}>{t}</option>)}
                     </select>
                   </div>
@@ -1180,7 +1368,7 @@
                     <span className="arch-step-label">02 · Project Phase</span>
                     <p className="arch-step-desc">Where are you in the delivery process?</p>
                     <select className="arch-select" value={archPhase}
-                      onChange={e=>{setArchPhase(e.target.value);setArchResponse("");}}>
+                      onChange={e=>{setArchPhase(e.target.value);setArchTopics([]);setArchResponse("");}}>
                       {PHASES.map(p=><option key={p} value={p}>{p}</option>)}
                     </select>
                   </div>
@@ -1189,7 +1377,7 @@
                     <span className="arch-step-label">03 · Topic Focus</span>
                     <p className="arch-step-desc">Select one or more areas your question touches on.</p>
                     <div className="arch-checks">
-                      {TOPICS.map(t=>(
+                      {relevantArchTopics.map(t=>(
                         <label key={t} className="arch-check-item">
                           <input type="checkbox" checked={archTopics.includes(t)}
                             onChange={()=>toggleTopic(t)}/>
@@ -1263,7 +1451,7 @@
                     <span className="arch-step-label">01 · Form</span>
                     <p className="arch-step-desc">What kind of writing are you working on?</p>
                     <select className="arch-select" value={writeForm}
-                      onChange={e=>{setWriteForm(e.target.value);setWriteResponse("");}}>
+                      onChange={e=>{setWriteForm(e.target.value);setWriteTopics([]);setWriteResponse("");}}>
                       <option value={WRITE_FORMS[0]}>{WRITE_FORMS[0]}</option>
                       {Object.entries(WRITE_CATEGORIES).map(([cat,forms])=>(
                         <optgroup key={cat} label={cat}>
@@ -1278,7 +1466,7 @@
                     <span className="arch-step-label">02 · Stage</span>
                     <p className="arch-step-desc">Where are you in the process right now?</p>
                     <select className="arch-select" value={writeStage}
-                      onChange={e=>{setWriteStage(e.target.value);setWriteResponse("");}}>
+                      onChange={e=>{setWriteStage(e.target.value);setWriteTopics([]);setWriteResponse("");}}>
                       {WRITE_STAGES.map(s=><option key={s} value={s}>{s}</option>)}
                     </select>
                   </div>
@@ -1287,7 +1475,7 @@
                     <span className="arch-step-label">03 · Craft Area</span>
                     <p className="arch-step-desc">What is the problem touching? Select one or more — being specific helps Claude give more useful guidance.</p>
                     <div className="arch-checks">
-                      {WRITE_TOPICS.map(t=>(
+                      {relevantWriteTopics.map(t=>(
                         <label key={t} className="arch-check-item">
                           <input type="checkbox" checked={writeTopics.includes(t)}
                             onChange={()=>toggleWriteTopic(t)}/>
