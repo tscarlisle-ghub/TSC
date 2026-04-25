@@ -38,7 +38,7 @@
       --accent-bg: rgba(139,69,19,.07);
 
       --f-ui:     "ff-meta-web-pro-condensed", sans-serif;
-      --f-prompt: "ff-meta-correspondence-web-p", sans-serif;
+      --f-prompt: "ff-meta-web-pro", sans-serif;
       --f-reply:  "warnock-pro", serif;
 
       --pad: 28px;
@@ -81,21 +81,21 @@
     .col-lbl {
       font-family: var(--f-ui);
       font-weight: 700;
-      font-size: 10.5px;
+      font-size: 15px;
       letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--muted);
       line-height: 1;
     }
+    .hd .col-lbl {
+      font-size: 20px;
+      letter-spacing: 0.2em;
+    }
     .hd-controls { display: flex; align-items: baseline; gap: 16px; }
     .model-tag {
       font-family: var(--f-ui);
       font-weight: 400;
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      border: 1px solid var(--rule);
+      font-size: 14px;
       padding: 3px 9px 2px;
     }
 
@@ -112,7 +112,7 @@
     .key-lbl {
       font-family: var(--f-ui);
       font-weight: 700;
-      font-size: 10px;
+      font-size: 14px;
       letter-spacing: 0.26em;
       text-transform: uppercase;
       color: var(--muted);
@@ -125,9 +125,7 @@
       border-bottom: 1px solid var(--rule);
       outline: none;
       font-family: var(--f-prompt);
-      font-size: 16px;
-      color: var(--ink);
-      padding: 3px 4px;
+      font-size: 22px;
     }
     .key-input::placeholder { color: var(--rule); }
     .key-btn {
@@ -136,7 +134,7 @@
       color: var(--muted);
       font-family: var(--f-ui);
       font-weight: 700;
-      font-size: 10px;
+      font-size: 14px;
       letter-spacing: 0.24em;
       text-transform: uppercase;
       padding: 5px 14px 4px;
@@ -165,7 +163,7 @@
     .key-active-lbl {
       font-family: var(--f-ui);
       font-weight: 700;
-      font-size: 9.5px;
+      font-size: 13px;
       letter-spacing: 0.26em;
       text-transform: uppercase;
       color: var(--muted);
@@ -175,7 +173,7 @@
       background: none; border: none;
       font-family: var(--f-ui);
       font-weight: 400;
-      font-size: 9.5px;
+      font-size: 13px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--muted);
@@ -211,9 +209,7 @@
     .empty-rule { width: 22px; height: 1px; background: var(--rule); margin-bottom: 18px; }
     .empty-txt {
       font-family: var(--f-reply);
-      font-size: 20px;
-      font-style: italic;
-      color: var(--muted);
+      font-size: 28px;
       line-height: 1.65;
     }
 
@@ -238,10 +234,7 @@
       display: block;
       font-family: var(--f-ui);
       font-weight: 700;
-      font-size: 9px;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--rule);
+      font-size: 13px;
       margin-bottom: 11px;
     }
     .query-text {
@@ -258,7 +251,7 @@
 
     .resp {
       font-family: var(--f-reply);
-      font-size: 20px;
+      font-size: 28px;
       font-weight: 400;
       line-height: 1.74;
       color: var(--ink);
@@ -278,16 +271,16 @@
       margin: 1.2em 0 .4em;
       line-height: 1.15;
     }
-    .resp h1 { font-size: 24px; }
-    .resp h2 { font-size: 19px; }
-    .resp h3 { font-size: 14px; letter-spacing: .26em; }
+    .resp h1 { font-size: 34px; }
+    .resp h2 { font-size: 27px; }
+    .resp h3 { font-size: 20px; letter-spacing: .26em; }
 
     .resp ul,.resp ol { padding-left: 20px; margin-bottom: .85em; }
     .resp li          { margin-bottom: .28em; }
 
     .resp code {
       font-family: var(--f-prompt);
-      font-size: 17px;
+      font-size: 24px;
       background: var(--parchment);
       border: 1px solid var(--rule-lt);
       padding: 1px 5px;
@@ -300,7 +293,7 @@
       margin: 14px 0;
       overflow-x: auto;
       font-family: var(--f-prompt);
-      font-size: 16px;
+      font-size: 22px;
       line-height: 1.65;
     }
     .resp pre code {
@@ -317,7 +310,7 @@
     .resp hr { border:none; border-top:1px solid var(--rule-lt); margin:18px 0; }
     .err-txt {
       font-family: var(--f-reply);
-      font-size: 19px;
+      font-size: 27px;
       font-style: italic;
       color: var(--accent);
     }
@@ -364,7 +357,7 @@
     .input-col-lbl {
       font-family: var(--f-ui);
       font-weight: 700;
-      font-size: 10px;
+      font-size: 14px;
       letter-spacing: .28em;
       text-transform: uppercase;
       color: var(--muted);
@@ -394,7 +387,7 @@
     .input-hint {
       font-family: var(--f-ui);
       font-weight: 400;
-      font-size: 10px;
+      font-size: 14px;
       letter-spacing: .16em;
       text-transform: uppercase;
       color: var(--muted);
@@ -405,7 +398,7 @@
       background: none; border: none;
       font-family: var(--f-ui);
       font-weight: 700;
-      font-size: 10px;
+      font-size: 14px;
       letter-spacing: .24em;
       text-transform: uppercase;
       color: var(--muted);
@@ -419,10 +412,7 @@
       color: var(--muted);
       font-family: var(--f-ui);
       font-weight: 700;
-      font-size: 12px;
-      letter-spacing: .28em;
-      text-transform: uppercase;
-      padding: 8px 20px 7px;
+      font-size: 17px;
       cursor: pointer;
       transition: all .15s;
       white-space: nowrap;
@@ -444,11 +434,7 @@
     .footer-note {
       font-family: var(--f-ui);
       font-weight: 400;
-      font-size: 9.5px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      opacity: .55;
+      font-size: 13px;
     }
   </style>
 </head>
