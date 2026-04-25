@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TSC-Claude</title>
 
+  <!--
+    Kit: https://use.typekit.net/ikf0hkb.css
+    Fonts in use:
+      din-condensed            — site title  (add to kit at fonts.adobe.com)
+      ff-meta-web-pro-condensed — col labels, UI chrome
+      ff-meta-web-pro          — inquiry text + input field
+      warnock-pro              — response text
+  -->
   <link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
 
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -14,37 +22,28 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /*
-      Typefaces — all from ikf0hkb kit:
-      ─────────────────────────────────────────────────────────
-      ff-meta-web-pro-condensed    UI chrome, labels, exchange
-                                   numbers — tall narrow caps
-                                   read like gauge markings
-      ff-meta-correspondence-web-p Your prompts — the typewriter
-                                   variant of Meta, keyed dispatch
-      ff-meta-web-pro              Claude responses — the classic
-                                   humanist Meta, built to read
-    */
-
     :root {
-      --cream:     #F5F0E8;
-      --parchment: #EDE7D9;
-      --ink:       #1C1A16;
-      --ink-warm:  #2E1A0E;
-      --muted:     #8A8178;
-      --rule:      #C8BFB0;
-      --rule-lt:   #DDD8CE;
-      --accent:    #8B4513;
-      --accent-bg: rgba(139,69,19,.07);
+      --cream:       #F5F0E8;
+      --parchment:   #EDE7D9;
+      --input-bg:    #F9F6F0;
+      --ink:         #1C1A16;
+      --ink-warm:    #2E1A0E;
+      --ink-light:   #4A4540;
+      --muted:       #8A8178;
+      --rule:        #C8BFB0;
+      --rule-lt:     #DDD8CE;
+      --accent:      #8B4513;
+      --accent-bg:   rgba(139,69,19,.07);
 
+      --f-title:  "din-condensed", "ff-meta-web-pro-condensed", sans-serif;
       --f-ui:     "ff-meta-web-pro-condensed", sans-serif;
       --f-prompt: "ff-meta-web-pro", sans-serif;
       --f-reply:  "warnock-pro", serif;
 
       --pad: 28px;
-      --gap: 34px;
-      --q:   37%;
-      --r:   63%;
+      --gap: 32px;
+      --q:   18.5%;
+      --r:   81.5%;
     }
 
     html, body { height: 100%; background: var(--cream); }
@@ -57,362 +56,121 @@
       color: var(--ink);
     }
 
-    /* ── Header ─────────────────────────────────── */
+    /* ── Header ──────────────────────────────────────── */
     .hd {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 13px var(--pad) 12px;
+      background: var(--parchment);
+      border-bottom: 1px solid var(--rule);
+      flex-shrink: 0;
+      gap: 20px;
+    }
+
+    .hd-title {
+      font-family: var(--f-title);
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .hd-controls {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+    }
+
+    .hist-btn, .clear-btn, .save-btn {
+      background: none;
+      border: 1px solid var(--rule);
+      font-family: var(--f-ui);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 4px 10px 3px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .hist-btn:hover,
+    .clear-btn:hover,
+    .save-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Persistent column labels ─────────────────────── */
+    .col-labels {
       display: grid;
       grid-template-columns: var(--q) var(--r);
       background: var(--parchment);
       border-bottom: 1px solid var(--rule);
       flex-shrink: 0;
     }
-    .hd-q {
-      padding: 14px var(--gap) 13px var(--pad);
+    .col-label-q {
+      padding: 8px var(--gap) 7px var(--pad);
       border-right: 1px solid var(--rule);
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
     }
-    .hd-r {
-      padding: 14px var(--pad) 13px var(--gap);
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
+    .col-label-r {
+      padding: 8px var(--pad) 7px var(--gap);
     }
     .col-lbl {
       font-family: var(--f-ui);
       font-weight: 700;
-      font-size: 15px;
-      letter-spacing: 0.28em;
+      font-size: 10px;
+      letter-spacing: .28em;
       text-transform: uppercase;
       color: var(--muted);
       line-height: 1;
     }
-    .hd .col-lbl {
-      font-size: 20px;
-      letter-spacing: 0.2em;
-    }
-    .hd-controls { display: flex; align-items: baseline; gap: 16px; }
-    .model-tag {
-      font-family: var(--f-ui);
-      font-weight: 400;
-      font-size: 14px;
-      padding: 3px 9px 2px;
-    }
 
-    /* ── API key ─────────────────────────────────── */
-    .key-bar {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 10px var(--pad);
-      background: var(--parchment);
-      border-bottom: 1px solid var(--rule);
-      flex-shrink: 0;
-    }
-    .key-lbl {
-      font-family: var(--f-ui);
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-    .key-input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--rule);
-      outline: none;
-      font-family: var(--f-prompt);
-      font-size: 22px;
-    }
-    .key-input::placeholder { color: var(--rule); }
-    .key-btn {
-      background: none;
-      border: 1px solid var(--rule);
-      color: var(--muted);
-      font-family: var(--f-ui);
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      padding: 5px 14px 4px;
-      cursor: pointer;
-      transition: all .15s;
-    }
-    .key-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-    .key-active {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px var(--pad);
-      background: var(--parchment);
-      border-bottom: 1px solid var(--rule);
-      flex-shrink: 0;
-    }
-    .key-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 6px rgba(139,69,19,.4);
-      animation: glow 3s ease-in-out infinite;
-    }
-    @keyframes glow { 0%,100%{opacity:1} 50%{opacity:.3} }
-    .key-active-lbl {
-      font-family: var(--f-ui);
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .key-clear {
-      margin-left: auto;
-      background: none; border: none;
-      font-family: var(--f-ui);
-      font-weight: 400;
-      font-size: 13px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      cursor: pointer;
-      transition: color .15s;
-    }
-    .key-clear:hover { color: var(--accent); }
-
-    /* ── Scroll ──────────────────────────────────── */
-    .scroll {
-      flex: 1;
-      overflow-y: auto;
-      scroll-behavior: smooth;
-      background: var(--cream);
-    }
-    .scroll::-webkit-scrollbar { width: 3px; }
-    .scroll::-webkit-scrollbar-track { background: transparent; }
-    .scroll::-webkit-scrollbar-thumb { background: var(--rule); }
-
-    /* ── Empty ───────────────────────────────────── */
-    .empty {
-      display: grid;
-      grid-template-columns: var(--q) var(--r);
-      height: 100%;
-      min-height: 180px;
-    }
-    .empty-col { padding: 52px var(--pad); }
-    .empty-col:first-child {
-      padding-right: var(--gap);
-      border-right: 1px solid var(--rule-lt);
-    }
-    .empty-col:last-child { padding-left: var(--gap); }
-    .empty-rule { width: 22px; height: 1px; background: var(--rule); margin-bottom: 18px; }
-    .empty-txt {
-      font-family: var(--f-reply);
-      font-size: 28px;
-      line-height: 1.65;
-    }
-
-    /* ── Exchange ────────────────────────────────── */
-    .exchange {
-      display: grid;
-      grid-template-columns: var(--q) var(--r);
-      border-bottom: 1px solid var(--rule-lt);
-      animation: rise .2s ease forwards;
-      opacity: 0;
-    }
-    @keyframes rise {
-      from { opacity:0; transform:translateY(4px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-
-    .ex-q {
-      padding: 28px var(--gap) 28px var(--pad);
-      border-right: 1px solid var(--rule);
-    }
-    .ex-num {
-      display: block;
-      font-family: var(--f-ui);
-      font-weight: 700;
-      font-size: 13px;
-      margin-bottom: 11px;
-    }
-    .query-text {
-      font-family: var(--f-prompt);
-      font-size: 20px;
-      font-weight: 400;
-      line-height: 1.65;
-      color: var(--ink-warm);
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .ex-r { padding: 28px var(--pad) 28px var(--gap); }
-
-    .resp {
-      font-family: var(--f-reply);
-      font-size: 28px;
-      font-weight: 400;
-      line-height: 1.74;
-      color: var(--ink);
-      word-break: break-word;
-    }
-    .resp p            { margin-bottom: .85em; }
-    .resp p:last-child { margin-bottom: 0; }
-    .resp strong       { font-weight: 700; color: var(--ink-warm); }
-    .resp em           { font-style: italic; }
-
-    .resp h1,.resp h2,.resp h3 {
-      font-family: var(--f-ui);
-      font-weight: 700;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--ink);
-      margin: 1.2em 0 .4em;
-      line-height: 1.15;
-    }
-    .resp h1 { font-size: 34px; }
-    .resp h2 { font-size: 27px; }
-    .resp h3 { font-size: 20px; letter-spacing: .26em; }
-
-    .resp ul,.resp ol { padding-left: 20px; margin-bottom: .85em; }
-    .resp li          { margin-bottom: .28em; }
-
-    .resp code {
-      font-family: var(--f-prompt);
-      font-size: 24px;
-      background: var(--parchment);
-      border: 1px solid var(--rule-lt);
-      padding: 1px 5px;
-      color: var(--accent);
-    }
-    .resp pre {
-      background: var(--ink);
-      color: #C8C0B0;
-      padding: 18px 20px;
-      margin: 14px 0;
-      overflow-x: auto;
-      font-family: var(--f-prompt);
-      font-size: 22px;
-      line-height: 1.65;
-    }
-    .resp pre code {
-      background:none; border:none; padding:0;
-      color:inherit; font-size:inherit;
-    }
-    .resp blockquote {
-      border-left: 2px solid var(--rule);
-      padding-left: 16px;
-      color: var(--muted);
-      font-style: italic;
-      margin: .85em 0;
-    }
-    .resp hr { border:none; border-top:1px solid var(--rule-lt); margin:18px 0; }
-    .err-txt {
-      font-family: var(--f-reply);
-      font-size: 27px;
-      font-style: italic;
-      color: var(--accent);
-    }
-
-    /* ── Thinking ────────────────────────────────── */
-    .thinking {
-      display: grid;
-      grid-template-columns: var(--q) var(--r);
-      animation: rise .2s ease forwards;
-      opacity: 0;
-    }
-    .thinking-q {
-      padding: 28px var(--gap) 28px var(--pad);
-      border-right: 1px solid var(--rule);
-    }
-    .thinking-r {
-      padding: 36px var(--pad) 28px var(--gap);
-      display: flex; align-items: flex-start; gap: 6px;
-    }
-    .dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--rule);
-      animation: blink 1.3s ease-in-out infinite;
-    }
-    .dot:nth-child(2) { animation-delay: .2s; }
-    .dot:nth-child(3) { animation-delay: .4s; }
-    @keyframes blink { 0%,80%,100%{opacity:.22} 40%{opacity:1} }
-
-    /* ── Input ───────────────────────────────────── */
+    /* ── Input box at top ─────────────────────────────── */
     .input-wrap {
-      border-top: 1px solid var(--rule);
-      background: var(--parchment);
-      flex-shrink: 0;
-    }
-    .input-grid {
       display: grid;
       grid-template-columns: var(--q) var(--r);
+      background: var(--input-bg);
+      border-bottom: 1px solid var(--rule);
+      flex-shrink: 0;
     }
     .input-left {
-      padding: 16px var(--gap) 16px var(--pad);
+      padding: 14px var(--gap) 14px var(--pad);
       border-right: 1px solid var(--rule);
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .input-col-lbl {
-      font-family: var(--f-ui);
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: .28em;
-      text-transform: uppercase;
-      color: var(--muted);
     }
     .input-field {
       width: 100%;
       background: transparent;
       border: none; outline: none;
       font-family: var(--f-prompt);
-      font-size: 20px;
+      font-size: 14px;
       font-weight: 400;
       color: var(--ink-warm);
       resize: none;
       line-height: 1.55;
-      min-height: 30px;
-      max-height: 160px;
+      min-height: 22px;
+      max-height: 140px;
       caret-color: var(--accent);
     }
     .input-field::placeholder { color: var(--rule); }
     .input-field:disabled      { opacity: .3; }
-
     .input-right {
-      padding: 16px var(--pad) 16px var(--gap);
-      display: flex; align-items: flex-end;
-      justify-content: space-between; gap: 16px;
+      padding: 14px var(--pad) 14px var(--gap);
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
     }
-    .input-hint {
-      font-family: var(--f-ui);
-      font-weight: 400;
-      font-size: 14px;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      line-height: 1.9;
-    }
-    .btn-row { display: flex; align-items: center; gap: 14px; }
-    .clear-btn {
-      background: none; border: none;
-      font-family: var(--f-ui);
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: .24em;
-      text-transform: uppercase;
-      color: var(--muted);
-      cursor: pointer;
-      transition: color .15s;
-    }
-    .clear-btn:hover { color: var(--accent); }
     .send-btn {
       background: none;
       border: 1px solid var(--rule);
       color: var(--muted);
       font-family: var(--f-ui);
       font-weight: 700;
-      font-size: 17px;
+      font-size: 12px;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      padding: 7px 18px 6px;
       cursor: pointer;
       transition: all .15s;
       white-space: nowrap;
@@ -424,17 +182,349 @@
     }
     .send-btn:disabled { opacity: .25; cursor: not-allowed; }
 
-    /* ── Footer ──────────────────────────────────── */
-    .footer {
-      padding: 7px var(--pad) 10px;
-      display: flex; justify-content: space-between;
-      background: var(--parchment);
-      border-top: 1px solid var(--rule-lt);
+    /* ── Scroll / conversation ────────────────────────── */
+    .scroll {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--cream);
+      scroll-behavior: smooth;
     }
-    .footer-note {
+    .scroll::-webkit-scrollbar { width: 3px; }
+    .scroll::-webkit-scrollbar-track { background: transparent; }
+    .scroll::-webkit-scrollbar-thumb { background: var(--rule); }
+
+    /* ── Empty state ──────────────────────────────────── */
+    .empty {
+      display: grid;
+      grid-template-columns: var(--q) var(--r);
+      height: 100%;
+      min-height: 160px;
+    }
+    .empty-col { padding: 40px var(--pad); }
+    .empty-col:first-child { padding-right: var(--gap); border-right: 1px solid var(--rule-lt); }
+    .empty-col:last-child  { padding-left: var(--gap); }
+    .empty-rule { width: 20px; height: 1px; background: var(--rule); margin-bottom: 14px; }
+    .empty-txt {
+      font-family: var(--f-reply);
+      font-size: 16px;
+      font-style: italic;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── Exchange rows ────────────────────────────────── */
+    .exchange {
+      display: grid;
+      grid-template-columns: var(--q) var(--r);
+      border-bottom: 1px solid var(--rule-lt);
+      animation: rise .2s ease forwards;
+      opacity: 0;
+    }
+    @keyframes rise {
+      from { opacity:0; transform:translateY(3px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    .ex-q {
+      padding: 22px var(--gap) 22px var(--pad);
+      border-right: 1px solid var(--rule);
+    }
+    .ex-num {
+      display: block;
+      font-family: var(--f-ui);
+      font-weight: 700;
+      font-size: 9px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--rule);
+      margin-bottom: 9px;
+    }
+    .query-text {
+      font-family: var(--f-prompt);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.65;
+      color: var(--ink-warm);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .ex-r { padding: 22px var(--pad) 22px var(--gap); }
+
+    .resp {
+      font-family: var(--f-reply);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.74;
+      color: var(--ink);
+      word-break: break-word;
+    }
+    .resp p            { margin-bottom: .75em; }
+    .resp p:last-child { margin-bottom: 0; }
+    .resp strong       { font-weight: 700; color: var(--ink-warm); }
+    .resp em           { font-style: italic; }
+    .resp h1,.resp h2,.resp h3 {
+      font-family: var(--f-ui);
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin: 1.1em 0 .35em;
+      line-height: 1.15;
+    }
+    .resp h1 { font-size: 18px; }
+    .resp h2 { font-size: 15px; }
+    .resp h3 { font-size: 12px; letter-spacing: .22em; }
+    .resp ul,.resp ol { padding-left: 18px; margin-bottom: .75em; }
+    .resp li          { margin-bottom: .25em; }
+    .resp code {
+      font-family: var(--f-prompt);
+      font-size: 13px;
+      background: var(--parchment);
+      border: 1px solid var(--rule-lt);
+      padding: 1px 4px;
+      color: var(--accent);
+    }
+    .resp pre {
+      background: var(--ink);
+      color: #C8C0B0;
+      padding: 14px 16px;
+      margin: 10px 0;
+      overflow-x: auto;
+      font-family: var(--f-prompt);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .resp pre code {
+      background:none; border:none; padding:0;
+      color:inherit; font-size:inherit;
+    }
+    .resp blockquote {
+      border-left: 2px solid var(--rule);
+      padding-left: 14px;
+      color: var(--muted);
+      font-style: italic;
+      margin: .75em 0;
+    }
+    .resp hr { border:none; border-top:1px solid var(--rule-lt); margin:14px 0; }
+    .err-txt {
+      font-family: var(--f-reply);
+      font-size: 14px;
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── Thinking indicator ───────────────────────────── */
+    .thinking {
+      display: grid;
+      grid-template-columns: var(--q) var(--r);
+      animation: rise .2s ease forwards;
+      opacity: 0;
+    }
+    .thinking-q {
+      padding: 22px var(--gap) 22px var(--pad);
+      border-right: 1px solid var(--rule);
+    }
+    .thinking-r {
+      padding: 28px var(--pad) 22px var(--gap);
+      display: flex; align-items: flex-start; gap: 5px;
+    }
+    .dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--rule);
+      animation: blink 1.3s ease-in-out infinite;
+    }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes blink { 0%,80%,100%{opacity:.22} 40%{opacity:1} }
+
+    /* ── Footer ───────────────────────────────────────── */
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px var(--pad) 10px;
+      background: var(--parchment);
+      border-top: 1px solid var(--rule);
+      flex-shrink: 0;
+      gap: 20px;
+    }
+
+    .model-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .model-lbl {
+      font-family: var(--f-ui);
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .model-select {
+      background: transparent;
+      border: 1px solid var(--rule);
       font-family: var(--f-ui);
       font-weight: 400;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      padding: 4px 10px 3px;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      padding-right: 24px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238A8178' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+    }
+    .model-select:hover { border-color: var(--accent); }
+
+    /* API indicator in footer */
+    .api-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .key-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 5px rgba(139,69,19,.4);
+      animation: glow 3s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes glow { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .api-active-lbl {
+      font-family: var(--f-ui);
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .key-clear {
+      background: none; border: none;
+      font-family: var(--f-ui);
+      font-weight: 400;
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color .15s;
+    }
+    .key-clear:hover { color: var(--accent); }
+
+    /* API key entry in footer */
+    .api-entry {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .key-lbl {
+      font-family: var(--f-ui);
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .key-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--rule);
+      outline: none;
+      font-family: var(--f-prompt);
       font-size: 13px;
+      color: var(--ink);
+      padding: 2px 4px;
+      width: 220px;
+    }
+    .key-input::placeholder { color: var(--rule); }
+    .key-btn {
+      background: none;
+      border: 1px solid var(--rule);
+      color: var(--muted);
+      font-family: var(--f-ui);
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      padding: 4px 12px 3px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .key-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── History panel ────────────────────────────────── */
+    .hist-panel {
+      background: var(--parchment);
+      border-bottom: 1px solid var(--rule);
+      flex-shrink: 0;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+    .hist-panel::-webkit-scrollbar { width: 3px; }
+    .hist-panel::-webkit-scrollbar-thumb { background: var(--rule); }
+    .hist-header {
+      display: flex; align-items: baseline;
+      justify-content: space-between;
+      padding: 12px var(--pad) 11px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .hist-title {
+      font-family: var(--f-ui); font-weight: 700; font-size: 12px;
+      letter-spacing: .22em; text-transform: uppercase; color: var(--ink);
+    }
+    .hist-close {
+      background: none; border: none; cursor: pointer;
+      font-family: var(--f-ui); font-weight: 700; font-size: 10px;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
+      transition: color .15s;
+    }
+    .hist-close:hover { color: var(--accent); }
+    .hist-empty {
+      padding: 24px var(--pad);
+      font-family: var(--f-reply); font-size: 15px; font-style: italic;
+      color: var(--muted); line-height: 1.6;
+    }
+    .hist-list { padding: 4px 0; }
+    .hist-item {
+      padding: 12px var(--pad);
+      border-bottom: 1px solid var(--rule-lt);
+      cursor: pointer;
+      transition: background .12s;
+    }
+    .hist-item:last-child { border-bottom: none; }
+    .hist-item:hover { background: var(--cream); }
+    .hist-item-meta {
+      display: flex; align-items: baseline; gap: 12px; margin-bottom: 5px;
+    }
+    .hist-date {
+      font-family: var(--f-ui); font-weight: 700; font-size: 10px;
+      letter-spacing: .22em; text-transform: uppercase; color: var(--accent);
+    }
+    .hist-count {
+      font-family: var(--f-ui); font-weight: 400; font-size: 10px;
+      letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+    }
+    .hist-del {
+      margin-left: auto; background: none; border: none; cursor: pointer;
+      font-family: var(--f-ui); font-weight: 400; font-size: 10px;
+      letter-spacing: .16em; text-transform: uppercase; color: var(--rule);
+      transition: color .15s;
+    }
+    .hist-del:hover { color: var(--accent); }
+    .hist-preview {
+      font-family: var(--f-reply); font-size: 14px; font-weight: 400;
+      color: var(--ink-light); line-height: 1.4;
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
     }
   </style>
 </head>
@@ -443,11 +533,32 @@
 
 <script type="text/babel">
   const { useState, useRef, useEffect } = React;
+  const LS_KEY = "tsc_history";
+
+  const MODELS = [
+    { id: "claude-sonnet-4-20250514",  label: "Claude Sonnet 4"  },
+    { id: "claude-opus-4-20250514",    label: "Claude Opus 4"    },
+    { id: "claude-haiku-4-5-20251001", label: "Claude Haiku 4.5" },
+  ];
+
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+    catch { return []; }
+  }
+  function saveHistory(s) { localStorage.setItem(LS_KEY, JSON.stringify(s)); }
+
+  function fmtDate(iso) {
+    const d = new Date(iso), now = new Date();
+    const diff = Math.floor((now - d) / 86400000);
+    if (diff === 0) return "Today";
+    if (diff === 1) return "Yesterday";
+    if (diff < 7)  return `${diff} days ago`;
+    return d.toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" });
+  }
 
   function renderMd(raw) {
     if (!raw) return "";
-    let s = raw
-      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    let s = raw.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
     s = s.replace(/```[\w]*\n?([\s\S]*?)```/g,(_,c)=>`<pre><code>${c.trim()}</code></pre>`);
     s = s.replace(/`([^`\n]+)`/g,"<code>$1</code>");
     s = s.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");
@@ -455,8 +566,8 @@
     s = s.replace(/^&gt;\s?(.+)$/gm,"<blockquote>$1</blockquote>");
     s = s.replace(/^---$/gm,"<hr/>");
     s = s.replace(/^### (.+)$/gm,"<h3>$1</h3>");
-    s = s.replace(/^## (.+)$/gm, "<h2>$1</h2>");
-    s = s.replace(/^# (.+)$/gm,  "<h1>$1</h1>");
+    s = s.replace(/^## (.+)$/gm,"<h2>$1</h2>");
+    s = s.replace(/^# (.+)$/gm,"<h1>$1</h1>");
     s = s.replace(/^\s*[-*]\s+(.+)$/gm,"<li>$1</li>");
     s = s.replace(/^\s*\d+\.\s+(.+)$/gm,"<li>$1</li>");
     s = s.replace(/(<li>[\s\S]*?<\/li>)(\n<li>[\s\S]*?<\/li>)*/g,m=>`<ul>${m}</ul>`);
@@ -473,10 +584,13 @@
     const [apiKey,   setApiKey]   = useState(()=>sessionStorage.getItem("ck")||"");
     const [keyDraft, setKeyDraft] = useState("");
     const [keySet,   setKeySet]   = useState(()=>!!sessionStorage.getItem("ck"));
+    const [model,    setModel]    = useState(MODELS[0].id);
     const [pairs,    setPairs]    = useState([]);
     const [draft,    setDraft]    = useState("");
     const [loading,  setLoading]  = useState(false);
     const [pendingQ, setPendingQ] = useState("");
+    const [showHist, setShowHist] = useState(false);
+    const [sessions, setSessions] = useState(loadHistory);
     const bottomRef = useRef(null);
     const taRef     = useRef(null);
 
@@ -485,13 +599,12 @@
     },[pairs,loading]);
 
     const resize = el => {
-      el.style.height = "auto";
-      el.style.height = Math.min(el.scrollHeight,160)+"px";
+      el.style.height="auto";
+      el.style.height=Math.min(el.scrollHeight,140)+"px";
     };
 
     const saveKey = () => {
-      const k = keyDraft.trim();
-      if (!k) return;
+      const k=keyDraft.trim(); if(!k)return;
       sessionStorage.setItem("ck",k);
       setApiKey(k); setKeySet(true); setKeyDraft("");
     };
@@ -500,22 +613,44 @@
       setApiKey(""); setKeySet(false);
     };
 
+    const saveAndNew = () => {
+      if(!pairs.length) return;
+      const session={id:Date.now().toString(), date:new Date().toISOString(), pairs};
+      const updated=[session,...sessions];
+      setSessions(updated); saveHistory(updated); setPairs([]);
+    };
+
+    const deleteSession = (id,e) => {
+      e.stopPropagation();
+      const updated=sessions.filter(s=>s.id!==id);
+      setSessions(updated); saveHistory(updated);
+    };
+
+    const loadSession = (session) => {
+      if(pairs.length){
+        const current={id:Date.now().toString(),date:new Date().toISOString(),pairs};
+        const updated=[current,...sessions.filter(s=>s.id!==session.id)];
+        setSessions(updated); saveHistory(updated);
+      }
+      setPairs(session.pairs); setShowHist(false);
+    };
+
     const buildHistory = () => {
-      const m = [];
+      const m=[];
       pairs.forEach(p=>{
-        m.push({role:"user",      content:p.query});
-        m.push({role:"assistant", content:p.response||" "});
+        m.push({role:"user",content:p.query});
+        m.push({role:"assistant",content:p.response||" "});
       });
       return m;
     };
 
     const send = async () => {
-      const q = draft.trim();
-      if (!q||loading||!apiKey) return;
+      const q=draft.trim();
+      if(!q||loading||!apiKey) return;
       setDraft(""); setPendingQ(q); setLoading(true);
-      if (taRef.current) taRef.current.style.height="auto";
+      if(taRef.current) taRef.current.style.height="auto";
       try {
-        const res = await fetch("https://api.anthropic.com/v1/messages",{
+        const res=await fetch("https://api.anthropic.com/v1/messages",{
           method:"POST",
           headers:{
             "Content-Type":"application/json",
@@ -524,65 +659,96 @@
             "anthropic-dangerous-direct-browser-access":"true"
           },
           body:JSON.stringify({
-            model:"claude-sonnet-4-20250514",
+            model,
             max_tokens:1024,
             messages:[...buildHistory(),{role:"user",content:q}]
           })
         });
-        if (!res.ok) {
-          const e = await res.json().catch(()=>({}));
+        if(!res.ok){
+          const e=await res.json().catch(()=>({}));
           throw new Error(e.error?.message||`HTTP ${res.status}`);
         }
-        const data  = await res.json();
-        const reply = data.content?.find(b=>b.type==="text")?.text||"";
+        const data=await res.json();
+        const reply=data.content?.find(b=>b.type==="text")?.text||"";
         setPairs(prev=>[...prev,{query:q,response:reply,error:null}]);
-      } catch(e) {
+      } catch(e){
         setPairs(prev=>[...prev,{query:q,response:"",error:e.message}]);
       } finally { setLoading(false); setPendingQ(""); }
     };
 
-    const onKey = e => {
-      if (e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); send(); }
-    };
+    const onKey=e=>{ if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();} };
 
     return (
       <div className="app">
 
+        {/* HEADER */}
         <header className="hd">
-          <div className="hd-q">
-            <span className="col-lbl">TSC-Claude</span>
-          </div>
-          <div className="hd-r">
-            <span className="col-lbl">Response</span>
-            <div className="hd-controls">
-              {pairs.length>0 &&
-                <button className="clear-btn" onClick={()=>setPairs([])}>Clear</button>}
-              <span className="model-tag">TSC-Claude · Sonnet 4</span>
-            </div>
+          <span className="hd-title">TSC-Claude</span>
+          <div className="hd-controls">
+            <button className="hist-btn" onClick={()=>setShowHist(v=>!v)}>
+              {showHist?"Close":"History"}{sessions.length>0?` · ${sessions.length}`:""}
+            </button>
+            {pairs.length>0 && <>
+              <button className="save-btn" onClick={saveAndNew}>Save · New</button>
+              <button className="clear-btn" onClick={()=>setPairs([])}>Clear</button>
+            </>}
           </div>
         </header>
 
-        {!keySet ? (
-          <div className="key-bar">
-            <span className="key-lbl">API Key</span>
-            <input
-              className="key-input"
-              type="password"
-              placeholder="sk-ant-…"
-              value={keyDraft}
-              onChange={e=>setKeyDraft(e.target.value)}
-              onKeyDown={e=>e.key==="Enter"&&saveKey()}
-            />
-            <button className="key-btn" onClick={saveKey}>Confirm</button>
-          </div>
-        ) : (
-          <div className="key-active">
-            <div className="key-dot"/>
-            <span className="key-active-lbl">Connection active · API key stored</span>
-            <button className="key-clear" onClick={clearKey}>Remove</button>
+        {/* HISTORY PANEL */}
+        {showHist && (
+          <div className="hist-panel">
+            <div className="hist-header">
+              <span className="hist-title">Previous Conversations</span>
+              <button className="hist-close" onClick={()=>setShowHist(false)}>Close</button>
+            </div>
+            {sessions.length===0 ? (
+              <div className="hist-empty">No saved conversations yet. Use "Save · New" to save the current session.</div>
+            ) : (
+              <div className="hist-list">
+                {sessions.map(s=>(
+                  <div key={s.id} className="hist-item" onClick={()=>loadSession(s)}>
+                    <div className="hist-item-meta">
+                      <span className="hist-date">{fmtDate(s.date)}</span>
+                      <span className="hist-count">{s.pairs.length} {s.pairs.length===1?"exchange":"exchanges"}</span>
+                      <button className="hist-del" onClick={e=>deleteSession(s.id,e)}>Delete</button>
+                    </div>
+                    <p className="hist-preview">{s.pairs[0]?.query?.slice(0,140)}{s.pairs[0]?.query?.length>140?"…":""}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
+        {/* PERSISTENT COLUMN LABELS */}
+        <div className="col-labels">
+          <div className="col-label-q"><span className="col-lbl">Inquiry</span></div>
+          <div className="col-label-r"><span className="col-lbl">Response</span></div>
+        </div>
+
+        {/* INPUT AT TOP */}
+        <div className="input-wrap">
+          <div className="input-left">
+            <textarea
+              ref={taRef}
+              className="input-field"
+              value={draft}
+              placeholder={keySet?"Type your question…":"Enter API key below"}
+              rows={1}
+              disabled={!keySet}
+              onChange={e=>{setDraft(e.target.value);resize(e.target);}}
+              onKeyDown={onKey}
+            />
+          </div>
+          <div className="input-right">
+            <button className="send-btn" onClick={send} disabled={!draft.trim()||loading||!keySet}>
+              Send
+            </button>
+          </div>
+        </div>
+
+        {/* CONVERSATION */}
         <div className="scroll">
           {pairs.length===0&&!loading&&(
             <div className="empty">
@@ -606,8 +772,7 @@
               <div className="ex-r">
                 {p.error
                   ? <p className="err-txt">⚠ {p.error}</p>
-                  : <div className="resp"
-                         dangerouslySetInnerHTML={{__html:renderMd(p.response)}}/>
+                  : <div className="resp" dangerouslySetInnerHTML={{__html:renderMd(p.response)}}/>
                 }
               </div>
             </div>
@@ -627,42 +792,37 @@
           <div ref={bottomRef}/>
         </div>
 
-        <div className="input-wrap">
-          <div className="input-grid">
-            <div className="input-left">
-              <span className="input-col-lbl">Inquiry</span>
-              <textarea
-                ref={taRef}
-                className="input-field"
-                value={draft}
-                placeholder={keySet?"Type your question…":"Enter API key above"}
-                rows={1}
-                disabled={!keySet}
-                onChange={e=>{setDraft(e.target.value);resize(e.target);}}
-                onKeyDown={onKey}
-              />
-            </div>
-            <div className="input-right">
-              <span className="input-hint">
-                Enter · Send<br/>
-                Shift+Enter · New line
-              </span>
-              <div className="btn-row">
-                <button
-                  className="send-btn"
-                  onClick={send}
-                  disabled={!draft.trim()||loading||!keySet}
-                >
-                  Send
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        {/* FOOTER: model selector left, API indicator right */}
         <div className="footer">
-          <span className="footer-note">TSC-Claude · Sonnet 4 · Anthropic API</span>
-          <span className="footer-note">Session only · Key not stored to disk</span>
+          <div className="model-select-wrap">
+            <span className="model-lbl">Model</span>
+            <select className="model-select" value={model} onChange={e=>setModel(e.target.value)}>
+              {MODELS.map(m=>(
+                <option key={m.id} value={m.id}>{m.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {!keySet ? (
+            <div className="api-entry">
+              <span className="key-lbl">API Key</span>
+              <input
+                className="key-input"
+                type="password"
+                placeholder="sk-ant-…"
+                value={keyDraft}
+                onChange={e=>setKeyDraft(e.target.value)}
+                onKeyDown={e=>e.key==="Enter"&&saveKey()}
+              />
+              <button className="key-btn" onClick={saveKey}>Confirm</button>
+            </div>
+          ) : (
+            <div className="api-indicator">
+              <div className="key-dot"/>
+              <span className="api-active-lbl">Connection active</span>
+              <button className="key-clear" onClick={clearKey}>Remove</button>
+            </div>
+          )}
         </div>
 
       </div>
