@@ -222,9 +222,10 @@
       width: 100%;
       background: transparent;
       border: none; outline: none;
-      font-family: var(--f-prompt);
+      font-family: var(--f-reply);
       font-size: 18px;
       font-weight: 400;
+      font-style: italic;
       color: var(--ink);
       resize: none;
       line-height: 1.55;
@@ -307,8 +308,14 @@
       letter-spacing: .32em; text-transform: uppercase; color: var(--rule); margin-bottom: 8px;
     }
     .query-text {
-      font-family: var(--f-prompt); font-size: 18px; font-weight: 400;
-      line-height: 1.65; color: var(--ink); white-space: pre-wrap; word-break: break-word;
+      font-family: var(--f-reply);
+      font-size: 18px;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.65;
+      color: var(--ink);
+      white-space: pre-wrap;
+      word-break: break-word;
     }
     .ex-r { padding: 20px var(--pad) 20px var(--gap); }
     .resp {
@@ -650,6 +657,51 @@
     "Project Scheduling",
   ];
 
+  const WRITE_FORMS = [
+    "— Select form —",
+    "Novel",
+    "Short Story",
+    "Flash Fiction",
+    "Personal Essay",
+    "Memoir / Narrative Non-fiction",
+    "Literary Non-fiction",
+    "Screenplay / Script",
+    "Poetry",
+    "Creative Non-fiction",
+    "Journalism / Feature",
+    "Other",
+  ];
+
+  const WRITE_STAGES = [
+    "— Select stage —",
+    "Brainstorming / Generating Ideas",
+    "Outlining / Structure",
+    "First Draft",
+    "Revision — Big Picture",
+    "Revision — Line Level",
+    "Copy Editing / Proofreading",
+    "Query Letter / Synopsis",
+    "Submission / Publication",
+  ];
+
+  const WRITE_TOPICS = [
+    "Plot & Structure",
+    "Character Development",
+    "Voice & Style",
+    "Point of View",
+    "Dialogue",
+    "Scene & Setting",
+    "Pacing & Tension",
+    "Opening / Hook",
+    "Endings & Resolution",
+    "Theme & Subtext",
+    "Research & Accuracy",
+    "World-building",
+    "Feedback & Critique",
+    "Writer's Block",
+    "Audience & Market",
+  ];
+
   function loadHistory() {
     try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
     catch { return []; }
@@ -711,6 +763,14 @@
     const [archQuestion, setArchQuestion] = useState("");
     const [archLoading,  setArchLoading]  = useState(false);
     const [archResponse, setArchResponse] = useState("");
+
+    // Writer state
+    const [writeForm,     setWriteForm]     = useState(WRITE_FORMS[0]);
+    const [writeStage,    setWriteStage]    = useState(WRITE_STAGES[0]);
+    const [writeTopics,   setWriteTopics]   = useState([]);
+    const [writeQuestion, setWriteQuestion] = useState("");
+    const [writeLoading,  setWriteLoading]  = useState(false);
+    const [writeResponse, setWriteResponse] = useState("");
 
     useEffect(()=>{ bottomRef.current?.scrollIntoView({behavior:"smooth"}); },[pairs,loading]);
 
@@ -803,6 +863,34 @@
       finally { setArchLoading(false); }
     };
 
+    // Writer helpers
+    const toggleWriteTopic = (t) => {
+      setWriteTopics(prev => prev.includes(t) ? prev.filter(x=>x!==t) : [...prev,t]);
+      setWriteResponse("");
+    };
+
+    const writeValid = writeForm !== WRITE_FORMS[0] && writeStage !== WRITE_STAGES[0] && writeTopics.length > 0 && writeQuestion.trim().length > 0;
+
+    const writePreview = () => {
+      if(!writeForm || writeForm===WRITE_FORMS[0]) return "Fill in the form to build a context-aware query for Claude.";
+      let p = `I am working on a ${writeForm}`;
+      if(writeStage && writeStage!==WRITE_STAGES[0]) p += ` and I am in the ${writeStage} stage`;
+      if(writeTopics.length) p += `. The area I need help with is: ${writeTopics.join(", ")}`;
+      if(writeQuestion.trim()) p += `. My specific question is: ${writeQuestion.trim()}`;
+      return p;
+    };
+
+    const sendWriteQuery = async () => {
+      if(!writeValid||!apiKey||writeLoading) return;
+      setWriteLoading(true); setWriteResponse("");
+      const prompt = `I am a writer working on a ${writeForm} and I am in the ${writeStage} stage. I need guidance on the following area(s): ${writeTopics.join(", ")}. My specific question is: ${writeQuestion.trim()}`;
+      try {
+        const reply = await callApi([{role:"user",content:prompt}]);
+        setWriteResponse(reply);
+      } catch(e) { setWriteResponse("⚠ "+e.message); }
+      finally { setWriteLoading(false); }
+    };
+
     const Footer = () => (
       <div className="footer">
         <div className="model-wrap">
@@ -841,6 +929,9 @@
             </button>
             <button className={`nav-item ${page==="architecture"?"active":""}`} onClick={()=>setPage("architecture")}>
               Architecture
+            </button>
+            <button className={`nav-item ${page==="writer"?"active":""}`} onClick={()=>setPage("writer")}>
+              Writer
             </button>
           </nav>
           <div className="sidebar-footer">
@@ -1019,6 +1110,98 @@
                     )}
                     {!archLoading&&archResponse&&(
                       <div className="arch-response-text" dangerouslySetInnerHTML={{__html:renderMd(archResponse)}}/>
+                    )}
+                  </div>
+                </div>
+
+              </div>
+              <Footer/>
+            </div>
+          )}
+
+          {/* ── WRITER PAGE ── */}
+          {page==="writer"&&(
+            <div className="arch-page">
+              <div className="arch-header">
+                <div className="arch-header-title">Writer's Assistant</div>
+                <div className="arch-header-sub">Describe your form, stage, and focus area — then send a context-rich query to Claude.</div>
+              </div>
+
+              <div className="arch-body">
+
+                {/* Left: guided form */}
+                <div className="arch-form-panel">
+
+                  <div className="arch-step">
+                    <span className="arch-step-label">01 · Form</span>
+                    <p className="arch-step-desc">What are you writing?</p>
+                    <select className="arch-select" value={writeForm}
+                      onChange={e=>{setWriteForm(e.target.value);setWriteResponse("");}}>
+                      {WRITE_FORMS.map(f=><option key={f} value={f}>{f}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="arch-step">
+                    <span className="arch-step-label">02 · Stage</span>
+                    <p className="arch-step-desc">Where are you in the process?</p>
+                    <select className="arch-select" value={writeStage}
+                      onChange={e=>{setWriteStage(e.target.value);setWriteResponse("");}}>
+                      {WRITE_STAGES.map(s=><option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="arch-step">
+                    <span className="arch-step-label">03 · Focus Area</span>
+                    <p className="arch-step-desc">Select one or more areas your question touches on.</p>
+                    <div className="arch-checks">
+                      {WRITE_TOPICS.map(t=>(
+                        <label key={t} className="arch-check-item">
+                          <input type="checkbox" checked={writeTopics.includes(t)}
+                            onChange={()=>toggleWriteTopic(t)}/>
+                          <span className="arch-check-lbl">{t}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="arch-step">
+                    <span className="arch-step-label">04 · Your Question</span>
+                    <p className="arch-step-desc">Describe the specific problem or question you're working through.</p>
+                    <textarea className="arch-textarea"
+                      placeholder="What is your specific question?"
+                      value={writeQuestion}
+                      onChange={e=>{setWriteQuestion(e.target.value);setWriteResponse("");}}
+                      rows={4}/>
+                  </div>
+
+                  <hr className="arch-divider"/>
+
+                  <button className="arch-submit-btn"
+                    onClick={sendWriteQuery}
+                    disabled={!writeValid||!apiKey||writeLoading}>
+                    {writeLoading ? "Thinking…" : "Send to Claude"}
+                  </button>
+                  {!keySet&&<p style={{marginTop:10,fontFamily:"var(--f-reply)",fontSize:13,fontStyle:"italic",color:"var(--accent)"}}>Enter API key in the footer first.</p>}
+                </div>
+
+                {/* Right: preview + response */}
+                <div className="arch-response-panel">
+                  <div className="arch-preview-box">
+                    <span className="arch-preview-lbl">Query Preview</span>
+                    <p className="arch-preview-text">{writePreview()}</p>
+                  </div>
+                  <div className="arch-response-scroll">
+                    <span className="arch-response-lbl">Response</span>
+                    {writeLoading&&(
+                      <div className="arch-dots">
+                        <div className="dot"/><div className="dot"/><div className="dot"/>
+                      </div>
+                    )}
+                    {!writeLoading&&!writeResponse&&(
+                      <p className="arch-empty">Response will appear here once you send your query.</p>
+                    )}
+                    {!writeLoading&&writeResponse&&(
+                      <div className="arch-response-text" dangerouslySetInnerHTML={{__html:renderMd(writeResponse)}}/>
                     )}
                   </div>
                 </div>
