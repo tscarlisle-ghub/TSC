@@ -71,8 +71,8 @@
     .hd-title {
       font-family: var(--f-title);
       font-weight: 400;
-      font-size: 22px;
-      letter-spacing: 0.18em;
+      font-size: 28px;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--ink);
       line-height: 1;
@@ -85,7 +85,126 @@
       gap: 14px;
     }
 
-    .hist-btn, .clear-btn, .save-btn {
+    .nav-btn {
+      background: none;
+      border: none;
+      font-family: var(--f-ui);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 4px 0;
+      cursor: pointer;
+      transition: color .15s;
+      border-bottom: 1px solid transparent;
+    }
+    .nav-btn:hover  { color: var(--ink); }
+    .nav-btn.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+    /* ── Architecture page ────────────────────────────── */
+    .arch-page {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--cream);
+    }
+    .arch-page::-webkit-scrollbar { width: 3px; }
+    .arch-page::-webkit-scrollbar-thumb { background: var(--rule); }
+
+    .arch-section {
+      display: grid;
+      grid-template-columns: var(--q) var(--r);
+      border-bottom: 1px solid var(--rule-lt);
+    }
+    .arch-section:last-child { border-bottom: none; }
+
+    .arch-label {
+      padding: 36px var(--gap) 36px var(--pad);
+      border-right: 1px solid var(--rule);
+    }
+    .arch-label-txt {
+      font-family: var(--f-ui);
+      font-weight: 700;
+      font-size: 9px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--rule);
+      line-height: 1;
+    }
+    .arch-label-num {
+      font-family: var(--f-ui);
+      font-weight: 700;
+      font-size: 9px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--rule);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .arch-body {
+      padding: 36px var(--pad) 36px var(--gap);
+    }
+
+    .arch-headline {
+      font-family: var(--f-ui);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 18px;
+      line-height: 1;
+    }
+
+    .arch-lede {
+      font-family: var(--f-reply);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--ink);
+      margin-bottom: 0;
+    }
+
+    .arch-p {
+      font-family: var(--f-reply);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.74;
+      color: var(--ink);
+      margin-bottom: 1em;
+    }
+    .arch-p:last-child { margin-bottom: 0; }
+    .arch-p strong { font-weight: 700; color: var(--ink-warm); }
+
+    .arch-tools {
+      margin-top: 4px;
+    }
+    .arch-tool {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0 24px;
+      padding: 14px 0;
+      border-top: 1px solid var(--rule-lt);
+    }
+    .arch-tool:first-child { border-top: none; padding-top: 0; }
+    .arch-tool-name {
+      font-family: var(--f-ui);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding-top: 2px;
+    }
+    .arch-tool-desc {
+      font-family: var(--f-reply);
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink-light);
+    }
+
+  
       background: none;
       border: 1px solid var(--rule);
       font-family: var(--f-ui);
@@ -573,7 +692,92 @@
     return s;
   }
 
+  function ArchPage() {
+    const tools = [
+      { name: "Fee Proposal",       desc: "Drafts complete fee proposals from project type, area, and delivery method. Knows the difference between SD/DD/CD/CA phases, typical hourly breakdowns for a custom residential practice, and how to frame reimbursables." },
+      { name: "Spec Writer",        desc: "Generates CSI MasterFormat specification sections from product selections and performance requirements. Understands prescriptive vs. performance specs, knows which sections carry liability, and flags scope gaps." },
+      { name: "RFI Response",       desc: "Reads an RFI and drafts a response that answers only what was asked, avoids inadvertent scope additions, and maintains the appropriate tone for contractor communications." },
+      { name: "Bid Leveler",        desc: "Takes multiple bid submissions and produces a structured comparison — normalizing allowances, identifying what each contractor included or excluded, and surfacing the real cost differences." },
+      { name: "Code Researcher",    desc: "Answers building code questions by jurisdiction — setbacks, height limits, lot coverage, occupancy classification, fire rating requirements — with citations to the applicable code section." },
+      { name: "Client Translator",  desc: "Converts architect-to-architect prose into language a residential client can engage with. Adjusts technical level, removes jargon, and preserves the intent of the original." },
+      { name: "Meeting Summary",    desc: "Takes rough notes from a client or consultant meeting and produces a structured summary with decisions made, items outstanding, and action items with responsible parties." },
+      { name: "Schedule Narrative", desc: "Writes the project schedule narrative for a fee proposal or contract — milestone-based, accounting for permit timelines by jurisdiction and contractor lead times for custom materials." },
+    ];
+
+    return (
+      <div className="arch-page">
+
+        <div className="arch-section">
+          <div className="arch-label">
+            <span className="arch-label-num">— 01 —</span>
+            <span className="arch-label-txt">Premise</span>
+          </div>
+          <div className="arch-body">
+            <p className="arch-lede">A general-purpose AI is useful to an architect. An AI that speaks architecture is indispensable.</p>
+          </div>
+        </div>
+
+        <div className="arch-section">
+          <div className="arch-label">
+            <span className="arch-label-num">— 02 —</span>
+            <span className="arch-label-txt">The Distinction</span>
+          </div>
+          <div className="arch-body">
+            <p className="arch-p">The underlying model — Claude, GPT-4, Gemini — is wholesale infrastructure. The value is in the front door: domain knowledge baked into the prompts, the workflows, the interface decisions, and the terminology.</p>
+            <p className="arch-p">A general tool doesn't know what a spec section is, what a bid leveling spreadsheet needs, what a scope gap looks like in a drawing set, how to write a fee proposal for a Design-Build project versus a traditional delivery, or what a contractor is really asking when he submits an RFI that seems straightforward but isn't.</p>
+            <p className="arch-p">That knowledge, systematized into structured prompts and purpose-built workflows, is not something a general AI or an Autodesk product will replicate quickly. It comes from having done the work.</p>
+          </div>
+        </div>
+
+        <div className="arch-section">
+          <div className="arch-label">
+            <span className="arch-label-num">— 03 —</span>
+            <span className="arch-label-txt">What's Built In</span>
+          </div>
+          <div className="arch-body">
+            <p className="arch-p">Every request is answered with pre-loaded context that a general AI would need to be told. The system knows:</p>
+            <p className="arch-p"><strong>Project delivery.</strong> SD, DD, CD, CA phases and what each produces. AIA contract structures, owner-architect agreements, consultants agreements. The difference between a GMP contract and a stipulated sum.</p>
+            <p className="arch-p"><strong>Specifications.</strong> CSI MasterFormat division structure. The difference between prescriptive and performance specifications. Which sections carry the most liability exposure in residential construction.</p>
+            <p className="arch-p"><strong>Construction administration.</strong> What an RFI is and isn't asking. How to read a schedule of values. What a legitimate reason for a change order looks like versus what isn't.</p>
+            <p className="arch-p"><strong>Residential practice.</strong> Custom home fee structures, typical hourly rates and multipliers, consultant coordination, permit process variability by jurisdiction, client communication patterns.</p>
+          </div>
+        </div>
+
+        <div className="arch-section">
+          <div className="arch-label">
+            <span className="arch-label-num">— 04 —</span>
+            <span className="arch-label-txt">Tools</span>
+          </div>
+          <div className="arch-body">
+            <div className="arch-tools">
+              {tools.map((t,i) => (
+                <div key={i} className="arch-tool">
+                  <span className="arch-tool-name">{t.name}</span>
+                  <span className="arch-tool-desc">{t.desc}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="arch-section">
+          <div className="arch-label">
+            <span className="arch-label-num">— 05 —</span>
+            <span className="arch-label-txt">The Moat</span>
+          </div>
+          <div className="arch-body">
+            <p className="arch-p">Every firm that uses the tool teaches it what architecture firms actually need. The aggregate of that usage — anonymized, pattern-recognized — makes the product better in ways a general tool never will be. The data layer compounds.</p>
+            <p className="arch-p">Architecture is a small world. There are roughly 120,000 licensed architects in the US. If AIA chapters, architecture schools, and a handful of respected firms adopt the tool, you have the profession. The firm that goes deepest into one vertical and builds the most trusted brand in that community wins, even if a larger player eventually enters.</p>
+            <p className="arch-p">Intuit still dominates small business accounting despite Google and Microsoft both having tried.</p>
+          </div>
+        </div>
+
+      </div>
+    );
+  }
+
   function App() {
+    const [page,     setPage]     = useState("chat");
     const [apiKey,   setApiKey]   = useState(()=>sessionStorage.getItem("ck")||"");
     const [keyDraft, setKeyDraft] = useState("");
     const [keySet,   setKeySet]   = useState(()=>!!sessionStorage.getItem("ck"));
@@ -678,18 +882,22 @@
         <header className="hd">
           <span className="hd-title">TSC-Claude</span>
           <div className="hd-controls">
-            <button className="hist-btn" onClick={()=>setShowHist(v=>!v)}>
-              {showHist?"Close":"History"}{sessions.length>0?` · ${sessions.length}`:""}
-            </button>
-            {pairs.length>0 && <>
-              <button className="save-btn" onClick={saveAndNew}>Save · New</button>
-              <button className="clear-btn" onClick={()=>setPairs([])}>Clear</button>
+            <button className={`nav-btn${page==="chat"?" active":""}`} onClick={()=>setPage("chat")}>Chat</button>
+            <button className={`nav-btn${page==="arch"?" active":""}`} onClick={()=>setPage("arch")}>For Architecture</button>
+            {page==="chat" && <>
+              <button className="hist-btn" onClick={()=>setShowHist(v=>!v)}>
+                {showHist?"Close":"History"}{sessions.length>0?` · ${sessions.length}`:""}
+              </button>
+              {pairs.length>0 && <>
+                <button className="save-btn" onClick={saveAndNew}>Save · New</button>
+                <button className="clear-btn" onClick={()=>setPairs([])}>Clear</button>
+              </>}
             </>}
           </div>
         </header>
 
         {/* HISTORY PANEL */}
-        {showHist && (
+        {page==="chat" && showHist && (
           <div className="hist-panel">
             <div className="hist-header">
               <span className="hist-title">Previous Conversations</span>
@@ -733,6 +941,12 @@
             </button>
           </div>
         </div>
+
+        {/* ARCHITECTURE PAGE */}
+        {page==="arch" && <ArchPage/>}
+
+        {/* CHAT PAGE */}
+        {page==="chat" && <>
 
         {/* PERSISTENT COLUMN LABELS */}
         <div className="col-labels">
@@ -783,6 +997,8 @@
           )}
           <div ref={bottomRef}/>
         </div>
+
+        </> /* end chat page */}
 
         {/* FOOTER: model selector left, API indicator right */}
         <div className="footer">
