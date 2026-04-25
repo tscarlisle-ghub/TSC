@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude · Kommunikation</title>
+
+  <!-- Adobe Fonts (FF Meta family) -->
+  <link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css" />
+
+  <!-- React + Babel (no build step needed) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* ── Warm paper palette (v1) ─────────────────── */
+      --cream:       #F5F0E8;
+      --parchment:   #EDE7D9;
+      --ink:         #1C1A16;
+      --ink-warm:    #2E1A0E;
+      --ink-light:   #4A4540;
+      --ink-muted:   #8A8178;
+      --rule:        #C8BFB0;
+      --rule-lt:     #DDD8CE;
+      --accent:      #8B4513;
+      --accent-bg:   rgba(139,69,19,0.07);
+
+      /* ── Type roles ──────────────────────────────── */
+      --f-label:     "ff-meta-web-pro-condensed", sans-serif;
+      --f-prompt:    "ff-meta-correspondence-web-p", sans-serif;
+      --f-reply:     "ff-meta-web-pro", sans-serif;
+    }
+
+    html, body { height: 100%; background: var(--cream); }
+    #root       { height: 100%; }
+
+    /* ── App shell ───────────────────────────────────── */
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      color: var(--ink);
+    }
+
+    /* ── Header ──────────────────────────────────────── */
+    .hd {
+      display: grid;
+      grid-template-columns: 38% 62%;
+      background: var(--parchment);
+      border-bottom: 1px solid var(--rule);
+      flex-shrink: 0;
+    }
+    .hd-left {
+      padding: 15px 28px 13px;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+    }
+    .hd-right {
+      padding: 15px 28px 13px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .hd-title {
+      font-family: var(--f-label);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .col-label {
+      font-family: var(--f-label);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+    .hd-controls {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+    }
+    .model-tag {
+      font-family: var(--f-label);
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      border: 1px solid var(--rule);
+      padding: 3px 9px 2px;
+    }
+
+    /* ── API key bar ─────────────────────────────────── */
+    .key-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 28px;
+      background: var(--parchment);
+      border-bottom: 1px solid var(--rule);
+      flex-shrink: 0;
+    }
+    .key-lbl {
+      font-family: var(--f-label);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
+    .key-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--rule);
+      outline: none;
+      font-family: var(--f-prompt);
+      font-size: 17px;
+      color: var(--ink);
+      padding: 3px 4px;
+      letter-spacing: 0.04em;
+    }
+    .key-input::placeholder { color: var(--rule); }
+    .key-btn {
+      background: none;
+      border: 1px solid var(--rule);
+      color: var(--ink-muted);
+      font-family: var(--f-label);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 5px 14px 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .key-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .key-active {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 28px;
+      background: var(--parchment);
+      border-bottom: 1px solid var(--rule);
+      flex-shrink: 0;
+    }
+    .key-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 5px var(--accent);
+      animation: glow 3s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%,100% { opacity: 1; } 50% { opacity: 0.35; }
+    }
+    .key-active-lbl {
+      font-family: var(--f-label);
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+    .key-clear {
+      margin-left: auto;
+      background: none; border: none;
+      font-family: var(--f-label);
+      font-weight: 400;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+    .key-clear:hover { color: var(--accent); }
+
+    /* ── Scroll area ─────────────────────────────────── */
+    .scroll {
+      flex: 1;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      background: var(--cream);
+    }
+    .scroll::-webkit-scrollbar { width: 3px; }
+    .scroll::-webkit-scrollbar-track { background: transparent; }
+    .scroll::-webkit-scrollbar-thumb { background: var(--rule); }
+
+    /* ── Empty state ─────────────────────────────────── */
+    .empty {
+      display: grid;
+      grid-template-columns: 38% 62%;
+      height: 100%;
+      min-height: 200px;
+    }
+    .empty-col { padding: 52px 28px; }
+    .empty-col:first-child { border-right: 1px solid var(--rule-lt); }
+    .empty-rule { width: 24px; height: 1px; background: var(--rule); margin-bottom: 18px; }
+    .empty-txt {
+      font-family: var(--f-reply);
+      font-size: 20px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--ink-muted);
+      line-height: 1.65;
+    }
+
+    /* ── Exchange rows ───────────────────────────────── */
+    .exchange {
+      display: grid;
+      grid-template-columns: 38% 62%;
+      border-bottom: 1px solid var(--rule-lt);
+      animation: rise 0.22s ease forwards;
+      opacity: 0;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .ex-q {
+      padding: 30px 28px;
+      border-right: 1px solid var(--rule);
+    }
+    .ex-num {
+      display: block;
+      font-family: var(--f-label);
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--rule);
+      margin-bottom: 12px;
+    }
+    .query-text {
+      font-family: var(--f-prompt);
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 1.65;
+      color: var(--ink-warm);
+      white-space: pre-wrap;
+      word-break: break-word;
+      letter-spacing: 0.02em;
+    }
+
+    .ex-r { padding: 30px 28px; }
+
+    /* ── Response text ───────────────────────────────── */
+    .resp {
+      font-family: var(--f-reply);
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 1.72;
+      color: var(--ink);
+      word-break: break-word;
+    }
+    .resp p            { margin-bottom: 0.85em; }
+    .resp p:last-child { margin-bottom: 0; }
+    .resp strong       { font-weight: 700; color: var(--ink-warm); }
+    .resp em           { font-style: italic; }
+
+    .resp h1, .resp h2, .resp h3 {
+      font-family: var(--f-label);
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin: 1.2em 0 0.45em;
+      line-height: 1.2;
+    }
+    .resp h1 { font-size: 26px; }
+    .resp h2 { font-size: 21px; }
+    .resp h3 { font-size: 16px; letter-spacing: 0.2em; }
+
+    .resp ul, .resp ol { padding-left: 22px; margin-bottom: 0.85em; }
+    .resp li           { margin-bottom: 0.3em; }
+
+    .resp code {
+      font-family: var(--f-prompt);
+      font-size: 18px;
+      background: var(--parchment);
+      border: 1px solid var(--rule-lt);
+      padding: 1px 5px;
+      color: var(--accent);
+    }
+    .resp pre {
+      background: var(--ink);
+      color: #C8C0B0;
+      padding: 18px 20px;
+      margin: 14px 0;
+      overflow-x: auto;
+      font-family: var(--f-prompt);
+      font-size: 17px;
+      line-height: 1.65;
+    }
+    .resp pre code {
+      background: none; border: none;
+      padding: 0; color: inherit; font-size: inherit;
+    }
+    .resp blockquote {
+      border-left: 2px solid var(--rule);
+      padding-left: 16px;
+      color: var(--ink-muted);
+      font-style: italic;
+      margin: 0.85em 0;
+    }
+    .resp hr {
+      border: none;
+      border-top: 1px solid var(--rule-lt);
+      margin: 18px 0;
+    }
+    .err-txt {
+      font-family: var(--f-reply);
+      font-size: 19px;
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── Thinking indicator ──────────────────────────── */
+    .thinking {
+      display: grid;
+      grid-template-columns: 38% 62%;
+      animation: rise 0.22s ease forwards;
+      opacity: 0;
+    }
+    .thinking-q { padding: 30px 28px; border-right: 1px solid var(--rule); }
+    .thinking-r { padding: 38px 28px; display: flex; align-items: flex-start; gap: 6px; }
+    .dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--rule);
+      animation: blink 1.3s ease-in-out infinite;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink {
+      0%,80%,100% { opacity: 0.25; } 40% { opacity: 1; }
+    }
+
+    /* ── Input area ──────────────────────────────────── */
+    .input-wrap {
+      border-top: 1px solid var(--rule);
+      background: var(--parchment);
+      flex-shrink: 0;
+    }
+    .input-grid {
+      display: grid;
+      grid-template-columns: 38% 62%;
+    }
+    .input-left {
+      padding: 16px 28px;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .input-col-lbl {
+      font-family: var(--f-label);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+    .input-field {
+      width: 100%;
+      background: transparent;
+      border: none; outline: none;
+      font-family: var(--f-prompt);
+      font-size: 21px;
+      font-weight: 400;
+      color: var(--ink-warm);
+      resize: none;
+      line-height: 1.55;
+      min-height: 30px;
+      max-height: 160px;
+      letter-spacing: 0.02em;
+      caret-color: var(--accent);
+    }
+    .input-field::placeholder { color: var(--rule); font-style: italic; }
+    .input-field:disabled { opacity: 0.35; }
+
+    .input-right {
+      padding: 16px 28px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .input-hint {
+      font-family: var(--f-label);
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      line-height: 1.8;
+    }
+    .btn-row { display: flex; align-items: center; gap: 14px; }
+
+    .clear-btn {
+      background: none; border: none;
+      font-family: var(--f-label);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+    .clear-btn:hover { color: var(--accent); }
+
+    .send-btn {
+      background: none;
+      border: 1px solid var(--rule);
+      color: var(--ink-muted);
+      font-family: var(--f-label);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      padding: 8px 22px 7px;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .send-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-bg);
+    }
+    .send-btn:disabled { opacity: 0.28; cursor: not-allowed; }
+
+    /* ── Footer ──────────────────────────────────────── */
+    .footer {
+      padding: 7px 28px 10px;
+      display: flex;
+      justify-content: space-between;
+      background: var(--parchment);
+      border-top: 1px solid var(--rule-lt);
+    }
+    .footer-note {
+      font-family: var(--f-label);
+      font-weight: 400;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      opacity: 0.55;
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+  const { useState, useRef, useEffect } = React;
+
+  function renderMd(raw) {
+    if (!raw) return "";
+    let s = raw
+      .replace(/&/g,  "&amp;")
+      .replace(/</g,  "&lt;")
+      .replace(/>/g,  "&gt;");
+    s = s.replace(/```[\w]*\n?([\s\S]*?)```/g,
+      (_, c) => `<pre><code>${c.trim()}</code></pre>`);
+    s = s.replace(/`([^`\n]+)`/g, "<code>$1</code>");
+    s = s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    s = s.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, "<em>$1</em>");
+    s = s.replace(/^&gt;\s?(.+)$/gm, "<blockquote>$1</blockquote>");
+    s = s.replace(/^---$/gm, "<hr/>");
+    s = s.replace(/^### (.+)$/gm, "<h3>$1</h3>");
+    s = s.replace(/^## (.+)$/gm,  "<h2>$1</h2>");
+    s = s.replace(/^# (.+)$/gm,   "<h1>$1</h1>");
+    s = s.replace(/^\s*[-*]\s+(.+)$/gm, "<li>$1</li>");
+    s = s.replace(/^\s*\d+\.\s+(.+)$/gm, "<li>$1</li>");
+    s = s.replace(/(<li>[\s\S]*?<\/li>)(\n<li>[\s\S]*?<\/li>)*/g,
+      m => `<ul>${m}</ul>`);
+    s = s.split(/\n{2,}/).map(b => {
+      const t = b.trim();
+      if (/^<(h[123]|ul|ol|li|pre|blockquote|hr)/.test(t)) return t;
+      if (!t) return "";
+      return `<p>${t.replace(/\n/g," ")}</p>`;
+    }).join("\n");
+    return s;
+  }
+
+  function App() {
+    const [apiKey,   setApiKey]   = useState(() => sessionStorage.getItem("ck") || "");
+    const [keyDraft, setKeyDraft] = useState("");
+    const [keySet,   setKeySet]   = useState(() => !!sessionStorage.getItem("ck"));
+    const [pairs,    setPairs]    = useState([]);
+    const [draft,    setDraft]    = useState("");
+    const [loading,  setLoading]  = useState(false);
+    const [pendingQ, setPendingQ] = useState("");
+    const bottomRef = useRef(null);
+    const taRef     = useRef(null);
+
+    useEffect(() => {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [pairs, loading]);
+
+    const resize = el => {
+      el.style.height = "auto";
+      el.style.height = Math.min(el.scrollHeight, 160) + "px";
+    };
+
+    const saveKey = () => {
+      const k = keyDraft.trim();
+      if (!k) return;
+      sessionStorage.setItem("ck", k);
+      setApiKey(k); setKeySet(true); setKeyDraft("");
+    };
+
+    const clearKey = () => {
+      sessionStorage.removeItem("ck");
+      setApiKey(""); setKeySet(false);
+    };
+
+    const buildHistory = () => {
+      const m = [];
+      pairs.forEach(p => {
+        m.push({ role: "user",      content: p.query });
+        m.push({ role: "assistant", content: p.response || " " });
+      });
+      return m;
+    };
+
+    const send = async () => {
+      const q = draft.trim();
+      if (!q || loading || !apiKey) return;
+      setDraft(""); setPendingQ(q); setLoading(true);
+      if (taRef.current) taRef.current.style.height = "auto";
+      try {
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type":      "application/json",
+            "x-api-key":         apiKey,
+            "anthropic-version": "2023-06-01",
+            "anthropic-dangerous-direct-browser-access": "true"
+          },
+          body: JSON.stringify({
+            model:      "claude-sonnet-4-20250514",
+            max_tokens: 1024,
+            messages:   [...buildHistory(), { role: "user", content: q }]
+          })
+        });
+        if (!res.ok) {
+          const e = await res.json().catch(() => ({}));
+          throw new Error(e.error?.message || `HTTP ${res.status}`);
+        }
+        const data  = await res.json();
+        const reply = data.content?.find(b => b.type === "text")?.text || "";
+        setPairs(prev => [...prev, { query: q, response: reply, error: null }]);
+      } catch (e) {
+        setPairs(prev => [...prev, { query: q, response: "", error: e.message }]);
+      } finally {
+        setLoading(false); setPendingQ("");
+      }
+    };
+
+    const onKey = e => {
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
+    };
+
+    return (
+      <div className="app">
+
+        {/* HEADER */}
+        <header className="hd">
+          <div className="hd-left">
+            <span className="hd-title">Claude · Kommunikation</span>
+          </div>
+          <div className="hd-right">
+            <span className="col-label">Response</span>
+            <div className="hd-controls">
+              {pairs.length > 0 &&
+                <button className="clear-btn" onClick={() => setPairs([])}>Clear</button>}
+              <span className="model-tag">Sonnet 4</span>
+            </div>
+          </div>
+        </header>
+
+        {/* API KEY */}
+        {!keySet ? (
+          <div className="key-bar">
+            <span className="key-lbl">API-Schlüssel</span>
+            <input
+              className="key-input"
+              type="password"
+              placeholder="sk-ant-…"
+              value={keyDraft}
+              onChange={e => setKeyDraft(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && saveKey()}
+            />
+            <button className="key-btn" onClick={saveKey}>Bestätigen</button>
+          </div>
+        ) : (
+          <div className="key-active">
+            <div className="key-dot" />
+            <span className="key-active-lbl">Verbindung aktiv · API-Schlüssel gespeichert</span>
+            <button className="key-clear" onClick={clearKey}>Entfernen</button>
+          </div>
+        )}
+
+        {/* CONVERSATION */}
+        <div className="scroll">
+
+          {pairs.length === 0 && !loading && (
+            <div className="empty">
+              <div className="empty-col">
+                <div className="empty-rule" />
+                <p className="empty-txt">Your questions<br />appear here.</p>
+              </div>
+              <div className="empty-col">
+                <div className="empty-rule" />
+                <p className="empty-txt">Responses appear<br />alongside each inquiry.</p>
+              </div>
+            </div>
+          )}
+
+          {pairs.map((p, i) => (
+            <div key={i} className="exchange">
+              <div className="ex-q">
+                <span className="ex-num">— {String(i+1).padStart(2,"0")} —</span>
+                <p className="query-text">{p.query}</p>
+              </div>
+              <div className="ex-r">
+                {p.error
+                  ? <p className="err-txt">⚠ {p.error}</p>
+                  : <div className="resp"
+                         dangerouslySetInnerHTML={{ __html: renderMd(p.response) }} />
+                }
+              </div>
+            </div>
+          ))}
+
+          {loading && (
+            <div className="thinking">
+              <div className="thinking-q">
+                <span className="ex-num">— {String(pairs.length+1).padStart(2,"0")} —</span>
+                <p className="query-text">{pendingQ}</p>
+              </div>
+              <div className="thinking-r">
+                <div className="dot"/><div className="dot"/><div className="dot"/>
+              </div>
+            </div>
+          )}
+
+          <div ref={bottomRef} />
+        </div>
+
+        {/* INPUT */}
+        <div className="input-wrap">
+          <div className="input-grid">
+            <div className="input-left">
+              <span className="input-col-lbl">Inquiry</span>
+              <textarea
+                ref={taRef}
+                className="input-field"
+                value={draft}
+                placeholder={keySet ? "Type your question…" : "Enter API key above"}
+                rows={1}
+                disabled={!keySet}
+                onChange={e => { setDraft(e.target.value); resize(e.target); }}
+                onKeyDown={onKey}
+              />
+            </div>
+            <div className="input-right">
+              <span className="input-hint">
+                Enter · Send<br />
+                Shift+Enter · New line
+              </span>
+              <div className="btn-row">
+                <button
+                  className="send-btn"
+                  onClick={send}
+                  disabled={!draft.trim() || loading || !keySet}
+                >
+                  Senden
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* FOOTER */}
+        <div className="footer">
+          <span className="footer-note">Claude Sonnet 4 · Anthropic API</span>
+          <span className="footer-note">Session only · Key not stored to disk</span>
+        </div>
+
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
