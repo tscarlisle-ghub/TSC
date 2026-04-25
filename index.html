@@ -1162,7 +1162,7 @@
 
     const relevantArchTopics = getRelevantArchTopics(archType, archPhase);
 
-    const archValid = archType !== PROJECT_TYPES[0] && archPhase !== PHASES[0] && archTopics.length > 0 && archQuestion.trim().length > 0;
+    const archValid = archType !== PROJECT_TYPES[0] && archPhase !== PHASES[0] && archTopics.length > 0;
 
     const archPreview = () => {
       if(!archType || archType===PROJECT_TYPES[0]) return "Fill in the form to build a context-aware query for Claude.";
@@ -1192,7 +1192,7 @@
 
     const relevantWriteTopics = getRelevantWriteTopics(writeForm, writeStage);
 
-    const writeValid = writeForm !== WRITE_FORMS[0] && writeStage !== WRITE_STAGES[0] && writeTopics.length > 0 && writeQuestion.trim().length > 0;
+    const writeValid = writeForm !== WRITE_FORMS[0] && writeStage !== WRITE_STAGES[0] && writeTopics.length > 0;
 
     const writePreview = () => {
       if(!writeForm || writeForm===WRITE_FORMS[0]) return "Fill in the form to build your craft question for Claude.";
