@@ -129,15 +129,10 @@
 
     /* ── Input box at top ─────────────────────────────── */
     .input-wrap {
-      display: grid;
-      grid-template-columns: var(--q) var(--r);
       background: var(--input-bg);
       border-bottom: 1px solid var(--rule);
       flex-shrink: 0;
-    }
-    .input-left {
-      padding: 14px var(--gap) 14px var(--pad);
-      border-right: 1px solid var(--rule);
+      padding: 14px var(--pad) 10px;
     }
     .input-field {
       width: 100%;
@@ -146,17 +141,26 @@
       font-family: var(--f-prompt);
       font-size: 18px;
       line-height: 1.55;
-      min-height: 22px;
+      min-height: 26px;
       max-height: 140px;
       caret-color: var(--accent);
+      display: block;
     }
     .input-field::placeholder { color: var(--rule); }
     .input-field:disabled      { opacity: .3; }
-    .input-right {
-      padding: 14px var(--pad) 14px var(--gap);
+    .input-footer {
       display: flex;
-      align-items: flex-end;
-      justify-content: flex-end;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+    .input-hint {
+      font-family: var(--f-ui);
+      font-weight: 400;
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--rule);
     }
     .send-btn {
       background: none;
@@ -712,19 +716,18 @@
 
         {/* INPUT AT TOP — above column labels */}
         <div className="input-wrap">
-          <div className="input-left">
-            <textarea
-              ref={taRef}
-              className="input-field"
-              value={draft}
-              placeholder={keySet?"Type your question…":"Enter API key below"}
-              rows={1}
-              disabled={!keySet}
-              onChange={e=>{setDraft(e.target.value);resize(e.target);}}
-              onKeyDown={onKey}
-            />
-          </div>
-          <div className="input-right">
+          <textarea
+            ref={taRef}
+            className="input-field"
+            value={draft}
+            placeholder={keySet?"Type your question…":"Enter API key below"}
+            rows={1}
+            disabled={!keySet}
+            onChange={e=>{setDraft(e.target.value);resize(e.target);}}
+            onKeyDown={onKey}
+          />
+          <div className="input-footer">
+            <span className="input-hint">Enter · Send &nbsp;·&nbsp; Shift+Enter · New line</span>
             <button className="send-btn" onClick={send} disabled={!draft.trim()||loading||!keySet}>
               Send
             </button>
