@@ -1007,6 +1007,8 @@
       // If intersection < 3, use union
       : WRITE_TOPICS.filter(t => (catSet?.has(t) || stageSet?.has(t)));
   }
+
+  function loadHistory() {
     try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
     catch { return []; }
   }
