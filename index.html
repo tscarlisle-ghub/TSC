@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Claude · Kommunikation</title>
+  <title>TSC-Claude</title>
 
   <link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
 
@@ -38,8 +38,8 @@
       --accent-bg: rgba(139,69,19,.07);
 
       --f-ui:     "ff-meta-web-pro-condensed", sans-serif;
-      --f-prompt: "ff-meta-correspondence-web-p", monospace;
-      --f-reply:  "ff-meta-web-pro", sans-serif;
+      --f-prompt: "ff-meta-correspondence-web-p", sans-serif;
+      --f-reply:  "warnock-pro", serif;
 
       --pad: 28px;
       --gap: 34px;
@@ -564,21 +564,21 @@
 
         <header className="hd">
           <div className="hd-q">
-            <span className="col-lbl">Inquiry</span>
+            <span className="col-lbl">TSC-Claude</span>
           </div>
           <div className="hd-r">
             <span className="col-lbl">Response</span>
             <div className="hd-controls">
               {pairs.length>0 &&
                 <button className="clear-btn" onClick={()=>setPairs([])}>Clear</button>}
-              <span className="model-tag">Claude · Sonnet 4</span>
+              <span className="model-tag">TSC-Claude · Sonnet 4</span>
             </div>
           </div>
         </header>
 
         {!keySet ? (
           <div className="key-bar">
-            <span className="key-lbl">API-Schlüssel</span>
+            <span className="key-lbl">API Key</span>
             <input
               className="key-input"
               type="password"
@@ -587,13 +587,13 @@
               onChange={e=>setKeyDraft(e.target.value)}
               onKeyDown={e=>e.key==="Enter"&&saveKey()}
             />
-            <button className="key-btn" onClick={saveKey}>Bestätigen</button>
+            <button className="key-btn" onClick={saveKey}>Confirm</button>
           </div>
         ) : (
           <div className="key-active">
             <div className="key-dot"/>
-            <span className="key-active-lbl">Verbindung aktiv · API-Schlüssel gespeichert</span>
-            <button className="key-clear" onClick={clearKey}>Entfernen</button>
+            <span className="key-active-lbl">Connection active · API key stored</span>
+            <button className="key-clear" onClick={clearKey}>Remove</button>
           </div>
         )}
 
@@ -667,7 +667,7 @@
                   onClick={send}
                   disabled={!draft.trim()||loading||!keySet}
                 >
-                  Senden
+                  Send
                 </button>
               </div>
             </div>
@@ -675,7 +675,7 @@
         </div>
 
         <div className="footer">
-          <span className="footer-note">Claude Sonnet 4 · Anthropic API</span>
+          <span className="footer-note">TSC-Claude · Sonnet 4 · Anthropic API</span>
           <span className="footer-note">Session only · Key not stored to disk</span>
         </div>
 
