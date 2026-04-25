@@ -535,7 +535,8 @@
       width: 100%;
       background: var(--parchment);
       border: 1px solid var(--rule);
-      font-family: var(--f-prompt); font-size: 15px; color: var(--ink);
+      font-family: var(--f-prompt); font-size: 14px; color: var(--ink);
+      text-transform: uppercase;
       padding: 8px 30px 8px 12px;
       outline: none; cursor: pointer;
       appearance: none; -webkit-appearance: none;
@@ -565,15 +566,16 @@
       flex-shrink: 0; cursor: pointer;
     }
     .arch-check-lbl {
-      font-family: var(--f-prompt); font-size: 15px; color: var(--ink);
-      line-height: 1.4; cursor: pointer;
+      font-family: var(--f-prompt); font-size: 14px; color: var(--ink);
+      text-transform: uppercase; line-height: 1.4; cursor: pointer;
     }
 
     .arch-textarea {
       width: 100%;
       background: var(--parchment);
       border: 1px solid var(--rule);
-      font-family: var(--f-prompt); font-size: 15px; color: var(--ink);
+      font-family: var(--f-prompt); font-size: 14px; color: var(--ink);
+      text-transform: uppercase;
       padding: 10px 12px;
       resize: none; outline: none; line-height: 1.55;
       min-height: 90px;
@@ -1072,6 +1074,24 @@
     useEffect(()=>{
       if(pairs.length > 0) localStorage.setItem(AUTO_KEY, JSON.stringify(pairs));
     },[pairs]);
+
+    // On unload, flush current conversation into named history so it survives reload
+    useEffect(()=>{
+      const flush = () => {
+        const current = JSON.parse(localStorage.getItem(AUTO_KEY)||"[]");
+        if(!current.length) return;
+        const existing = JSON.parse(localStorage.getItem(LS_KEY)||"[]");
+        // Only save if meaningfully different from the most recent session
+        const topQuery = existing[0]?.pairs?.[0]?.query;
+        const curQuery = current[0]?.query;
+        if(curQuery && curQuery !== topQuery) {
+          const session = {id:Date.now().toString(), date:new Date().toISOString(), pairs:current};
+          localStorage.setItem(LS_KEY, JSON.stringify([session, ...existing]));
+        }
+      };
+      window.addEventListener("beforeunload", flush);
+      return () => window.removeEventListener("beforeunload", flush);
+    },[]);
 
     // Architecture state
     const [archType,     setArchType]     = useState(PROJECT_TYPES[0]);
