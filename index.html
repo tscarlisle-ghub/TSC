@@ -522,9 +522,9 @@
       margin-bottom: 24px;
     }
     .arch-step-label {
-      font-family: var(--f-heading); font-weight: 400; font-size: 18px;
-      letter-spacing: .06em; color: var(--ink);
-      margin-bottom: 6px; display: block; line-height: 1.2;
+      font-family: var(--f-heading); font-weight: 700; font-size: 32px;
+      letter-spacing: .04em; color: var(--ink);
+      margin-bottom: 6px; display: block; line-height: 1.1;
     }
     .arch-step-desc {
       font-family: var(--f-reply); font-size: 14px; color: var(--ink-light);
@@ -578,7 +578,7 @@
       resize: none; outline: none; line-height: 1.55;
       min-height: 90px;
     }
-    .arch-textarea::placeholder { color: var(--rule); }
+    .arch-textarea::placeholder { color: var(--ink-light); }
     .arch-textarea:focus { border-color: var(--accent); }
 
     .arch-divider {
@@ -588,13 +588,13 @@
     .arch-submit-btn {
       width: 100%;
       background: none;
-      border: 1px solid var(--accent);
-      color: var(--accent);
+      border: 1px solid var(--ink-warm);
+      color: var(--ink-warm);
       font-family: var(--f-ui); font-weight: 700; font-size: 12px;
       letter-spacing: .26em; text-transform: uppercase;
       padding: 10px 0 9px; cursor: pointer; transition: all .15s;
     }
-    .arch-submit-btn:hover:not(:disabled) { background: var(--accent); color: var(--cream); }
+    .arch-submit-btn:hover:not(:disabled) { background: var(--ink-warm); color: var(--cream); }
     .arch-submit-btn:disabled { opacity: .3; cursor: not-allowed; }
 
     /* Right: preview + response */
@@ -612,13 +612,13 @@
       background: var(--input-bg);
     }
     .arch-preview-lbl {
-      font-family: var(--f-ui); font-weight: 700; font-size: 10px;
+      font-family: var(--f-ui); font-weight: 700; font-size: 14px;
       letter-spacing: .24em; text-transform: uppercase; color: var(--muted);
-      margin-bottom: 10px; display: block;
+      margin-bottom: 12px; display: block;
     }
     .arch-preview-text {
-      font-family: var(--f-prompt); font-size: 14px; color: var(--ink-light);
-      line-height: 1.6; font-style: italic;
+      font-family: var(--f-prompt); font-size: 18px; color: var(--ink-light);
+      line-height: 1.65; font-style: italic;
     }
 
     .arch-response-scroll {
@@ -628,18 +628,18 @@
     .arch-response-scroll::-webkit-scrollbar-thumb { background: var(--rule); }
 
     .arch-response-lbl {
-      font-family: var(--f-ui); font-weight: 700; font-size: 10px;
+      font-family: var(--f-ui); font-weight: 700; font-size: 14px;
       letter-spacing: .24em; text-transform: uppercase; color: var(--muted);
-      margin-bottom: 14px; display: block;
+      margin-bottom: 16px; display: block;
     }
     .arch-empty {
-      font-family: var(--f-reply); font-size: 16px; font-style: italic;
+      font-family: var(--f-reply); font-size: 18px; font-style: italic;
       color: var(--muted); line-height: 1.65;
     }
     .arch-dots { display:flex; gap:5px; padding-top: 4px; }
 
     .arch-response-text {
-      font-family: var(--f-reply); font-size: 18px; color: var(--ink);
+      font-family: var(--f-reply); font-size: 20px; color: var(--ink);
       line-height: 1.74; word-break: break-word;
     }
     .arch-response-text p { margin-bottom: .8em; }
