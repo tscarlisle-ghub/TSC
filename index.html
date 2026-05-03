@@ -65,6 +65,18 @@
   }
   header.masthead .project-name-input::placeholder { color: var(--ink-faint); font-style: italic; }
   header.masthead .project-name-input:focus { border-bottom: 1px solid var(--accent-mute); }
+  /* Flash when sharing without a name */
+  header.masthead .project-name-input.required-flash {
+    border-bottom: 1px solid var(--accent);
+    background: rgba(139, 40, 24, 0.06);
+    animation: pn-flash 0.6s ease-out 2;
+  }
+  @keyframes pn-flash {
+    0%   { background: rgba(139, 40, 24, 0.18); }
+    100% { background: rgba(139, 40, 24, 0.04); }
+  }
+  .placeholder-hint { color: var(--accent); }
+  .placeholder-hint::placeholder { color: var(--accent); }
   header.masthead .firm {
     font-family: "trajan-sans-pro", "Trajan Pro", "Optima", "Palatino", serif;
     font-weight: 600;
@@ -1670,43 +1682,81 @@ function wireControls() {
     try { history.replaceState(null, "", location.pathname); } catch (e) {}
     location.reload();
   });
-  // Email-to-client — opens a mailto draft pre-filled with the share link
+  // Project name is REQUIRED before any sharing. If empty, focus the field,
+  // flash it red, and (if file://) show a placeholder hint.
+  function requireProjectName() {
+    const pn = document.getElementById("projectName");
+    if (state.projectName && state.projectName.trim()) return true;
+    if (pn) {
+      pn.classList.add("required-flash");
+      pn.placeholder = "Add a project name first to share…";
+      pn.focus();
+      setTimeout(() => pn.classList.remove("required-flash"), 1300);
+    }
+    return false;
+  }
+
+  // Shorten the share URL via is.gd (free, no API key, returns ~25-char URL).
+  // Falls back to the long URL if the shortener is unreachable.
+  async function getShortLink(longURL) {
+    try {
+      const api = "https://is.gd/create.php?format=simple&url=" + encodeURIComponent(longURL);
+      const r = await fetch(api, { method: "GET" });
+      if (!r.ok) return longURL;
+      const text = (await r.text()).trim();
+      if (text && text.startsWith("http")) return text;
+      return longURL;
+    } catch (e) {
+      return longURL;
+    }
+  }
+
+  // Email-to-client — opens a mailto draft pre-filled with the (short) share link
   const emailBtn = document.getElementById("emailClientBtn");
-  if (emailBtn) emailBtn.addEventListener("click", () => {
-    syncStateToURL();
-    const url     = location.href;
-    const project = (state.projectName || "").trim();
-    const subject = (project ? project + " — " : "") + "Construction Cost Estimate · Carlisle Moore Architects";
-    const body =
-      (project ? "Hi,\n\nHere's a starting point for " + project + " you can play with — " : "Hi,\n\nHere's a starting point you can play with — ") +
-      "adjust the rooms, finishes, and overall scope to match what you have in mind. " +
-      "Whatever changes you make stick to the link, so feel free to send it back when you're ready to talk through it.\n\n" +
-      url + "\n\n" +
-      "— Scott\n" +
-      "Carlisle Moore Architects";
-    window.location.href = "mailto:?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  if (emailBtn) emailBtn.addEventListener("click", async () => {
+    if (!requireProjectName()) return;
+    const original = emailBtn.textContent;
+    emailBtn.disabled = true; emailBtn.textContent = "Shortening link…";
+    try {
+      syncStateToURL();
+      const longURL = location.href;
+      const shortURL = await getShortLink(longURL);
+      const project = (state.projectName || "").trim();
+      const subject = project + " — Construction Cost Estimate · Carlisle Moore Architects";
+      const body =
+        "Hi,\n\nHere's a starting point for " + project + " you can play with — " +
+        "adjust the rooms, finishes, and overall scope to match what you have in mind. " +
+        "Whatever changes you make stick to the link, so feel free to send it back when you're ready to talk through it.\n\n" +
+        shortURL + "\n\n" +
+        "— Scott\n" +
+        "Carlisle Moore Architects";
+      window.location.href = "mailto:?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    } finally {
+      setTimeout(() => { emailBtn.disabled = false; emailBtn.textContent = original; }, 600);
+    }
   });
 
   const shareBtn = document.getElementById("shareLinkBtn");
   if (shareBtn) shareBtn.addEventListener("click", async () => {
-    syncStateToURL();
-    const url = location.href;
+    if (!requireProjectName()) return;
     const original = shareBtn.textContent;
+    shareBtn.disabled = true; shareBtn.textContent = "Shortening link…";
+    syncStateToURL();
+    const longURL = location.href;
+    const shortURL = await getShortLink(longURL);
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(url);
+        await navigator.clipboard.writeText(shortURL);
       } else {
-        // Fallback for older browsers / file:// — use a temp input
         const tmp = document.createElement("input");
-        tmp.value = url; document.body.appendChild(tmp);
+        tmp.value = shortURL; document.body.appendChild(tmp);
         tmp.select(); document.execCommand("copy"); tmp.remove();
       }
-      shareBtn.textContent = "Link copied";
-      shareBtn.disabled = true;
-      setTimeout(() => { shareBtn.textContent = original; shareBtn.disabled = false; }, 1500);
+      shareBtn.textContent = (shortURL === longURL) ? "Long link copied" : "Short link copied";
+      setTimeout(() => { shareBtn.textContent = original; shareBtn.disabled = false; }, 1800);
     } catch (e) {
-      // Show the URL so the user can copy manually
-      prompt("Copy this share link:", url);
+      prompt("Copy this share link:", shortURL);
+      shareBtn.textContent = original; shareBtn.disabled = false;
     }
   });
 }

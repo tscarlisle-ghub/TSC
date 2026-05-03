@@ -9,6 +9,294 @@ Most recent at top.
 
 ---
 
+## 2026-04-29 — Pass 17: short, client-friendly share links via is.gd + mandatory project name
+
+### Instructions
+1. Make the project-name field **mandatory**.
+2. The share link needs to be **way smaller** — client-friendly, not a
+   150-character monstrosity.
+
+### What changed
+- **Mandatory project name**: `requireProjectName()` helper. Both the
+  **Copy share link** and **Email to client** buttons now check for a
+  non-empty `state.projectName` first. If empty:
+  - The masthead input flashes red briefly (border-bottom + soft
+    background pulse, animation runs twice).
+  - The placeholder updates to "Add a project name first to share…".
+  - Focus jumps to the input.
+  - The button does nothing else.
+- **URL shortener**: `getShortLink(longURL)` calls **is.gd** —
+  `https://is.gd/create.php?format=simple&url=…` — free, no API key,
+  CORS-friendly. Returns a ~20–25 char short URL like `https://is.gd/abc123`.
+  - Both share buttons now run the long URL through this before copying /
+    emailing. The button text shows "Shortening link…" while it's working.
+  - **Graceful fallback**: if is.gd is unreachable or returns an unexpected
+    response, falls back to the long URL silently. The Copy button label
+    distinguishes ("Short link copied" vs. "Long link copied") so the user
+    knows which they got.
+  - Note: shortening only works when the page is served over http(s) (not
+    `file://`) because is.gd requires a fetchable URL.
+
+### Result
+- Default-state share link: was ~5,100 chars, then ~990 with LZ-string,
+  now **~24 characters** when the shortener is reachable. Fits in any
+  email subject line, reads well in iMessage / SMS, easy to dictate over
+  the phone if needed.
+- The full long URL is still always present in the address bar and in
+  localStorage as a permanent fallback. The shortener URL just **points** to
+  it; the real state lives in the encoded URL we generate.
+
+### One thing to know about is.gd
+is.gd is a 16-year-old free shortener with strict TOS but very reliable.
+Links don't expire. There's no auth. If they ever go down, the long URL
+fallback keeps everything working — clients still get a functioning link,
+just longer.
+
+If Scott wants belt-and-suspenders later, the architecture lets us swap in
+TinyURL or v.gd by editing the one fetch call in `getShortLink()`.
+
+---
+
+## 2026-04-29 — Pass 16: tiny share link (LZ-string + compact snapshot) + tier text −25%
+
+### Instructions
+1. "Can you make the link address smaller, like way smaller?"
+2. "Make the text labels for the cost summary tier, $/sf, etc. 25% smaller and
+   the same for the text for each tier including the titles."
+
+### Share-link compression
+- Embedded **LZ-string 1.4.4** (pieroxy, MIT) inline at the top of the script
+  (~3 KB minified). No CDN dependency.
+- `encodeStateForURL()` now uses `LZString.compressToEncodedURIComponent()`.
+- `decodeStateFromURL()` tries LZ-string first, then falls back to the legacy
+  base64 decode so any links Scott already shared keep working.
+- Also **compacted the snapshot itself** before compression:
+  - Top-level keys unchanged (already short).
+  - Each room is now stored as `{ k, w, l, g, x?, c?, cond? }` instead of
+    the verbose `{ tplKey, tplIndex, name, w, l, count, group, conditioned,
+    removable }`. `name`, `defaultW/L`, `minW/L`, `isStair`, `removable` are
+    all reconstructed from `TPL[k]` at load.
+  - `c` (count) only present when > 1; `x` (tplIndex) only present when set;
+    `cond` only present if it differs from the template's default.
+- `applySnapshot()` accepts both the new compact format and the old verbose
+  format (for backward compat with any existing share links).
+
+### Size reduction (real measurement, full default house with project name)
+| Stage | Length |
+|---|---|
+| Old base64 of full JSON | ~5,100 chars |
+| LZ-string of full JSON | ~2,000 chars |
+| **LZ-string of compact JSON** | **~990 chars** |
+
+Roughly **80% smaller** vs. the old base64 link. Most share links should
+now sit comfortably under 1 KB and fit in any URL bar / email client.
+
+### Tier table −25%
+- `th` (column headers): 19 → **14 px**
+- Tier name: 25 → **19 px**
+- $/sf primary: 23 → **17 px**
+- "Under roof" small label: 14 → **10 px**
+- "($X-$X conditioned)" line: 19 → **14 px**
+- Tier base range: 23 → **17 px**
+- Total w/ adjustments: 26 → **20 px**
+- Cell padding 12 → 9 px to keep proportions tight.
+
+---
+
+### Pick-up at the office (refreshed for end-of-session)
+
+Everything is in `TSC-SQF/` (Dropbox-synced):
+- `index.html` — the tool (≈91 KB now, includes LZ-string)
+- `README.md` — public, GitHub Pages-ready
+- `.gitignore` — excludes private inputs, both session-notes files, sample xlsx
+- `session-notes.md` ← this file (visible)
+- `inputs/` — private bid PDFs and plan sets (gitignored)
+- `SAMPLE- SPACE CALCULATIONS 2026.xlsx` — CMA reference (gitignored)
+- The hidden `.session-notes.md` is left in place untouched
+
+#### Workflow Scott can use today
+1. Open `index.html` (or the GitHub Pages URL once deployed).
+2. Type a project name in the masthead field (e.g. "Smith Residence").
+3. Pick a finish-level tier in House Type — that cascades the matching
+   defaults into Materials &amp; Finishes (walls, roof, interior, cabinets,
+   landscape).
+4. Adjust rooms (sliders or type W/L), modifiers, materials.
+5. Click **Email to client** → a mail draft opens with the project name
+   in the subject and the (now ~1 KB) share link in the body.
+6. Client opens the link → exact configuration loads on their device.
+7. They tweak, send back, etc. Scott can also **Copy share link** to
+   paste anywhere, or **Export to Excel** for an editable workbook
+   styled in Seaford with formula-driven SF totals.
+
+#### Open follow-ups (not yet built)
+- Construction contingency toggle (0% / 5% / 10%).
+- Fireplaces (count + material — limestone surrounds at $5–12k each
+  per Davis pricing).
+- Window package as its own selector (separate from walls).
+- Possible additions: HVAC tier, driveway type, outdoor kitchen,
+  fencing/gates, smart home / AV.
+- Free-text "Notes for Scott" field that travels with the share link.
+
+#### Permanent rules in memory (apply across all projects)
+- `feedback_session_notes.md` — keep `session-notes.md` updated after every
+  change/instruction in every project workspace.
+- `feedback_no_delete_without_asking.md` — never delete files without
+  explicit approval, including hidden/leftover/obsolete-looking ones.
+- `feedback_cma_design.md` — Tufte information-design principles for all
+  CMA tools (cream paper, restrained color, Interstate Condensed for
+  display, Trajan Sans for the firm wordmark).
+
+---
+
+## 2026-04-29 — Pass 15: per-client share links via project name + Email-to-client button
+
+### Instruction
+"Would it be possible to have a unique link I could send to each client?
+Maybe I do a first pass, type in a client name and then create a link to send
+them a unique version to play with."
+
+Plus: "Write session notes as I am leaving to work and will pick it up there."
+
+### What I added
+
+#### Project name field
+- New `state.projectName` (default `""`).
+- New italic-serif text input in the masthead under the title:
+  `<input id="projectName" placeholder="Project name (optional)…" maxlength=80>`.
+- The value:
+  - **Persists in localStorage** via `saveState()` on each keystroke.
+  - **Persists in the share-link URL** via `syncStateToURL()` (so the link
+    you copy or email already carries the project name; the recipient sees
+    "Smith Residence" or whatever you typed when they open it).
+  - Survives the round-trip in `applySnapshot()` on load.
+  - Appears as a third title line in the **Excel export** (large italic,
+    just under the firm name).
+
+#### Email-to-client button
+- New **Email to client** button at the front of the header actions.
+- On click it:
+  1. Calls `syncStateToURL()` to make sure the URL reflects current state.
+  2. Reads `location.href` for the share link.
+  3. Builds a `mailto:` URL with:
+     - **Subject:** `<projectName> — Construction Cost Estimate · Carlisle Moore Architects`
+       (skips the dash if no project name).
+     - **Body:** A short, professional message that includes the share link
+       and is signed "— Scott / Carlisle Moore Architects".
+  4. Opens the user's default mail client with the draft pre-filled.
+- The recipient just clicks the link in the email → lands on a copy of the
+  estimator with that exact configuration loaded.
+
+#### Per-client workflow
+1. Open the estimator.
+2. Type the client/project name in the masthead field
+   (e.g., "Smith Residence — 4321 Vestavia Drive").
+3. Configure the first pass (bedrooms, modifiers, finishes, rooms).
+4. Click **Email to client** → mailto draft opens with subject + body
+   pre-filled. Edit if you want, send.
+5. Client receives the link, opens it, makes their own changes — none
+   of those changes affect your local copy because they're loading from
+   the URL, not from your localStorage.
+6. They can click **Copy share link** or **Email to client** themselves
+   to send their version back to you.
+
+Each link is **already** unique by virtue of encoding the configuration
+in `?s=...`. Adding the project name just labels it and makes the email
+flow one-click instead of "compose, copy URL, paste."
+
+---
+
+### Where the project lives, for the office
+- `index.html` (the tool, single file)
+- `README.md` (public, for GitHub)
+- `.gitignore` (excludes `inputs/`, both session-notes files, working
+  template, OS noise)
+- `session-notes.md` ← you're reading it; non-hidden. **The hidden
+  `.session-notes.md` is left in place per "never delete files without
+  asking"; it's frozen at pre-pass-12 and not updated anymore.**
+- `inputs/` — private GC estimates and plan sets used to derive pricing
+- `SAMPLE- SPACE CALCULATIONS 2026.xlsx` — CMA's reference template
+
+### Current pricing model summary
+- **Tiers** ($/sf under-roof): Normally Nice $315–$345 / Elevated $350–$390 /
+  Very High $420–$465.
+- **15% uplift** on summed conditioned room SF for walls + circulation.
+- **Material adjustments** ($/U-R sf): walls (Normal $0 / Elevated +$6 /
+  Very High +$14); roof (Asphalt $0 / Cedar +$15 / Slate +$28); interior
+  (Normal $0 / Elevated +$15 / Very High +$35); cabinetry (Normal $0 /
+  Elevated +$10 / Very High +$25).
+- **Steep site %**: Flat 0% / Sloping 4% / Steep 8% — applied to
+  (tier base + materials).
+- **Flat adds** (NOT subject to steep): Pool $120,000 when on; Landscape
+  $60k / $90k / $135k always added.
+- **Garage**: 1-car 12'×24' / 2-car 24'×24' / 3-car 36'×24' — fixed,
+  selected via segmented selector.
+- **Stairs**: 5'×18' = 90 sf, may grow up to 5%.
+- **Tier cascade**: picking a tier in House Type or via clicking a tier
+  row cascades the matching defaults into Materials &amp; Finishes (user
+  can still override individual selections after).
+
+### Open follow-ups Scott liked but hasn't decided to add
+- **Construction contingency** toggle (0% / 5% / 10%).
+- **Fireplaces** count + material (limestone surrounds at $5–12k each).
+- **Window package** as its own selector (separate from walls).
+- HVAC tier, driveway type, outdoor kitchen, fencing, smart home / AV.
+- Notes/free-text field that travels with the share link.
+
+### Pick-up from the office
+- The whole project is in `TSC-SQF/` in Dropbox so it follows you.
+- This file is the canonical change log — most recent at top, so just read
+  the top entry to see where we left off.
+- All state is auto-saving to localStorage as Scott uses the tool, AND
+  encoded in the URL — so any share link Scott has tried before will
+  reproduce that exact config.
+
+---
+
+## 2026-04-29 — Pass 14: bolder labels, +20% sections, tier headers in Interstate Condensed Medium
+
+### Instructions
+1. Make all label headers ALL CAPS and bold everywhere; keep the size that
+   Materials &amp; Finishes uses.
+2. Make the section labels (House Type, Materials &amp; Finishes, Rooms,
+   Cost Summary, etc.) ALL CAPS and 20% larger.
+3. Make the tier table column headers (Tier, $/sf, Tier base range, etc.)
+   ALL CAPS and 20% larger in **Interstate Condensed Medium**.
+
+### Changes
+- `.config-cell .label-line`: weight 600 → **700** (true bold), color
+  `--ink-mute` → **`--ink`** (full ink). Already ALL CAPS at 11 px / 0.18em
+  letter-spacing &mdash; size unchanged because Scott liked it.
+- `h2.section`: 11 → **13 px** (~20% larger), weight 600 → 700. Stays ALL CAPS.
+- `.cost-h2` override removed; "Cost Summary" now matches the other section
+  headers (uppercase / 13 px).
+- Tier table column headers (`table.tiers th`): 16 → **19 px** (~20% larger),
+  weight 600 → **500 (Interstate Condensed Medium)**, color stays `--ink`,
+  letter-spacing dialed to 0.14em for readability at the larger size.
+
+### Plus: tier-cascade into Materials &amp; Finishes
+Scott also asked: "When I make a selection on the Finish level in House Type,
+change the selections to the appropriate tier on Materials &amp; Finishes."
+
+Added a `TIER_PRESETS` map and an `applyTierPreset(tierKey)` function:
+
+| Tier | Walls | Roof | Interior | Cabinetry | Landscape |
+|---|---|---|---|---|---|
+| Normally Nice | Normal   | Asphalt     | Normal   | Normal   | Normal   |
+| Elevated      | Elevated | Cedar shake | Elevated | Elevated | Elevated |
+| Very High     | Very High| Slate       | Very High| Very High| Very High|
+
+`applyTierPreset` is now invoked from both the Finish-level segmented click
+handler **and** the click-anywhere-on-a-tier-row handler in the cost summary,
+so picking a tier in either place cascades the matching materials. After
+cascading, `syncUIToState()` updates the segmented active states and the wall
+description display refreshes. Pool stays out of the cascade (always a
+separate decision).
+
+Users can still override individual selections after picking a tier — the
+cascade only fires on the actual tier selection event.
+
+---
+
 ## 2026-04-29 — Pass 13: hide tier marker, bigger/caps/darker labels, Pool selector under Landscape, House Type spacing
 
 ### Instructions received (this batch)
