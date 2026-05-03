@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Construction Cost Estimator — Carlisle Moore Architects</title>
+<title>Conceptual Cost Estimator — Carlisle Moore Architects</title>
 <link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
 <style>
   :root {
@@ -662,7 +662,7 @@
 
   <header class="masthead">
     <div class="title-block">
-      <h1>Construction Cost Estimator <em>—  preliminary scope &amp; budget</em></h1>
+      <h1>Conceptual Cost Estimator <em>—  preliminary scope &amp; budget</em></h1>
       <input class="project-name-input" id="projectName" type="text"
              placeholder="Project name (optional)…" maxlength="80" autocomplete="off">
     </div>
@@ -1801,7 +1801,7 @@ function wireControls() {
       const longURL = location.href;
       const shortURL = await getShortLink(longURL);
       const project = (state.projectName || "").trim();
-      const subject = project + " — Construction Cost Estimate · Carlisle Moore Architects";
+      const subject = project + " — Conceptual Cost Estimate · Carlisle Moore Architects";
       const body =
         "Hi,\n\nHere's a starting point for " + project + " you can play with — " +
         "adjust the rooms, finishes, and overall scope to match what you have in mind. " +
@@ -2074,7 +2074,7 @@ async function exportToExcel() {
     }
 
     // ---- 1.  TITLE ----
-    let r = ws.addRow(["Construction Cost Estimator"]);
+    let r = ws.addRow(["Conceptual Cost Estimator"]);
     ws.mergeCells(`A${r.number}:G${r.number}`);
     r.getCell(1).font = F.title;
     r.height = 28;

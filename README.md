@@ -1,4 +1,4 @@
-# Construction Cost Estimator
+# Conceptual Cost Estimator
 ### Carlisle Moore Architects &mdash; preliminary scope &amp; budget
 
 A single-file, client-facing cost estimator for CMA's custom residential

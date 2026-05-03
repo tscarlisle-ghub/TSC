@@ -9,6 +9,41 @@ Most recent at top.
 
 ---
 
+## 2026-04-29 — Pass 19: rename "Construction" → "Conceptual"; clarify why modal didn't show
+
+### Instructions
+1. "Change the title to Conceptual Cost Estimator."
+2. Scott reported "I don't see the modal."
+
+### Title rename
+Replaced "Construction Cost Estimator" → "**Conceptual Cost Estimator**"
+across `index.html`, `README.md`, and the Excel export. Also updated the
+email subject from "…Construction Cost Estimate…" → "…Conceptual Cost
+Estimate…". This frames the tool more accurately for clients: this is a
+conceptual / preliminary scope tool, not a construction-bid replacement.
+
+### Why the modal didn't show on Scott's machine
+The modal only appears when `state.projectName` is empty. On Scott's
+browser, **localStorage from earlier testing already has a saved state**
+(possibly with a project name typed during pass 19, or just leftover
+state). When the page loads, that's restored and the modal stays hidden.
+
+This is intentional behavior — clients should never see the modal twice
+on the same device, and a returning user shouldn't be re-prompted.
+
+To force the modal for testing:
+- Click the **Reset** button in the Cost Summary header (clears
+  localStorage and the URL `?s=` param, then reloads to defaults).
+- Or in Chrome DevTools: Application → Local Storage → right-click the
+  domain → Clear, then reload.
+- Or open in a private/incognito window.
+
+If after Reset the modal still doesn't appear, the most likely cause is
+the browser caching an older version of `index.html`. Hard reload with
+**⌘ + Shift + R** (or **Ctrl + Shift + R** on Windows) bypasses the cache.
+
+---
+
 ## 2026-04-29 — Pass 18: project-name onboarding modal
 
 ### Instruction
