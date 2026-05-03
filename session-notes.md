@@ -9,6 +9,39 @@ Most recent at top.
 
 ---
 
+## 2026-04-29 — Pass 20: action buttons moved to masthead; bigger Title-Case name
+
+### Instructions
+1. Put the Email to client / Copy share link / other buttons at the top, to
+   the right of the project name.
+2. Make the project-name text Title Case and ~20% larger.
+
+### Changes
+- The `.header-actions` `<span>` (Email to client, Copy share link, Export to
+  Excel, Reset) was moved out of the Cost Summary `<h2>` and into the
+  masthead, between the title-block (heading + project-name input) and the
+  firm wordmark.
+- New CSS for the masthead's actions cluster: `flex: 0 0 auto`, right-aligned,
+  `align-self: end` so it sits along the bottom edge of the title block.
+- Project-name input:
+  - Font size 18 → **22 px** (~22% larger)
+  - Added `text-transform: capitalize` so display reads as Title Case
+    regardless of how the user types it
+  - Padding bumped slightly + max-width raised to 600 px to accommodate the
+    larger text
+- Removed the (now redundant) action span from the Cost Summary heading.
+- Mobile fallback: under 760 px, `.header-actions` wraps to a full row below
+  the title block instead of crowding the right edge.
+
+### Note on Title Case
+The CSS `text-transform: capitalize` only affects rendering — the underlying
+stored value (used in localStorage, share links, email subject, Excel export)
+is whatever the user typed. So if a client receives a link with the title
+"Smith Residence — 4321 Vestavia Drive", that's what they see in their
+masthead too, regardless of caps preference.
+
+---
+
 ## 2026-04-29 — Pass 19: rename "Construction" → "Conceptual"; clarify why modal didn't show
 
 ### Instructions

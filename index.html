@@ -52,16 +52,17 @@
   header.masthead .title-block { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
   header.masthead .project-name-input {
     font-family: var(--serif);
-    font-size: 18px;
+    font-size: 22px;
     font-style: italic;
+    text-transform: capitalize;
     color: var(--ink);
     border: none;
     background: transparent;
     outline: none;
     width: 100%;
-    max-width: 540px;
-    padding: 2px 0 2px 0;
-    margin-top: 2px;
+    max-width: 600px;
+    padding: 4px 0 4px 0;
+    margin-top: 4px;
   }
   header.masthead .project-name-input::placeholder { color: var(--ink-faint); font-style: italic; }
   header.masthead .project-name-input:focus { border-bottom: 1px solid var(--accent-mute); }
@@ -175,7 +176,21 @@
   }
   .export-btn:hover { color: var(--ink); border-color: var(--ink-faint); }
   .export-btn:disabled { color: var(--ink-faint); cursor: wait; }
-  .header-actions { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+  .header-actions { display: inline-flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  /* In the masthead, the actions sit between the title-block and the firm */
+  header.masthead .header-actions {
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    align-self: end;
+    margin-left: 16px;
+  }
+  @media (max-width: 760px) {
+    header.masthead .header-actions {
+      width: 100%;
+      justify-content: flex-start;
+      margin-left: 0;
+    }
+  }
 
   /* Count multiplier label inside room name */
   .count-tag {
@@ -664,8 +679,14 @@
     <div class="title-block">
       <h1>Conceptual Cost Estimator <em>—  preliminary scope &amp; budget</em></h1>
       <input class="project-name-input" id="projectName" type="text"
-             placeholder="Project name (optional)…" maxlength="80" autocomplete="off">
+             placeholder="Project name…" maxlength="80" autocomplete="off">
     </div>
+    <span class="header-actions">
+      <button id="emailClientBtn"  type="button" class="export-btn" title="Open an email draft with this configuration's link">Email to client</button>
+      <button id="shareLinkBtn"    type="button" class="export-btn" title="Copy a sharable link with this configuration">Copy share link</button>
+      <button id="exportXlsxBtn"   type="button" class="export-btn" title="Export to Excel">Export to Excel</button>
+      <button id="resetBtn"        type="button" class="export-btn" title="Reset to defaults">Reset</button>
+    </span>
     <span class="firm">Carlisle Moore Architects</span>
   </header>
 
@@ -771,14 +792,7 @@
   </div>
 
   <!-- ===================== COST SUMMARY ===================== -->
-  <h2 class="section">Cost Summary
-    <span class="header-actions">
-      <button id="emailClientBtn"  type="button" class="export-btn" title="Open an email draft with this configuration's link">Email to client</button>
-      <button id="shareLinkBtn"    type="button" class="export-btn" title="Copy a sharable link with this configuration">Copy share link</button>
-      <button id="exportXlsxBtn"   type="button" class="export-btn" title="Export to Excel">Export to Excel</button>
-      <button id="resetBtn"        type="button" class="export-btn" title="Reset to defaults">Reset</button>
-    </span>
-  </h2>
+  <h2 class="section">Cost Summary</h2>
   <div class="summary-panel">
     <div class="summary-grid">
 
