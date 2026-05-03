@@ -77,6 +77,73 @@
   }
   .placeholder-hint { color: var(--accent); }
   .placeholder-hint::placeholder { color: var(--accent); }
+
+  /* ----------- Project-name onboarding modal ----------- */
+  .project-modal {
+    position: fixed; inset: 0;
+    background: rgba(255, 255, 248, 0.92);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .project-modal[hidden] { display: none; }
+  .project-modal-card {
+    background: #fffff8;
+    border: 1px solid var(--ink);
+    border-radius: 1px;
+    padding: 36px 40px 32px;
+    max-width: 520px; width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  }
+  .project-modal-card h2 {
+    font-family: "interstate-condensed", "Helvetica Neue Condensed", "Arial Narrow", sans-serif;
+    font-size: 26px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--ink);
+    margin: 0 0 14px;
+  }
+  .project-modal-card p {
+    font-family: var(--serif);
+    font-size: 14px;
+    color: var(--ink-mute);
+    margin: 0 0 22px;
+    line-height: 1.5;
+  }
+  .project-modal-card input {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: var(--serif);
+    font-size: 17px;
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 1px;
+    background: #fff;
+    outline: none;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .project-modal-card input:focus { border-color: var(--accent-mute); }
+  .project-modal-card input::placeholder { color: var(--ink-faint); font-style: italic; }
+  .project-modal-card button {
+    font-family: var(--sans);
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    padding: 9px 18px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .project-modal-card button:hover:not(:disabled) { opacity: 0.85; }
+  .project-modal-card button:disabled {
+    background: #fff;
+    color: var(--ink-faint);
+    border-color: var(--rule);
+    cursor: not-allowed;
+  }
   header.masthead .firm {
     font-family: "trajan-sans-pro", "Trajan Pro", "Optima", "Palatino", serif;
     font-weight: 600;
@@ -766,6 +833,18 @@
   <!-- ===================== ROOMS ===================== -->
   <h2 class="section">Rooms</h2>
   <div id="floorsContainer"></div>
+
+  <!-- ===================== PROJECT-NAME ONBOARDING MODAL ===================== -->
+  <div id="projectModal" class="project-modal" hidden>
+    <div class="project-modal-card">
+      <h2>Name this estimate</h2>
+      <p>Add a project or client name so this estimate can be saved, shared, and tracked. You can edit it any time afterwards.</p>
+      <input id="projectModalInput" type="text"
+             placeholder="e.g. Smith Residence — 4321 Vestavia Drive"
+             maxlength="80" autocomplete="off">
+      <button id="projectModalContinue" type="button" disabled>Continue</button>
+    </div>
+  </div>
 
   <footer>
     Preliminary cost ranges are derived from recent CMA project bids in the Birmingham, Alabama
@@ -2200,12 +2279,48 @@ async function exportToExcel() {
   }
 }
 
+/* ====================================================================
+   Project-name onboarding modal — gates first interaction until a name
+   is entered. Doesn't re-trigger if the user later clears the name.
+   ==================================================================== */
+function showProjectModal() {
+  const modal  = document.getElementById("projectModal");
+  const input  = document.getElementById("projectModalInput");
+  const button = document.getElementById("projectModalContinue");
+  if (!modal || !input || !button) return;
+  input.value = "";
+  modal.hidden = false;
+  setTimeout(() => input.focus(), 50);
+
+  function checkValid() { button.disabled = input.value.trim().length === 0; }
+  input.addEventListener("input", checkValid);
+  checkValid();
+
+  function commit() {
+    const name = input.value.trim();
+    if (!name) return;
+    state.projectName = name;
+    const pn = document.getElementById("projectName");
+    if (pn) pn.value = name;
+    modal.hidden = true;
+    saveState();
+  }
+  button.addEventListener("click", commit);
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") { e.preventDefault(); commit(); }
+  });
+}
+
 /* Boot */
 const restored = loadState();
 if (!restored) buildRoomList();
 wireControls();
 syncUIToState();
 render();
+// Gate first interaction with the project-name modal
+if (!state.projectName || !state.projectName.trim()) {
+  showProjectModal();
+}
 </script>
 </body>
 </html>

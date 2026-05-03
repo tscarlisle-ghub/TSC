@@ -9,6 +9,51 @@ Most recent at top.
 
 ---
 
+## 2026-04-29 — Pass 18: project-name onboarding modal
+
+### Instruction
+"Make it so you have to put a name in before being allowed to do any
+changes; maybe a popup where they type it in and then it infills
+automatically."
+
+### What I added
+- Full-page modal overlay (`#projectModal`) that appears on first load
+  whenever `state.projectName` is empty.
+- Modal content:
+  - Title: "Name this estimate" (Interstate Condensed, ALL CAPS)
+  - Subtitle: explains the purpose and notes you can edit it later
+  - Single text input (max 80 chars) with a placeholder example
+  - **Continue** button — disabled until something is typed; Enter key
+    also submits
+- Background of the modal is the same cream paper at 92% opacity with a
+  subtle backdrop blur, so the underlying tool is faintly visible but
+  un-clickable until the modal closes.
+- On submit:
+  - `state.projectName` is set
+  - The masthead input is auto-filled with the same value
+  - State saves to localStorage + URL
+  - Modal hides, full page becomes interactive
+
+### When the modal appears
+- Fresh load with no `localStorage` and no `?s=` URL → empty name → modal
+- Load via a share link with a project name → name is set → no modal
+- Load on a returning device with localStorage → name typically set → no modal
+
+### When it does NOT re-appear
+- If the user later clears the masthead name input, the modal does not
+  re-trigger. The earlier "Project name required" flash on the share
+  buttons handles that case.
+
+### Boot order
+1. `loadState()` (URL → localStorage)
+2. `buildRoomList()` if no state restored
+3. `wireControls()`
+4. `syncUIToState()`
+5. `render()`
+6. **`showProjectModal()`** if name is empty
+
+---
+
 ## 2026-04-29 — Pass 17: short, client-friendly share links via is.gd + mandatory project name
 
 ### Instructions
