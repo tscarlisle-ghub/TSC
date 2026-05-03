@@ -677,7 +677,7 @@
 
   <header class="masthead">
     <div class="title-block">
-      <h1>Conceptual Cost Estimator <em>—  preliminary scope &amp; budget</em></h1>
+      <h1>Conceptual Cost Estimator <em>preliminary scope &amp; budget</em></h1>
       <input class="project-name-input" id="projectName" type="text"
              placeholder="Project name…" maxlength="80" autocomplete="off">
     </div>
@@ -1659,7 +1659,8 @@ function updateFloorHeading(sectionEl, groupId) {
    Wire controls
    ==================================================================== */
 function wireControls() {
-  // Project name input — saves on input + on blur
+  // Project name input — saves on input + on blur. Clearing the input
+  // re-opens the onboarding modal (so "start a new estimate" is one keystroke).
   const pnInput = document.getElementById("projectName");
   if (pnInput) {
     pnInput.addEventListener("input", () => {
@@ -1670,6 +1671,7 @@ function wireControls() {
       state.projectName = pnInput.value.trim();
       pnInput.value = state.projectName;
       saveState();
+      if (!state.projectName) showProjectModal();
     });
   }
 
