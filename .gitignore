@@ -1,0 +1,21 @@
+# --- Private project content (do not push to a public repo) ---
+# GC estimates and architectural plan sets used only to derive pricing
+inputs/
+
+# Internal change log; references private project names
+.session-notes.md
+session-notes.md
+
+# CMA's working space-calculation template
+SAMPLE- SPACE CALCULATIONS 2026.xlsx
+
+# Working notes
+derivation-notes.md
+
+# --- OS / editor noise ---
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+node_modules/
