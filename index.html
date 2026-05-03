@@ -2304,6 +2304,7 @@ function showProjectModal() {
   const input  = document.getElementById("projectModalInput");
   const button = document.getElementById("projectModalContinue");
   if (!modal || !input || !button) return;
+  // Always start with an empty input — never pre-fill from prior state.
   input.value = "";
   modal.hidden = false;
   setTimeout(() => input.focus(), 50);
@@ -2333,8 +2334,14 @@ if (!restored) buildRoomList();
 wireControls();
 syncUIToState();
 render();
-// Gate first interaction with the project-name modal
-if (!state.projectName || !state.projectName.trim()) {
+// Always prompt for a project name on direct page loads. Skip the modal only
+// when the page is opened via a share link (`?s=...`) — in that case the
+// recipient is loading someone else's configuration with the name baked in.
+const cameFromShareLink = (function () {
+  try { return new URLSearchParams(location.search).has("s"); }
+  catch (e) { return false; }
+})();
+if (!cameFromShareLink) {
   showProjectModal();
 }
 </script>
