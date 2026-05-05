@@ -186,8 +186,11 @@ function saveConfig () {
 // STATE
 // =================================================================
 
+// Build state in two steps so cloneTemplatesFrom() can read config without
+// needing to reference `state` (which would be in the TDZ during this literal).
+const initialConfig = loadConfig();
 const state = {
-  config: loadConfig(),
+  config: initialConfig,
   data: null,                  // current data.json contents
   dataSha: null,
   dataDirty: false,            // true if we've added clients locally
@@ -203,7 +206,7 @@ const state = {
     phases: { DEPOSIT: 0.05, SD: 0.20, DD: 0.20, CD: 0.50, CA: 0.05 },
     phaseAmountOverrides: {},  // phase -> amount (manual)
   },
-  scopeByPhase: cloneTemplates(),
+  scopeByPhase: cloneTemplatesFrom(initialConfig),
   comp: {
     intro: DEFAULT_COMP_INTRO,
     leadIn: DEFAULT_COMP_LEAD_IN,
@@ -269,11 +272,7 @@ function cloneItems (arr) {
   return arr.map(x => Object.assign({}, x));
 }
 
-function cloneTemplates () {
-  // Read templates from config if state is set up; otherwise fall back to factory.
-  // (We may be called during initial state construction, so `state` itself may
-  //  still be in the temporal dead zone — guard with typeof.)
-  const cfg = (typeof state !== 'undefined' && state && state.config) ? state.config : null;
+function cloneTemplatesFrom (cfg) {
   const out = {};
   for (const p of SCOPE_PHASES) {
     const tpl = (cfg && cfg.scopeTemplates && cfg.scopeTemplates[p]) || FACTORY_TEMPLATES[p];
@@ -283,6 +282,10 @@ function cloneTemplates () {
     };
   }
   return out;
+}
+function cloneTemplates () {
+  // Convenience wrapper used after `state` is initialized.
+  return cloneTemplatesFrom(state && state.config);
 }
 
 function genId () {
