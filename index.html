@@ -417,9 +417,17 @@
 <div id="toast" class="toast"></div>
 
 <!-- Libraries -->
-<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"
-        onerror="document.write('<scr'+'ipt src="https://unpkg.com/docx@8.5.0/build/index.umd.js"><\/scr'+'ipt>')"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-<script src="app.js?v=20260504"></script>
+<script>
+  // Fallback to unpkg if jsdelivr blocked
+  if (typeof window.docx === 'undefined') {
+    var s = document.createElement('script');
+    s.src = 'https://unpkg.com/docx@8.5.0/build/index.umd.js';
+    s.async = false;
+    document.head.appendChild(s);
+  }
+</script>
+<script src="app.js?v=20260505a"></script>
 </body>
 </html>
