@@ -270,9 +270,13 @@ function cloneItems (arr) {
 }
 
 function cloneTemplates () {
+  // Read templates from config if state is set up; otherwise fall back to factory.
+  // (We may be called during initial state construction, so `state` itself may
+  //  still be in the temporal dead zone — guard with typeof.)
+  const cfg = (typeof state !== 'undefined' && state && state.config) ? state.config : null;
   const out = {};
   for (const p of SCOPE_PHASES) {
-    const tpl = state.config.scopeTemplates[p] || FACTORY_TEMPLATES[p];
+    const tpl = (cfg && cfg.scopeTemplates && cfg.scopeTemplates[p]) || FACTORY_TEMPLATES[p];
     out[p] = {
       description: tpl.description,
       items: cloneItems(tpl.items),
