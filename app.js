@@ -1030,7 +1030,35 @@ function showDoneScreen({ moved, copied, routed, backupName }) {
 /* ─── 10. Bootstrap / event wiring ─── */
 
 function checkBrowserSupport() {
-  if (!window.showDirectoryPicker || !window.crypto?.subtle) {
+  // The only API we *strictly* need is `showDirectoryPicker`. crypto.subtle
+  // is a transitive dep (we use it for hashing) but it's available in every
+  // browser/version that has showDirectoryPicker, so checking it separately
+  // just adds false-negatives.
+  const hasFSA = typeof window.showDirectoryPicker === 'function';
+
+  if (!hasFSA) {
+    // Log a clear diagnostic so anyone hitting this can tell us exactly why.
+    const diag = {
+      showDirectoryPicker: typeof window.showDirectoryPicker,
+      cryptoSubtle: typeof window.crypto?.subtle,
+      isSecureContext: window.isSecureContext,
+      protocol: location.protocol,
+      url: location.href,
+      ua: navigator.userAgent
+    };
+    console.warn('[Folder Reorganizer] File System Access API not available.', diag);
+    // Surface the diagnostic on the warning page itself, so the user can read
+    // it without opening DevTools.
+    const warn = $('#browser-warning');
+    if (warn) {
+      const card = warn.querySelector('.card');
+      if (card) {
+        const pre = document.createElement('pre');
+        pre.style.cssText = 'font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.78rem;background:#fff8e7;padding:0.6rem 0.8rem;border:1px solid #d8d4c4;white-space:pre-wrap;word-break:break-all;margin-top:1rem;';
+        pre.textContent = JSON.stringify(diag, null, 2);
+        card.append(pre);
+      }
+    }
     $('#browser-warning').hidden = false;
     $('#app').hidden = true;
     return false;
