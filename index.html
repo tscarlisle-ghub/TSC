@@ -8,7 +8,7 @@
 
   <!-- Adobe Fonts: Warnock Pro / Interstate / DIN Condensed -->
   <link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 
@@ -148,9 +148,11 @@
 
           <fieldset class="strategies">
             <legend>Organizing strategy</legend>
-            <label><input type="radio" name="strategy" value="type" checked> By&nbsp;file&nbsp;type</label>
+            <label><input type="radio" name="strategy" value="smart" checked>
+              <span><strong>Smart</strong> &mdash; reads filename + folder context. Project folders preserved as units; image files that look like documents (scans, receipts, contracts) routed to <code>Documents/</code>; renderings, drawings, and photos disambiguated by filename. Recommended.</span></label>
+            <label><input type="radio" name="strategy" value="type"> By&nbsp;file&nbsp;type</label>
             <label><input type="radio" name="strategy" value="date"> By&nbsp;date</label>
-            <label><input type="radio" name="strategy" value="project"> By&nbsp;project (keep top-level folders)</label>
+            <label><input type="radio" name="strategy" value="project"> By&nbsp;project (keep top-level folders, no sub-organization)</label>
             <label><input type="radio" name="strategy" value="hybrid"> Hybrid (type + date)</label>
           </fieldset>
 
@@ -275,6 +277,6 @@
     </footer>
   </div>
 
-  <script type="module" src="app.js?v=4"></script>
+  <script type="module" src="app.js?v=5"></script>
 </body>
 </html>

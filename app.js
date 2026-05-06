@@ -36,6 +36,58 @@ const CATEGORIES = {
   'Other':         []
 };
 
+// Filename-based hints used by the Smart strategy to reclassify files into a
+// purpose-based folder rather than a flat by-extension folder. Order matters:
+// the first matching pattern wins, so put more specific hints first. Within
+// each alternation, longer keywords come before shorter ones (e.g.
+// "rendering" before "render") so the longer match is preferred.
+//
+// All matching is on filename only (no byte reads), so this works in
+// cloud-friendly mode for online-only Dropbox/iCloud files.
+//
+// We use custom boundaries `(?<![a-z0-9])` / `(?![a-z0-9])` instead of `\b`
+// because `\b` treats `_` as a word character — so `\bscan\b` would NOT match
+// `scan_permit.jpg`. Our boundary breaks on underscores, hyphens, dots,
+// spaces, and parentheses, which is how filenames actually separate words.
+const HB = '(?<![a-z0-9])';   // boundary before
+const HA = '(?![a-z0-9])';    // boundary after
+const wb = (re) => new RegExp(HB + re + HA, 'i');
+
+const FILENAME_HINTS = [
+  // ── Documents that happen to be image files (the request driving this) ──
+  { pattern: wb('(receipts?|invoices?|bills?|statements?)'),                       target: 'Documents/Receipts & Invoices' },
+  { pattern: wb('(agreements?|contracts?|proposals?|nda|loi)'),                    target: 'Documents/Contracts' },
+  { pattern: wb('change[\\s_-]?orders?'),                                          target: 'Documents/Contracts' },
+  { pattern: wb('(permits?|zoning|variance|approvals?)'),                          target: 'Documents/Permits' },
+  { pattern: wb('(topographic|topos?|surveys?|plats?|deeds?)'),                    target: 'Documents/Surveys & Site' },
+  { pattern: wb('(specifications?|specs|schedules?)'),                             target: 'Documents/Specs' },
+  { pattern: wb('(meetings?|minutes|agendas?)'),                                   target: 'Documents/Meeting Notes' },
+  { pattern: wb('(scanned|scans?)'),                                               target: 'Documents/Scans' },
+  // ── Reference & inspiration ──
+  { pattern: /^(screenshot|screen[\s_-]?shot)/i,                                   target: 'References/Screenshots' },
+  { pattern: wb('(references?|inspirations?|precedents?|moodboards?)'),            target: 'References' },
+  // ── Architecture-specific ──
+  { pattern: wb('(renderings?|render|perspectives?|exterior[\\s_-]?view|interior[\\s_-]?view|massing)'), target: 'Renderings' },
+  { pattern: wb('(floor[\\s_-]?plans?|site[\\s_-]?plans?|roof[\\s_-]?plans?|elevations?|sections?)'),    target: 'Drawings' },
+  { pattern: wb('(axonometric|axon|isometric|details?)'),                          target: 'Drawings' },
+  { pattern: wb('(redlines?|markups?|reviews?)'),                                  target: 'Drawings/Markups' },
+  // ── Project photography (camera filename patterns) ──
+  { pattern: /^(IMG[_-]|DSC[NF]?[_-]?|PXL[_-]|MVI[_-]|GOPR|P\d{6,})/i,             target: 'Photos' },
+];
+
+// Words that suggest a top-level folder is a "project" / "client" folder
+// rather than a generic bucket. Used by the Smart strategy.
+const PROJECT_KEYWORDS = wb('(residences?|houses?|home|project|projects|renovations?|remodels?|additions?|cottage|bungalow|estate|cabin|loft|condo|apartment|studio|villa|townhouse)');
+const STREET_KEYWORDS  = new RegExp(HB + '(st|street|ave|avenue|rd|road|blvd|boulevard|dr|drive|ln|lane|ct|court|way|pl|place|hwy|highway|cir|circle)\\.?' + HA, 'i');
+const CATEGORY_LIKE_NAMES = new Set([
+  'documents','docs','spreadsheets','sheets','presentations','slides',
+  'images','image','photos','photo','pictures','pics','renderings','renders',
+  'drawings','cad','design','designs','audio','music','video','videos',
+  'archives','archive','code','source','fonts','ebooks','books','other','misc',
+  'inbox','downloads','desktop','tmp','temp','old','backup','backups','archive',
+  '_old','_backup','_archive','_review-for-deletion'
+]);
+
 // Macros that match files we treat as system noise / safely-routable junk.
 // These never get permanently deleted — they go to _Review-for-Deletion/junk/.
 const JUNK_PATTERNS = [
@@ -83,7 +135,7 @@ const state = {
   junkIds: new Set(),      // ids of files matching junk patterns
   emptyIds: new Set(),     // ids of zero-byte files
   proposedTree: null,      // root TreeNode for the proposed structure
-  strategy: 'type',
+  strategy: 'smart',
   movePlan: [],            // [{ fileId, fromPath, toPath, reason }]
   reviewMoves: [],         // [{ fileId, fromPath, toPath, kind }]  duplicates / junk
   cloudMode: false         // true → skip content reads (hashing & backup copies);
@@ -512,8 +564,134 @@ function buildProposedTree(strategy) {
     }
   }
 
+  else if (strategy === 'smart') {
+    buildSmartTree(root, goodFiles);
+  }
+
   state.proposedTree = root;
   return root;
+}
+
+/* ──── Smart strategy ────
+   Combines content + context. Two-pass:
+   1. Detect "project folders" — top-level folders that look like client or
+      project containers (mixed file types, specific names, year/street/proper
+      noun patterns). Preserve them as atomic units; sub-organize by purpose
+      INSIDE each.
+   2. Everything else (loose root files + contents of non-project folders)
+      gets redistributed at the root by purpose, with fine-grained subfolders
+      where filename hints give us a strong signal (Documents/Receipts,
+      Documents/Scans, References/Screenshots, etc.).
+*/
+
+function isProjectFolder(name, files) {
+  if (!name) return false;
+  // Folders we explicitly recognize as generic buckets are NOT projects.
+  if (CATEGORY_LIKE_NAMES.has(name.toLowerCase())) return false;
+
+  let score = 0;
+  if (/\b(19|20)\d{2}\b/.test(name)) score += 3;                               // year
+  if (/^([A-Z][a-z]+[\s_-]?){2,}/.test(name)) score += 3;                      // multi-cap words
+  if (PROJECT_KEYWORDS.test(name)) score += 3;
+  if (STREET_KEYWORDS.test(name)) score += 2;
+  if (/^\d{2,5}\b/.test(name)) score += 1;                                     // leading street number
+  if (name.length >= 8) score += 1;
+  if (files.length >= 5) score += 1;
+
+  const cats = new Set(files.map(f => f.category));
+  if (cats.size >= 3) score += 2;                                              // mixed contents
+
+  return score >= 5;
+}
+
+// Decide which "purpose" subfolder a file should land in, using filename
+// hints first, then category fallback. Returns a slash-separated path like
+// 'Documents/Scans' or 'Photos'. Pure metadata — no byte reads.
+function purposeFor(f) {
+  for (const hint of FILENAME_HINTS) {
+    if (hint.pattern.test(f.name)) return hint.target;
+  }
+  switch (f.category) {
+    case 'CAD & 3D':      return 'Drawings';
+    case 'Design Files':  return 'Drawings';
+    case 'Documents':     return 'Documents';
+    case 'Spreadsheets':  return 'Documents/Spreadsheets';
+    case 'Presentations': return 'Documents/Presentations';
+    case 'Images':        return 'Photos';     // default photo bucket; explicit hints route doc-like images elsewhere
+    case 'Audio':         return 'Audio';
+    case 'Video':         return 'Video';
+    case 'Archives':      return 'Archives';
+    case 'Code':          return 'Code';
+    case 'Fonts':         return 'Fonts';
+    case 'eBooks':        return 'eBooks';
+    default:              return 'Other';
+  }
+}
+
+// Place each file under `parentFolder` according to its purposeFor() path,
+// creating intermediate subfolders as needed.
+function placeByPurpose(parentFolder, files) {
+  for (const f of files) {
+    const segs = purposeFor(f).split('/');
+    let cur = parentFolder;
+    for (const seg of segs) {
+      let existing = cur.children.find(c => c.name === seg);
+      if (!existing) {
+        existing = makeFolder(seg);
+        cur.children.push(existing);
+      }
+      cur = existing;
+    }
+    cur.fileIds.push(f.id);
+  }
+  // Sort children alphabetically within each folder for predictable order,
+  // but keep files (which we don't represent as nodes here) in insertion order.
+  sortChildrenAlpha(parentFolder);
+}
+
+function sortChildrenAlpha(node) {
+  node.children.sort((a, b) => a.name.localeCompare(b.name));
+  for (const c of node.children) sortChildrenAlpha(c);
+}
+
+function buildSmartTree(root, goodFiles) {
+  // Bucket files by their top-level folder (or 'ROOT' for loose files).
+  const looseFiles = [];
+  const byTop = new Map();
+  for (const f of goodFiles) {
+    const segs = f.originalPath.split('/');
+    if (segs.length === 1) {
+      looseFiles.push(f);
+    } else {
+      const top = segs[0];
+      if (!byTop.has(top)) byTop.set(top, []);
+      byTop.get(top).push(f);
+    }
+  }
+
+  // Identify project folders. The rest gets redistributed.
+  const projectsAlpha = [];
+  const redistribute = [...looseFiles];
+  for (const [name, files] of byTop) {
+    if (isProjectFolder(name, files)) {
+      projectsAlpha.push({ name, files });
+    } else {
+      redistribute.push(...files);
+    }
+  }
+  projectsAlpha.sort((a, b) => a.name.localeCompare(b.name));
+
+  // Project folders first, internally organized by purpose.
+  for (const { name, files } of projectsAlpha) {
+    const folder = makeFolder(name);
+    placeByPurpose(folder, files);
+    root.children.push(folder);
+  }
+
+  // Then a single bucket for everything that didn't belong to a project,
+  // organized by purpose. We put this *after* the projects so client work
+  // surfaces first when the tree opens.
+  if (redistribute.length) placeByPurpose(root, redistribute);
 }
 
 function groupBy(arr, keyFn) {
@@ -1126,7 +1304,7 @@ function wireEvents() {
 
   $('#btn-back-to-welcome').addEventListener('click', () => setPhase('welcome'));
   $('#btn-go-propose').addEventListener('click', () => {
-    state.strategy = $('input[name="strategy"]:checked')?.value || 'type';
+    state.strategy = $('input[name="strategy"]:checked')?.value || 'smart';
     buildProposedTree(state.strategy);
     renderTree();
     setPhase('propose');
