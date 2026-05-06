@@ -8,7 +8,7 @@
 
   <!-- Adobe Fonts: Warnock Pro / Interstate / DIN Condensed -->
   <link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 
@@ -69,6 +69,21 @@
             Cloud sync will pick up the changes automatically. Files that are <em>online-only</em>
             (not yet downloaded locally) will be skipped &mdash; download them first if you want
             them included.</p>
+
+          <fieldset class="cloud-mode">
+            <legend>Online-only files</legend>
+            <label>
+              <input type="checkbox" id="cloud-mode">
+              <span>My folder contains <strong>online-only</strong> Dropbox or iCloud files</span>
+            </label>
+            <p class="hint">
+              When checked, the tool relocates files using a metadata-only move
+              (no bytes are read), so online-only placeholders stay online-only.
+              Trade-offs: duplicate-by-content detection is disabled, and the
+              backup is reduced to a manifest only &mdash; your cloud
+              provider&rsquo;s version history is the safety net.
+            </p>
+          </fieldset>
 
           <div class="actions">
             <button id="btn-pick-folder" class="btn btn--primary">Choose folder &rarr;</button>
@@ -164,6 +179,16 @@
           <h2 class="display">Review &amp; approve</h2>
 
           <h3>What's about to happen</h3>
+
+          <p id="review-cloud-hint" class="cloud-hint" hidden>
+            <strong>Cloud-friendly mode is on.</strong> Files will be relocated
+            using a metadata-only move &mdash; their bytes are never read, so
+            online-only Dropbox/iCloud files stay online-only. The backup will
+            contain a <code>manifest.json</code> only (no copies of original
+            file contents). Use your cloud provider&rsquo;s version history if
+            you need to roll the move back.
+          </p>
+
           <ol class="numbered">
             <li>A timestamped backup folder named
               <code id="review-backup-name">_Backup-…</code> will be created
@@ -250,37 +275,6 @@
     </footer>
   </div>
 
-  <!-- Inline pre-flight diagnostic. Runs before app.js. Prints API check
-       results into a visible banner so we can see them regardless of what
-       app.js does. Cache-busted query string forces fresh fetch of app.js. -->
-  <script>
-    (function preflight() {
-      var diag = {
-        showDirectoryPicker: typeof window.showDirectoryPicker,
-        cryptoSubtle: typeof (window.crypto && window.crypto.subtle),
-        isSecureContext: window.isSecureContext,
-        protocol: location.protocol,
-        host: location.host,
-        url: location.href,
-        ua: navigator.userAgent
-      };
-      console.log('[Preflight]', diag);
-      var bar = document.createElement('div');
-      var ok = (typeof window.showDirectoryPicker === 'function');
-      bar.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;'
-        + 'padding:0.6rem 1rem;font-family:ui-monospace,Menlo,Consolas,monospace;'
-        + 'font-size:0.78rem;line-height:1.4;border-bottom:1px solid #333;'
-        + 'background:' + (ok ? '#d8f0d8' : '#ffe2c2') + ';color:#111;'
-        + 'white-space:pre-wrap;word-break:break-all;';
-      bar.textContent =
-        '[Preflight · v3] showDirectoryPicker=' + diag.showDirectoryPicker
-        + ' · cryptoSubtle=' + diag.cryptoSubtle
-        + ' · isSecureContext=' + diag.isSecureContext
-        + ' · protocol=' + diag.protocol
-        + '\nUA: ' + diag.ua;
-      document.body.insertBefore(bar, document.body.firstChild);
-    })();
-  </script>
-  <script type="module" src="app.js?v=3"></script>
+  <script type="module" src="app.js?v=4"></script>
 </body>
 </html>
