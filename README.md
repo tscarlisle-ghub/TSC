@@ -40,7 +40,17 @@ Dropbox and iCloud are presented to you as ordinary folders on your filesystem w
 
 The reorganization happens locally; Dropbox and iCloud will sync the changes after the fact, just as if you'd moved files in Finder.
 
-**Online-only files** (Dropbox Smart Sync, iCloud "Optimize Storage") cannot be read by the browser. The app marks them as unreadable and skips them. To include them, right-click in Finder/Explorer and choose "Make available offline" / "Always keep on this device" before running the tool.
+### Cloud-friendly mode (for online-only files)
+
+If your folder contains files marked as **online-only** in Dropbox or iCloud (a cloud icon in Finder, no local bytes), tick the **"My folder contains online-only Dropbox or iCloud files"** checkbox on the welcome screen before clicking *Choose folder*. With this on, the tool relocates files using the browser's native `FileSystemFileHandle.move()` — a metadata-only operation. The bytes are never read, so online-only placeholders stay online-only and Dropbox/iCloud just rename the cloud-side entry.
+
+Trade-offs of cloud-friendly mode:
+
+- **Duplicate detection by content is disabled** — finding duplicates would require reading file bytes, which would force every candidate file to download. The tool will still flag system noise (`.DS_Store`, etc.) and zero-byte files because those checks are name- or metadata-based.
+- **The backup is reduced to a manifest only** — the timestamped `_Backup-…/` folder will contain just a `manifest.json` (the full mapping of original → new paths). No copies of the files themselves. Your cloud provider's version history is the rollback path: every Dropbox plan keeps 30 days of file history (longer on paid plans), and iCloud keeps 30 days of recently deleted files.
+- Reorganizations are still fully reversible by reading the manifest and undoing each move, since `move()` is symmetric.
+
+If your folder is fully local (everything downloaded), leave the checkbox off — you'll get the full safety net (content-hashed duplicate detection plus a complete file backup).
 
 ---
 

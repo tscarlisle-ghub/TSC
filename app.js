@@ -85,7 +85,13 @@ const state = {
   proposedTree: null,      // root TreeNode for the proposed structure
   strategy: 'type',
   movePlan: [],            // [{ fileId, fromPath, toPath, reason }]
-  reviewMoves: []          // [{ fileId, fromPath, toPath, kind }]  duplicates / junk
+  reviewMoves: [],         // [{ fileId, fromPath, toPath, kind }]  duplicates / junk
+  cloudMode: false         // true → skip content reads (hashing & backup copies);
+                           // required when the folder contains online-only
+                           // Dropbox / iCloud files that you don't want forced
+                           // to download. Reorganization still works because
+                           // moves use the native FileSystemFileHandle.move()
+                           // which is a metadata operation.
 };
 
 
@@ -189,6 +195,8 @@ function setPhase(name) {
 
 async function pickFolder() {
   try {
+    // Read the cloud-friendly mode toggle once, before opening the picker.
+    state.cloudMode = !!$('#cloud-mode')?.checked;
     const handle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
     // Permission may need to be re-granted explicitly for write mode.
     const perm = await handle.queryPermission({ mode: 'readwrite' });
@@ -295,26 +303,33 @@ async function runAnalysis() {
   }
 
   // Phase 5c: hash files for duplicate detection.
-  // To keep things fast, we only hash files that share an exact size with
-  // at least one other file — same size is a precondition for being a duplicate.
-  status.textContent = 'Looking for duplicates…';
-  await tick();
-  const bySize = new Map();
-  for (const f of state.files) {
-    if (f.unreadable || f.size === 0) continue;
-    if (!bySize.has(f.size)) bySize.set(f.size, []);
-    bySize.get(f.size).push(f);
-  }
-  const candidates = [];
-  for (const arr of bySize.values()) if (arr.length > 1) candidates.push(...arr);
-  for (let i = 0; i < candidates.length; i++) {
-    const f = candidates[i];
-    try { f.hash = await sampleHash(f.handle, f.size); }
-    catch { f.hash = null; }
-    if (i % YIELD_EVERY === 0) {
-      bar.value = 50 + (i / Math.max(1, candidates.length)) * 50;
-      status.textContent = `Hashing… (${fmtNum(i)}/${fmtNum(candidates.length)})`;
-      await tick();
+  // We only hash files that share an exact size with at least one other file
+  // (same size is a precondition for being a duplicate). Hashing reads the
+  // first 256 KB of each file — which would force online-only Dropbox/iCloud
+  // placeholders to download. So in Cloud-friendly mode we skip this entirely.
+  if (state.cloudMode) {
+    status.textContent = 'Cloud-friendly mode — skipping content-based duplicate detection.';
+    await tick();
+  } else {
+    status.textContent = 'Looking for duplicates…';
+    await tick();
+    const bySize = new Map();
+    for (const f of state.files) {
+      if (f.unreadable || f.size === 0) continue;
+      if (!bySize.has(f.size)) bySize.set(f.size, []);
+      bySize.get(f.size).push(f);
+    }
+    const candidates = [];
+    for (const arr of bySize.values()) if (arr.length > 1) candidates.push(...arr);
+    for (let i = 0; i < candidates.length; i++) {
+      const f = candidates[i];
+      try { f.hash = await sampleHash(f.handle, f.size); }
+      catch { f.hash = null; }
+      if (i % YIELD_EVERY === 0) {
+        bar.value = 50 + (i / Math.max(1, candidates.length)) * 50;
+        status.textContent = `Hashing… (${fmtNum(i)}/${fmtNum(candidates.length)})`;
+        await tick();
+      }
     }
   }
 
@@ -380,6 +395,10 @@ function renderAnalysis() {
   const findingItem = (kind, text) =>
     el('li', {}, el('span', {class:'badge ' + kind}, kind), text);
 
+  if (state.cloudMode) {
+    findings.append(findingItem('info',
+      `Cloud-friendly mode is on. Duplicate detection by content was skipped — file bytes are never read. Files will be relocated using a metadata-only move so online-only Dropbox/iCloud files stay online-only.`));
+  }
   if (dupCount > 0) {
     findings.append(findingItem('warn',
       `${fmtNum(dupCount)} duplicate file(s) detected across ${fmtNum(state.duplicates.length)} group(s). The first copy of each will keep its place; the rest will be moved to ${REVIEW_FOLDER}/duplicates/.`));
@@ -783,6 +802,10 @@ function renderReview() {
   $('#review-move-count').textContent = fmtNum(state.movePlan.length);
   $('#review-deletion-count').textContent = fmtNum(state.reviewMoves.length);
 
+  // Make the cloud-mode caveat very visible on the review screen.
+  const cloudHint = $('#review-cloud-hint');
+  if (cloudHint) cloudHint.hidden = !state.cloudMode;
+
   // Top 200 moves — keep DOM light.
   const tbody = $('#move-plan tbody');
   tbody.innerHTML = '';
@@ -839,9 +862,28 @@ async function copyFile(srcHandle, dstParent, dstName) {
   await writable.close();
 }
 
-// Move a file: copy then delete original.
+// Move a file. Prefer the native `FileSystemFileHandle.move()` method —
+// it's a metadata operation that doesn't read the file's bytes. That's
+// critical for online-only Dropbox/iCloud files: a native move re-routes
+// the placeholder without forcing the bytes to download. As a bonus, it's
+// also much faster than copy+delete for any large local file.
+//
+// Falls back to copy+delete on browsers/builds where move() is missing or
+// throws (e.g. cross-bucket moves the impl doesn't handle).
 async function moveFile(srcParent, srcName, dstParent, dstName) {
   const srcHandle = await srcParent.getFileHandle(srcName);
+  if (typeof srcHandle.move === 'function') {
+    try {
+      if (srcParent === dstParent) {
+        await srcHandle.move(dstName);
+      } else {
+        await srcHandle.move(dstParent, dstName);
+      }
+      return;
+    } catch (err) {
+      console.warn('[move] native move() failed, falling back to copy+delete:', err);
+    }
+  }
   await copyFile(srcHandle, dstParent, dstName);
   await srcParent.removeEntry(srcName);
 }
@@ -890,32 +932,43 @@ async function executeReorganization() {
     logExec(`Creating ${backupName}/`);
     const backupRoot = await ensureDir(root, backupName);
 
-    // Copy every file (including ones flagged as junk/duplicate — backup is exhaustive).
+    // In Cloud-friendly mode we deliberately do NOT copy every file —
+    // copying reads bytes, which would force online-only files to download.
+    // The manifest (written below) plus your cloud provider's own version
+    // history are the safety net instead.
     let copied = 0;
-    for (const f of state.files) {
-      if (f.unreadable) { advance(); continue; }
-      try {
-        const { parentDir, fileName } = await ensureParent(backupRoot, f.originalPath);
-        await copyFile(f.handle, parentDir, fileName);
-        copied++;
-      } catch (err) {
-        logExec(`× backup failed: ${f.originalPath} (${err.message})`, true);
+    if (state.cloudMode) {
+      logExec(`Cloud-friendly mode: skipping full file backup. The manifest at ${backupName}/manifest.json is the restore reference; combine it with Dropbox/iCloud version history if you need to roll back.`);
+      // Mark all the would-be backup steps as advanced so the progress bar still works.
+      for (const _ of state.files) advance();
+    } else {
+      // Copy every file (including ones flagged as junk/duplicate — backup is exhaustive).
+      for (const f of state.files) {
+        if (f.unreadable) { advance(); continue; }
+        try {
+          const { parentDir, fileName } = await ensureParent(backupRoot, f.originalPath);
+          await copyFile(f.handle, parentDir, fileName);
+          copied++;
+        } catch (err) {
+          logExec(`× backup failed: ${f.originalPath} (${err.message})`, true);
+        }
+        advance();
+        if (copied % 25 === 0) {
+          status.textContent = `Backing up… ${fmtNum(copied)}/${fmtNum(state.files.length)}`;
+          await tick();
+        }
       }
-      advance();
-      if (copied % 25 === 0) {
-        status.textContent = `Backing up… ${fmtNum(copied)}/${fmtNum(state.files.length)}`;
-        await tick();
-      }
+      logExec(`Backed up ${fmtNum(copied)} of ${fmtNum(state.files.length)} files.`);
     }
-    logExec(`Backed up ${fmtNum(copied)} of ${fmtNum(state.files.length)} files.`);
 
     // Save manifest.json into the backup folder.
     const manifest = {
       tool: 'CMA Folder Reorganizer',
-      version: '1.0',
+      version: '1.1',
       timestamp: new Date().toISOString(),
       sourceFolder: state.rootName,
       strategy: state.strategy,
+      cloudMode: state.cloudMode,
       backupFolder: backupName,
       reviewFolder: REVIEW_FOLDER,
       files: state.files.map(f => ({
