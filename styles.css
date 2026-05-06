@@ -35,6 +35,11 @@ html, body { margin: 0; padding: 0; }
 button { font: inherit; color: inherit; }
 img, svg { display: block; max-width: 100%; }
 
+/* The HTML `hidden` attribute must always beat element-specific display rules
+   (e.g. `#browser-warning { display: grid }`). Without !important, an ID rule
+   wins on specificity and the hidden attribute is ignored. */
+[hidden] { display: none !important; }
+
 /* ---------- Page foundation ---------- */
 html { font-size: 17px; }
 body {
