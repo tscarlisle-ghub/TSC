@@ -250,6 +250,37 @@
     </footer>
   </div>
 
-  <script type="module" src="app.js"></script>
+  <!-- Inline pre-flight diagnostic. Runs before app.js. Prints API check
+       results into a visible banner so we can see them regardless of what
+       app.js does. Cache-busted query string forces fresh fetch of app.js. -->
+  <script>
+    (function preflight() {
+      var diag = {
+        showDirectoryPicker: typeof window.showDirectoryPicker,
+        cryptoSubtle: typeof (window.crypto && window.crypto.subtle),
+        isSecureContext: window.isSecureContext,
+        protocol: location.protocol,
+        host: location.host,
+        url: location.href,
+        ua: navigator.userAgent
+      };
+      console.log('[Preflight]', diag);
+      var bar = document.createElement('div');
+      var ok = (typeof window.showDirectoryPicker === 'function');
+      bar.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;'
+        + 'padding:0.6rem 1rem;font-family:ui-monospace,Menlo,Consolas,monospace;'
+        + 'font-size:0.78rem;line-height:1.4;border-bottom:1px solid #333;'
+        + 'background:' + (ok ? '#d8f0d8' : '#ffe2c2') + ';color:#111;'
+        + 'white-space:pre-wrap;word-break:break-all;';
+      bar.textContent =
+        '[Preflight · v3] showDirectoryPicker=' + diag.showDirectoryPicker
+        + ' · cryptoSubtle=' + diag.cryptoSubtle
+        + ' · isSecureContext=' + diag.isSecureContext
+        + ' · protocol=' + diag.protocol
+        + '\nUA: ' + diag.ua;
+      document.body.insertBefore(bar, document.body.firstChild);
+    })();
+  </script>
+  <script type="module" src="app.js?v=3"></script>
 </body>
 </html>
