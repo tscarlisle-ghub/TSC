@@ -77,6 +77,14 @@ a:hover { color: var(--accent-dark); }
   margin: 0;
   line-height: 1;
 }
+.masthead-logo {
+  display: block;
+  height: auto;
+  width: auto;
+  max-height: 64px;
+  max-width: 100%;
+  margin: 0 0 4px;
+}
 .masthead-sub {
   font-family: var(--font-body);
   font-weight: 300;
@@ -221,12 +229,16 @@ input:focus::placeholder,
 textarea:focus::placeholder { color: transparent; }
 textarea {
   min-height: 110px;
-  resize: vertical;
+  /* JS auto-grows textareas to fit their content — no manual resize handle,
+     no internal scrollbars. Lines wrap, and the box expands as you type. */
+  resize: none;
+  overflow: hidden;
   border: 1px solid var(--rule);
   padding: 12px 14px;
   background: var(--field-bg);
   font-size: 18px;
   line-height: 1.55;
+  display: block;
 }
 textarea:focus { border-color: var(--accent); border-width: 2px; background: var(--highlight); }
 select {
@@ -552,19 +564,63 @@ footer .accent { color: var(--accent); }
 }
 
 @media print {
-  body { font-size: 11pt; background: #fff; }
-  .action-row, .action-status, footer, .masthead { display: none; }
-  section { page-break-inside: avoid; }
-  .section-header { padding-left: 0; }
-  .section-note { position: static !important; width: auto; text-align: left; padding-left: 12px; padding-right: 0; border-right: none; border-left: 2px solid #aaa; margin-top: 4px; }
-  .q { padding-left: 0 !important; }
-  .sidenote { position: static !important; width: auto; padding-right: 0; padding-left: 12px; text-align: left; border-right: none; border-left: 2px solid #aaa; margin: 4px 0 8px; }
+  @page { margin: 0.6in 0.55in; }
+  body { font-size: 11pt; background: #fff; color: #000; }
+  .action-row, .action-status, footer, .toast, .welcome-modal, .map-link { display: none !important; }
+  /* Keep the masthead on the first page only — it's the cover */
+  .masthead { border-bottom: 1px solid #000; padding: 0 0 14px; margin-bottom: 18px; }
+  .masthead-row { padding: 0; max-width: none; }
+  .masthead-sub { font-size: 28px; }
+  .masthead-logo { max-height: 56px; }
+  .doc-head { padding: 0; margin-bottom: 22px; max-width: none; }
+  .doc-intro { font-size: 11pt; }
+  .page { padding: 0; max-width: none; }
+  article { max-width: none; }
+  section { page-break-inside: auto; break-inside: auto; margin: 18px 0 14px; }
+  .section-header { padding-left: 0; page-break-after: avoid; break-after: avoid; }
+  .section-note { position: static !important; width: auto; text-align: left; padding-left: 12px; padding-right: 0; border-right: none; border-left: 2px solid #aaa; margin-top: 4px; font-size: 9pt; }
+  .q { padding-left: 0 !important; margin-bottom: 14px; page-break-inside: avoid; break-inside: avoid; }
+  .q-label { page-break-after: avoid; break-after: avoid; }
+  .sidenote { position: static !important; width: auto; padding-right: 0; padding-left: 12px; text-align: left; border-right: none; border-left: 2px solid #aaa; margin: 4px 0 8px; font-size: 9pt; letter-spacing: 0.06em; }
   .q-callout { margin-left: 0; }
+  /* CRITICAL: let textareas show their full content (no scrollbars in PDF) */
+  textarea, .notes-box {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 1px solid #bbb !important;
+    background: #fff !important;
+    padding: 8px 10px !important;
+    font-size: 10.5pt !important;
+    line-height: 1.45 !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+  }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], select {
+    border: none !important;
+    border-bottom: 1px solid #888 !important;
+    background: #fff !important;
+    padding: 4px 2px !important;
+    font-size: 11pt !important;
+  }
+  /* Unselected chips/spaces/styles disappear so the PDF shows only the chosen items */
+  .chip:not(.selected), .space:not(.selected), .style:not(.selected), .budget-item:not(.selected) { display: none !important; }
+  .chip.selected { color: #000 !important; font-weight: 700; padding: 2px 14px 2px 0; margin-right: 14px; }
+  .chip.selected::after { content: ""; }
+  .space.selected, .style.selected, .budget-item.selected { color: #000 !important; }
+  .style.selected .style-title { color: #000 !important; }
+  /* Drop hover/focus highlights */
+  *:focus { outline: none !important; background: #fff !important; }
+  /* Page-break helpers */
+  h2 { page-break-after: avoid; break-after: avoid; }
+  .section-rule { page-break-after: avoid; break-after: avoid; }
 }
 @media (max-width: 720px) {
   .masthead-row, .page { padding-left: 22px; padding-right: 22px; }
   .masthead h1 { font-size: 22px; letter-spacing: 0.06em; }
   .masthead-sub { font-size: 32px; }
+  .masthead-logo { max-height: 48px; }
   body { font-size: 18px; }
   h2 { font-size: 22px; }
   input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], select, textarea { font-size: 20px; }
@@ -592,7 +648,7 @@ footer .accent { color: var(--accent); }
   <div class="welcome-card">
     <h2 id="welcome-title">Carlisle Moore Architects</h2>
     <p class="welcome-lede">Before we begin &mdash; what should we call your project?</p>
-    <p class="welcome-body">Usually a family or last name, like <em>Davis Family</em>. This is just so we can file your answers correctly &mdash; you'll fill in the rest in a moment. Your work saves automatically to a unique link in the address bar; close this tab anytime and come back to it later.</p>
+    <p class="welcome-body">Usually a family or last name, like <em>Davis Family</em>. This is just so we can file your answers correctly &mdash; you'll fill in the rest in a moment. Your work saves automatically in this browser as you go, so you can close the tab and come back to it later from the same device.</p>
     <form id="welcome-form" novalidate>
       <div class="welcome-field">
         <label class="welcome-label" for="welcome-name">Project name</label>
@@ -608,7 +664,7 @@ footer .accent { color: var(--accent); }
 
 <header class="masthead">
   <div class="masthead-row">
-    <h1>Carlisle Moore Architects</h1>
+    <img class="masthead-logo" src="logo.png" alt="Carlisle Moore Architects">
     <span class="masthead-sub">Design Questionnaire</span>
   </div>
 </header>
@@ -617,11 +673,12 @@ footer .accent { color: var(--accent); }
   <div class="doc-stamp" id="doc-stamp">&nbsp;</div>
   <div class="project-badge" id="project-badge" hidden><span class="sigil">§</span>Project<span class="name" id="project-badge-name"></span></div>
   <div class="doc-intro">
-    Welcome &mdash; and thank you for taking the time. <em>This is just a starting point &mdash; a way for us to get a feel for what you're after.</em> Nothing here is meant to be a final answer; it's the opening of our conversation. The more honest and specific you can be, the more we'll have to work with when we sit down together. Type as much or as little as you'd like in any field, skip anything that doesn't apply, and use the box at the very top for anything we forgot to ask. As you fill it in, your answers save automatically to a unique link in the address bar &mdash; when you're done, click <em>Send back to Scott</em> to email it back. There's no clock running.
+    Welcome &mdash; and thank you for taking the time. <em>This is just a starting point &mdash; a way for us to get a feel for what you're after.</em> Nothing here is meant to be a final answer; it's the opening of our conversation. The more honest and specific you can be, the more we'll have to work with when we sit down together. Type as much or as little as you'd like in any field, skip anything that doesn't apply, and use the box at the very top for anything we forgot to ask. Your answers save automatically in this browser as you go, so you can close the tab and come back to it later &mdash; when you're done, click <em>Send back to Scott</em> to email it back. There's no clock running.
   </div>
   <div class="action-row top">
     <button class="action-btn primary" data-action="email" type="button">Send back to Scott</button>
     <button class="action-btn" data-action="share" type="button">Copy share link</button>
+    <button class="action-btn" data-action="pdf" type="button">Create PDF</button>
     <button class="action-btn" data-action="download" type="button">Download answers</button>
   </div>
 </div>
@@ -1136,6 +1193,7 @@ footer .accent { color: var(--accent); }
   <div class="action-row">
     <button class="action-btn primary" data-action="email" type="button">Send back to Scott</button>
     <button class="action-btn" data-action="share" type="button">Copy share link</button>
+    <button class="action-btn" data-action="pdf" type="button">Create PDF</button>
     <button class="action-btn" data-action="download" type="button">Download answers</button>
   </div>
   <div class="action-status" id="action-status"></div>
@@ -1369,8 +1427,14 @@ function syncStateToURL() {
   } catch (e) {}
 }
 function saveDraft() {
+  /* Autosave to localStorage only — DO NOT stamp state into the URL on
+     every keystroke. That kept the address bar synced for cross-device
+     resume, but it also made the URL absurdly long and meant every link
+     copied from the address bar carried the prior visitor's answers
+     forward. The explicit "Copy share link" button still generates the
+     full state-bearing URL via syncStateToURL() when someone actually
+     wants to share or resume on another device. */
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(collect())); } catch (e) {}
-  syncStateToURL();
 }
 
 function load() {
@@ -1537,8 +1601,57 @@ function downloadJSON() {
   setStatus(`Downloaded ${filename}.`, 'ok');
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   AUTO-GROW TEXTAREAS — every textarea expands vertically to fit its
+   content, so no answer is ever hidden behind a scrollbar (and PDFs
+   print the full text). Runs on every input event, after data is
+   loaded, and after a hard reset. Also runs on window resize because
+   wrapping changes when the column width changes.
+   ═══════════════════════════════════════════════════════════════════════ */
+function autoSizeTextarea(el) {
+  if (!el || el.tagName !== 'TEXTAREA') return;
+  /* Reset first so shrinking works as the user deletes lines. */
+  el.style.height = 'auto';
+  /* +2px so the bottom line doesn't get clipped by the border. */
+  el.style.height = (el.scrollHeight + 2) + 'px';
+}
+function autoSizeAll() {
+  document.querySelectorAll('textarea').forEach(autoSizeTextarea);
+}
+document.querySelectorAll('textarea').forEach(el => {
+  el.addEventListener('input', () => autoSizeTextarea(el));
+  /* Initial pass — handles textareas that were pre-filled by load(). */
+  autoSizeTextarea(el);
+});
+window.addEventListener('resize', autoSizeAll);
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CREATE PDF — opens the browser's print dialog. The user picks
+   "Save as PDF" (or "Microsoft Print to PDF") as the destination.
+   We set the document title first so the suggested filename comes
+   out as "CMA Questionnaire — <project> — <date>.pdf".
+   ═══════════════════════════════════════════════════════════════════════ */
+function createPDF() {
+  const data = collect();
+  /* Make sure every textarea is sized to its content before the print
+     snapshot is taken — Safari especially can capture stale heights. */
+  autoSizeAll();
+  const project = (data.client || data.name || 'Questionnaire').trim();
+  const date = new Date().toISOString().slice(0, 10);
+  const oldTitle = document.title;
+  document.title = `CMA Questionnaire — ${project} — ${date}`;
+  setStatus('Opening print dialog — choose "Save as PDF" as the destination.', 'ok');
+  /* Tiny defer so the toast paints before the (blocking) print dialog. */
+  setTimeout(() => {
+    try { window.print(); } catch (e) { /* user may have blocked it */ }
+    /* Restore the title shortly after the dialog is dismissed. */
+    setTimeout(() => { document.title = oldTitle; }, 1500);
+  }, 60);
+}
+
 document.querySelectorAll('[data-action="email"]').forEach(b => b.addEventListener('click', sendToScott));
 document.querySelectorAll('[data-action="share"]').forEach(b => b.addEventListener('click', copyShareLink));
+document.querySelectorAll('[data-action="pdf"]').forEach(b => b.addEventListener('click', createPDF));
 document.querySelectorAll('[data-action="download"]').forEach(b => b.addEventListener('click', downloadJSON));
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1594,6 +1707,9 @@ function formatPhoneValue(raw) {
 });
 
 const __loadSource = load();
+/* After load() may have populated textareas from URL/localStorage, size
+   each of them to fit. */
+autoSizeAll();
 window.addEventListener('input', saveDraft);
 window.addEventListener('change', saveDraft);
 
@@ -1614,6 +1730,8 @@ function resetAllFields() {
   }
   const mapLink = document.getElementById('q-address-map');
   if (mapLink) mapLink.hidden = true;
+  /* Collapse every textarea back to its CSS min-height. */
+  if (typeof autoSizeAll === 'function') autoSizeAll();
 }
 
 /* WELCOME MODAL: gate every brand-new visit behind a name prompt so the URL
@@ -1665,17 +1783,20 @@ function resetAllFields() {
     if (notesEl) notesEl.focus();
   });
 
-  /* Only show on a genuinely fresh visit — never if they already have a
-     ?s= state, a ?client= pre-fill, a localStorage draft, or a pre-typed
-     name (covers an embedded-iframe scenario). */
-  const params      = new URLSearchParams(location.search);
-  const hasState    = params.has('s');
-  const hasClient   = params.has('client');
+  /* Show the welcome modal any time we don't yet have a project name —
+     covers fresh visits, shared links that carried someone else's ?s=
+     state without a client value, and stale localStorage drafts. The
+     only ways to skip it are: a ?client= pre-fill in the URL, or a
+     loaded state (URL or localStorage) that already names a project.
+     This way every new visitor names their project before they see
+     the form, even if Scott's share link still has his test state in it. */
   const hasProject  = !!(clientName && clientName.trim());
-  const isFreshLoad = (__loadSource === 'fresh') && !hasState && !hasClient && !hasProject;
-  if (isFreshLoad) {
+  if (!hasProject) {
     /* Wipe any leftover autofill / partial state behind the modal so the
-       new visitor lands on a clean slate the moment they click Begin. */
+       new visitor lands on a clean slate the moment they click Begin.
+       If state was loaded from the URL or localStorage but never set a
+       project name, it's almost certainly an inadvertently-shared link
+       carrying someone else's answers — safer to start fresh. */
     resetAllFields();
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     showModal();
