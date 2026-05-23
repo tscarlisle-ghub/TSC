@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Conceptual Cost Estimator — Carlisle Moore Architects</title>
+<title>Conceptual Square Foot Cost Estimator — Carlisle Moore Architects</title>
 <link rel="stylesheet" href="https://use.typekit.net/wup0iix.css">
 <style>
   :root {
@@ -199,7 +199,7 @@
   /* Section heading — V5 engraved style (Columbia Titling, ruled below) */
   h2.section {
     font-family: var(--ff-display);
-    font-size: 16px; font-weight: 400;
+    font-size: 16px; font-weight: 700;
     text-transform: uppercase; letter-spacing: var(--tr-engraved);
     color: var(--v5-engraved);
     margin: 32px 0 12px;
@@ -542,7 +542,7 @@
     color: var(--ink-3);
   }
   .grand-total .v {
-    font-family: var(--ff-mono); font-size: 24px;
+    font-family: var(--ff-mono); font-size: 29px;
     color: var(--forest-1); font-feature-settings: "tnum";
     margin-top: 2px;
   }
@@ -721,12 +721,13 @@
 
   <header class="masthead">
     <div class="title-block">
-      <h1>Conceptual Cost Estimator <em>preliminary scope &amp; budget</em></h1>
+      <h1>Conceptual Square Foot Cost Estimator</h1>
       <input class="project-name-input" id="projectName" type="text"
              placeholder="Project name…" maxlength="80" autocomplete="off">
     </div>
     <span class="header-actions">
       <button id="emailClientBtn"  type="button" class="export-btn" title="Open an email draft with this configuration's link">Email to client</button>
+      <button id="printBtn"        type="button" class="export-btn" title="Create a PDF (uses your browser's Save as PDF)">Create PDF</button>
       <button id="shareLinkBtn"    type="button" class="export-btn" title="Copy a sharable link with this configuration">Copy share link</button>
       <button id="exportXlsxBtn"   type="button" class="export-btn" title="Export to Excel">Export to Excel</button>
       <button id="resetBtn"        type="button" class="export-btn" title="Reset to defaults">Reset</button>
@@ -1861,7 +1862,7 @@ function wireControls() {
       const longURL = location.href;
       const shortURL = await getShortLink(longURL);
       const project = (state.projectName || "").trim();
-      const subject = project + " — Conceptual Cost Estimate · Carlisle Moore Architects";
+      const subject = project + " — Conceptual Square Foot Cost Estimate · Carlisle Moore Architects";
       const body =
         "Hi,\n\nHere's a starting point for " + project + " you can play with — " +
         "adjust the rooms, finishes, and overall scope to match what you have in mind. " +
@@ -2134,7 +2135,7 @@ async function exportToExcel() {
     }
 
     // ---- 1.  TITLE ----
-    let r = ws.addRow(["Conceptual Cost Estimator"]);
+    let r = ws.addRow(["Conceptual Square Foot Cost Estimator"]);
     ws.mergeCells(`A${r.number}:G${r.number}`);
     r.getCell(1).font = F.title;
     r.height = 28;
