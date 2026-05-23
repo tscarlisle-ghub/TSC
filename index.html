@@ -5,70 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Design Questionnaire &middot; Carlisle Moore Architects</title>
 <meta name="description" content="A design questionnaire for prospective clients of Carlisle Moore Architects.">
-<link rel="stylesheet" href="https://use.typekit.net/wup0iix.css">
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
 <style>
 /* ════════════════════════════════════════════════════════════════════════
-   Typekit kit wup0iix — Carlisle Moore Architects
-   Engraved letterhead aesthetic, matched to the CMA Project Board (V5).
-   Type: Columbia Titling (display), Miller Text (serif italic),
-   FF Meta Web Pro (sans, with Condensed), FF Meta Correspondence (mono),
-   Warnock Pro retained as a body-serif fallback.
+   Typekit kit ikf0hkb
+   Designed using Edward Tufte's principles of analytical design.
+   Typeset in Warnock Pro, Interstate (with Condensed), Trajan Sans.
    ════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── V5 type families (CMA, May 2026) ── */
-  --ff-display:    "columbia-titling", "Trajan Pro 3", "Cormorant Garamond", "Times New Roman", serif;
-  --ff-serif:      "miller-text", "warnock-pro", Charter, "Iowan Old Style", Georgia, serif;
-  --ff-sans:       "ff-meta-web-pro", "Meta Pro", "Helvetica Neue", Arial, sans-serif;
-  --ff-sans-cond:  "ff-meta-web-pro-condensed", "ff-meta-web-pro", "Helvetica Neue Condensed", "Arial Narrow", sans-serif;
-  --ff-mono:       "ff-meta-correspondence-web-p", "iA Writer Mono S", "JetBrains Mono", Menlo, monospace;
-  --ff-body:       "warnock-pro", "miller-text", Charter, Georgia, serif;
+  --font-body:    "warnock-pro", Georgia, serif;
+  --font-display: "interstate-condensed", "Helvetica Neue", sans-serif;
+  --font-ui:      "interstate", "Helvetica Neue", sans-serif;
+  --font-trajan:  "trajan-sans-pro", "trajan-pro-3", "trajan-pro", "Cinzel", "warnock-pro", Georgia, serif;
 
-  /* Legacy aliases — kept so existing rule selectors stay valid */
-  --font-body:    var(--ff-body);
-  --font-display: var(--ff-sans-cond);
-  --font-ui:      var(--ff-sans);
-  --font-trajan:  var(--ff-display);
-
-  /* ── V5 paper + ink ramps ── */
-  --paper-0:    #fbfaf6;
-  --paper-1:    #f5f2ea;
-  --paper-2:    #ede8db;
-  --paper-3:    #ddd6c4;
-  --ink-0:      #14110d;     /* warm near-black */
-  --ink-1:      #2b271f;
-  --ink-2:      #57514a;
-  --ink-3:      #8a847b;
-  --ink-4:      #b6b0a6;
-  --ink-5:      #d5cfc3;
-
-  /* ── Forest accent (engraved letterhead) ── */
-  --forest-0:   #103627;
-  --forest-1:   #1f4d3a;
-  --forest-2:   #2f6b53;
-  --forest-3:   #b8cdb9;
-  --forest-4:   #e8efe5;
-  --v5-engraved:      #1a1814;
-  --v5-engraved-rule: #3b352c;
-  --tr-engraved:       0.22em;
-  --tr-engraved-wide:  0.32em;
-
-  /* Legacy variable aliases — these still appear throughout the rest of the
-     stylesheet, so re-pointed at the V5 ramp rather than re-edited everywhere */
-  --ink:        var(--ink-1);
-  --ink-soft:   var(--ink-2);
-  --ink-faint:  var(--ink-3);
-  --rule:       var(--ink-5);
-  --rule-soft:  #ece7da;
-  --paper:      var(--paper-0);
-  --paper-2:    var(--paper-1);
+  --ink:        #2e2e2e;     /* palette charcoal */
+  --ink-soft:   #4a4a45;
+  --ink-faint:  #7a7872;
+  --rule:       #d4d2cc;
+  --rule-soft:  #e8e6e0;
+  --paper:      #fbfaf6;
+  --paper-2:    #f4f2eb;
+  --accent:     #8b0000;     /* palette deep red */
+  --accent-dark:#5a0000;
   --field-bg:   #ffffff;
-  --highlight:  var(--forest-4);   /* focus glow — pale moss instead of goldenrod */
-  --cream:      var(--paper-1);
-  --tan:        var(--ink-4);
-  --accent:     #d04030;           /* brand red — kept for required-marks + small accents */
-  --accent-dark:#8c2818;
+  --highlight:  #fafad2;     /* palette pale goldenrod — focus glow */
+  --cream:      #ede1b1;     /* palette butter cream — selected-state fill */
+  --tan:        #cdb79e;     /* palette warm tan — section rules, soft accents */
 }
 
 * { box-sizing: border-box; }
@@ -105,24 +68,32 @@ a:hover { color: var(--accent-dark); }
   gap: 6px;
 }
 .masthead h1 {
-  font-family: var(--ff-display);
-  font-weight: 400;
-  font-size: 16px;
-  letter-spacing: var(--tr-engraved-wide);
+  font-family: var(--font-trajan);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--v5-engraved);
+  color: var(--ink);
   margin: 0;
   line-height: 1;
 }
+.masthead-logo {
+  display: block;
+  height: auto;
+  width: auto;
+  max-height: 64px;
+  max-width: 100%;
+  margin: 0 0 4px;
+}
 .masthead-sub {
-  font-family: var(--ff-serif);
-  font-weight: 400;
+  font-family: var(--font-body);
+  font-weight: 300;
   font-style: italic;
-  font-size: 42px;
+  font-size: 46px;
   letter-spacing: 0;
-  color: var(--ink-1);
+  color: var(--ink);
   line-height: 1.05;
-  margin-top: 8px;
+  margin-top: 5px;
 }
 
 /* ── PAGE ───────────────────────────────────────────────────────────────── */
@@ -147,15 +118,13 @@ section { position: relative; margin: 40px 0 28px; }
 }
 .section-header h2 { display: block; }
 h2 {
-  font-family: var(--ff-display);
-  font-weight: 400;
-  font-size: 19px;
-  letter-spacing: var(--tr-engraved);
+  font-family: var(--font-ui);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--v5-engraved);
-  margin: 0 0 6px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--v5-engraved-rule);
+  color: var(--ink);
+  margin: 0;
   line-height: 1.1;
 }
 .section-note {
@@ -166,14 +135,14 @@ h2 {
   padding-right: 22px;
   border-right: 1px solid var(--rule-soft);
   text-align: right;
-  font-family: var(--ff-sans-cond);
-  font-weight: 600;
+  font-family: var(--font-ui);
+  font-weight: 300;
   font-style: normal;
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--ink-3);
-  line-height: 1.55;
+  color: var(--ink-soft);
+  line-height: 1.6;
 }
 .section-rule {
   border-top: 1px solid var(--tan);
@@ -211,9 +180,7 @@ h2 {
 }
 .q-label .req { color: var(--accent); margin-left: 3px; font-weight: normal; }
 
-/* Sidenote — pinned to the LEFT margin on wide screens, with a hairline.
-   Switched from uppercase tracked sans (9px) to lowercase Miller italic so it
-   reads at the slightly larger size requested for the instruction text. */
+/* Sidenote — pinned to the LEFT margin on wide screens, with a hairline */
 .sidenote {
   position: absolute;
   left: 0;
@@ -222,14 +189,14 @@ h2 {
   padding-right: 22px;
   border-right: 1px solid var(--rule-soft);
   text-align: right;
-  font-family: var(--ff-serif);
-  font-weight: 400;
-  font-style: italic;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--ink-2);
-  font-size: 15px;
-  line-height: 1.45;
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.55;
 }
 
 /* ── FIELDS ─────────────────────────────────────────────────────────────── */
@@ -250,11 +217,11 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="url"], i
   transition: border-color 0.12s, background 0.12s;
 }
 input:focus, select:focus, textarea:focus {
-  border-bottom: 1.5px solid var(--forest-1);
-  background: var(--paper-1);
+  border-bottom: 2px solid var(--accent);
+  background: var(--highlight);
 }
 input::placeholder, textarea::placeholder {
-  color: var(--ink-4);
+  color: var(--ink-faint);
   font-style: italic;
 }
 /* Hide the example text the moment the user clicks/focuses a field */
@@ -262,14 +229,18 @@ input:focus::placeholder,
 textarea:focus::placeholder { color: transparent; }
 textarea {
   min-height: 110px;
-  resize: vertical;
-  border: 1px solid var(--ink-5);
+  /* JS auto-grows textareas to fit their content — no manual resize handle,
+     no internal scrollbars. Lines wrap, and the box expands as you type. */
+  resize: none;
+  overflow: hidden;
+  border: 1px solid var(--rule);
   padding: 12px 14px;
   background: var(--field-bg);
   font-size: 18px;
   line-height: 1.55;
+  display: block;
 }
-textarea:focus { border: 1.5px solid var(--forest-1); background: var(--paper-1); }
+textarea:focus { border-color: var(--accent); border-width: 2px; background: var(--highlight); }
 select {
   background-color: var(--field-bg);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231c1c1a' stroke-width='1.2' fill='none'/%3E%3C/svg%3E");
@@ -398,26 +369,25 @@ select {
   flex-wrap: wrap;
 }
 .action-btn {
-  font-family: var(--ff-sans-cond);
+  font-family: var(--font-ui);
   font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.14em;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
   background: transparent;
-  border: 1px solid var(--ink-3);
-  padding: 11px 22px;
-  color: var(--ink-2);
+  border: 1px solid var(--rule);
+  padding: 9px 18px;
+  color: var(--ink-soft);
   transition: all 0.15s;
 }
-.action-btn:hover { border-color: var(--ink-0); color: var(--ink-0); background: transparent; }
+.action-btn:hover { border-color: var(--ink); color: var(--ink); background: var(--cream); }
 .action-btn.primary {
-  background: var(--ink-0);
-  color: var(--paper-0);
-  border-color: var(--ink-0);
-  font-weight: 700;
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
 }
-.action-btn.primary:hover { background: var(--forest-1); color: var(--paper-0); border-color: var(--forest-1); }
+.action-btn.primary:hover { background: #000; color: var(--paper); border-color: #000; }
 .action-status {
   font-family: var(--font-body);
   font-style: italic;
@@ -459,24 +429,22 @@ select {
 .project-badge {
   display: inline-flex;
   align-items: baseline;
-  font-family: var(--ff-sans-cond);
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.16em;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ink-3);
+  color: var(--ink-faint);
   margin-bottom: 10px;
 }
-.project-badge .sigil { color: var(--forest-1); margin-right: 8px; font-weight: 700; }
+.project-badge .sigil { color: var(--accent); margin-right: 8px; font-weight: 700; }
 .project-badge .name {
-  font-family: var(--ff-display);
-  font-style: normal;
-  font-weight: 400;
+  font-family: var(--font-body);
+  font-style: italic;
   font-size: 14px;
-  letter-spacing: var(--tr-engraved);
-  text-transform: uppercase;
-  color: var(--v5-engraved);
-  margin-left: 10px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  margin-left: 8px;
 }
 
 /* ── FOOTER ─────────────────────────────────────────────────────────────── */
@@ -500,23 +468,23 @@ footer .accent { color: var(--accent); }
   padding: 0 40px;
 }
 .doc-stamp {
-  font-family: var(--ff-mono);
-  font-weight: 400;
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ink-3);
+  color: var(--ink-faint);
   margin-bottom: 14px;
 }
 .doc-intro {
-  font-family: var(--ff-body);
-  font-size: 19px;
+  font-family: var(--font-body);
+  font-size: 18px;
   line-height: 1.55;
-  color: var(--ink-1);
+  color: var(--ink-soft);
   max-width: 880px;
   margin-left: 0;
 }
-.doc-intro em { color: var(--forest-1); font-style: italic; font-family: var(--ff-serif); }
+.doc-intro em { color: var(--ink); font-style: italic; }
 
 /* ── MAP LINK — appears below the project-location field as you type ───── */
 .map-link {
@@ -568,6 +536,15 @@ footer .accent { color: var(--accent); }
 }
 .q-callout a:hover { color: var(--accent-dark); border-bottom-color: var(--accent-dark); }
 
+/* ── PDF EXPORT SWAP ────────────────────────────────────────────────────────
+   The Create PDF button temporarily replaces every <textarea> with a
+   <div class="pdf-answer"> so long answers flow across pages without
+   getting clipped. On screen those swapped elements are kept invisible
+   so the brief transition (swap → print dialog → restore) has no flicker.
+   The @media print block further down un-hides the divs for printing. */
+.pdf-answer { display: none; }
+textarea.pdf-hidden { display: none !important; }
+
 /* ── MOBILE / NARROW: collapse marginalia to inline ─────────────────────── */
 @media (max-width: 1023px) {
   .section-header { padding-left: 0; }
@@ -596,19 +573,97 @@ footer .accent { color: var(--accent); }
 }
 
 @media print {
-  body { font-size: 11pt; background: #fff; }
-  .action-row, .action-status, footer, .masthead { display: none; }
-  section { page-break-inside: avoid; }
-  .section-header { padding-left: 0; }
-  .section-note { position: static !important; width: auto; text-align: left; padding-left: 12px; padding-right: 0; border-right: none; border-left: 2px solid #aaa; margin-top: 4px; }
-  .q { padding-left: 0 !important; }
-  .sidenote { position: static !important; width: auto; padding-right: 0; padding-left: 12px; text-align: left; border-right: none; border-left: 2px solid #aaa; margin: 4px 0 8px; }
+  @page { margin: 0.6in 0.55in; }
+  body { font-size: 11pt; background: #fff; color: #000; }
+  .action-row, .action-status, footer, .toast, .welcome-modal, .map-link { display: none !important; }
+  /* Keep the masthead on the first page only — it's the cover */
+  .masthead { border-bottom: 1px solid #000; padding: 0 0 14px; margin-bottom: 18px; }
+  .masthead-row { padding: 0; max-width: none; }
+  .masthead-sub { font-size: 28px; }
+  .masthead-logo { max-height: 56px; }
+  .doc-head { padding: 0; margin-bottom: 22px; max-width: none; }
+  .doc-intro { font-size: 11pt; }
+  .page { padding: 0; max-width: none; }
+  article { max-width: none; }
+  section { page-break-inside: auto; break-inside: auto; margin: 18px 0 14px; }
+  .section-header { padding-left: 0; page-break-after: avoid; break-after: avoid; }
+  .section-note { position: static !important; width: auto; text-align: left; padding-left: 12px; padding-right: 0; border-right: none; border-left: 2px solid #aaa; margin-top: 4px; font-size: 9pt; }
+  .q { padding-left: 0 !important; margin-bottom: 14px; page-break-inside: avoid; break-inside: avoid; }
+  .q-label { page-break-after: avoid; break-after: avoid; }
+  .sidenote { position: static !important; width: auto; padding-right: 0; padding-left: 12px; text-align: left; border-right: none; border-left: 2px solid #aaa; margin: 4px 0 8px; font-size: 9pt; letter-spacing: 0.06em; }
   .q-callout { margin-left: 0; }
+  /* CRITICAL: let textareas show their full content (no scrollbars in PDF).
+     The Create PDF button additionally swaps each textarea for a
+     .pdf-answer div before printing — see createPDF() in the script
+     below — because height:auto on a real <textarea> is unreliable
+     across Chrome / Safari / Firefox print engines. The rules below
+     remain as a safety net for users who hit Cmd-P / Ctrl-P directly
+     without going through the Create PDF button. */
+  textarea, .notes-box {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 1px solid #bbb !important;
+    background: #fff !important;
+    padding: 8px 10px !important;
+    font-size: 10.5pt !important;
+    line-height: 1.45 !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+  }
+  /* PDF-only answer boxes (created by createPDF() — see script).
+     These replace the live textareas while the print dialog is open,
+     so the full text flows naturally onto as many pages as it needs. */
+  .pdf-answer {
+    display: block;
+    border: 1px solid #bbb;
+    background: #fff;
+    padding: 8px 10px;
+    font-family: var(--font-body);
+    font-size: 10.5pt;
+    line-height: 1.45;
+    color: #000;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 0;
+    page-break-inside: auto;
+    break-inside: auto;
+  }
+  .pdf-answer.pdf-answer-notes {
+    /* The opening notes get a heavier rule, matching the on-screen .notes-box */
+    border: 1px solid #888;
+    padding: 12px 14px;
+  }
+  /* Empty answers don't deserve a printed box */
+  .pdf-answer.pdf-answer-empty { display: none !important; }
+  /* While the swap is active, hide the original (now-empty) textarea */
+  textarea.pdf-hidden { display: none !important; }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], select {
+    border: none !important;
+    border-bottom: 1px solid #888 !important;
+    background: #fff !important;
+    padding: 4px 2px !important;
+    font-size: 11pt !important;
+  }
+  /* Unselected chips/spaces/styles disappear so the PDF shows only the chosen items */
+  .chip:not(.selected), .space:not(.selected), .style:not(.selected), .budget-item:not(.selected) { display: none !important; }
+  .chip.selected { color: #000 !important; font-weight: 700; padding: 2px 14px 2px 0; margin-right: 14px; }
+  .chip.selected::after { content: ""; }
+  .space.selected, .style.selected, .budget-item.selected { color: #000 !important; }
+  .style.selected .style-title { color: #000 !important; }
+  /* Drop hover/focus highlights */
+  *:focus { outline: none !important; background: #fff !important; }
+  /* Page-break helpers */
+  h2 { page-break-after: avoid; break-after: avoid; }
+  .section-rule { page-break-after: avoid; break-after: avoid; }
 }
 @media (max-width: 720px) {
   .masthead-row, .page { padding-left: 22px; padding-right: 22px; }
   .masthead h1 { font-size: 22px; letter-spacing: 0.06em; }
   .masthead-sub { font-size: 32px; }
+  .masthead-logo { max-height: 48px; }
   body { font-size: 18px; }
   h2 { font-size: 22px; }
   input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], select, textarea { font-size: 20px; }
@@ -616,26 +671,15 @@ footer .accent { color: var(--accent); }
 .welcome-modal { position: fixed; inset: 0; z-index: 1000; background: rgba(20,18,14,0.55); display: flex; align-items: center; justify-content: center; padding: 24px; font-family: var(--font-body); animation: welcome-fade-in 0.18s ease-out; }
 .welcome-modal[hidden] { display: none; }
 @keyframes welcome-fade-in { from { opacity: 0; } to { opacity: 1; } }
-.welcome-card { background: var(--paper-0); border: 1px solid var(--ink-5); max-width: 540px; width: 100%; padding: 38px 42px 32px; box-shadow: 0 18px 50px rgba(20,18,14,0.32); }
-.welcome-card h2 {
-  font-family: var(--ff-display);
-  font-weight: 400;
-  font-size: 18px;
-  letter-spacing: var(--tr-engraved-wide);
-  text-transform: uppercase;
-  margin: 0 0 14px;
-  color: var(--v5-engraved);
-  border-bottom: 1px solid var(--v5-engraved-rule);
-  padding-bottom: 12px;
-  line-height: 1.2;
-}
-.welcome-lede { font-family: var(--ff-serif); font-style: italic; color: var(--ink-2); margin: 0 0 18px; font-size: 19px; line-height: 1.4; }
-.welcome-body { font-family: var(--ff-body); font-size: 17px; line-height: 1.55; color: var(--ink-1); margin: 0 0 24px; }
+.welcome-card { background: var(--paper); border: 1px solid var(--ink); max-width: 540px; width: 100%; padding: 36px 40px 30px; box-shadow: 0 14px 40px rgba(0,0,0,0.28); }
+.welcome-card h2 { font-family: var(--font-trajan); font-size: 26px; letter-spacing: 0.04em; text-transform: uppercase; margin: 0 0 8px; color: var(--ink); border-bottom: none; padding-bottom: 0; }
+.welcome-lede { font-style: italic; color: var(--ink-soft); margin: 0 0 18px; font-size: 17px; line-height: 1.45; }
+.welcome-body { font-size: 17px; line-height: 1.55; color: var(--ink); margin: 0 0 22px; }
 .welcome-row { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 8px; }
-.welcome-field { margin-bottom: 10px; }
-.welcome-label { display: block; font-family: var(--ff-sans-cond); font-weight: 600; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 5px; }
-.welcome-card input[type="text"] { width: 100%; font-family: var(--ff-sans); font-size: 20px; padding: 6px 0 8px; border: none; border-bottom: 1px solid var(--ink-5); background: transparent; color: var(--ink-0); border-radius: 0; transition: border-color 0.15s; }
-.welcome-card input[type="text"]:focus { outline: none; border-bottom: 1.5px solid var(--forest-1); background: transparent; }
+.welcome-field { margin-bottom: 8px; }
+.welcome-label { display: block; font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+.welcome-card input[type="text"] { width: 100%; font-family: var(--font-body); font-size: 19px; padding: 8px 0; border: none; border-bottom: 1px solid var(--ink-soft); background: transparent; color: var(--ink); border-radius: 0; }
+.welcome-card input[type="text"]:focus { outline: none; border-bottom: 2px solid var(--accent); }
 .welcome-error { color: var(--accent); font-style: italic; font-size: 14px; min-height: 20px; margin: 6px 0 8px; }
 .welcome-actions { display: flex; justify-content: flex-end; margin-top: 6px; }
 @media (max-width: 520px) { .welcome-card { padding: 28px 22px 22px; } .welcome-row { grid-template-columns: 1fr; gap: 14px; } .welcome-card h2 { font-size: 22px; } }
@@ -647,7 +691,7 @@ footer .accent { color: var(--accent); }
   <div class="welcome-card">
     <h2 id="welcome-title">Carlisle Moore Architects</h2>
     <p class="welcome-lede">Before we begin &mdash; what should we call your project?</p>
-    <p class="welcome-body">Usually a family or last name, like <em>Davis Family</em>. This is just so we can file your answers correctly &mdash; you'll fill in the rest in a moment. Your work saves automatically to a unique link in the address bar; close this tab anytime and come back to it later.</p>
+    <p class="welcome-body">Usually a family or last name, like <em>Davis Family</em>. This is just so we can file your answers correctly &mdash; you'll fill in the rest in a moment. Your work saves automatically in this browser as you go, so you can close the tab and come back to it later from the same device.</p>
     <form id="welcome-form" novalidate>
       <div class="welcome-field">
         <label class="welcome-label" for="welcome-name">Project name</label>
@@ -663,7 +707,7 @@ footer .accent { color: var(--accent); }
 
 <header class="masthead">
   <div class="masthead-row">
-    <h1>Carlisle Moore Architects</h1>
+    <img class="masthead-logo" src="logo.png" alt="Carlisle Moore Architects">
     <span class="masthead-sub">Design Questionnaire</span>
   </div>
 </header>
@@ -672,12 +716,13 @@ footer .accent { color: var(--accent); }
   <div class="doc-stamp" id="doc-stamp">&nbsp;</div>
   <div class="project-badge" id="project-badge" hidden><span class="sigil">§</span>Project<span class="name" id="project-badge-name"></span></div>
   <div class="doc-intro">
-    Welcome &mdash; and thank you for taking the time. <em>This is just a starting point &mdash; a way for us to get a feel for what you're after.</em> Nothing here is meant to be a final answer; it's the opening of our conversation. The more honest and specific you can be, the more we'll have to work with when we sit down together. Type as much or as little as you'd like in any field, skip anything that doesn't apply, and use the box at the very top for anything we forgot to ask. As you fill it in, your answers save automatically to a unique link in the address bar &mdash; when you're done, click <em>Send back to Scott</em> to email it back. There's no clock running.
+    Welcome &mdash; and thank you for taking the time. <em>This is just a starting point &mdash; a way for us to get a feel for what you're after.</em> Nothing here is meant to be a final answer; it's the opening of our conversation. The more honest and specific you can be, the more we'll have to work with when we sit down together. Type as much or as little as you'd like in any field, skip anything that doesn't apply, and use the box at the very top for anything we forgot to ask. Your answers save automatically in this browser as you go, so you can close the tab and come back to it later &mdash; when you're done, click <em>Send back to Scott</em> to email it back. There's no clock running.
   </div>
   <div class="action-row top">
     <button class="action-btn primary" data-action="email" type="button">Send back to Scott</button>
     <button class="action-btn" data-action="share" type="button">Copy share link</button>
     <button class="action-btn" data-action="pdf" type="button">Create PDF</button>
+    <button class="action-btn" data-action="download" type="button">Download answers</button>
   </div>
 </div>
 
@@ -1192,6 +1237,7 @@ footer .accent { color: var(--accent); }
     <button class="action-btn primary" data-action="email" type="button">Send back to Scott</button>
     <button class="action-btn" data-action="share" type="button">Copy share link</button>
     <button class="action-btn" data-action="pdf" type="button">Create PDF</button>
+    <button class="action-btn" data-action="download" type="button">Download answers</button>
   </div>
   <div class="action-status" id="action-status"></div>
 
@@ -1424,8 +1470,14 @@ function syncStateToURL() {
   } catch (e) {}
 }
 function saveDraft() {
+  /* Autosave to localStorage only — DO NOT stamp state into the URL on
+     every keystroke. That kept the address bar synced for cross-device
+     resume, but it also made the URL absurdly long and meant every link
+     copied from the address bar carried the prior visitor's answers
+     forward. The explicit "Copy share link" button still generates the
+     full state-bearing URL via syncStateToURL() when someone actually
+     wants to share or resume on another device. */
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(collect())); } catch (e) {}
-  syncStateToURL();
 }
 
 function load() {
@@ -1577,275 +1629,118 @@ async function copyShareLink() {
   }
 }
 
-/* ── Create PDF ──
-   Generates a real PDF (not a print dialog) using jsPDF. Captures every
-   filled-in field, including the freeform textareas, and lays it out in a
-   clean engraved-letterhead style that matches the on-screen design. */
+function downloadJSON() {
+  const data = collect();
+  const date = new Date().toISOString().slice(0, 10);
+  const filename = `cma-questionnaire-${slugify(data.client || data.name)}-${date}.json`;
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  setStatus(`Downloaded ${filename}.`, 'ok');
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   AUTO-GROW TEXTAREAS — every textarea expands vertically to fit its
+   content, so no answer is ever hidden behind a scrollbar (and PDFs
+   print the full text). Runs on every input event, after data is
+   loaded, and after a hard reset. Also runs on window resize because
+   wrapping changes when the column width changes.
+   ═══════════════════════════════════════════════════════════════════════ */
+function autoSizeTextarea(el) {
+  if (!el || el.tagName !== 'TEXTAREA') return;
+  /* Reset first so shrinking works as the user deletes lines. */
+  el.style.height = 'auto';
+  /* +2px so the bottom line doesn't get clipped by the border. */
+  el.style.height = (el.scrollHeight + 2) + 'px';
+}
+function autoSizeAll() {
+  document.querySelectorAll('textarea').forEach(autoSizeTextarea);
+}
+document.querySelectorAll('textarea').forEach(el => {
+  el.addEventListener('input', () => autoSizeTextarea(el));
+  /* Initial pass — handles textareas that were pre-filled by load(). */
+  autoSizeTextarea(el);
+});
+window.addEventListener('resize', autoSizeAll);
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CREATE PDF — opens the browser's print dialog. The user picks
+   "Save as PDF" (or "Microsoft Print to PDF") as the destination.
+
+   The trick that actually makes long answers print in full:
+   before opening the dialog, every <textarea> is swapped out for a
+   matching <div class="pdf-answer"> that holds the same text. A div
+   flows naturally onto the page across as many pages as it needs;
+   a textarea, even with height:auto in print CSS, clips in Chrome
+   and Safari unpredictably. After the dialog closes (or is cancelled)
+   the textareas are restored exactly as they were.
+
+   We also set the document title up front so the browser's "Save as
+   PDF" filename suggestion comes out as
+       CMA Questionnaire — <project> — <date>.pdf
+   ═══════════════════════════════════════════════════════════════════════ */
 function createPDF() {
   const data = collect();
-  if (!window.jspdf || !window.jspdf.jsPDF) {
-    setStatus('PDF library still loading — give it a second and try again.', 'error');
-    return;
-  }
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+  /* Belt-and-braces: size the live textareas first so the cancel/restore
+     path lands on correctly-sized boxes. */
+  autoSizeAll();
 
-  const PAGE_W = doc.internal.pageSize.getWidth();
-  const PAGE_H = doc.internal.pageSize.getHeight();
-  const MARGIN_L = 56;
-  const MARGIN_R = 56;
-  const MARGIN_T = 64;
-  const MARGIN_B = 64;
-  const TEXT_W = PAGE_W - MARGIN_L - MARGIN_R;
-  let y = MARGIN_T;
+  /* ── SWAP: textarea → .pdf-answer div ──────────────────────────────── */
+  const swaps = [];
+  document.querySelectorAll('textarea').forEach(ta => {
+    const div = document.createElement('div');
+    div.className = 'pdf-answer';
+    if (ta.classList.contains('notes-box')) div.classList.add('pdf-answer-notes');
+    /* textContent preserves \n; combined with white-space: pre-wrap in
+       the print CSS, line breaks render exactly as the user typed them. */
+    div.textContent = ta.value;
+    if (!ta.value.trim()) div.classList.add('pdf-answer-empty');
+    ta.classList.add('pdf-hidden');
+    ta.parentNode.insertBefore(div, ta.nextSibling);
+    swaps.push({ ta, div });
+  });
 
-  /* Page helpers */
-  function newPage() {
-    doc.addPage();
-    y = MARGIN_T;
-    /* footer drawn on every page in the final pass — no double-draw here */
-  }
-  function ensure(spaceNeeded) {
-    if (y + spaceNeeded > PAGE_H - MARGIN_B) newPage();
-  }
-  function drawFooter() {
-    const fy = PAGE_H - 32;
-    doc.setDrawColor(180, 175, 165);
-    doc.setLineWidth(0.4);
-    doc.line(MARGIN_L, fy, PAGE_W - MARGIN_R, fy);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8.5);
-    doc.setTextColor(120, 115, 105);
-    doc.text('Carlisle Moore Architects', MARGIN_L, fy + 14);
-    const pageStr = 'Page ' + doc.internal.getCurrentPageInfo().pageNumber;
-    doc.text(pageStr, PAGE_W - MARGIN_R, fy + 14, { align: 'right' });
-  }
-
-  /* Header — engraved letterhead */
-  doc.setFont('times', 'normal');
-  doc.setFontSize(11);
-  doc.setTextColor(26, 24, 20);
-  doc.setCharSpace(2.6);
-  doc.text('CARLISLE MOORE ARCHITECTS', MARGIN_L, y);
-  doc.setCharSpace(0);
-  y += 8;
-  doc.setDrawColor(60, 52, 44);
-  doc.setLineWidth(0.6);
-  doc.line(MARGIN_L, y, PAGE_W - MARGIN_R, y);
-  y += 26;
-
-  /* Document title */
-  doc.setFont('times', 'italic');
-  doc.setFontSize(28);
-  doc.setTextColor(20, 17, 13);
-  doc.text('Design Questionnaire', MARGIN_L, y);
-  y += 20;
-
-  /* Project + date stamp */
-  doc.setFont('courier', 'normal');
-  doc.setFontSize(10);
-  doc.setTextColor(120, 115, 105);
-  const stampParts = [];
-  if (data.client) stampParts.push('PROJECT · ' + data.client.toUpperCase());
-  stampParts.push('SUBMITTED · ' + new Date(data.submitted_at || Date.now())
-    .toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }).toUpperCase());
-  doc.text(stampParts.join('    '), MARGIN_L, y);
-  y += 26;
-
-  /* Section + line helpers. Section headers are LAZY — the title is buffered
-     and drawn only when a labeledValue inside the section actually has data,
-     so empty sections don't litter the PDF with placeholder headers. */
-  let pendingSection = null;
-  function section(title) { pendingSection = title; }
-  function flushSection() {
-    if (!pendingSection) return;
-    ensure(50);
-    y += 4;
-    doc.setDrawColor(60, 52, 44);
-    doc.setLineWidth(0.4);
-    doc.line(MARGIN_L, y, PAGE_W - MARGIN_R, y);
-    y += 16;
-    doc.setFont('times', 'normal');
-    doc.setFontSize(12);
-    doc.setTextColor(26, 24, 20);
-    doc.setCharSpace(2.2);
-    doc.text(pendingSection.toUpperCase(), MARGIN_L, y);
-    doc.setCharSpace(0);
-    y += 18;
-    pendingSection = null;
-  }
-  function labeledValue(label, value) {
-    if (value === undefined || value === null) return;
-    if (Array.isArray(value)) value = value.filter(Boolean).join(', ');
-    value = (value == null ? '' : String(value)).trim();
-    if (!value) return;
-    flushSection();
-    /* Label (uppercase, condensed feel) */
-    ensure(22);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.setTextColor(120, 115, 105);
-    doc.setCharSpace(1.4);
-    doc.text(label.toUpperCase(), MARGIN_L, y);
-    doc.setCharSpace(0);
-    y += 12;
-    /* Value (serif) */
-    doc.setFont('times', 'normal');
-    doc.setFontSize(11);
-    doc.setTextColor(26, 24, 20);
-    const lines = doc.splitTextToSize(value, TEXT_W);
-    for (const ln of lines) {
-      ensure(15);
-      doc.text(ln, MARGIN_L, y);
-      y += 14;
-    }
-    y += 8;
-  }
-
-  /* Opening notes — set off with a forest rule + larger size, since this is
-     the freeform "anything you want us to know" box and tends to be the
-     most narrative content. */
-  if (data.notes && data.notes.trim()) {
-    ensure(60);
-    doc.setDrawColor(31, 77, 58);
-    doc.setLineWidth(1.5);
-    doc.line(MARGIN_L, y, MARGIN_L, y + 6);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.setTextColor(120, 115, 105);
-    doc.setCharSpace(1.4);
-    doc.text('OPENING NOTES', MARGIN_L + 12, y + 2);
-    doc.setCharSpace(0);
-    y += 18;
-    doc.setFont('times', 'italic');
-    doc.setFontSize(12);
-    doc.setTextColor(26, 24, 20);
-    const noteLines = doc.splitTextToSize(data.notes.trim(), TEXT_W);
-    for (const ln of noteLines) {
-      ensure(16);
-      doc.text(ln, MARGIN_L, y);
-      y += 15;
-    }
-    y += 10;
-  }
-
-  section('§ 1 · Contact');
-  labeledValue('Full name', data.name);
-  labeledValue('Partner', data.partner);
-  labeledValue('Email', data.email);
-  labeledValue('Phone', data.phone);
-  labeledValue('Partner email', data.partner_email);
-  labeledValue('Partner phone', data.partner_phone);
-  labeledValue('Project location', data.address);
-
-  section('§ 2 · You and your life');
-  labeledValue('Household', data.household);
-  labeledValue('Weekly rhythm', data.rhythm);
-  labeledValue('Lifestyle', data.lifestyle);
-
-  section('§ 3 · Project');
-  labeledValue('Type', data.project_type);
-  labeledValue('Square footage', data.sqft);
-  labeledValue('Stories', data.stories);
-  labeledValue('Add-ons', data.addons);
-  labeledValue('Builder', data.builder);
-  labeledValue('Interior designer', data.interior_designer);
-  labeledValue('Landscape architect', data.landscape_architect);
-  labeledValue('Sustainability', data.sustainability);
-
-  section('§ 4 · Character');
-  labeledValue('Style resonance', data.style_cards);
-  labeledValue('Aesthetic concepts', data.aesthetic_concepts);
-  labeledValue('In their words', data.style_words);
-  labeledValue('References', data.references);
-  labeledValue('Imagery', data.imagery);
-  labeledValue('What to avoid', data.avoid);
-  labeledValue('Materials — interior', data.materials_interior);
-  labeledValue('Materials — exterior', data.materials_exterior);
-  labeledValue('Specialty finishes', data.specialty_finishes);
-
-  section('§ 5 · Spaces');
-  labeledValue('Bedrooms', data.bedrooms);
-  labeledValue('Primary bedroom', data.primary_bedroom);
-  labeledValue('Bathrooms', data.bathrooms);
-  labeledValue('Spaces', data.spaces);
-  labeledValue('Key spaces', data.key_spaces);
-  labeledValue('Storage', data.storage);
-  labeledValue('Heirlooms', data.heirlooms);
-  labeledValue('Aging in place', data.aging);
-
-  section('§ 6 · Site');
-  labeledValue('Site strengths', data.site_best);
-  labeledValue('Challenges + constraints', data.site_worst_and_constraints);
-  labeledValue('Arrival + outdoor living', data.arrival_and_outdoor);
-  labeledValue('Landscape intensity', data.landscape_intensity);
-  labeledValue('Grounds', data.grounds);
-  labeledValue('Outbuildings', data.outbuildings);
-  labeledValue('Grounds notes', data.grounds_notes);
-
-  section('§ 7 · Budget & timeline');
-  labeledValue('Budget', data.budget);
-  labeledValue('Construction start', data.construction_start);
-  labeledValue('Target move-in', data.target_movein);
-
-  section('§ 8 · Last thoughts');
-  labeledValue('Priority', data.priority);
-  labeledValue('Concerns', data.concerns);
-  labeledValue('Feeling', data.feeling);
-  labeledValue('Anything else', data.other);
-
-  /* Footer on every page (the first page didn't get one yet) */
-  const totalPages = doc.internal.getNumberOfPages();
-  for (let i = 1; i <= totalPages; i++) {
-    doc.setPage(i);
-    /* avoid double-drawing if newPage already drew one */
-    drawFooter();
-  }
-
+  const project = (data.client || data.name || 'Questionnaire').trim();
   const date = new Date().toISOString().slice(0, 10);
-  const filename = `cma-questionnaire-${slugify(data.client || data.name)}-${date}.pdf`;
-  doc.save(filename);
-  setStatus(`Saved ${filename}.`, 'ok');
+  const oldTitle = document.title;
+  document.title = `CMA Questionnaire — ${project} — ${date}`;
+
+  /* ── RESTORE: runs after the print dialog closes (or is cancelled).
+        Uses afterprint where available, with a timeout fallback for
+        older browsers / odd cases where afterprint doesn't fire. ── */
+  let restored = false;
+  function restore() {
+    if (restored) return;
+    restored = true;
+    swaps.forEach(({ ta, div }) => {
+      if (div && div.parentNode) div.parentNode.removeChild(div);
+      ta.classList.remove('pdf-hidden');
+    });
+    autoSizeAll();
+    document.title = oldTitle;
+    window.removeEventListener('afterprint', restore);
+  }
+  window.addEventListener('afterprint', restore);
+
+  setStatus('Opening print dialog — choose "Save as PDF" as the destination.', 'ok');
+  /* Tiny defer so the toast paints before the (blocking) print dialog. */
+  setTimeout(() => {
+    try { window.print(); } catch (e) { /* user may have blocked it */ }
+    /* Safety-net restore: if afterprint never fires (rare, but it
+       happens on some mobile browsers), put the page back after 4s. */
+    setTimeout(restore, 4000);
+  }, 60);
 }
 
 document.querySelectorAll('[data-action="email"]').forEach(b => b.addEventListener('click', sendToScott));
 document.querySelectorAll('[data-action="share"]').forEach(b => b.addEventListener('click', copyShareLink));
 document.querySelectorAll('[data-action="pdf"]').forEach(b => b.addEventListener('click', createPDF));
-
-/* ── SPELL-CHECK ──
-   Enable spell-checking on every freeform text field. Skip the email and
-   phone inputs, where the squiggles are noise. Browsers default to true for
-   textareas, but we set it explicitly so it survives any stylesheet that
-   disables it and so we can also turn on autocapitalize/autocorrect for
-   iOS. */
-(function enableSpellCheck() {
-  const FREEFORM_TEXT = [
-    'q-name', 'q-partner', 'q-address', 'q-sqft', 'q-builder',
-    'q-interior-designer', 'q-landscape-architect', 'q-sustainability',
-    'q-movein', 'welcome-name'
-  ];
-  document.querySelectorAll('textarea').forEach(el => {
-    el.setAttribute('spellcheck', 'true');
-    el.setAttribute('autocapitalize', 'sentences');
-    el.setAttribute('autocorrect', 'on');
-  });
-  FREEFORM_TEXT.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.setAttribute('spellcheck', 'true');
-    el.setAttribute('autocapitalize', 'words');
-    el.setAttribute('autocorrect', 'on');
-  });
-  /* Email / phone / URL inputs — turn spell-check OFF, since squiggles under
-     names like "tscarlisle@" are just clutter. */
-  document.querySelectorAll(
-    'input[type="email"], input[type="tel"], input[type="url"]'
-  ).forEach(el => {
-    el.setAttribute('spellcheck', 'false');
-    el.setAttribute('autocapitalize', 'off');
-    el.setAttribute('autocorrect', 'off');
-  });
-})();
+document.querySelectorAll('[data-action="download"]').forEach(b => b.addEventListener('click', downloadJSON));
 
 /* ═══════════════════════════════════════════════════════════════════════
    DATE STAMP at the top of the document — current local date/time
@@ -1900,6 +1795,9 @@ function formatPhoneValue(raw) {
 });
 
 const __loadSource = load();
+/* After load() may have populated textareas from URL/localStorage, size
+   each of them to fit. */
+autoSizeAll();
 window.addEventListener('input', saveDraft);
 window.addEventListener('change', saveDraft);
 
@@ -1920,6 +1818,8 @@ function resetAllFields() {
   }
   const mapLink = document.getElementById('q-address-map');
   if (mapLink) mapLink.hidden = true;
+  /* Collapse every textarea back to its CSS min-height. */
+  if (typeof autoSizeAll === 'function') autoSizeAll();
 }
 
 /* WELCOME MODAL: gate every brand-new visit behind a name prompt so the URL
@@ -1971,17 +1871,20 @@ function resetAllFields() {
     if (notesEl) notesEl.focus();
   });
 
-  /* Only show on a genuinely fresh visit — never if they already have a
-     ?s= state, a ?client= pre-fill, a localStorage draft, or a pre-typed
-     name (covers an embedded-iframe scenario). */
-  const params      = new URLSearchParams(location.search);
-  const hasState    = params.has('s');
-  const hasClient   = params.has('client');
+  /* Show the welcome modal any time we don't yet have a project name —
+     covers fresh visits, shared links that carried someone else's ?s=
+     state without a client value, and stale localStorage drafts. The
+     only ways to skip it are: a ?client= pre-fill in the URL, or a
+     loaded state (URL or localStorage) that already names a project.
+     This way every new visitor names their project before they see
+     the form, even if Scott's share link still has his test state in it. */
   const hasProject  = !!(clientName && clientName.trim());
-  const isFreshLoad = (__loadSource === 'fresh') && !hasState && !hasClient && !hasProject;
-  if (isFreshLoad) {
+  if (!hasProject) {
     /* Wipe any leftover autofill / partial state behind the modal so the
-       new visitor lands on a clean slate the moment they click Begin. */
+       new visitor lands on a clean slate the moment they click Begin.
+       If state was loaded from the URL or localStorage but never set a
+       project name, it's almost certainly an inadvertently-shared link
+       carrying someone else's answers — safer to start fresh. */
     resetAllFields();
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     showModal();
