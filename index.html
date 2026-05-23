@@ -5,33 +5,70 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Design Questionnaire &middot; Carlisle Moore Architects</title>
 <meta name="description" content="A design questionnaire for prospective clients of Carlisle Moore Architects.">
-<link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
+<link rel="stylesheet" href="https://use.typekit.net/wup0iix.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 /* ════════════════════════════════════════════════════════════════════════
-   Typekit kit ikf0hkb
-   Designed using Edward Tufte's principles of analytical design.
-   Typeset in Warnock Pro, Interstate (with Condensed), Trajan Sans.
+   Typekit kit wup0iix — Carlisle Moore Architects
+   Engraved letterhead aesthetic, matched to the CMA Project Board (V5).
+   Type: Columbia Titling (display), Miller Text (serif italic),
+   FF Meta Web Pro (sans, with Condensed), FF Meta Correspondence (mono),
+   Warnock Pro retained as a body-serif fallback.
    ════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --font-body:    "warnock-pro", Georgia, serif;
-  --font-display: "interstate-condensed", "Helvetica Neue", sans-serif;
-  --font-ui:      "interstate", "Helvetica Neue", sans-serif;
-  --font-trajan:  "trajan-sans-pro", "trajan-pro-3", "trajan-pro", "Cinzel", "warnock-pro", Georgia, serif;
+  /* ── V5 type families (CMA, May 2026) ── */
+  --ff-display:    "columbia-titling", "Trajan Pro 3", "Cormorant Garamond", "Times New Roman", serif;
+  --ff-serif:      "miller-text", "warnock-pro", Charter, "Iowan Old Style", Georgia, serif;
+  --ff-sans:       "ff-meta-web-pro", "Meta Pro", "Helvetica Neue", Arial, sans-serif;
+  --ff-sans-cond:  "ff-meta-web-pro-condensed", "ff-meta-web-pro", "Helvetica Neue Condensed", "Arial Narrow", sans-serif;
+  --ff-mono:       "ff-meta-correspondence-web-p", "iA Writer Mono S", "JetBrains Mono", Menlo, monospace;
+  --ff-body:       "warnock-pro", "miller-text", Charter, Georgia, serif;
 
-  --ink:        #2e2e2e;     /* palette charcoal */
-  --ink-soft:   #4a4a45;
-  --ink-faint:  #7a7872;
-  --rule:       #d4d2cc;
-  --rule-soft:  #e8e6e0;
-  --paper:      #fbfaf6;
-  --paper-2:    #f4f2eb;
-  --accent:     #8b0000;     /* palette deep red */
-  --accent-dark:#5a0000;
+  /* Legacy aliases — kept so existing rule selectors stay valid */
+  --font-body:    var(--ff-body);
+  --font-display: var(--ff-sans-cond);
+  --font-ui:      var(--ff-sans);
+  --font-trajan:  var(--ff-display);
+
+  /* ── V5 paper + ink ramps ── */
+  --paper-0:    #fbfaf6;
+  --paper-1:    #f5f2ea;
+  --paper-2:    #ede8db;
+  --paper-3:    #ddd6c4;
+  --ink-0:      #14110d;     /* warm near-black */
+  --ink-1:      #2b271f;
+  --ink-2:      #57514a;
+  --ink-3:      #8a847b;
+  --ink-4:      #b6b0a6;
+  --ink-5:      #d5cfc3;
+
+  /* ── Forest accent (engraved letterhead) ── */
+  --forest-0:   #103627;
+  --forest-1:   #1f4d3a;
+  --forest-2:   #2f6b53;
+  --forest-3:   #b8cdb9;
+  --forest-4:   #e8efe5;
+  --v5-engraved:      #1a1814;
+  --v5-engraved-rule: #3b352c;
+  --tr-engraved:       0.22em;
+  --tr-engraved-wide:  0.32em;
+
+  /* Legacy variable aliases — these still appear throughout the rest of the
+     stylesheet, so re-pointed at the V5 ramp rather than re-edited everywhere */
+  --ink:        var(--ink-1);
+  --ink-soft:   var(--ink-2);
+  --ink-faint:  var(--ink-3);
+  --rule:       var(--ink-5);
+  --rule-soft:  #ece7da;
+  --paper:      var(--paper-0);
+  --paper-2:    var(--paper-1);
   --field-bg:   #ffffff;
-  --highlight:  #fafad2;     /* palette pale goldenrod — focus glow */
-  --cream:      #ede1b1;     /* palette butter cream — selected-state fill */
-  --tan:        #cdb79e;     /* palette warm tan — section rules, soft accents */
+  --highlight:  var(--forest-4);   /* focus glow — pale moss instead of goldenrod */
+  --cream:      var(--paper-1);
+  --tan:        var(--ink-4);
+  --accent:     #d04030;           /* brand red — kept for required-marks + small accents */
+  --accent-dark:#8c2818;
 }
 
 * { box-sizing: border-box; }
@@ -68,32 +105,24 @@ a:hover { color: var(--accent-dark); }
   gap: 6px;
 }
 .masthead h1 {
-  font-family: var(--font-trajan);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.14em;
+  font-family: var(--ff-display);
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: var(--tr-engraved-wide);
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--v5-engraved);
   margin: 0;
   line-height: 1;
 }
-.masthead-logo {
-  display: block;
-  height: auto;
-  width: auto;
-  max-height: 64px;
-  max-width: 100%;
-  margin: 0 0 4px;
-}
 .masthead-sub {
-  font-family: var(--font-body);
-  font-weight: 300;
+  font-family: var(--ff-serif);
+  font-weight: 400;
   font-style: italic;
-  font-size: 46px;
+  font-size: 42px;
   letter-spacing: 0;
-  color: var(--ink);
+  color: var(--ink-1);
   line-height: 1.05;
-  margin-top: 5px;
+  margin-top: 8px;
 }
 
 /* ── PAGE ───────────────────────────────────────────────────────────────── */
@@ -118,13 +147,15 @@ section { position: relative; margin: 40px 0 28px; }
 }
 .section-header h2 { display: block; }
 h2 {
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 22px;
-  letter-spacing: 0.04em;
+  font-family: var(--ff-display);
+  font-weight: 400;
+  font-size: 19px;
+  letter-spacing: var(--tr-engraved);
   text-transform: uppercase;
-  color: var(--ink);
-  margin: 0;
+  color: var(--v5-engraved);
+  margin: 0 0 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--v5-engraved-rule);
   line-height: 1.1;
 }
 .section-note {
@@ -135,14 +166,14 @@ h2 {
   padding-right: 22px;
   border-right: 1px solid var(--rule-soft);
   text-align: right;
-  font-family: var(--font-ui);
-  font-weight: 300;
+  font-family: var(--ff-sans-cond);
+  font-weight: 600;
   font-style: normal;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--ink-soft);
-  line-height: 1.6;
+  color: var(--ink-3);
+  line-height: 1.55;
 }
 .section-rule {
   border-top: 1px solid var(--tan);
@@ -180,7 +211,9 @@ h2 {
 }
 .q-label .req { color: var(--accent); margin-left: 3px; font-weight: normal; }
 
-/* Sidenote — pinned to the LEFT margin on wide screens, with a hairline */
+/* Sidenote — pinned to the LEFT margin on wide screens, with a hairline.
+   Switched from uppercase tracked sans (9px) to lowercase Miller italic so it
+   reads at the slightly larger size requested for the instruction text. */
 .sidenote {
   position: absolute;
   left: 0;
@@ -189,14 +222,14 @@ h2 {
   padding-right: 22px;
   border-right: 1px solid var(--rule-soft);
   text-align: right;
-  font-family: var(--font-ui);
-  font-weight: 300;
-  font-style: normal;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  font-size: 9px;
-  line-height: 1.55;
+  font-family: var(--ff-serif);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.45;
 }
 
 /* ── FIELDS ─────────────────────────────────────────────────────────────── */
@@ -217,11 +250,11 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="url"], i
   transition: border-color 0.12s, background 0.12s;
 }
 input:focus, select:focus, textarea:focus {
-  border-bottom: 2px solid var(--accent);
-  background: var(--highlight);
+  border-bottom: 1.5px solid var(--forest-1);
+  background: var(--paper-1);
 }
 input::placeholder, textarea::placeholder {
-  color: var(--ink-faint);
+  color: var(--ink-4);
   font-style: italic;
 }
 /* Hide the example text the moment the user clicks/focuses a field */
@@ -229,18 +262,14 @@ input:focus::placeholder,
 textarea:focus::placeholder { color: transparent; }
 textarea {
   min-height: 110px;
-  /* JS auto-grows textareas to fit their content — no manual resize handle,
-     no internal scrollbars. Lines wrap, and the box expands as you type. */
-  resize: none;
-  overflow: hidden;
-  border: 1px solid var(--rule);
+  resize: vertical;
+  border: 1px solid var(--ink-5);
   padding: 12px 14px;
   background: var(--field-bg);
   font-size: 18px;
   line-height: 1.55;
-  display: block;
 }
-textarea:focus { border-color: var(--accent); border-width: 2px; background: var(--highlight); }
+textarea:focus { border: 1.5px solid var(--forest-1); background: var(--paper-1); }
 select {
   background-color: var(--field-bg);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231c1c1a' stroke-width='1.2' fill='none'/%3E%3C/svg%3E");
@@ -369,25 +398,26 @@ select {
   flex-wrap: wrap;
 }
 .action-btn {
-  font-family: var(--font-ui);
+  font-family: var(--ff-sans-cond);
   font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-size: 13px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
   background: transparent;
-  border: 1px solid var(--rule);
-  padding: 9px 18px;
-  color: var(--ink-soft);
+  border: 1px solid var(--ink-3);
+  padding: 11px 22px;
+  color: var(--ink-2);
   transition: all 0.15s;
 }
-.action-btn:hover { border-color: var(--ink); color: var(--ink); background: var(--cream); }
+.action-btn:hover { border-color: var(--ink-0); color: var(--ink-0); background: transparent; }
 .action-btn.primary {
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink);
+  background: var(--ink-0);
+  color: var(--paper-0);
+  border-color: var(--ink-0);
+  font-weight: 700;
 }
-.action-btn.primary:hover { background: #000; color: var(--paper); border-color: #000; }
+.action-btn.primary:hover { background: var(--forest-1); color: var(--paper-0); border-color: var(--forest-1); }
 .action-status {
   font-family: var(--font-body);
   font-style: italic;
@@ -468,23 +498,23 @@ footer .accent { color: var(--accent); }
   padding: 0 40px;
 }
 .doc-stamp {
-  font-family: var(--font-ui);
-  font-weight: 300;
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-family: var(--ff-mono);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  color: var(--ink-3);
   margin-bottom: 14px;
 }
 .doc-intro {
-  font-family: var(--font-body);
-  font-size: 18px;
+  font-family: var(--ff-body);
+  font-size: 19px;
   line-height: 1.55;
-  color: var(--ink-soft);
+  color: var(--ink-1);
   max-width: 880px;
   margin-left: 0;
 }
-.doc-intro em { color: var(--ink); font-style: italic; }
+.doc-intro em { color: var(--forest-1); font-style: italic; font-family: var(--ff-serif); }
 
 /* ── MAP LINK — appears below the project-location field as you type ───── */
 .map-link {
@@ -564,63 +594,19 @@ footer .accent { color: var(--accent); }
 }
 
 @media print {
-  @page { margin: 0.6in 0.55in; }
-  body { font-size: 11pt; background: #fff; color: #000; }
-  .action-row, .action-status, footer, .toast, .welcome-modal, .map-link { display: none !important; }
-  /* Keep the masthead on the first page only — it's the cover */
-  .masthead { border-bottom: 1px solid #000; padding: 0 0 14px; margin-bottom: 18px; }
-  .masthead-row { padding: 0; max-width: none; }
-  .masthead-sub { font-size: 28px; }
-  .masthead-logo { max-height: 56px; }
-  .doc-head { padding: 0; margin-bottom: 22px; max-width: none; }
-  .doc-intro { font-size: 11pt; }
-  .page { padding: 0; max-width: none; }
-  article { max-width: none; }
-  section { page-break-inside: auto; break-inside: auto; margin: 18px 0 14px; }
-  .section-header { padding-left: 0; page-break-after: avoid; break-after: avoid; }
-  .section-note { position: static !important; width: auto; text-align: left; padding-left: 12px; padding-right: 0; border-right: none; border-left: 2px solid #aaa; margin-top: 4px; font-size: 9pt; }
-  .q { padding-left: 0 !important; margin-bottom: 14px; page-break-inside: avoid; break-inside: avoid; }
-  .q-label { page-break-after: avoid; break-after: avoid; }
-  .sidenote { position: static !important; width: auto; padding-right: 0; padding-left: 12px; text-align: left; border-right: none; border-left: 2px solid #aaa; margin: 4px 0 8px; font-size: 9pt; letter-spacing: 0.06em; }
+  body { font-size: 11pt; background: #fff; }
+  .action-row, .action-status, footer, .masthead { display: none; }
+  section { page-break-inside: avoid; }
+  .section-header { padding-left: 0; }
+  .section-note { position: static !important; width: auto; text-align: left; padding-left: 12px; padding-right: 0; border-right: none; border-left: 2px solid #aaa; margin-top: 4px; }
+  .q { padding-left: 0 !important; }
+  .sidenote { position: static !important; width: auto; padding-right: 0; padding-left: 12px; text-align: left; border-right: none; border-left: 2px solid #aaa; margin: 4px 0 8px; }
   .q-callout { margin-left: 0; }
-  /* CRITICAL: let textareas show their full content (no scrollbars in PDF) */
-  textarea, .notes-box {
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
-    border: 1px solid #bbb !important;
-    background: #fff !important;
-    padding: 8px 10px !important;
-    font-size: 10.5pt !important;
-    line-height: 1.45 !important;
-    white-space: pre-wrap !important;
-    word-wrap: break-word !important;
-  }
-  input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], select {
-    border: none !important;
-    border-bottom: 1px solid #888 !important;
-    background: #fff !important;
-    padding: 4px 2px !important;
-    font-size: 11pt !important;
-  }
-  /* Unselected chips/spaces/styles disappear so the PDF shows only the chosen items */
-  .chip:not(.selected), .space:not(.selected), .style:not(.selected), .budget-item:not(.selected) { display: none !important; }
-  .chip.selected { color: #000 !important; font-weight: 700; padding: 2px 14px 2px 0; margin-right: 14px; }
-  .chip.selected::after { content: ""; }
-  .space.selected, .style.selected, .budget-item.selected { color: #000 !important; }
-  .style.selected .style-title { color: #000 !important; }
-  /* Drop hover/focus highlights */
-  *:focus { outline: none !important; background: #fff !important; }
-  /* Page-break helpers */
-  h2 { page-break-after: avoid; break-after: avoid; }
-  .section-rule { page-break-after: avoid; break-after: avoid; }
 }
 @media (max-width: 720px) {
   .masthead-row, .page { padding-left: 22px; padding-right: 22px; }
   .masthead h1 { font-size: 22px; letter-spacing: 0.06em; }
   .masthead-sub { font-size: 32px; }
-  .masthead-logo { max-height: 48px; }
   body { font-size: 18px; }
   h2 { font-size: 22px; }
   input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], select, textarea { font-size: 20px; }
@@ -628,15 +614,26 @@ footer .accent { color: var(--accent); }
 .welcome-modal { position: fixed; inset: 0; z-index: 1000; background: rgba(20,18,14,0.55); display: flex; align-items: center; justify-content: center; padding: 24px; font-family: var(--font-body); animation: welcome-fade-in 0.18s ease-out; }
 .welcome-modal[hidden] { display: none; }
 @keyframes welcome-fade-in { from { opacity: 0; } to { opacity: 1; } }
-.welcome-card { background: var(--paper); border: 1px solid var(--ink); max-width: 540px; width: 100%; padding: 36px 40px 30px; box-shadow: 0 14px 40px rgba(0,0,0,0.28); }
-.welcome-card h2 { font-family: var(--font-trajan); font-size: 26px; letter-spacing: 0.04em; text-transform: uppercase; margin: 0 0 8px; color: var(--ink); border-bottom: none; padding-bottom: 0; }
-.welcome-lede { font-style: italic; color: var(--ink-soft); margin: 0 0 18px; font-size: 17px; line-height: 1.45; }
-.welcome-body { font-size: 17px; line-height: 1.55; color: var(--ink); margin: 0 0 22px; }
+.welcome-card { background: var(--paper-0); border: 1px solid var(--ink-5); max-width: 540px; width: 100%; padding: 38px 42px 32px; box-shadow: 0 18px 50px rgba(20,18,14,0.32); }
+.welcome-card h2 {
+  font-family: var(--ff-display);
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: var(--tr-engraved-wide);
+  text-transform: uppercase;
+  margin: 0 0 14px;
+  color: var(--v5-engraved);
+  border-bottom: 1px solid var(--v5-engraved-rule);
+  padding-bottom: 12px;
+  line-height: 1.2;
+}
+.welcome-lede { font-family: var(--ff-serif); font-style: italic; color: var(--ink-2); margin: 0 0 18px; font-size: 19px; line-height: 1.4; }
+.welcome-body { font-family: var(--ff-body); font-size: 17px; line-height: 1.55; color: var(--ink-1); margin: 0 0 24px; }
 .welcome-row { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 8px; }
-.welcome-field { margin-bottom: 8px; }
-.welcome-label { display: block; font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
-.welcome-card input[type="text"] { width: 100%; font-family: var(--font-body); font-size: 19px; padding: 8px 0; border: none; border-bottom: 1px solid var(--ink-soft); background: transparent; color: var(--ink); border-radius: 0; }
-.welcome-card input[type="text"]:focus { outline: none; border-bottom: 2px solid var(--accent); }
+.welcome-field { margin-bottom: 10px; }
+.welcome-label { display: block; font-family: var(--ff-sans-cond); font-weight: 600; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 5px; }
+.welcome-card input[type="text"] { width: 100%; font-family: var(--ff-sans); font-size: 20px; padding: 6px 0 8px; border: none; border-bottom: 1px solid var(--ink-5); background: transparent; color: var(--ink-0); border-radius: 0; transition: border-color 0.15s; }
+.welcome-card input[type="text"]:focus { outline: none; border-bottom: 1.5px solid var(--forest-1); background: transparent; }
 .welcome-error { color: var(--accent); font-style: italic; font-size: 14px; min-height: 20px; margin: 6px 0 8px; }
 .welcome-actions { display: flex; justify-content: flex-end; margin-top: 6px; }
 @media (max-width: 520px) { .welcome-card { padding: 28px 22px 22px; } .welcome-row { grid-template-columns: 1fr; gap: 14px; } .welcome-card h2 { font-size: 22px; } }
@@ -648,7 +645,7 @@ footer .accent { color: var(--accent); }
   <div class="welcome-card">
     <h2 id="welcome-title">Carlisle Moore Architects</h2>
     <p class="welcome-lede">Before we begin &mdash; what should we call your project?</p>
-    <p class="welcome-body">Usually a family or last name, like <em>Davis Family</em>. This is just so we can file your answers correctly &mdash; you'll fill in the rest in a moment. Your work saves automatically in this browser as you go, so you can close the tab and come back to it later from the same device.</p>
+    <p class="welcome-body">Usually a family or last name, like <em>Davis Family</em>. This is just so we can file your answers correctly &mdash; you'll fill in the rest in a moment. Your work saves automatically to a unique link in the address bar; close this tab anytime and come back to it later.</p>
     <form id="welcome-form" novalidate>
       <div class="welcome-field">
         <label class="welcome-label" for="welcome-name">Project name</label>
@@ -664,7 +661,7 @@ footer .accent { color: var(--accent); }
 
 <header class="masthead">
   <div class="masthead-row">
-    <img class="masthead-logo" src="logo.png" alt="Carlisle Moore Architects">
+    <h1>Carlisle Moore Architects</h1>
     <span class="masthead-sub">Design Questionnaire</span>
   </div>
 </header>
@@ -673,12 +670,11 @@ footer .accent { color: var(--accent); }
   <div class="doc-stamp" id="doc-stamp">&nbsp;</div>
   <div class="project-badge" id="project-badge" hidden><span class="sigil">§</span>Project<span class="name" id="project-badge-name"></span></div>
   <div class="doc-intro">
-    Welcome &mdash; and thank you for taking the time. <em>This is just a starting point &mdash; a way for us to get a feel for what you're after.</em> Nothing here is meant to be a final answer; it's the opening of our conversation. The more honest and specific you can be, the more we'll have to work with when we sit down together. Type as much or as little as you'd like in any field, skip anything that doesn't apply, and use the box at the very top for anything we forgot to ask. Your answers save automatically in this browser as you go, so you can close the tab and come back to it later &mdash; when you're done, click <em>Send back to Scott</em> to email it back. There's no clock running.
+    Welcome &mdash; and thank you for taking the time. <em>This is just a starting point &mdash; a way for us to get a feel for what you're after.</em> Nothing here is meant to be a final answer; it's the opening of our conversation. The more honest and specific you can be, the more we'll have to work with when we sit down together. Type as much or as little as you'd like in any field, skip anything that doesn't apply, and use the box at the very top for anything we forgot to ask. As you fill it in, your answers save automatically to a unique link in the address bar &mdash; when you're done, click <em>Send back to Scott</em> to email it back. There's no clock running.
   </div>
   <div class="action-row top">
     <button class="action-btn primary" data-action="email" type="button">Send back to Scott</button>
     <button class="action-btn" data-action="share" type="button">Copy share link</button>
-    <button class="action-btn" data-action="pdf" type="button">Create PDF</button>
     <button class="action-btn" data-action="download" type="button">Download answers</button>
   </div>
 </div>
@@ -1193,7 +1189,6 @@ footer .accent { color: var(--accent); }
   <div class="action-row">
     <button class="action-btn primary" data-action="email" type="button">Send back to Scott</button>
     <button class="action-btn" data-action="share" type="button">Copy share link</button>
-    <button class="action-btn" data-action="pdf" type="button">Create PDF</button>
     <button class="action-btn" data-action="download" type="button">Download answers</button>
   </div>
   <div class="action-status" id="action-status"></div>
@@ -1427,14 +1422,8 @@ function syncStateToURL() {
   } catch (e) {}
 }
 function saveDraft() {
-  /* Autosave to localStorage only — DO NOT stamp state into the URL on
-     every keystroke. That kept the address bar synced for cross-device
-     resume, but it also made the URL absurdly long and meant every link
-     copied from the address bar carried the prior visitor's answers
-     forward. The explicit "Copy share link" button still generates the
-     full state-bearing URL via syncStateToURL() when someone actually
-     wants to share or resume on another device. */
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(collect())); } catch (e) {}
+  syncStateToURL();
 }
 
 function load() {
@@ -1601,57 +1590,8 @@ function downloadJSON() {
   setStatus(`Downloaded ${filename}.`, 'ok');
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   AUTO-GROW TEXTAREAS — every textarea expands vertically to fit its
-   content, so no answer is ever hidden behind a scrollbar (and PDFs
-   print the full text). Runs on every input event, after data is
-   loaded, and after a hard reset. Also runs on window resize because
-   wrapping changes when the column width changes.
-   ═══════════════════════════════════════════════════════════════════════ */
-function autoSizeTextarea(el) {
-  if (!el || el.tagName !== 'TEXTAREA') return;
-  /* Reset first so shrinking works as the user deletes lines. */
-  el.style.height = 'auto';
-  /* +2px so the bottom line doesn't get clipped by the border. */
-  el.style.height = (el.scrollHeight + 2) + 'px';
-}
-function autoSizeAll() {
-  document.querySelectorAll('textarea').forEach(autoSizeTextarea);
-}
-document.querySelectorAll('textarea').forEach(el => {
-  el.addEventListener('input', () => autoSizeTextarea(el));
-  /* Initial pass — handles textareas that were pre-filled by load(). */
-  autoSizeTextarea(el);
-});
-window.addEventListener('resize', autoSizeAll);
-
-/* ═══════════════════════════════════════════════════════════════════════
-   CREATE PDF — opens the browser's print dialog. The user picks
-   "Save as PDF" (or "Microsoft Print to PDF") as the destination.
-   We set the document title first so the suggested filename comes
-   out as "CMA Questionnaire — <project> — <date>.pdf".
-   ═══════════════════════════════════════════════════════════════════════ */
-function createPDF() {
-  const data = collect();
-  /* Make sure every textarea is sized to its content before the print
-     snapshot is taken — Safari especially can capture stale heights. */
-  autoSizeAll();
-  const project = (data.client || data.name || 'Questionnaire').trim();
-  const date = new Date().toISOString().slice(0, 10);
-  const oldTitle = document.title;
-  document.title = `CMA Questionnaire — ${project} — ${date}`;
-  setStatus('Opening print dialog — choose "Save as PDF" as the destination.', 'ok');
-  /* Tiny defer so the toast paints before the (blocking) print dialog. */
-  setTimeout(() => {
-    try { window.print(); } catch (e) { /* user may have blocked it */ }
-    /* Restore the title shortly after the dialog is dismissed. */
-    setTimeout(() => { document.title = oldTitle; }, 1500);
-  }, 60);
-}
-
 document.querySelectorAll('[data-action="email"]').forEach(b => b.addEventListener('click', sendToScott));
 document.querySelectorAll('[data-action="share"]').forEach(b => b.addEventListener('click', copyShareLink));
-document.querySelectorAll('[data-action="pdf"]').forEach(b => b.addEventListener('click', createPDF));
 document.querySelectorAll('[data-action="download"]').forEach(b => b.addEventListener('click', downloadJSON));
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1707,9 +1647,6 @@ function formatPhoneValue(raw) {
 });
 
 const __loadSource = load();
-/* After load() may have populated textareas from URL/localStorage, size
-   each of them to fit. */
-autoSizeAll();
 window.addEventListener('input', saveDraft);
 window.addEventListener('change', saveDraft);
 
@@ -1730,8 +1667,6 @@ function resetAllFields() {
   }
   const mapLink = document.getElementById('q-address-map');
   if (mapLink) mapLink.hidden = true;
-  /* Collapse every textarea back to its CSS min-height. */
-  if (typeof autoSizeAll === 'function') autoSizeAll();
 }
 
 /* WELCOME MODAL: gate every brand-new visit behind a name prompt so the URL
@@ -1783,20 +1718,17 @@ function resetAllFields() {
     if (notesEl) notesEl.focus();
   });
 
-  /* Show the welcome modal any time we don't yet have a project name —
-     covers fresh visits, shared links that carried someone else's ?s=
-     state without a client value, and stale localStorage drafts. The
-     only ways to skip it are: a ?client= pre-fill in the URL, or a
-     loaded state (URL or localStorage) that already names a project.
-     This way every new visitor names their project before they see
-     the form, even if Scott's share link still has his test state in it. */
+  /* Only show on a genuinely fresh visit — never if they already have a
+     ?s= state, a ?client= pre-fill, a localStorage draft, or a pre-typed
+     name (covers an embedded-iframe scenario). */
+  const params      = new URLSearchParams(location.search);
+  const hasState    = params.has('s');
+  const hasClient   = params.has('client');
   const hasProject  = !!(clientName && clientName.trim());
-  if (!hasProject) {
+  const isFreshLoad = (__loadSource === 'fresh') && !hasState && !hasClient && !hasProject;
+  if (isFreshLoad) {
     /* Wipe any leftover autofill / partial state behind the modal so the
-       new visitor lands on a clean slate the moment they click Begin.
-       If state was loaded from the URL or localStorage but never set a
-       project name, it's almost certainly an inadvertently-shared link
-       carrying someone else's answers — safer to start fresh. */
+       new visitor lands on a clean slate the moment they click Begin. */
     resetAllFields();
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
     showModal();
