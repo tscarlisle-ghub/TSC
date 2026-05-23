@@ -459,22 +459,24 @@ select {
 .project-badge {
   display: inline-flex;
   align-items: baseline;
-  font-family: var(--font-ui);
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-family: var(--ff-sans-cond);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  color: var(--ink-3);
   margin-bottom: 10px;
 }
-.project-badge .sigil { color: var(--accent); margin-right: 8px; font-weight: 700; }
+.project-badge .sigil { color: var(--forest-1); margin-right: 8px; font-weight: 700; }
 .project-badge .name {
-  font-family: var(--font-body);
-  font-style: italic;
+  font-family: var(--ff-display);
+  font-style: normal;
+  font-weight: 400;
   font-size: 14px;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--ink);
-  margin-left: 8px;
+  letter-spacing: var(--tr-engraved);
+  text-transform: uppercase;
+  color: var(--v5-engraved);
+  margin-left: 10px;
 }
 
 /* ── FOOTER ─────────────────────────────────────────────────────────────── */
@@ -675,7 +677,7 @@ footer .accent { color: var(--accent); }
   <div class="action-row top">
     <button class="action-btn primary" data-action="email" type="button">Send back to Scott</button>
     <button class="action-btn" data-action="share" type="button">Copy share link</button>
-    <button class="action-btn" data-action="download" type="button">Download answers</button>
+    <button class="action-btn" data-action="pdf" type="button">Create PDF</button>
   </div>
 </div>
 
@@ -1189,7 +1191,7 @@ footer .accent { color: var(--accent); }
   <div class="action-row">
     <button class="action-btn primary" data-action="email" type="button">Send back to Scott</button>
     <button class="action-btn" data-action="share" type="button">Copy share link</button>
-    <button class="action-btn" data-action="download" type="button">Download answers</button>
+    <button class="action-btn" data-action="pdf" type="button">Create PDF</button>
   </div>
   <div class="action-status" id="action-status"></div>
 
@@ -1575,24 +1577,275 @@ async function copyShareLink() {
   }
 }
 
-function downloadJSON() {
+/* ── Create PDF ──
+   Generates a real PDF (not a print dialog) using jsPDF. Captures every
+   filled-in field, including the freeform textareas, and lays it out in a
+   clean engraved-letterhead style that matches the on-screen design. */
+function createPDF() {
   const data = collect();
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    setStatus('PDF library still loading — give it a second and try again.', 'error');
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+
+  const PAGE_W = doc.internal.pageSize.getWidth();
+  const PAGE_H = doc.internal.pageSize.getHeight();
+  const MARGIN_L = 56;
+  const MARGIN_R = 56;
+  const MARGIN_T = 64;
+  const MARGIN_B = 64;
+  const TEXT_W = PAGE_W - MARGIN_L - MARGIN_R;
+  let y = MARGIN_T;
+
+  /* Page helpers */
+  function newPage() {
+    doc.addPage();
+    y = MARGIN_T;
+    /* footer drawn on every page in the final pass — no double-draw here */
+  }
+  function ensure(spaceNeeded) {
+    if (y + spaceNeeded > PAGE_H - MARGIN_B) newPage();
+  }
+  function drawFooter() {
+    const fy = PAGE_H - 32;
+    doc.setDrawColor(180, 175, 165);
+    doc.setLineWidth(0.4);
+    doc.line(MARGIN_L, fy, PAGE_W - MARGIN_R, fy);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(120, 115, 105);
+    doc.text('Carlisle Moore Architects', MARGIN_L, fy + 14);
+    const pageStr = 'Page ' + doc.internal.getCurrentPageInfo().pageNumber;
+    doc.text(pageStr, PAGE_W - MARGIN_R, fy + 14, { align: 'right' });
+  }
+
+  /* Header — engraved letterhead */
+  doc.setFont('times', 'normal');
+  doc.setFontSize(11);
+  doc.setTextColor(26, 24, 20);
+  doc.setCharSpace(2.6);
+  doc.text('CARLISLE MOORE ARCHITECTS', MARGIN_L, y);
+  doc.setCharSpace(0);
+  y += 8;
+  doc.setDrawColor(60, 52, 44);
+  doc.setLineWidth(0.6);
+  doc.line(MARGIN_L, y, PAGE_W - MARGIN_R, y);
+  y += 26;
+
+  /* Document title */
+  doc.setFont('times', 'italic');
+  doc.setFontSize(28);
+  doc.setTextColor(20, 17, 13);
+  doc.text('Design Questionnaire', MARGIN_L, y);
+  y += 20;
+
+  /* Project + date stamp */
+  doc.setFont('courier', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(120, 115, 105);
+  const stampParts = [];
+  if (data.client) stampParts.push('PROJECT · ' + data.client.toUpperCase());
+  stampParts.push('SUBMITTED · ' + new Date(data.submitted_at || Date.now())
+    .toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }).toUpperCase());
+  doc.text(stampParts.join('    '), MARGIN_L, y);
+  y += 26;
+
+  /* Section + line helpers. Section headers are LAZY — the title is buffered
+     and drawn only when a labeledValue inside the section actually has data,
+     so empty sections don't litter the PDF with placeholder headers. */
+  let pendingSection = null;
+  function section(title) { pendingSection = title; }
+  function flushSection() {
+    if (!pendingSection) return;
+    ensure(50);
+    y += 4;
+    doc.setDrawColor(60, 52, 44);
+    doc.setLineWidth(0.4);
+    doc.line(MARGIN_L, y, PAGE_W - MARGIN_R, y);
+    y += 16;
+    doc.setFont('times', 'normal');
+    doc.setFontSize(12);
+    doc.setTextColor(26, 24, 20);
+    doc.setCharSpace(2.2);
+    doc.text(pendingSection.toUpperCase(), MARGIN_L, y);
+    doc.setCharSpace(0);
+    y += 18;
+    pendingSection = null;
+  }
+  function labeledValue(label, value) {
+    if (value === undefined || value === null) return;
+    if (Array.isArray(value)) value = value.filter(Boolean).join(', ');
+    value = (value == null ? '' : String(value)).trim();
+    if (!value) return;
+    flushSection();
+    /* Label (uppercase, condensed feel) */
+    ensure(22);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8.5);
+    doc.setTextColor(120, 115, 105);
+    doc.setCharSpace(1.4);
+    doc.text(label.toUpperCase(), MARGIN_L, y);
+    doc.setCharSpace(0);
+    y += 12;
+    /* Value (serif) */
+    doc.setFont('times', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(26, 24, 20);
+    const lines = doc.splitTextToSize(value, TEXT_W);
+    for (const ln of lines) {
+      ensure(15);
+      doc.text(ln, MARGIN_L, y);
+      y += 14;
+    }
+    y += 8;
+  }
+
+  /* Opening notes — set off with a forest rule + larger size, since this is
+     the freeform "anything you want us to know" box and tends to be the
+     most narrative content. */
+  if (data.notes && data.notes.trim()) {
+    ensure(60);
+    doc.setDrawColor(31, 77, 58);
+    doc.setLineWidth(1.5);
+    doc.line(MARGIN_L, y, MARGIN_L, y + 6);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8.5);
+    doc.setTextColor(120, 115, 105);
+    doc.setCharSpace(1.4);
+    doc.text('OPENING NOTES', MARGIN_L + 12, y + 2);
+    doc.setCharSpace(0);
+    y += 18;
+    doc.setFont('times', 'italic');
+    doc.setFontSize(12);
+    doc.setTextColor(26, 24, 20);
+    const noteLines = doc.splitTextToSize(data.notes.trim(), TEXT_W);
+    for (const ln of noteLines) {
+      ensure(16);
+      doc.text(ln, MARGIN_L, y);
+      y += 15;
+    }
+    y += 10;
+  }
+
+  section('§ 1 · Contact');
+  labeledValue('Full name', data.name);
+  labeledValue('Partner', data.partner);
+  labeledValue('Email', data.email);
+  labeledValue('Phone', data.phone);
+  labeledValue('Partner email', data.partner_email);
+  labeledValue('Partner phone', data.partner_phone);
+  labeledValue('Project location', data.address);
+
+  section('§ 2 · You and your life');
+  labeledValue('Household', data.household);
+  labeledValue('Weekly rhythm', data.rhythm);
+  labeledValue('Lifestyle', data.lifestyle);
+
+  section('§ 3 · Project');
+  labeledValue('Type', data.project_type);
+  labeledValue('Square footage', data.sqft);
+  labeledValue('Stories', data.stories);
+  labeledValue('Add-ons', data.addons);
+  labeledValue('Builder', data.builder);
+  labeledValue('Interior designer', data.interior_designer);
+  labeledValue('Landscape architect', data.landscape_architect);
+  labeledValue('Sustainability', data.sustainability);
+
+  section('§ 4 · Character');
+  labeledValue('Style resonance', data.style_cards);
+  labeledValue('Aesthetic concepts', data.aesthetic_concepts);
+  labeledValue('In their words', data.style_words);
+  labeledValue('References', data.references);
+  labeledValue('Imagery', data.imagery);
+  labeledValue('What to avoid', data.avoid);
+  labeledValue('Materials — interior', data.materials_interior);
+  labeledValue('Materials — exterior', data.materials_exterior);
+  labeledValue('Specialty finishes', data.specialty_finishes);
+
+  section('§ 5 · Spaces');
+  labeledValue('Bedrooms', data.bedrooms);
+  labeledValue('Primary bedroom', data.primary_bedroom);
+  labeledValue('Bathrooms', data.bathrooms);
+  labeledValue('Spaces', data.spaces);
+  labeledValue('Key spaces', data.key_spaces);
+  labeledValue('Storage', data.storage);
+  labeledValue('Heirlooms', data.heirlooms);
+  labeledValue('Aging in place', data.aging);
+
+  section('§ 6 · Site');
+  labeledValue('Site strengths', data.site_best);
+  labeledValue('Challenges + constraints', data.site_worst_and_constraints);
+  labeledValue('Arrival + outdoor living', data.arrival_and_outdoor);
+  labeledValue('Landscape intensity', data.landscape_intensity);
+  labeledValue('Grounds', data.grounds);
+  labeledValue('Outbuildings', data.outbuildings);
+  labeledValue('Grounds notes', data.grounds_notes);
+
+  section('§ 7 · Budget & timeline');
+  labeledValue('Budget', data.budget);
+  labeledValue('Construction start', data.construction_start);
+  labeledValue('Target move-in', data.target_movein);
+
+  section('§ 8 · Last thoughts');
+  labeledValue('Priority', data.priority);
+  labeledValue('Concerns', data.concerns);
+  labeledValue('Feeling', data.feeling);
+  labeledValue('Anything else', data.other);
+
+  /* Footer on every page (the first page didn't get one yet) */
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    /* avoid double-drawing if newPage already drew one */
+    drawFooter();
+  }
+
   const date = new Date().toISOString().slice(0, 10);
-  const filename = `cma-questionnaire-${slugify(data.client || data.name)}-${date}.json`;
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  setStatus(`Downloaded ${filename}.`, 'ok');
+  const filename = `cma-questionnaire-${slugify(data.client || data.name)}-${date}.pdf`;
+  doc.save(filename);
+  setStatus(`Saved ${filename}.`, 'ok');
 }
 
 document.querySelectorAll('[data-action="email"]').forEach(b => b.addEventListener('click', sendToScott));
 document.querySelectorAll('[data-action="share"]').forEach(b => b.addEventListener('click', copyShareLink));
-document.querySelectorAll('[data-action="download"]').forEach(b => b.addEventListener('click', downloadJSON));
+document.querySelectorAll('[data-action="pdf"]').forEach(b => b.addEventListener('click', createPDF));
+
+/* ── SPELL-CHECK ──
+   Enable spell-checking on every freeform text field. Skip the email and
+   phone inputs, where the squiggles are noise. Browsers default to true for
+   textareas, but we set it explicitly so it survives any stylesheet that
+   disables it and so we can also turn on autocapitalize/autocorrect for
+   iOS. */
+(function enableSpellCheck() {
+  const FREEFORM_TEXT = [
+    'q-name', 'q-partner', 'q-address', 'q-sqft', 'q-builder',
+    'q-interior-designer', 'q-landscape-architect', 'q-sustainability',
+    'q-movein', 'welcome-name'
+  ];
+  document.querySelectorAll('textarea').forEach(el => {
+    el.setAttribute('spellcheck', 'true');
+    el.setAttribute('autocapitalize', 'sentences');
+    el.setAttribute('autocorrect', 'on');
+  });
+  FREEFORM_TEXT.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.setAttribute('spellcheck', 'true');
+    el.setAttribute('autocapitalize', 'words');
+    el.setAttribute('autocorrect', 'on');
+  });
+  /* Email / phone / URL inputs — turn spell-check OFF, since squiggles under
+     names like "tscarlisle@" are just clutter. */
+  document.querySelectorAll(
+    'input[type="email"], input[type="tel"], input[type="url"]'
+  ).forEach(el => {
+    el.setAttribute('spellcheck', 'false');
+    el.setAttribute('autocapitalize', 'off');
+    el.setAttribute('autocorrect', 'off');
+  });
+})();
 
 /* ═══════════════════════════════════════════════════════════════════════
    DATE STAMP at the top of the document — current local date/time
