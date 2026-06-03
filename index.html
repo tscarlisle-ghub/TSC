@@ -73,6 +73,7 @@
     color: var(--v5-engraved);
     margin: 0;
     line-height: 1.15;
+    white-space: nowrap;   /* keep each phrase on one line — the explicit <br> is the only break */
   }
   header.masthead h1 em {
     font-family: var(--ff-serif);
@@ -721,7 +722,7 @@
 
   <header class="masthead">
     <div class="title-block">
-      <h1>Conceptual Square Foot Cost Estimator</h1>
+      <h1>Conceptual Square Foot<br>Cost Estimator</h1>
       <input class="project-name-input" id="projectName" type="text"
              placeholder="Project name…" maxlength="80" autocomplete="off">
     </div>
