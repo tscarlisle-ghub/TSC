@@ -509,6 +509,41 @@
   /* Selected-tier marker: hidden — the highlight + bold text mark the selection */
   .selected-marker { display: none; }
 
+  /* Custom tier row — terracotta-tinted to mark it as the editable one.       */
+  table.tiers tr.custom td {
+    background: var(--cma-accent-tint, #f6ece1);
+    border-bottom-color: var(--cma-accent-rule, #d6b59a);
+  }
+  table.tiers tr.custom.selected td {
+    background: var(--highlight);
+    border-bottom-color: var(--tier-accent-mute);
+  }
+  table.tiers tr.custom td.tier-name { color: var(--cma-accent-deep, #7d4319); }
+  table.tiers tr.custom.selected td.tier-name { color: var(--tier-accent); }
+  .custom-psf-input {
+    font-family: var(--ff-mono, "Interstate Mono", monospace);
+    font-variant-numeric: tabular-nums;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink, #14110d);
+    background: var(--paper-0, #fbfaf6);
+    border: 1px solid var(--cma-accent, #a85c24);
+    border-radius: 2px;
+    padding: 3px 8px;
+    width: 78px;
+    text-align: right;
+    outline: none;
+    -moz-appearance: textfield;
+  }
+  .custom-psf-input::-webkit-outer-spin-button,
+  .custom-psf-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .custom-psf-input:focus { outline: 1.5px solid var(--forest-1, #1f4d3a); outline-offset: 0; }
+  table.tiers td.psf .custom-note {
+    display: block; font-family: var(--ff-serif, Georgia, serif); font-style: italic;
+    font-size: 13px; color: var(--ink-mute, #57514a); margin-top: 2px; font-weight: 400;
+    letter-spacing: 0; text-transform: none;
+  }
+
   /* Adjustments breakdown */
   .adj-list { margin-top: 8px; }
   .adj-row {
@@ -927,7 +962,10 @@
 const TIERS = {
   normal:   { label: "Normally Nice", sub: "Asphalt + standard finishes",     loUR: 315, hiUR: 345 },
   high:     { label: "Elevated",      sub: "Cedar shake + nice finishes",     loUR: 350, hiUR: 390 },
-  veryHigh: { label: "Very High",     sub: "Slate or premium cedar + custom", loUR: 420, hiUR: 465 }
+  veryHigh: { label: "Very High",     sub: "Slate or premium cedar + custom", loUR: 420, hiUR: 465 },
+  // Custom — single $/sf driven by state.customPsf; lo == hi, treated like the
+  // other tiers (materials + steep + fixedAdj layered on top).
+  custom:   { label: "Custom",        sub: "your $/sf",                       loUR:   0, hiUR:   0 }
 };
 
 // All material adjustments expressed as $/under-roof-sf delta from baseline.
@@ -1098,6 +1136,7 @@ const state = {
   garageCars:  2,          // 1 / 2 / 3
   landscape:   "normal",   // normal / elevated / veryHigh
   finishTier:  "normal",
+  customPsf:   385,        // user-typed $/sf for the Custom tier row
   materials:  {
     walls:    "normal",
     roof:     "asphalt",
@@ -1291,8 +1330,20 @@ function totals() {
 }
 
 function tierBaseRange(tierKey, urTotal) {
+  if (tierKey === "custom") {
+    const p = Number(state.customPsf) || 0;
+    return { lo: p * urTotal, hi: p * urTotal };
+  }
   const t = TIERS[tierKey];
   return { lo: t.loUR * urTotal, hi: t.hiUR * urTotal };
+}
+function tierPsfRange(tierKey) {
+  if (tierKey === "custom") {
+    const p = Number(state.customPsf) || 0;
+    return { lo: p, hi: p };
+  }
+  const t = TIERS[tierKey];
+  return { lo: t.loUR, hi: t.hiUR };
 }
 
 const MAT_ORDER = ["walls","roof","interior","cabinets"];
@@ -1402,32 +1453,101 @@ function renderSummary() {
   // the grand total instead. Clicking any row selects that tier.
   const tbody = document.getElementById("tiersBody");
   tbody.innerHTML = "";
-  for (const key of ["normal","high","veryHigh"]) {
+  for (const key of ["normal","high","veryHigh","custom"]) {
     const ti = TIERS[key];
     const base = tierBaseRange(key, t.urTotal);
     let totLo = (base.lo + matSum) * (1 + steep) + fixedAdj;
     let totHi = (base.hi + matSum) * (1 + steep) + fixedAdj;
+    const isCustom = (key === "custom");
+    const psfHC = (t.hcNet > 0) ? Math.round(base.lo / t.hcNet) : 0;
     const psfHCLo = (t.hcNet > 0) ? Math.round(base.lo / t.hcNet) : 0;
     const psfHCHi = (t.hcNet > 0) ? Math.round(base.hi / t.hcNet) : 0;
     const tr = document.createElement("tr");
     tr.style.cursor = "pointer";
     tr.dataset.tier = key;
-    if (key === state.finishTier) tr.className = "selected";
+    let cls = "";
+    if (isCustom) cls += " custom";
+    if (key === state.finishTier) cls += " selected";
+    if (cls) tr.className = cls.trim();
+    let psfCell;
+    if (isCustom) {
+      psfCell =
+        "<td class=\"psf\">" +
+          "<span>$<input class=\"custom-psf-input\" id=\"customPsfInput\" " +
+            "type=\"number\" min=\"100\" max=\"2000\" step=\"5\" " +
+            "value=\"" + (Number(state.customPsf) || 0) + "\"></span>" +
+          "<span class=\"label\">Under roof</span>" +
+          "<span class=\"custom-note\">your number &middot; cond $" + psfHC + "/sf</span>" +
+        "</td>";
+    } else {
+      psfCell =
+        "<td class=\"psf\">" +
+          "<span>$" + ti.loUR + "&ndash;$" + ti.hiUR + "</span><span class=\"label\">Under roof</span>" +
+          "<span class=\"cond\">($" + psfHCLo + "&ndash;$" + psfHCHi + " conditioned)</span>" +
+        "</td>";
+    }
+    const baseCell = isCustom
+      ? ("<td class=\"range\">" + fmt$M(base.lo) + "</td>")
+      : ("<td class=\"range\">" + fmt$M(base.lo) + " &ndash; " + fmt$M(base.hi) + "</td>");
+    const totalCell = isCustom
+      ? ("<td class=\"total\">" + fmt$M(totLo) + "</td>")
+      : ("<td class=\"total\">" + fmt$M(totLo) + " &ndash; " + fmt$M(totHi) + "</td>");
     tr.innerHTML =
       "<td class=\"tier-name\"><span class=\"selected-marker\"></span>" + ti.label + "</td>" +
-      "<td class=\"psf\">" +
-        "<span>$" + ti.loUR + "&ndash;$" + ti.hiUR + "</span><span class=\"label\">Under roof</span>" +
-        "<span class=\"cond\">($" + psfHCLo + "&ndash;$" + psfHCHi + " conditioned)</span>" +
-      "</td>" +
-      "<td class=\"range\">" + fmt$M(base.lo) + " &ndash; " + fmt$M(base.hi) + "</td>" +
-      "<td class=\"total\">" + fmt$M(totLo) + " &ndash; " + fmt$M(totHi) + "</td>";
-    tr.addEventListener("click", () => {
+      psfCell + baseCell + totalCell;
+    tr.addEventListener("click", (ev) => {
+      // Don't hijack clicks on the input or the inline note inside the custom row
+      if (ev.target && (ev.target.tagName === "INPUT" || ev.target.closest(".custom-note"))) return;
       state.finishTier = key;
-      applyTierPreset(key);   // cascade matching materials (also re-syncs UI)
+      applyTierPreset(key);   // cascade matching materials (no-op for custom — no preset)
       renderSummary();
       saveState();
     });
     tbody.appendChild(tr);
+  }
+
+  // Wire the custom-psf input so typing updates the row totals + grand total
+  // in place WITHOUT re-rendering (which would steal focus). Selects Custom on
+  // first edit if it isn't already the active tier.
+  const cpsf = document.getElementById("customPsfInput");
+  if (cpsf) {
+    cpsf.addEventListener("input", () => {
+      const v = parseFloat(cpsf.value);
+      if (!isFinite(v) || v < 0) return;
+      state.customPsf = v;
+      if (state.finishTier !== "custom") {
+        state.finishTier = "custom";
+      }
+      // Recompute in place
+      const tt = totals();
+      const matSum2   = materialAdjustmentSum(tt.urTotal);
+      const steep2    = steepPct();
+      const fixedAdj2 = fixedAdjustments();
+      const base2     = tierBaseRange("custom", tt.urTotal);
+      const tot2      = (base2.lo + matSum2) * (1 + steep2) + fixedAdj2;
+      const row = cpsf.closest("tr");
+      if (row) {
+        row.classList.add("selected");
+        // Mark the others unselected
+        row.parentNode.querySelectorAll("tr").forEach(r => {
+          if (r !== row) r.classList.remove("selected");
+        });
+        const rangeCell = row.querySelector("td.range");
+        const totalCell = row.querySelector("td.total");
+        if (rangeCell) rangeCell.textContent = fmt$M(base2.lo);
+        if (totalCell) totalCell.textContent = fmt$M(tot2);
+        // Update conditioned $/sf hint
+        const noteEl = row.querySelector(".custom-note");
+        if (noteEl) {
+          const psfCond = (tt.hcNet > 0) ? Math.round(base2.lo / tt.hcNet) : 0;
+          noteEl.innerHTML = "your number &middot; cond $" + psfCond + "/sf";
+        }
+      }
+      document.getElementById("selTierName").textContent = "Custom";
+      document.getElementById("grandTotal").innerHTML = fmt$M(tot2);
+      document.getElementById("selTierSub").textContent = buildSelectedDescriptor();
+      saveState();
+    });
   }
 
   // Grand total — selected tier with materials, steep, pool + landscape folded in
@@ -1435,7 +1555,9 @@ function renderSummary() {
   const totLoSel = (baseSel.lo + matSum) * (1 + steep) + fixedAdj;
   const totHiSel = (baseSel.hi + matSum) * (1 + steep) + fixedAdj;
   document.getElementById("selTierName").textContent = TIERS[state.finishTier].label;
-  document.getElementById("grandTotal").innerHTML = fmt$M(totLoSel) + "  &ndash;  " + fmt$M(totHiSel);
+  document.getElementById("grandTotal").innerHTML = (state.finishTier === "custom")
+    ? fmt$M(totLoSel)
+    : (fmt$M(totLoSel) + "  &ndash;  " + fmt$M(totHiSel));
   document.getElementById("selTierSub").textContent = buildSelectedDescriptor();
 }
 
@@ -1958,6 +2080,7 @@ function buildSnapshot() {
     garageCars: state.garageCars,
     landscape: state.landscape,
     finishTier: state.finishTier,
+    customPsf: state.customPsf,
     materials: state.materials,
     // Rooms are stored compactly:
     //   k = tplKey, x = tplIndex (only when set), w, l, c = count (only if >1),
@@ -2025,6 +2148,8 @@ function applySnapshot(snap) {
   state.garageCars = snap.garageCars || 2;
   state.landscape  = snap.landscape  || "normal";
   state.finishTier = snap.finishTier || "normal";
+  state.customPsf  = (snap.customPsf !== undefined && Number.isFinite(Number(snap.customPsf)))
+                     ? Number(snap.customPsf) : 385;
   state.materials = Object.assign({}, state.materials, snap.materials || {});
   // Map any legacy material keys to the new normal/elevated/veryHigh set
   if (state.materials.walls && !MATERIALS.walls.options[state.materials.walls]) state.materials.walls = "normal";
@@ -2262,16 +2387,20 @@ async function exportToExcel() {
     const fixedAdj = (state.modifiers.pool ? POOL_DOLLARS : 0) + LANDSCAPE_TIERS[state.landscape || "normal"].dollars;
 
     const tierRows = {};
-    for (const k of ["normal","high","veryHigh"]) {
+    for (const k of ["normal","high","veryHigh","custom"]) {
       const ti = TIERS[k];
       const isSel = (k === state.finishTier);
+      const isCustom = (k === "custom");
+      const loPsf = isCustom ? (Number(state.customPsf) || 0) : ti.loUR;
+      const hiPsf = isCustom ? (Number(state.customPsf) || 0) : ti.hiUR;
+      const psfCell = isCustom ? ("$" + loPsf) : ("$" + ti.loUR + "–$" + ti.hiUR);
       const tr = ws.addRow([
         ti.label,
-        "$" + ti.loUR + "–$" + ti.hiUR,
-        { formula: `F${urN}*${ti.loUR}` },
-        { formula: `F${urN}*${ti.hiUR}` },
+        psfCell,
+        { formula: `F${urN}*${loPsf}` },
+        { formula: `F${urN}*${hiPsf}` },
         "",
-        { formula: `(F${urN}*${ti.loUR}+${matPsf}*F${urN})*${1+steep}+${fixedAdj}` }
+        { formula: `(F${urN}*${loPsf}+${matPsf}*F${urN})*${1+steep}+${fixedAdj}` }
       ]);
       const baseFont = isSel ? F.tierSel : F.tier;
       tr.getCell(1).font = baseFont;
@@ -2281,9 +2410,9 @@ async function exportToExcel() {
       tr.getCell(6).font = baseFont;
       [3,4,6].forEach(c => { tr.getCell(c).alignment = ALIGN_R; tr.getCell(c).numFmt = '"$"#,##0'; });
       tr.getCell(2).alignment = ALIGN_R;
-      // Add the upper-bound total in the same cell-formatted row by also writing
-      // a high-bound formula in the same cell: easier to just use 6 and adjust
-      tr.getCell(6).value = { formula: `(F${urN}*${ti.hiUR}+${matPsf}*F${urN})*${1+steep}+${fixedAdj}` };
+      // For non-custom tiers, put the HIGH-bound total in col 6 to match the
+      // display. For custom (lo == hi), the LOW-bound formula is the only value.
+      tr.getCell(6).value = { formula: `(F${urN}*${hiPsf}+${matPsf}*F${urN})*${1+steep}+${fixedAdj}` };
       tierRows[k] = tr.number;
     }
     ws.addRow([]);
@@ -2293,8 +2422,10 @@ async function exportToExcel() {
     r.getCell(1).font = F.label;
     const sel = state.finishTier;
     const ti = TIERS[sel];
-    const lo = (urN, lo) => `(F${urN}*${ti.loUR}+${matPsf}*F${urN})*${1+steep}+${fixedAdj}`;
-    const hi = (urN)     => `(F${urN}*${ti.hiUR}+${matPsf}*F${urN})*${1+steep}+${fixedAdj}`;
+    const selLoPsf = (sel === "custom") ? (Number(state.customPsf) || 0) : ti.loUR;
+    const selHiPsf = (sel === "custom") ? (Number(state.customPsf) || 0) : ti.hiUR;
+    const lo = (urN, lo) => `(F${urN}*${selLoPsf}+${matPsf}*F${urN})*${1+steep}+${fixedAdj}`;
+    const hi = (urN)     => `(F${urN}*${selHiPsf}+${matPsf}*F${urN})*${1+steep}+${fixedAdj}`;
     const gtLo = ws.addRow(["Total range — low",  "", "", "", "", { formula: lo(urN) }]);
     const gtHi = ws.addRow(["Total range — high", "", "", "", "", { formula: hi(urN) }]);
     [gtLo, gtHi].forEach(rr => {
