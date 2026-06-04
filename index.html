@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Conceptual Square Foot Cost Estimator — Carlisle Moore Architects</title>
 <link rel="stylesheet" href="https://use.typekit.net/wup0iix.css">
+<link rel="stylesheet" href="https://tscarlisle-ghub.github.io/fonts/tsc-fonts.css">
 <style>
   :root {
     /* ── Legacy aliases (kept so existing rules keep working) ── */
@@ -88,9 +89,11 @@
   }
   header.masthead .title-block { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
   header.masthead .project-name-input {
-    font-family: var(--ff-serif);
-    font-size: 22px;
-    font-style: italic;
+    font-family: "Interstate Condensed", "ff-meta-web-pro-condensed", "Helvetica Neue Condensed", "Arial Narrow", sans-serif;
+    font-weight: 700;
+    font-size: 34px;
+    font-style: normal;
+    letter-spacing: 0.01em;
     text-transform: capitalize;
     color: var(--ink);
     border: none;
@@ -188,13 +191,11 @@
     cursor: not-allowed;
   }
   header.masthead .firm {
-    /* Match the CMA Board engraved letterhead — Columbia Titling. */
-    font-family: var(--ff-display);
-    font-weight: 400;
-    font-size: 12px;
-    letter-spacing: var(--tr-engraved-wide);
-    color: var(--v5-engraved);
-    text-transform: uppercase;
+    /* Now an <img> — the Logo_Only.png wordmark sits where the text used to. */
+    height: 40px;
+    width: auto;
+    display: block;
+    align-self: center;
   }
 
   /* Section heading — V5 engraved style (Columbia Titling, ruled below) */
@@ -768,7 +769,7 @@
       <button id="exportXlsxBtn"   type="button" class="export-btn" title="Export to Excel">Export to Excel</button>
       <button id="resetBtn"        type="button" class="export-btn" title="Reset to defaults">Reset</button>
     </span>
-    <span class="firm">Carlisle Moore Architects</span>
+    <img class="firm" src="Logo_Only.png" alt="Carlisle Moore Architects" height="40">
   </header>
 
   <!-- ===================== HOUSE TYPE ===================== -->
