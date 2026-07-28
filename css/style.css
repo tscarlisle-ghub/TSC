@@ -1,0 +1,170 @@
+/* ============================================================
+   CMA EDITORIAL — CONSTRUCTION ADMINISTRATION TASK MANAGER
+   Built on the CMA Editorial design tokens ("engraved letterpress
+   as software"). See /data/schema.sql for the data model this
+   styles. Class names are prefixed ca- to stay collision-free.
+   ============================================================ */
+@import url("https://use.typekit.net/wup0iix.css");
+
+:root{
+  --rust:#A2512D; --rust-mid:#B57340; --rust-soft:#E2BFA7; --rust-wash:#F2E2D2;
+  --ink:#2A2520; --ink-soft:#6E5E52; --ink-mute:#8E7E72;
+  --paper:#FBF6EE; --paper-edge:#F1E9DA; --paper-deep:#ECE3D0; --night:#1a1714;
+  --hairline:rgba(162,81,45,.32); --hairline-strong:rgba(162,81,45,.65); --hairline-ink:rgba(42,37,32,.16);
+  --forest:#3F6B4E; --forest-deep:#2C4F39; --forest-wash:#E9F0EA;
+  --gold:#C99A2E; --alert:#8A2A1F; --mint:#BFE0D2;
+  --display:"aviano-sans","Optima",serif;
+  --titling:"columbia-titling","Trajan Pro",serif;
+  --serif:"urw-antiqua","Iowan Old Style",Georgia,serif;
+  --sans-cond:"franklin-gothic-condensed","Franklin Gothic",sans-serif;
+  --sans-comp:"franklin-gothic-compressed","franklin-gothic-condensed",sans-serif;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;}
+.tabular,.ca-tab-num{font-variant-numeric:tabular-nums;}
+a{color:var(--rust);}
+button{font:inherit;}
+
+/* ---------- layout shell ---------- */
+.ca-app{min-height:100vh;}
+.ca-main{max-width:1180px;margin:0 auto;padding:0 64px 40px;}
+@media (max-width: 900px){ .ca-main{padding:0 20px 40px;} .ca-header-inner{padding:16px 20px !important;} }
+
+/* ---------- header / nav ---------- */
+.ca-header{position:sticky;top:0;z-index:30;background:rgba(251,246,238,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--hairline-ink);}
+.ca-header-inner{max-width:1180px;margin:0 auto;padding:16px 64px;display:flex;align-items:center;gap:32px;}
+.ca-logo{width:118px;height:auto;display:block;flex-shrink:0;}
+.ca-nav{flex:1;display:flex;justify-content:center;gap:26px;flex-wrap:wrap;}
+.ca-nav button{background:none;border:none;cursor:pointer;padding:6px 0;font-family:var(--titling);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid transparent;transition:color 160ms,border-color 160ms;}
+.ca-nav button:hover{color:var(--rust);}
+.ca-nav button.active{color:var(--rust);border-bottom-color:var(--rust);}
+
+/* ---------- generic buttons ---------- */
+.ca-btn{font-family:var(--titling);font-size:10px;letter-spacing:.22em;text-transform:uppercase;padding:11px 18px;border:none;cursor:pointer;background:none;border-radius:0;transition:background 160ms,color 160ms,border-color 160ms;line-height:1.3;}
+.ca-btn-primary{color:var(--rust);border:1px solid var(--rust);}
+.ca-btn-primary:hover{background:var(--rust);color:var(--paper);}
+.ca-btn-save{color:#fff;background:var(--forest-deep);}
+.ca-btn-save:hover{background:var(--forest);}
+.ca-btn-cancel{color:#fff;background:var(--alert);}
+.ca-btn-cancel:hover{background:#6e2018;}
+.ca-btn-secondary{color:var(--ink-soft);border:1px solid var(--hairline-ink);background:none;}
+.ca-btn-secondary:hover{background:var(--paper-edge);}
+.ca-btn-ghost{color:var(--ink-mute);border:1px solid transparent;background:none;padding:8px 10px;}
+.ca-btn-ghost:hover{color:var(--rust);}
+.ca-btn:disabled{opacity:.45;cursor:not-allowed;}
+
+/* segmented view toggle (Priority / Category) */
+.ca-seg{display:inline-flex;border:1px solid var(--hairline-ink);}
+.ca-seg button{font-family:var(--titling);font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:9px 16px;border:none;background:none;color:var(--ink-soft);cursor:pointer;}
+.ca-seg button + button{border-left:1px solid var(--hairline-ink);}
+.ca-seg button.active{background:var(--rust);color:var(--paper);}
+
+/* ---------- inputs / forms ---------- */
+.ca-lab{font-family:var(--titling);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-mute);display:block;margin-bottom:7px;}
+.ca-in, .ca-select, textarea.ca-in{width:100%;background:#fff;border:1px solid var(--hairline-ink);padding:11px 13px;font-family:var(--serif);font-size:15px;color:var(--ink);border-radius:0;outline:none;}
+.ca-in:focus, .ca-select:focus, textarea.ca-in:focus{border-color:var(--rust);}
+.ca-in::placeholder{color:var(--ink-mute);font-style:italic;}
+textarea.ca-in{resize:vertical;font-family:var(--serif);}
+.ca-field{margin-bottom:16px;}
+.ca-row{display:grid;gap:14px;}
+.ca-row-2{grid-template-columns:1fr 1fr;}
+.ca-row-3{grid-template-columns:1fr 1fr 1fr;}
+.ca-row-4{grid-template-columns:1fr 1fr 1fr 1fr;}
+@media (max-width:640px){ .ca-row-2,.ca-row-3,.ca-row-4{grid-template-columns:1fr;} }
+
+.ca-radio-group{display:flex;gap:22px;flex-wrap:wrap;}
+.ca-radio{display:flex;align-items:center;gap:9px;cursor:pointer;background:none;border:none;padding:0;font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;}
+.ca-radio-ring{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink-mute);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ca-radio-dot{width:7px;height:7px;border-radius:50%;background:transparent;}
+.ca-radio.on .ca-radio-ring{border-color:var(--rust);}
+.ca-radio.on .ca-radio-dot{background:var(--rust);}
+
+/* ---------- KPI ribbon ---------- */
+.ca-kpis{border-top:1px solid var(--hairline-strong);border-bottom:1px solid var(--hairline);display:grid;grid-template-columns:repeat(4,1fr);}
+@media (max-width:760px){ .ca-kpis{grid-template-columns:repeat(2,1fr);} }
+.ca-kpi{padding:24px 26px 22px;border-left:1px solid var(--hairline);}
+.ca-kpi:first-child{border-left:none;}
+.ca-kpi-of{font-family:var(--titling);font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:var(--ink-mute);}
+.ca-kpi-v{font-family:var(--sans-comp);font-size:30px;line-height:.96;margin-top:14px;letter-spacing:.01em;}
+.ca-kpi-lab{font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink);margin-top:12px;}
+.ca-kpi-note{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--ink-soft);margin-top:5px;line-height:1.3;}
+
+/* ---------- numbered plate ---------- */
+.ca-plate{display:grid;grid-template-columns:220px 1fr;gap:72px;align-items:start;padding:56px 0 8px;}
+@media (max-width:820px){ .ca-plate{grid-template-columns:1fr;gap:20px;} }
+.ca-plate-num{font-family:var(--sans-comp);font-size:84px;color:var(--rust);line-height:.82;}
+.ca-plate-kicker{font-family:var(--titling);font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:var(--ink-mute);margin-top:12px;}
+.ca-plate-rule{width:40px;height:2px;background:var(--rust);margin:16px 0;}
+.ca-plate-label{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink);line-height:1.25;}
+.ca-plate-note{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink-soft);margin-top:18px;line-height:1.5;}
+.ca-lede{margin:0 0 26px;font-family:var(--serif);font-style:italic;font-weight:400;font-size:32px;line-height:1.1;color:var(--ink);}
+
+/* ---------- ledger tables ---------- */
+.ca-ledger-head{display:grid;padding:0 0 8px;border-bottom:1px solid var(--ink);font-family:var(--titling);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mute);}
+.ca-ledger-row{display:grid;align-items:center;padding:13px 0;border-bottom:1px solid var(--hairline);cursor:pointer;transition:background 140ms;}
+.ca-ledger-row:hover{background:var(--rust-wash);}
+.ca-ledger-total{display:grid;align-items:baseline;padding:15px 0 0;border-top:2px solid var(--ink);}
+.ca-num{font-family:var(--sans-cond);font-variant-numeric:tabular-nums;}
+.ca-num-lg{font-family:var(--sans-comp);font-variant-numeric:tabular-nums;}
+.ca-group-head{display:flex;align-items:baseline;justify-content:space-between;padding:10px 0;margin-top:30px;border-bottom:1px solid var(--ink);}
+.ca-group-title{font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--rust);}
+.ca-group-count{font-family:var(--titling);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-mute);}
+
+/* ---------- status / priority / party tags ---------- */
+.ca-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:middle;flex-shrink:0;}
+.ca-tag{font-family:var(--titling);font-size:9px;letter-spacing:.16em;text-transform:uppercase;}
+.ca-pill{display:inline-block;font-family:var(--titling);font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--hairline);}
+.ca-party{font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:.05em;text-transform:uppercase;}
+
+/* checkbox (square, editorial) */
+.ca-check{width:16px;height:16px;border:1.5px solid var(--ink-mute);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:var(--sans-cond);font-size:12px;cursor:pointer;flex-shrink:0;background:none;padding:0;}
+.ca-check.on{border-color:var(--forest);background:var(--forest);}
+
+/* ---------- modal ---------- */
+.ca-modal-backdrop{position:fixed;inset:0;background:rgba(26,23,20,.55);display:flex;align-items:flex-start;justify-content:center;padding:5vh 20px;z-index:100;overflow-y:auto;}
+.ca-modal{width:100%;max-width:720px;background:var(--paper);border:1px solid var(--hairline-ink);box-shadow:0 18px 60px rgba(20,17,13,.28);margin-bottom:5vh;}
+.ca-modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 30px;border-bottom:1px solid var(--hairline-strong);}
+.ca-modal-title{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--rust);}
+.ca-modal-close{font-family:var(--serif);font-size:24px;color:var(--ink-mute);cursor:pointer;background:none;border:none;line-height:1;}
+.ca-modal-body{padding:26px 30px;}
+.ca-modal-foot{display:flex;align-items:center;justify-content:space-between;padding:16px 30px;border-top:1px solid var(--hairline-strong);background:var(--paper-edge);}
+.ca-sec{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--rust);padding-bottom:9px;border-bottom:1px solid var(--hairline);margin:26px 0 16px;}
+.ca-sec:first-child{margin-top:0;}
+
+/* ---------- expand chevron ---------- */
+.ca-chev{font-family:var(--serif);font-size:18px;color:var(--rust);text-align:center;display:inline-block;transition:transform 200ms;}
+.ca-chev.open{transform:rotate(90deg);}
+
+/* ---------- empty state ---------- */
+.ca-empty{display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;padding:90px 24px;border-top:1px solid var(--hairline);}
+.ca-empty img{width:54px;height:auto;opacity:.7;}
+.ca-empty-msg{font-family:var(--serif);font-style:italic;font-size:24px;color:var(--ink);max-width:540px;line-height:1.4;}
+
+/* ---------- banners / alerts ---------- */
+.ca-banner{padding:13px 18px;border-left:2px solid var(--rust);background:var(--rust-wash);font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink-soft);margin:20px 0;}
+.ca-banner.warn{border-color:var(--alert);background:#f4e3df;}
+.ca-banner.ok{border-color:var(--forest);background:var(--forest-wash);}
+
+/* ---------- folio / footer ---------- */
+.ca-folio{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--titling);font-size:10px;letter-spacing:.36em;text-transform:uppercase;color:var(--ink-mute);padding:34px 0 60px;border-top:1px solid var(--hairline);margin-top:48px;}
+.ca-folio .brand{color:var(--rust);}
+.ca-folio .brand .fy{color:var(--ink-mute);margin-left:10px;}
+
+/* ---------- filter bar ---------- */
+.ca-filterbar{display:flex;gap:14px;flex-wrap:wrap;align-items:end;padding:30px 0 6px;}
+.ca-filterbar .ca-field{margin-bottom:0;min-width:150px;}
+
+/* ---------- settings ---------- */
+.ca-settings-block{max-width:640px;}
+.ca-help{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--ink-soft);margin-top:6px;line-height:1.5;}
+
+/* ---------- print / PDF export ---------- */
+@media print{
+  @page{ margin:0.6in; }
+  .ca-no-print{ display:none !important; }
+  body{ background:#fff; }
+  .ca-print-only{ display:block !important; }
+}
+.ca-print-only{ display:none; }
