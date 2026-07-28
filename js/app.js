@@ -82,6 +82,13 @@ const App = (() => {
       if (cached) {
         await CATask_DB.init(cached);
         state.dirty = true; // we don't know if this matches GitHub's latest
+        // Fetch the current remote sha in the background (without touching the
+        // loaded db) so the next "Save to GitHub" already knows it, instead of
+        // relying on push()'s own auto-recovery. Failures here are silent —
+        // push() still works without it.
+        if (state.settings.ghToken && state.settings.ghOwner && state.settings.ghRepo) {
+          CAGitHub.pull(ghConfig()).then((r) => { if (!r.notFound) state.remoteSha = r.sha; }).catch(() => {});
+        }
       } else if (state.settings.ghToken && state.settings.ghOwner && state.settings.ghRepo) {
         try {
           const { bytes, sha, notFound } = await CAGitHub.pull(ghConfig());

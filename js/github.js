@@ -53,7 +53,13 @@ const CAGitHub = (() => {
   // Push new db bytes to GitHub. sha is required when overwriting an existing file
   // (pass the sha you most recently pulled — GitHub rejects the write if the file
   // has changed since, so pull() again if you get a 409).
-  async function push(cfg, bytes, message, sha) {
+  //
+  // If we don't have a sha in hand (e.g. this browser loaded the db from its local
+  // cache and never fetched the file's current GitHub sha), a first attempt without
+  // one will 422 on an existing file with "sha wasn't supplied". Rather than make the
+  // user manually "Pull Latest" first, auto-recover once: look up the current sha and
+  // retry the same write with it.
+  async function push(cfg, bytes, message, sha, _retried) {
     const path = encodeURIComponent(cfg.path).replace(/%2F/g, '/');
     const url = `${API}/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
     const body = {
@@ -70,6 +76,14 @@ const CAGitHub = (() => {
     if (!res.ok) {
       if (res.status === 409) {
         throw new Error('The file on GitHub changed since you last pulled it. Click "Pull Latest" and re-apply your edit before saving.');
+      }
+      let payload = null;
+      try { payload = await res.clone().json(); } catch (_) {}
+      const missingSha = res.status === 422 && payload && /sha/i.test(payload.message || '');
+      if (missingSha && !sha && !_retried) {
+        const current = await pull(cfg);
+        if (current.notFound) throw new Error(await describeError(res)); // genuinely doesn't exist; surface the original error
+        return push(cfg, bytes, message, current.sha, true);
       }
       throw new Error(await describeError(res));
     }
