@@ -1,0 +1,172 @@
+{
+  "company": {
+    "name": "Meridian Supply Co.",
+    "fiscal_year_start_month": 1,
+    "industry": "product",
+    "divisions": [
+      { "id": "wholesale", "name": "Wholesale", "type": "product" },
+      { "id": "direct", "name": "Direct / DTC", "type": "product" },
+      { "id": "services", "name": "Install Services", "type": "service" },
+      { "id": "subscriptions", "name": "Maintenance Plans", "type": "subscription" }
+    ]
+  },
+  "months": [
+    {
+      "period": "2025-11",
+      "revenue": { "by_division": [
+        { "division_id": "wholesale",     "total": 62000, "recurring": 52000, "units_sold": 310 },
+        { "division_id": "direct",        "total": 28000, "recurring": 8000,  "units_sold": 140 },
+        { "division_id": "services",      "total": 14000, "recurring": 4000 },
+        { "division_id": "subscriptions", "total": 8000,  "recurring": 8000 }
+      ]},
+      "cogs": { "by_division": [
+        { "division_id": "wholesale",     "materials": 31000, "direct_labor": 4000, "shipping": 3100 },
+        { "division_id": "direct",        "materials": 11200, "direct_labor": 1400, "shipping": 2800 },
+        { "division_id": "services",      "materials": 2800,  "direct_labor": 5600, "shipping": 0 },
+        { "division_id": "subscriptions", "materials": 400,   "direct_labor": 1600, "shipping": 0 }
+      ]},
+      "expenses": {
+        "payroll": { "salary_and_wages": 38000, "payroll_taxes_benefits": 6000, "headcount_fte": 6 },
+        "contractors": { "total": 9000 },
+        "facilities": { "rent": 4200, "utilities": 800, "maintenance": 300 },
+        "software_and_tools": { "total": 3000 },
+        "marketing": { "paid_ads": 2200, "content_and_creative": 800 },
+        "professional_services": { "accounting": 1200, "legal": 0 },
+        "other_opex": { "total": 1500 }
+      },
+      "cash": { "opening_balance": 285000, "ar_current": 48000, "ar_31_60": 12000, "ar_61_90": 4000, "ar_over_90": 1000, "ap_current": 22000, "ap_over_30": 5000 },
+      "inventory": { "totals": { "total_units_on_hand": 1840, "total_inventory_value": 184000, "total_units_sold": 450, "shrinkage": 2000 } }
+    },
+    {
+      "period": "2025-12",
+      "revenue": { "by_division": [
+        { "division_id": "wholesale",     "total": 65000, "recurring": 54000, "units_sold": 325 },
+        { "division_id": "direct",        "total": 30000, "recurring": 9000,  "units_sold": 155 },
+        { "division_id": "services",      "total": 15000, "recurring": 4500 },
+        { "division_id": "subscriptions", "total": 8000,  "recurring": 8000 }
+      ]},
+      "cogs": { "by_division": [
+        { "division_id": "wholesale",     "materials": 32500, "direct_labor": 4200, "shipping": 3250 },
+        { "division_id": "direct",        "materials": 12000, "direct_labor": 1500, "shipping": 3000 },
+        { "division_id": "services",      "materials": 3000,  "direct_labor": 6000, "shipping": 0 },
+        { "division_id": "subscriptions", "materials": 400,   "direct_labor": 1600, "shipping": 0 }
+      ]},
+      "expenses": {
+        "payroll": { "salary_and_wages": 38000, "payroll_taxes_benefits": 6000, "headcount_fte": 6 },
+        "contractors": { "total": 11000 },
+        "facilities": { "rent": 4200, "utilities": 900, "maintenance": 200 },
+        "software_and_tools": { "total": 3200 },
+        "marketing": { "paid_ads": 3500, "content_and_creative": 1000 },
+        "professional_services": { "accounting": 1200, "legal": 2000 },
+        "other_opex": { "total": 1800 }
+      },
+      "cash": { "opening_balance": 298000, "ar_current": 52000, "ar_31_60": 14000, "ar_61_90": 3000, "ar_over_90": 2000, "ap_current": 25000, "ap_over_30": 6000 },
+      "inventory": { "totals": { "total_units_on_hand": 1720, "total_inventory_value": 172000, "total_units_sold": 480, "shrinkage": 1800 } }
+    },
+    {
+      "period": "2026-01",
+      "revenue": { "by_division": [
+        { "division_id": "wholesale",     "total": 68000, "recurring": 56000, "units_sold": 340 },
+        { "division_id": "direct",        "total": 29000, "recurring": 9000,  "units_sold": 148 },
+        { "division_id": "services",      "total": 18000, "recurring": 5000 },
+        { "division_id": "subscriptions", "total": 9000,  "recurring": 9000 }
+      ]},
+      "cogs": { "by_division": [
+        { "division_id": "wholesale",     "materials": 34000, "direct_labor": 4400, "shipping": 3400 },
+        { "division_id": "direct",        "materials": 11600, "direct_labor": 1450, "shipping": 2900 },
+        { "division_id": "services",      "materials": 3600,  "direct_labor": 7200, "shipping": 0 },
+        { "division_id": "subscriptions", "materials": 450,   "direct_labor": 1800, "shipping": 0 }
+      ]},
+      "expenses": {
+        "payroll": { "salary_and_wages": 39000, "payroll_taxes_benefits": 6200, "headcount_fte": 6.5 },
+        "contractors": { "total": 10000 },
+        "facilities": { "rent": 4200, "utilities": 750, "maintenance": 400 },
+        "software_and_tools": { "total": 3400 },
+        "marketing": { "paid_ads": 2800, "content_and_creative": 900 },
+        "professional_services": { "accounting": 1200, "legal": 0 },
+        "other_opex": { "total": 1400 }
+      },
+      "cash": { "opening_balance": 291000, "ar_current": 55000, "ar_31_60": 11000, "ar_61_90": 5000, "ar_over_90": 1500, "ap_current": 24000, "ap_over_30": 4000 },
+      "inventory": { "totals": { "total_units_on_hand": 1650, "total_inventory_value": 165000, "total_units_sold": 488, "shrinkage": 1600 } }
+    },
+    {
+      "period": "2026-02",
+      "revenue": { "by_division": [
+        { "division_id": "wholesale",     "total": 72000, "recurring": 58000, "units_sold": 360 },
+        { "division_id": "direct",        "total": 31000, "recurring": 10000, "units_sold": 162 },
+        { "division_id": "services",      "total": 19000, "recurring": 5500 },
+        { "division_id": "subscriptions", "total": 9000,  "recurring": 9000 }
+      ]},
+      "cogs": { "by_division": [
+        { "division_id": "wholesale",     "materials": 36000, "direct_labor": 4600, "shipping": 3600 },
+        { "division_id": "direct",        "materials": 12400, "direct_labor": 1550, "shipping": 3100 },
+        { "division_id": "services",      "materials": 3800,  "direct_labor": 7600, "shipping": 0 },
+        { "division_id": "subscriptions", "materials": 450,   "direct_labor": 1800, "shipping": 0 }
+      ]},
+      "expenses": {
+        "payroll": { "salary_and_wages": 39000, "payroll_taxes_benefits": 6200, "headcount_fte": 6.5 },
+        "contractors": { "total": 12000 },
+        "facilities": { "rent": 4200, "utilities": 780, "maintenance": 250 },
+        "software_and_tools": { "total": 3600 },
+        "marketing": { "paid_ads": 3200, "content_and_creative": 1100 },
+        "professional_services": { "accounting": 1200, "legal": 500 },
+        "other_opex": { "total": 1600 }
+      },
+      "cash": { "opening_balance": 304000, "ar_current": 58000, "ar_31_60": 13000, "ar_61_90": 4500, "ar_over_90": 2000, "ap_current": 26000, "ap_over_30": 5500 },
+      "inventory": { "totals": { "total_units_on_hand": 1580, "total_inventory_value": 158000, "total_units_sold": 522, "shrinkage": 1900 } }
+    },
+    {
+      "period": "2026-03",
+      "revenue": { "by_division": [
+        { "division_id": "wholesale",     "total": 70000, "recurring": 57000, "units_sold": 350 },
+        { "division_id": "direct",        "total": 33000, "recurring": 10500, "units_sold": 170 },
+        { "division_id": "services",      "total": 20000, "recurring": 6000 },
+        { "division_id": "subscriptions", "total": 9000,  "recurring": 9000 }
+      ]},
+      "cogs": { "by_division": [
+        { "division_id": "wholesale",     "materials": 35000, "direct_labor": 4500, "shipping": 3500 },
+        { "division_id": "direct",        "materials": 13200, "direct_labor": 1650, "shipping": 3300 },
+        { "division_id": "services",      "materials": 4000,  "direct_labor": 8000, "shipping": 0 },
+        { "division_id": "subscriptions", "materials": 450,   "direct_labor": 1800, "shipping": 0 }
+      ]},
+      "expenses": {
+        "payroll": { "salary_and_wages": 40000, "payroll_taxes_benefits": 6400, "headcount_fte": 7 },
+        "contractors": { "total": 11000 },
+        "facilities": { "rent": 4200, "utilities": 820, "maintenance": 300 },
+        "software_and_tools": { "total": 3800 },
+        "marketing": { "paid_ads": 2900, "content_and_creative": 1000 },
+        "professional_services": { "accounting": 1200, "legal": 0 },
+        "other_opex": { "total": 1700 }
+      },
+      "cash": { "opening_balance": 299000, "ar_current": 56000, "ar_31_60": 14000, "ar_61_90": 5000, "ar_over_90": 1800, "ap_current": 25000, "ap_over_30": 5000 },
+      "inventory": { "totals": { "total_units_on_hand": 1520, "total_inventory_value": 152000, "total_units_sold": 520, "shrinkage": 2100 } }
+    },
+    {
+      "period": "2026-04",
+      "revenue": { "by_division": [
+        { "division_id": "wholesale",     "total": 78000, "recurring": 62000, "units_sold": 390 },
+        { "division_id": "direct",        "total": 36000, "recurring": 11000, "units_sold": 182 },
+        { "division_id": "services",      "total": 22000, "recurring": 6500 },
+        { "division_id": "subscriptions", "total": 11000, "recurring": 11000 }
+      ]},
+      "cogs": { "by_division": [
+        { "division_id": "wholesale",     "materials": 39000, "direct_labor": 5000, "shipping": 3900 },
+        { "division_id": "direct",        "materials": 14400, "direct_labor": 1800, "shipping": 3600 },
+        { "division_id": "services",      "materials": 4400,  "direct_labor": 8800, "shipping": 0 },
+        { "division_id": "subscriptions", "materials": 550,   "direct_labor": 2200, "shipping": 0 }
+      ]},
+      "expenses": {
+        "payroll": { "salary_and_wages": 40000, "payroll_taxes_benefits": 6400, "headcount_fte": 7 },
+        "contractors": { "total": 14000 },
+        "facilities": { "rent": 4200, "utilities": 850, "maintenance": 350 },
+        "software_and_tools": { "total": 4200 },
+        "marketing": { "paid_ads": 3400, "content_and_creative": 1200 },
+        "professional_services": { "accounting": 1200, "legal": 0 },
+        "other_opex": { "total": 2000 }
+      },
+      "cash": { "opening_balance": 294000, "ar_current": 62000, "ar_31_60": 15000, "ar_61_90": 6000, "ar_over_90": 2200, "ap_current": 28000, "ap_over_30": 6500 },
+      "inventory": { "totals": { "total_units_on_hand": 1440, "total_inventory_value": 144000, "total_units_sold": 572, "shrinkage": 2400 } },
+      "notes": "Closed $34K contract renewal with Hartwell Distribution at full rate — no discount given. Contractor spike driven by Q2 product launch prep. Software number includes two new tools added by ops team without CFO sign-off."
+    }
+  ]
+}

@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CFO Dashboard</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap">
+</head>
+<body>
+
+<!-- ── Toolbar ──────────────────────────────────────────────────────── -->
+<div class="toolbar">
+  <div class="toolbar-left">
+    <span class="toolbar-brand">CFO Dashboard</span>
+    <span class="toolbar-co" id="toolbarCoName">Meridian Supply Co.</span>
+  </div>
+  <div class="toolbar-right">
+    <span class="toolbar-period" id="toolbarPeriod">April 2026</span>
+    <button class="btn btn-sm" style="color:#f5f1e8;border-color:rgba(245,241,232,0.25)" onclick="exportData()">Export JSON</button>
+    <button class="btn btn-sm" style="color:#f5f1e8;border-color:rgba(245,241,232,0.25)" onclick="window.print()">Print PDF</button>
+    <button class="btn btn-sm btn-primary" onclick="showTab('inputs')">Enter Data</button>
+  </div>
+</div>
+
+<!-- ── Tab bar ──────────────────────────────────────────────────────── -->
+<div class="tab-bar">
+  <div class="tab active" onclick="showTab('overview')">Overview</div>
+  <div class="tab" onclick="showTab('divisions')">Divisions</div>
+  <div class="tab" onclick="showTab('expenses')">Expenses</div>
+  <div class="tab" onclick="showTab('inventory')">Inventory</div>
+  <div class="tab" onclick="showTab('cashflow')">Cash & AR</div>
+  <div class="tab" onclick="showTab('inputs')">Data Inputs</div>
+  <div class="tab" onclick="showTab('settings')">Settings</div>
+</div>
+
+<!-- ── App body ─────────────────────────────────────────────────────── -->
+<div class="app-body">
+
+  <!-- Main content -->
+  <div class="main-content" id="mainContent">
+
+    <!-- ════════════════════════════════════════════════════════
+         TAB: OVERVIEW
+    ═════════════════════════════════════════════════════════ -->
+    <div class="tab-panel active" id="tab-overview">
+
+      <div class="metric-grid" id="overviewMetrics"></div>
+
+      <div class="chart-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Revenue vs. Expenses</span>
+            <div class="legend">
+              <span class="legend-item"><span class="legend-swatch" style="background:#1a5c2e"></span>Revenue</span>
+              <span class="legend-item"><span class="legend-swatch" style="background:#74130c"></span>Expenses</span>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap" style="height:200px"><canvas id="overviewRevExp" role="img" aria-label="Revenue vs expenses bar chart">Monthly revenue and expense comparison.</canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Gross & Net Margin</span>
+            <div class="legend">
+              <span class="legend-item"><span class="legend-swatch" style="background:#1a5c2e"></span>Gross</span>
+              <span class="legend-item"><span class="legend-swatch" style="background:#74130c;border-top:2px dashed #74130c;background:transparent"></span>Net</span>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap" style="height:200px"><canvas id="overviewMargin" role="img" aria-label="Gross and net margin trend">Margin trend over time.</canvas></div>
+        </div>
+      </div>
+
+      <div class="panel" id="overviewActions">
+        <div class="panel-header">
+          <span class="panel-title">Action Items</span>
+          <span class="panel-meta">Current period</span>
+        </div>
+        <div id="actionItemsList"></div>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         TAB: DIVISIONS
+    ═════════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-divisions">
+
+      <div class="panel" style="margin-bottom:18px">
+        <div class="panel-header">
+          <span class="panel-title">Division P&L — Current Period</span>
+          <span class="panel-meta" id="divPeriodLabel"></span>
+        </div>
+        <table class="div-table" id="divTable">
+          <thead>
+            <tr>
+              <th>Division</th>
+              <th>Revenue</th>
+              <th>COGS</th>
+              <th>Gross Profit</th>
+              <th>Margin</th>
+              <th>Recurring %</th>
+            </tr>
+          </thead>
+          <tbody id="divTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="chart-grid">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Revenue by Division — Trailing 6 mo.</span></div>
+          <div id="divLegend" class="legend" style="margin-bottom:10px"></div>
+          <div class="chart-canvas-wrap" style="height:220px"><canvas id="divRevChart" role="img" aria-label="Stacked revenue by division">Division revenue breakdown.</canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Gross Margin by Division</span></div>
+          <div class="chart-canvas-wrap" style="height:220px"><canvas id="divMarginChart" role="img" aria-label="Division gross margins">Gross margin comparison across divisions.</canvas></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         TAB: EXPENSES
+    ═════════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-expenses">
+
+      <div class="chart-grid" style="margin-bottom:18px">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Expense Mix — Current Period</span></div>
+          <div class="chart-canvas-wrap" style="height:220px"><canvas id="expDonut" role="img" aria-label="Expense category donut chart">Expense breakdown by category.</canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Expense Breakdown</span></div>
+          <div id="expBreakdownList" style="padding-top:4px"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Expense Trend — Trailing 6 mo.</span>
+          <div class="legend" id="expTrendLegend"></div>
+        </div>
+        <div class="chart-canvas-wrap" style="height:200px"><canvas id="expTrendChart" role="img" aria-label="Expense trend over time">Expense trends by category.</canvas></div>
+      </div>
+
+      <div class="panel" style="margin-top:18px">
+        <div class="panel-header"><span class="panel-title">Software & Subscriptions Audit</span></div>
+        <div id="softwareAudit"></div>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         TAB: INVENTORY
+    ═════════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-inventory">
+
+      <div class="metric-grid" id="invMetrics"></div>
+
+      <div class="chart-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Days on Hand & Turnover</span>
+            <div class="legend">
+              <span class="legend-item"><span class="legend-dot" style="background:#2a4a6a"></span>Days on hand</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#b07d15"></span>Turns/yr</span>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap" style="height:200px"><canvas id="invChart" role="img" aria-label="Inventory days on hand and turnover">Inventory efficiency metrics.</canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Inventory Value vs. COGS</span></div>
+          <div class="chart-canvas-wrap" style="height:200px"><canvas id="invValueChart" role="img" aria-label="Inventory value and cost of goods sold">Inventory value compared to COGS.</canvas></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:18px">
+        <div class="panel-header"><span class="panel-title">SKU Analysis</span><span class="panel-meta">Sample data — replace with your SKU feed</span></div>
+        <table class="div-table" id="skuTable">
+          <thead><tr><th>SKU / Product</th><th>Units on Hand</th><th>Cost/Unit</th><th>Value</th><th>Units Sold / Mo.</th><th>Days on Hand</th><th>Status</th></tr></thead>
+          <tbody id="skuTableBody"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         TAB: CASH & AR
+    ═════════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-cashflow">
+
+      <div class="metric-grid" id="cashMetrics"></div>
+
+      <div class="chart-grid">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Cash Position — Trailing 6 mo.</span></div>
+          <div class="chart-canvas-wrap" style="height:200px"><canvas id="cashChart" role="img" aria-label="Cash balance over time">Cash position trend.</canvas></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">AR Aging — Trailing 6 mo.</span>
+            <div class="legend">
+              <span class="legend-item"><span class="legend-dot" style="background:#1a5c2e"></span>Current</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#b07d15"></span>31–60</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#74130c"></span>61–90</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#3a0a06"></span>>90</span>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap" style="height:200px"><canvas id="arChart" role="img" aria-label="AR aging stacked bar chart">Accounts receivable aging.</canvas></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:18px">
+        <div class="panel-header"><span class="panel-title">Runway Scenarios</span></div>
+        <div id="runwayScenarios" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-top:4px"></div>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         TAB: DATA INPUTS
+    ═════════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-inputs">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+
+        <div>
+          <!-- Revenue -->
+          <div class="panel input-section" style="margin-bottom:18px">
+            <div class="input-section-title">Revenue by Division</div>
+            <div id="revenueInputs"></div>
+          </div>
+
+          <!-- COGS -->
+          <div class="panel input-section" style="margin-bottom:18px">
+            <div class="input-section-title">Cost of Goods Sold by Division</div>
+            <div id="cogsInputs"></div>
+          </div>
+
+          <!-- Cash -->
+          <div class="panel input-section">
+            <div class="input-section-title">Cash & Receivables</div>
+            <div class="field-grid">
+              <div class="field"><label class="field-label">Opening Balance</label><input type="number" id="inp_cash_opening" placeholder="0"><span class="field-hint">Bank balance on 1st of month</span></div>
+              <div class="field"><label class="field-label">AR Current (0–30)</label><input type="number" id="inp_ar_current" placeholder="0"></div>
+              <div class="field"><label class="field-label">AR 31–60 days</label><input type="number" id="inp_ar_3160" placeholder="0"></div>
+              <div class="field"><label class="field-label">AR 61–90 days</label><input type="number" id="inp_ar_6190" placeholder="0"></div>
+              <div class="field"><label class="field-label">AR Over 90 days</label><input type="number" id="inp_ar_over90" placeholder="0"><span class="field-hint">Flag for collection review</span></div>
+              <div class="field"><label class="field-label">AP Current</label><input type="number" id="inp_ap_current" placeholder="0"></div>
+              <div class="field"><label class="field-label">Credit Line Available</label><input type="number" id="inp_credit_avail" placeholder="0"></div>
+              <div class="field"><label class="field-label">Credit Line Drawn</label><input type="number" id="inp_credit_drawn" placeholder="0"></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <!-- Expenses -->
+          <div class="panel input-section" style="margin-bottom:18px">
+            <div class="input-section-title">Operating Expenses</div>
+            <div class="field-grid">
+              <div class="field"><label class="field-label">Salaries & Wages</label><input type="number" id="inp_salary" placeholder="0"></div>
+              <div class="field"><label class="field-label">Payroll Taxes & Benefits</label><input type="number" id="inp_benefits" placeholder="0"></div>
+              <div class="field"><label class="field-label">FTE Headcount</label><input type="number" id="inp_fte" placeholder="0" step="0.5"><span class="field-hint">Include part-time as 0.5</span></div>
+              <div class="field"><label class="field-label">Contractor Spend</label><input type="number" id="inp_contractors" placeholder="0"><span class="field-hint">Flags hire threshold at $12K+/mo</span></div>
+              <div class="field"><label class="field-label">Rent</label><input type="number" id="inp_rent" placeholder="0"></div>
+              <div class="field"><label class="field-label">Utilities</label><input type="number" id="inp_utilities" placeholder="0"></div>
+              <div class="field"><label class="field-label">Maintenance</label><input type="number" id="inp_maintenance" placeholder="0"></div>
+              <div class="field"><label class="field-label">Software & Subscriptions</label><input type="number" id="inp_software" placeholder="0"><span class="field-hint">Audited if >$3,500/mo</span></div>
+              <div class="field"><label class="field-label">Paid Advertising</label><input type="number" id="inp_paid_ads" placeholder="0"></div>
+              <div class="field"><label class="field-label">Content & Creative</label><input type="number" id="inp_content" placeholder="0"></div>
+              <div class="field"><label class="field-label">Accounting</label><input type="number" id="inp_accounting" placeholder="0"></div>
+              <div class="field"><label class="field-label">Legal</label><input type="number" id="inp_legal" placeholder="0"></div>
+              <div class="field"><label class="field-label">Other Opex</label><input type="number" id="inp_other_opex" placeholder="0"></div>
+            </div>
+          </div>
+
+          <!-- Inventory -->
+          <div class="panel input-section" style="margin-bottom:18px">
+            <div class="input-section-title">Inventory</div>
+            <div class="field-grid">
+              <div class="field"><label class="field-label">Units on Hand (total)</label><input type="number" id="inp_inv_units" placeholder="0"></div>
+              <div class="field"><label class="field-label">Inventory Value ($)</label><input type="number" id="inp_inv_value" placeholder="0"><span class="field-hint">At cost</span></div>
+              <div class="field"><label class="field-label">Units Sold This Month</label><input type="number" id="inp_inv_sold" placeholder="0"></div>
+              <div class="field"><label class="field-label">Shrinkage / Write-offs</label><input type="number" id="inp_inv_shrink" placeholder="0"></div>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div class="panel input-section">
+            <div class="input-section-title">CFO Notes</div>
+            <div class="field">
+              <label class="field-label">Owner Notes for This Month</label>
+              <textarea id="inp_notes" rows="4" style="background:var(--surface);border:0.5px solid var(--faint);border-radius:3px;padding:8px 10px;font-size:13px;color:var(--ink);font-family:var(--font-ui);width:100%;resize:vertical" placeholder="One-time items, unusual events, context for the CFO team…"></textarea>
+              <span class="field-hint">This populates the narrative context for your CFO package</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end">
+        <button class="btn" onclick="loadSampleData()">Load Sample Data</button>
+        <button class="btn btn-primary" onclick="saveInputs()">Save & Refresh Dashboard</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         TAB: SETTINGS
+    ═════════════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-settings">
+      <div style="max-width:600px">
+        <div class="panel" style="margin-bottom:18px">
+          <div class="input-section-title">Company Setup</div>
+          <div class="field-grid">
+            <div class="field" style="grid-column:1/-1"><label class="field-label">Company Name</label><input type="text" id="set_coname" placeholder="Your Company"></div>
+            <div class="field"><label class="field-label">Industry</label>
+              <select id="set_industry">
+                <option value="product">Product</option>
+                <option value="service">Service</option>
+                <option value="hybrid">Hybrid</option>
+                <option value="retail">Retail</option>
+                <option value="saas">SaaS</option>
+              </select>
+            </div>
+            <div class="field"><label class="field-label">Fiscal Year Start</label>
+              <select id="set_fy">
+                <option value="1">January</option><option value="4">April</option>
+                <option value="7">July</option><option value="10">October</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top:16px">
+            <div class="input-section-title" style="margin-bottom:10px">Divisions (up to 8)</div>
+            <div id="divisionEditor"></div>
+            <button class="btn btn-sm" style="margin-top:10px" onclick="addDivision()">+ Add Division</button>
+          </div>
+          <div style="margin-top:16px">
+            <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="input-section-title">Import / Export</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div>
+              <label class="field-label" style="display:block;margin-bottom:6px">Import JSON</label>
+              <textarea id="importJson" rows="5" style="background:var(--surface);border:0.5px solid var(--faint);border-radius:3px;padding:8px;font-size:11px;font-family:var(--font-mono);color:var(--ink);width:100%;resize:vertical" placeholder="Paste exported JSON here…"></textarea>
+              <button class="btn btn-sm" style="margin-top:8px" onclick="importData()">Import</button>
+            </div>
+            <div>
+              <button class="btn" onclick="exportData()">Export current data as JSON</button>
+              <button class="btn" style="margin-left:8px;color:var(--neg)" onclick="clearData()">Clear all data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+
+  <!-- ── Sidebar ──────────────────────────────────────────────────── -->
+  <div class="sidebar">
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Period</div>
+      <div class="month-select" id="monthChips"></div>
+    </div>
+
+    <div class="sidebar-section" id="sidebarKPIs"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Inputs Required</div>
+      <div id="inputStatus" style="font-size:11px;line-height:1.7;color:var(--hair)"></div>
+    </div>
+
+  </div>
+
+</div><!-- /app-body -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── Inline state (no module bundler needed) ───────────────────────────────
+const STORAGE_KEY = 'cfo_data';
+const PALETTE = ['#74130c','#1a5c2e','#2a4a6a','#b07d15','#1a5c52','#6b3a7d','#4a4a4a','#7a3a10'];
+let state = null;
+let activeMonth = null;
+const charts = {};
+
+// ── Utility ───────────────────────────────────────────────────────────────
+const fmt$ = v => '$' + (Math.abs(v) >= 1000000 ? (v/1000000).toFixed(1)+'M' : Math.abs(v) >= 1000 ? Math.round(Math.abs(v)/1000)+'K' : Math.round(v));
+const fmtPct = v => Math.round(v*100) + '%';
+const fmtFull = v => '$' + Math.round(v).toLocaleString();
+const sign = v => v >= 0 ? '+' : '';
+const isDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+const gridCol = () => isDark() ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
+const tickCol = () => isDark() ? 'rgba(255,255,255,0.4)' : '#9a9a9a';
+const baseScales = () => ({
+  x: { grid:{color:gridCol()}, ticks:{color:tickCol(),font:{size:11}}, border:{color:'transparent'} },
+  y: { grid:{color:gridCol()}, ticks:{color:tickCol(),font:{size:11}}, border:{color:'transparent'} }
+});
+
+function mkChart(id, cfg) {
+  if (charts[id]) charts[id].destroy();
+  const el = document.getElementById(id);
+  if (!el) return;
+  charts[id] = new Chart(el, cfg);
+}
+
+function periodLabel(period) {
+  const [y,m] = period.split('-');
+  return new Date(+y, +m-1, 1).toLocaleString('default',{month:'short',year:'numeric'});
+}
+
+// ── Computed metrics ──────────────────────────────────────────────────────
+function divRev(mo) {
+  const out={};
+  (mo.revenue?.by_division||[]).forEach(d=>{ out[d.division_id]=d.total||0; });
+  return out;
+}
+function divCOGS(mo) {
+  const out={};
+  (mo.cogs?.by_division||[]).forEach(d=>{ out[d.division_id]=(d.materials||0)+(d.direct_labor||0)+(d.shipping||0)+(d.other_direct||0); });
+  return out;
+}
+function totalRev(mo)  { return (mo.revenue?.by_division||[]).reduce((s,d)=>s+(d.total||0),0); }
+function totalCogs(mo) { return (mo.cogs?.by_division||[]).reduce((s,d)=>s+(d.materials||0)+(d.direct_labor||0)+(d.shipping||0)+(d.other_direct||0),0); }
+function grossProfit(mo){ return totalRev(mo)-totalCogs(mo); }
+function grossMargin(mo){ const r=totalRev(mo); return r?grossProfit(mo)/r:0; }
+function totalOpex(mo) {
+  const e=mo.expenses||{};
+  return (e.payroll?.salary_and_wages||0)+(e.payroll?.payroll_taxes_benefits||0)+(e.contractors?.total||0)
+        +(e.facilities?.rent||0)+(e.facilities?.utilities||0)+(e.facilities?.maintenance||0)
+        +(e.software_and_tools?.total||0)+(e.marketing?.paid_ads||0)+(e.marketing?.content_and_creative||0)
+        +(e.marketing?.events_and_sponsorships||0)+(e.professional_services?.accounting||0)
+        +(e.professional_services?.legal||0)+(e.professional_services?.consulting||0)+(e.other_opex?.total||0);
+}
+function netIncome(mo) { return grossProfit(mo)-totalOpex(mo); }
+function netMargin(mo) { const r=totalRev(mo); return r?netIncome(mo)/r:0; }
+function totalExp(mo)  { return totalCogs(mo)+totalOpex(mo); }
+function expBreak(mo) {
+  const e=mo.expenses||{};
+  return {
+    'Payroll':      (e.payroll?.salary_and_wages||0)+(e.payroll?.payroll_taxes_benefits||0),
+    'Contractors':   e.contractors?.total||0,
+    'Facilities':   (e.facilities?.rent||0)+(e.facilities?.utilities||0)+(e.facilities?.maintenance||0),
+    'Software':      e.software_and_tools?.total||0,
+    'Marketing':    (e.marketing?.paid_ads||0)+(e.marketing?.content_and_creative||0)+(e.marketing?.events_and_sponsorships||0),
+    'Professional': (e.professional_services?.accounting||0)+(e.professional_services?.legal||0)+(e.professional_services?.consulting||0),
+    'Other':         e.other_opex?.total||0,
+  };
+}
+function cashRunway(mo) {
+  const bal=mo.cash?.opening_balance||0;
+  const burn=totalOpex(mo)+totalCogs(mo)-totalRev(mo);
+  return burn>0 ? bal/burn : 99;
+}
+function invTurnover(mo) {
+  const c=totalCogs(mo), v=mo.inventory?.totals?.total_inventory_value||0;
+  return v?(c*12)/v:0;
+}
+function daysOnHand(mo) { const t=invTurnover(mo); return t?Math.round(365/t):0; }
+
+// ── State management ──────────────────────────────────────────────────────
+function loadState() {
+  try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e){}
+  if (!state || !state.months?.length) loadSampleData(false);
+}
+function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+function loadSampleData(refresh=true) {
+  fetch('data/sample.json').then(r=>r.json()).then(d=>{ state=d; saveState(); if(refresh)init(); });
+}
+
+function importData() {
+  try {
+    state = JSON.parse(document.getElementById('importJson').value);
+    saveState(); init();
+  } catch(e) { alert('Invalid JSON. Please check the format.'); }
+}
+function exportData() {
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download = (state.company?.name||'cfo')+'-data.json'; a.click();
+}
+function clearData() {
+  if (confirm('Clear all data? This cannot be undone.')) { localStorage.removeItem(STORAGE_KEY); init(); }
+}
+
+// ── Tab navigation ────────────────────────────────────────────────────────
+function showTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name)?.classList.add('active');
+  const idx = ['overview','divisions','expenses','inventory','cashflow','inputs','settings'].indexOf(name);
+  document.querySelectorAll('.tab')[idx]?.classList.add('active');
+  renderTab(name);
+}
+
+function renderTab(name) {
+  if (!state?.months?.length) return;
+  switch(name) {
+    case 'overview':  renderOverview();  break;
+    case 'divisions': renderDivisions(); break;
+    case 'expenses':  renderExpenses();  break;
+    case 'inventory': renderInventory(); break;
+    case 'cashflow':  renderCashflow();  break;
+    case 'inputs':    renderInputs();    break;
+    case 'settings':  renderSettings();  break;
+  }
+}
+
+// ── Active month helpers ──────────────────────────────────────────────────
+function getActiveMo() {
+  return state.months.find(m=>m.period===activeMonth) || state.months[state.months.length-1];
+}
+function getPriorMo() {
+  const idx = state.months.findIndex(m=>m.period===activeMonth);
+  return idx>0 ? state.months[idx-1] : null;
+}
+function getTrailing(n=6) {
+  const all=state.months;
+  const endIdx=state.months.findIndex(m=>m.period===activeMonth);
+  const end=endIdx>=0?endIdx:all.length-1;
+  return all.slice(Math.max(0,end-n+1),end+1);
+}
+
+// ── Render sidebar ────────────────────────────────────────────────────────
+function renderSidebar() {
+  document.getElementById('toolbarCoName').textContent = state.company?.name||'—';
+  const mo = getActiveMo();
+  document.getElementById('toolbarPeriod').textContent = periodLabel(mo.period);
+
+  // month chips
+  const chips = document.getElementById('monthChips');
+  chips.innerHTML = state.months.slice(-12).map(m=>
+    `<button class="month-chip ${m.period===activeMonth?'active':''}" onclick="setMonth('${m.period}')">${periodLabel(m.period).split(' ')[0]+" '"+m.period.slice(2,4)}</button>`
+  ).join('');
+
+  // KPIs
+  const prior=getPriorMo();
+  const kpis=[
+    ['Revenue',   fmt$(totalRev(mo)),   prior?sign(totalRev(mo)-totalRev(prior))+fmtPct((totalRev(mo)-totalRev(prior))/(totalRev(prior)||1)):'—'],
+    ['Gross Margin', fmtPct(grossMargin(mo)), prior?sign(grossMargin(mo)-grossMargin(prior))+(Math.round((grossMargin(mo)-grossMargin(prior))*1000)/10)+'pp':'—'],
+    ['Net Income', fmt$(netIncome(mo)),  prior?sign(netIncome(mo)-netIncome(prior))+fmtPct((netIncome(mo)-netIncome(prior))/(Math.abs(netIncome(prior))||1)):'—'],
+    ['Cash',       fmt$(mo.cash?.opening_balance||0), ''],
+    ['Runway',     (cashRunway(mo)>50?'Healthy':cashRunway(mo).toFixed(1)+' mo'), ''],
+    ['Headcount',  (mo.expenses?.payroll?.headcount_fte||0)+' FTE', ''],
+  ];
+  document.getElementById('sidebarKPIs').innerHTML =
+    `<div class="sidebar-section-title">Key Metrics — ${periodLabel(mo.period)}</div>`+
+    kpis.map(([n,v,d])=>`<div class="kpi-row"><span class="kpi-name">${n}</span><span class="kpi-val">${v}${d?` <small style="color:var(--hair)">${d}</small>`:''}</span></div>`).join('');
+
+  // input status
+  const fields=[
+    ['Revenue entered', (mo.revenue?.by_division?.length||0)>0],
+    ['COGS entered',    (mo.cogs?.by_division?.length||0)>0],
+    ['Expenses entered',(mo.expenses?.payroll?.salary_and_wages||0)>0],
+    ['Cash balance',    (mo.cash?.opening_balance||0)>0],
+    ['Inventory data',  (mo.inventory?.totals?.total_inventory_value||0)>0],
+  ];
+  document.getElementById('inputStatus').innerHTML = fields.map(([n,ok])=>
+    `<div style="display:flex;align-items:center;gap:6px;padding:3px 0">
+      <span style="color:${ok?'var(--pos)':'var(--neg)'};font-size:12px">${ok?'✓':'○'}</span>
+      <span style="color:${ok?'var(--ink)':'var(--hair)'}">${n}</span>
+    </div>`
+  ).join('');
+}
+
+function setMonth(period) {
+  activeMonth=period;
+  renderSidebar();
+  const activeTab=document.querySelector('.tab.active');
+  const tabs=['overview','divisions','expenses','inventory','cashflow','inputs','settings'];
+  const idx=[...document.querySelectorAll('.tab')].indexOf(activeTab);
+  if(idx>=0) renderTab(tabs[idx]);
+}
+
+// ── Overview tab ──────────────────────────────────────────────────────────
+function renderOverview() {
+  const mo=getActiveMo(), prior=getPriorMo(), tr=getTrailing(6);
+  const labels=tr.map(m=>periodLabel(m.period).split(' ')[0]);
+
+  // metrics
+  const metrics=[
+    {label:'Revenue',  val:fmt$(totalRev(mo)), delta:prior?sign(totalRev(mo)-totalRev(prior))+fmtPct((totalRev(mo)-totalRev(prior))/(totalRev(prior)||1)):null, cls:totalRev(mo)>=(prior?totalRev(prior):0)?'t-pos':'t-neg'},
+    {label:'Total Expenses', val:fmt$(totalExp(mo)), delta:prior?sign(totalExp(mo)-totalExp(prior))+fmtPct((totalExp(mo)-totalExp(prior))/(totalExp(prior)||1)):null, cls:totalExp(mo)<=(prior?totalExp(prior):0)?'t-pos':'t-neg'},
+    {label:'Net Income', val:fmt$(netIncome(mo)), delta:fmtPct(netMargin(mo))+' margin', cls:netIncome(mo)>0?'t-pos':'t-neg'},
+    {label:'Gross Margin', val:fmtPct(grossMargin(mo)), delta:prior?sign(grossMargin(mo)-grossMargin(prior))+(Math.round((grossMargin(mo)-grossMargin(prior))*1000)/10)+'pp vs prior':null, cls:'t-neutral'},
+    {label:'Cash Runway', val:cashRunway(mo)>50?'Healthy':cashRunway(mo).toFixed(1)+' mo', delta:prior&&cashRunway(mo)<cashRunway(prior)?'↓ declining':'', cls:cashRunway(mo)>6?'t-pos':cashRunway(mo)>4?'t-warn':'t-neg'},
+    {label:'Recurring Rev.', val:fmtPct((mo.revenue?.by_division||[]).reduce((s,d)=>s+(d.recurring||0),0)/(totalRev(mo)||1)), delta:'of total revenue', cls:'t-neutral'},
+  ];
+  document.getElementById('overviewMetrics').innerHTML = metrics.map(m=>
+    `<div class="metric-card ${m.cls}"><div class="metric-label">${m.label}</div><div class="metric-value">${m.val}</div>${m.delta?`<div class="metric-delta">${m.delta}</div>`:''}</div>`
+  ).join('');
+
+  mkChart('overviewRevExp',{type:'bar',data:{labels,datasets:[
+    {label:'Revenue',data:tr.map(totalRev),backgroundColor:'#1a5c2e',borderRadius:2,borderSkipped:false},
+    {label:'Expenses',data:tr.map(totalExp),backgroundColor:'#74130c',borderRadius:2,borderSkipped:false},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt$(ctx.parsed.y)}}},scales:{...baseScales(),y:{...baseScales().y,ticks:{...baseScales().y.ticks,callback:fmt$}}}}});
+
+  mkChart('overviewMargin',{type:'line',data:{labels,datasets:[
+    {label:'Gross',data:tr.map(grossMargin),borderColor:'#1a5c2e',borderWidth:2,pointRadius:3,pointBackgroundColor:'#1a5c2e',tension:0.3,fill:false},
+    {label:'Net',  data:tr.map(netMargin), borderColor:'#74130c',borderWidth:2,pointRadius:3,pointBackgroundColor:'#74130c',tension:0.3,fill:false,borderDash:[4,3]},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmtPct(ctx.parsed.y)}}},scales:{...baseScales(),y:{...baseScales().y,min:0,max:1,ticks:{...baseScales().y.ticks,callback:fmtPct}}}}});
+
+  // action items
+  const actions=[];
+  if((mo.expenses?.contractors?.total||0)>12000) actions.push({type:'urgent',text:'<strong>Contractor spend above hire threshold</strong> ('+fmt$(mo.expenses.contractors.total)+'/mo). Model a full-time hire.'});
+  if((mo.expenses?.software_and_tools?.total||0)>3500) actions.push({type:'warn',text:'<strong>Software subscriptions elevated</strong> at '+fmt$(mo.expenses.software_and_tools.total)+'/mo. Audit recommended.'});
+  if(cashRunway(mo)<6&&cashRunway(mo)<50) actions.push({type:'warn',text:'<strong>Cash runway at '+cashRunway(mo).toFixed(1)+' months</strong>. Monitor monthly.'});
+  if((mo.cash?.ar_over_90||0)>5000) actions.push({type:'urgent',text:'<strong>'+fmt$(mo.cash.ar_over_90)+' in AR over 90 days</strong>. Escalate for collection.'});
+  if(netMargin(mo)>0.30) actions.push({type:'good',text:'<strong>Net margin at '+fmtPct(netMargin(mo))+'</strong> — above 30% target. Strong month.'});
+  if(!actions.length) actions.push({type:'good',text:'No flags this period. All metrics within normal range.'});
+
+  const pillCls={urgent:'pill-urgent',warn:'pill-watch',good:'pill-good'};
+  const pillLabel={urgent:'Urgent',warn:'Watch',good:'Good'};
+  document.getElementById('actionItemsList').innerHTML = actions.map(a=>
+    `<div class="action-item"><span class="action-pill ${pillCls[a.type]}">${pillLabel[a.type]}</span><div class="action-text">${a.text}</div></div>`
+  ).join('');
+
+  if(mo.notes) {
+    document.getElementById('actionItemsList').insertAdjacentHTML('beforebegin',`<div class="notes-box">"${mo.notes}"</div>`);
+  }
+}
+
+// ── Divisions tab ─────────────────────────────────────────────────────────
+function renderDivisions() {
+  const mo=getActiveMo(), tr=getTrailing(6), divs=state.company.divisions||[];
+  document.getElementById('divPeriodLabel').textContent=periodLabel(mo.period);
+
+  const rev=divRev(mo), cogs=divCOGS(mo);
+  let totalR=0,totalC=0,totalG=0;
+  const rows=divs.map((d,i)=>{
+    const r=rev[d.id]||0, c=cogs[d.id]||0, gp=r-c, gm=r?gp/r:0;
+    const recPct=(mo.revenue?.by_division?.find(x=>x.division_id===d.id)?.recurring||0)/( r||1);
+    totalR+=r; totalC+=c; totalG+=gp;
+    const barW=Math.round(gm*80);
+    return `<tr>
+      <td><span class="div-color" style="background:${PALETTE[i%PALETTE.length]}"></span>${d.name}</td>
+      <td>${fmtFull(r)}</td><td>${fmtFull(c)}</td><td>${fmtFull(gp)}</td>
+      <td><div class="margin-bar-wrap"><div class="exp-bar-track"><div class="exp-bar-fill" style="width:${barW}px;background:${gm>0.4?'#1a5c2e':gm>0.25?'#b07d15':'#74130c'}"></div></div><span class="margin-val">${fmtPct(gm)}</span></div></td>
+      <td>${fmtPct(recPct)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('divTableBody').innerHTML = rows +
+    `<tr class="total-row"><td>Total</td><td>${fmtFull(totalR)}</td><td>${fmtFull(totalC)}</td><td>${fmtFull(totalG)}</td><td><span class="margin-val">${fmtPct(totalR?totalG/totalR:0)}</span></td><td>—</td></tr>`;
+
+  // stacked revenue chart
+  const labels=tr.map(m=>periodLabel(m.period).split(' ')[0]);
+  const datasets=divs.map((d,i)=>({
+    label:d.name, data:tr.map(m=>divRev(m)[d.id]||0),
+    backgroundColor:PALETTE[i%PALETTE.length], borderRadius:i===divs.length-1?2:0, borderSkipped:false, stack:'r'
+  }));
+  mkChart('divRevChart',{type:'bar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt$(ctx.parsed.y)}}},scales:{...baseScales(),x:{...baseScales().x,stacked:true},y:{...baseScales().y,stacked:true,ticks:{...baseScales().y.ticks,callback:fmt$}}}}});
+
+  // division legend
+  document.getElementById('divLegend').innerHTML=divs.map((d,i)=>`<span class="legend-item"><span class="legend-dot" style="background:${PALETTE[i%PALETTE.length]}"></span>${d.name}</span>`).join('');
+
+  // margin by division bar
+  const margins=divs.map(d=>{ const r=rev[d.id]||0,c=cogs[d.id]||0; return r?(r-c)/r:0; });
+  mkChart('divMarginChart',{type:'bar',data:{labels:divs.map(d=>d.name),datasets:[{label:'Gross Margin',data:margins,backgroundColor:divs.map((_,i)=>PALETTE[i%PALETTE.length]),borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmtPct(ctx.parsed.x)}}},scales:{...baseScales(),x:{...baseScales().x,min:0,max:1,ticks:{...baseScales().x.ticks,callback:fmtPct}},y:{...baseScales().y}}}});
+}
+
+// ── Expenses tab ──────────────────────────────────────────────────────────
+function renderExpenses() {
+  const mo=getActiveMo(), tr=getTrailing(6);
+  const brk=expBreak(mo);
+  const total=Object.values(brk).reduce((s,v)=>s+v,0)||1;
+  const cats=Object.keys(brk);
+  const expColors=['#4a4a4a','#74130c','#2a4a6a','#1a5c52','#b07d15','#1a5c2e','#9a9a9a'];
+
+  mkChart('expDonut',{type:'doughnut',data:{labels:cats,datasets:[{data:Object.values(brk),backgroundColor:expColors,borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.label+': '+fmt$(ctx.parsed)}}}}});
+
+  document.getElementById('expBreakdownList').innerHTML = cats.map((cat,i)=>
+    `<div class="exp-row">
+      <div class="exp-name"><span class="div-color" style="background:${expColors[i]}"></span>${cat}</div>
+      <div class="exp-bar-track"><div class="exp-bar-fill" style="width:${Math.round(brk[cat]/total*100)}px;background:${expColors[i]}"></div></div>
+      <div class="exp-amount">${fmt$(brk[cat])}</div>
+      <div class="exp-pct">${fmtPct(brk[cat]/total)}</div>
+    </div>`
+  ).join('');
+
+  // trend
+  const labels=tr.map(m=>periodLabel(m.period).split(' ')[0]);
+  const trendDatasets=cats.map((cat,i)=>({label:cat,data:tr.map(m=>expBreak(m)[cat]||0),borderColor:expColors[i],borderWidth:1.5,pointRadius:2,tension:0.3,fill:false}));
+  mkChart('expTrendChart',{type:'line',data:{labels,datasets:trendDatasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt$(ctx.parsed.y)}}},scales:{...baseScales(),y:{...baseScales().y,ticks:{...baseScales().y.ticks,callback:fmt$}}}}});
+  document.getElementById('expTrendLegend').innerHTML=cats.map((c,i)=>`<span class="legend-item"><span class="legend-swatch" style="background:${expColors[i]}"></span>${c}</span>`).join('');
+
+  // software audit
+  const sw=mo.expenses?.software_and_tools;
+  const total_sw=sw?.total||0;
+  const items=sw?.line_items||[];
+  let html='';
+  if(items.length){
+    html=`<table class="div-table"><thead><tr><th>Tool</th><th>Monthly Cost</th><th>Status</th></tr></thead><tbody>`;
+    html+=items.map(it=>`<tr><td>${it.name}</td><td>${fmt$(it.monthly_cost)}</td><td><span class="inv-badge ${it.active?'badge-ok':'badge-dead'}">${it.active?'Active':'Inactive'}</span></td></tr>`).join('');
+    html+=`<tr class="total-row"><td>Total</td><td>${fmt$(total_sw)}</td><td>${total_sw>3500?'<span class="inv-badge badge-low">Audit recommended</span>':''}</td></tr></tbody></table>`;
+  } else {
+    html=`<div style="color:var(--hair);font-size:12px;font-style:italic;padding:8px 0">Add individual subscription line items in Settings → Data Inputs to enable the subscription audit. Current total: <strong>${fmt$(total_sw)}/mo</strong>.</div>`;
+  }
+  document.getElementById('softwareAudit').innerHTML=html;
+}
+
+// ── Inventory tab ─────────────────────────────────────────────────────────
+function renderInventory() {
+  const mo=getActiveMo(), tr=getTrailing(6);
+  const inv=mo.inventory?.totals||{};
+  const doh=daysOnHand(mo), turn=invTurnover(mo);
+
+  const mets=[
+    {label:'Inventory Value', val:fmt$(inv.total_inventory_value||0), cls:'t-neutral'},
+    {label:'Units on Hand',   val:(inv.total_units_on_hand||0).toLocaleString(), cls:'t-neutral'},
+    {label:'Days on Hand',    val:doh+' days', cls:doh<30?'t-pos':doh<60?'t-warn':'t-neg'},
+    {label:'Annual Turns',    val:(Math.round(turn*10)/10)+'×', cls:turn>6?'t-pos':turn>4?'t-warn':'t-neg'},
+    {label:'Shrinkage',       val:fmt$(inv.shrinkage||0), cls:(inv.shrinkage||0)>2000?'t-warn':'t-neutral'},
+    {label:'Carrying Cost/Mo',val:fmt$((inv.total_inventory_value||0)*0.025), cls:'t-neutral'},
+  ];
+  document.getElementById('invMetrics').innerHTML=mets.map(m=>
+    `<div class="metric-card ${m.cls}"><div class="metric-label">${m.label}</div><div class="metric-value">${m.val}</div></div>`
+  ).join('');
+
+  const labels=tr.map(m=>periodLabel(m.period).split(' ')[0]);
+  mkChart('invChart',{type:'bar',data:{labels,datasets:[
+    {label:'Days on Hand',data:tr.map(daysOnHand),backgroundColor:'#2a4a6a',borderRadius:2,yAxisID:'y'},
+    {label:'Turns/yr',data:tr.map(invTurnover).map(v=>Math.round(v*10)/10),backgroundColor:'#b07d15',borderRadius:2,yAxisID:'y2'},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{...baseScales(),y:{...baseScales().y,position:'left'},y2:{...baseScales().y,position:'right',grid:{display:false}}}}});
+
+  mkChart('invValueChart',{type:'line',data:{labels,datasets:[
+    {label:'Inventory Value',data:tr.map(m=>m.inventory?.totals?.total_inventory_value||0),borderColor:'#2a4a6a',borderWidth:2,pointRadius:3,pointBackgroundColor:'#2a4a6a',tension:0.3,fill:true,backgroundColor:'rgba(42,74,106,0.07)'},
+    {label:'COGS',data:tr.map(totalCogs),borderColor:'#74130c',borderWidth:1.5,pointRadius:2,pointBackgroundColor:'#74130c',tension:0.3,fill:false,borderDash:[4,3]},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt$(ctx.parsed.y)}}},scales:{...baseScales(),y:{...baseScales().y,ticks:{...baseScales().y.ticks,callback:fmt$}}}}});
+
+  // SKU table — sample or actuals
+  const skus=(mo.inventory?.by_sku?.length?mo.inventory.by_sku:[
+    {sku:'MSC-001',name:'Type A Unit',units_on_hand:480,cost_per_unit:120,units_sold_this_month:95,reorder_point:100},
+    {sku:'MSC-002',name:'Type B Unit',units_on_hand:210,cost_per_unit:85,units_sold_this_month:88,reorder_point:150},
+    {sku:'MSC-003',name:'Accessory Pack',units_on_hand:820,cost_per_unit:22,units_sold_this_month:310,reorder_point:200},
+    {sku:'MSC-004',name:'Premium Bundle',units_on_hand:68,cost_per_unit:340,units_sold_this_month:12,reorder_point:30},
+    {sku:'MSC-005',name:'Legacy Model',units_on_hand:145,cost_per_unit:95,units_sold_this_month:2,reorder_point:50},
+  ]);
+  document.getElementById('skuTableBody').innerHTML=skus.map(s=>{
+    const doh_s=s.units_sold_this_month>0?Math.round(s.units_on_hand/s.units_sold_this_month*30):999;
+    const status=s.units_on_hand<=s.reorder_point?'badge-low':doh_s>180?'badge-dead':'badge-ok';
+    const statusLbl=s.units_on_hand<=s.reorder_point?'Reorder':doh_s>180?'Dead stock':'OK';
+    return `<tr>
+      <td>${s.name} <span style="color:var(--hair);font-size:11px">${s.sku}</span></td>
+      <td>${s.units_on_hand.toLocaleString()}</td>
+      <td>${fmt$(s.cost_per_unit)}</td>
+      <td>${fmt$(s.units_on_hand*s.cost_per_unit)}</td>
+      <td>${s.units_sold_this_month}</td>
+      <td>${doh_s===999?'—':doh_s+' days'}</td>
+      <td><span class="inv-badge ${status}">${statusLbl}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Cash & AR tab ─────────────────────────────────────────────────────────
+function renderCashflow() {
+  const mo=getActiveMo(), tr=getTrailing(6), prior=getPriorMo();
+  const c=mo.cash||{};
+
+  const mets=[
+    {label:'Cash Balance',   val:fmt$(c.opening_balance||0), cls:'t-neutral'},
+    {label:'Total AR',       val:fmt$((c.ar_current||0)+(c.ar_31_60||0)+(c.ar_61_90||0)+(c.ar_over_90||0)), cls:'t-neutral'},
+    {label:'AR Over 90 Days',val:fmt$(c.ar_over_90||0), cls:(c.ar_over_90||0)>3000?'t-neg':'t-pos'},
+    {label:'Cash Runway',    val:cashRunway(mo)>50?'Healthy':cashRunway(mo).toFixed(1)+' mo', cls:cashRunway(mo)>6?'t-pos':cashRunway(mo)>4?'t-warn':'t-neg'},
+  ];
+  document.getElementById('cashMetrics').innerHTML=mets.map(m=>
+    `<div class="metric-card ${m.cls}"><div class="metric-label">${m.label}</div><div class="metric-value">${m.val}</div></div>`
+  ).join('');
+
+  const labels=tr.map(m=>periodLabel(m.period).split(' ')[0]);
+  mkChart('cashChart',{type:'line',data:{labels,datasets:[{label:'Cash',data:tr.map(m=>m.cash?.opening_balance||0),borderColor:'#4a4a4a',borderWidth:1.5,pointRadius:3,pointBackgroundColor:'#4a4a4a',tension:0.3,fill:true,backgroundColor:'rgba(74,74,74,0.06)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt$(ctx.parsed.y)}}},scales:{...baseScales(),y:{...baseScales().y,ticks:{...baseScales().y.ticks,callback:fmt$}}}}});
+
+  mkChart('arChart',{type:'bar',data:{labels,datasets:[
+    {label:'Current',data:tr.map(m=>m.cash?.ar_current||0),backgroundColor:'#1a5c2e',stack:'ar'},
+    {label:'31–60', data:tr.map(m=>m.cash?.ar_31_60||0), backgroundColor:'#b07d15',stack:'ar'},
+    {label:'61–90', data:tr.map(m=>m.cash?.ar_61_90||0), backgroundColor:'#74130c',stack:'ar'},
+    {label:'>90',   data:tr.map(m=>m.cash?.ar_over_90||0),backgroundColor:'#3a0a06',stack:'ar'},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt$(ctx.parsed.y)}}},scales:{...baseScales(),x:{...baseScales().x,stacked:true},y:{...baseScales().y,stacked:true,ticks:{...baseScales().y.ticks,callback:fmt$}}}}});
+
+  // runway scenarios
+  const burn=totalOpex(mo)+totalCogs(mo);
+  const scenarios=[
+    {name:'Conservative', rev_mult:0.95, exp_mult:1.05, desc:'Revenue -5%, expenses +5%'},
+    {name:'Base Case',    rev_mult:1.00, exp_mult:1.00, desc:'Current trajectory holds'},
+    {name:'Growth',       rev_mult:1.10, exp_mult:1.02, desc:'Revenue +10%, expenses flat'},
+  ];
+  document.getElementById('runwayScenarios').innerHTML=scenarios.map(s=>{
+    const adj_burn=(burn*s.exp_mult)-(totalRev(mo)*s.rev_mult);
+    const runway=adj_burn>0?((c.opening_balance||0)/adj_burn):99;
+    const runwayStr=runway>50?'Healthy':runway.toFixed(1)+' mo';
+    const cls=runway>6?'t-pos':runway>4?'t-warn':'t-neg';
+    return `<div class="metric-card ${cls}"><div class="metric-label">${s.name}</div><div class="metric-value">${runwayStr}</div><div class="metric-delta" style="color:var(--hair);font-style:italic">${s.desc}</div></div>`;
+  }).join('');
+}
+
+// ── Inputs tab ────────────────────────────────────────────────────────────
+function renderInputs() {
+  const mo=getActiveMo(), divs=state.company.divisions||[];
+
+  // Revenue inputs per division
+  document.getElementById('revenueInputs').innerHTML=divs.map(d=>{
+    const existing=mo.revenue?.by_division?.find(x=>x.division_id===d.id)||{};
+    return `<div style="margin-bottom:14px"><div style="font-size:10px;font-weight:600;letter-spacing:0.10em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">${d.name}</div>
+    <div class="field-grid">
+      <div class="field"><label class="field-label">Total Revenue</label><input type="number" id="rev_${d.id}_total" value="${existing.total||''}" placeholder="0"></div>
+      <div class="field"><label class="field-label">Recurring Portion</label><input type="number" id="rev_${d.id}_recurring" value="${existing.recurring||''}" placeholder="0"><span class="field-hint">Subscription/renewal revenue</span></div>
+      ${d.type==='product'?`<div class="field"><label class="field-label">Units Sold</label><input type="number" id="rev_${d.id}_units" value="${existing.units_sold||''}" placeholder="0"></div>`:''}
+    </div></div>`;
+  }).join('');
+
+  // COGS inputs per division
+  document.getElementById('cogsInputs').innerHTML=divs.map(d=>{
+    const existing=mo.cogs?.by_division?.find(x=>x.division_id===d.id)||{};
+    return `<div style="margin-bottom:14px"><div style="font-size:10px;font-weight:600;letter-spacing:0.10em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">${d.name}</div>
+    <div class="field-grid">
+      <div class="field"><label class="field-label">Materials</label><input type="number" id="cogs_${d.id}_materials" value="${existing.materials||''}" placeholder="0"></div>
+      <div class="field"><label class="field-label">Direct Labor</label><input type="number" id="cogs_${d.id}_direct_labor" value="${existing.direct_labor||''}" placeholder="0"></div>
+      <div class="field"><label class="field-label">Shipping / Fulfillment</label><input type="number" id="cogs_${d.id}_shipping" value="${existing.shipping||''}" placeholder="0"></div>
+    </div></div>`;
+  }).join('');
+
+  // Populate expense fields
+  const e=mo.expenses||{};
+  const fields={
+    'inp_salary':e.payroll?.salary_and_wages||'',
+    'inp_benefits':e.payroll?.payroll_taxes_benefits||'',
+    'inp_fte':e.payroll?.headcount_fte||'',
+    'inp_contractors':e.contractors?.total||'',
+    'inp_rent':e.facilities?.rent||'',
+    'inp_utilities':e.facilities?.utilities||'',
+    'inp_maintenance':e.facilities?.maintenance||'',
+    'inp_software':e.software_and_tools?.total||'',
+    'inp_paid_ads':e.marketing?.paid_ads||'',
+    'inp_content':e.marketing?.content_and_creative||'',
+    'inp_accounting':e.professional_services?.accounting||'',
+    'inp_legal':e.professional_services?.legal||'',
+    'inp_other_opex':e.other_opex?.total||'',
+  };
+  Object.entries(fields).forEach(([id,val])=>{ const el=document.getElementById(id); if(el) el.value=val; });
+
+  const ca=mo.cash||{};
+  Object.entries({'inp_cash_opening':ca.opening_balance,'inp_ar_current':ca.ar_current,'inp_ar_3160':ca.ar_31_60,'inp_ar_6190':ca.ar_61_90,'inp_ar_over90':ca.ar_over_90,'inp_ap_current':ca.ap_current,'inp_credit_avail':ca.credit_line_available,'inp_credit_drawn':ca.credit_line_drawn}).forEach(([id,val])=>{ const el=document.getElementById(id); if(el&&val) el.value=val; });
+
+  const inv=mo.inventory?.totals||{};
+  Object.entries({'inp_inv_units':inv.total_units_on_hand,'inp_inv_value':inv.total_inventory_value,'inp_inv_sold':inv.total_units_sold,'inp_inv_shrink':inv.shrinkage}).forEach(([id,val])=>{ const el=document.getElementById(id); if(el&&val) el.value=val; });
+
+  const notesEl=document.getElementById('inp_notes');
+  if(notesEl) notesEl.value=mo.notes||'';
+}
+
+function saveInputs() {
+  const mo=getActiveMo(), divs=state.company.divisions||[];
+  mo.revenue={by_division:divs.map(d=>({
+    division_id:d.id,
+    total:+document.getElementById('rev_'+d.id+'_total')?.value||0,
+    recurring:+document.getElementById('rev_'+d.id+'_recurring')?.value||0,
+    units_sold:+document.getElementById('rev_'+d.id+'_units')?.value||0,
+  }))};
+  mo.cogs={by_division:divs.map(d=>({
+    division_id:d.id,
+    materials:+document.getElementById('cogs_'+d.id+'_materials')?.value||0,
+    direct_labor:+document.getElementById('cogs_'+d.id+'_direct_labor')?.value||0,
+    shipping:+document.getElementById('cogs_'+d.id+'_shipping')?.value||0,
+  }))};
+  const g=id=>+document.getElementById(id)?.value||0;
+  mo.expenses={
+    payroll:{salary_and_wages:g('inp_salary'),payroll_taxes_benefits:g('inp_benefits'),headcount_fte:g('inp_fte')},
+    contractors:{total:g('inp_contractors')},
+    facilities:{rent:g('inp_rent'),utilities:g('inp_utilities'),maintenance:g('inp_maintenance')},
+    software_and_tools:{total:g('inp_software')},
+    marketing:{paid_ads:g('inp_paid_ads'),content_and_creative:g('inp_content')},
+    professional_services:{accounting:g('inp_accounting'),legal:g('inp_legal')},
+    other_opex:{total:g('inp_other_opex')},
+  };
+  mo.cash={opening_balance:g('inp_cash_opening'),ar_current:g('inp_ar_current'),ar_31_60:g('inp_ar_3160'),ar_61_90:g('inp_ar_6190'),ar_over_90:g('inp_ar_over90'),ap_current:g('inp_ap_current'),credit_line_available:g('inp_credit_avail'),credit_line_drawn:g('inp_credit_drawn')};
+  mo.inventory={totals:{total_units_on_hand:g('inp_inv_units'),total_inventory_value:g('inp_inv_value'),total_units_sold:g('inp_inv_sold'),shrinkage:g('inp_inv_shrink')}};
+  mo.notes=document.getElementById('inp_notes')?.value||'';
+  saveState(); renderSidebar(); showTab('overview');
+}
+
+// ── Settings tab ──────────────────────────────────────────────────────────
+function renderSettings() {
+  const co=state.company||{};
+  document.getElementById('set_coname').value=co.name||'';
+  document.getElementById('set_industry').value=co.industry||'product';
+  document.getElementById('set_fy').value=co.fiscal_year_start_month||1;
+  renderDivisionEditor();
+}
+
+function renderDivisionEditor() {
+  const divs=state.company.divisions||[];
+  document.getElementById('divisionEditor').innerHTML=divs.map((d,i)=>
+    `<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+      <input type="text" value="${d.name}" id="div_name_${i}" style="flex:1;padding:7px;background:var(--surface);border:0.5px solid var(--faint);border-radius:3px;font-size:13px;color:var(--ink)">
+      <select id="div_type_${i}" style="padding:7px;background:var(--surface);border:0.5px solid var(--faint);border-radius:3px;font-size:12px;color:var(--ink)">
+        <option value="product" ${d.type==='product'?'selected':''}>Product</option>
+        <option value="service" ${d.type==='service'?'selected':''}>Service</option>
+        <option value="subscription" ${d.type==='subscription'?'selected':''}>Subscription</option>
+      </select>
+      <button class="btn btn-sm" style="color:var(--neg)" onclick="removeDivision(${i})">✕</button>
+    </div>`
+  ).join('');
+}
+
+function addDivision() {
+  if(state.company.divisions.length>=8) return;
+  state.company.divisions.push({id:'div'+Date.now(),name:'New Division',type:'product'});
+  renderDivisionEditor();
+}
+function removeDivision(i) {
+  state.company.divisions.splice(i,1);
+  renderDivisionEditor();
+}
+function saveSettings() {
+  state.company.name=document.getElementById('set_coname').value;
+  state.company.industry=document.getElementById('set_industry').value;
+  state.company.fiscal_year_start_month=+document.getElementById('set_fy').value;
+  state.company.divisions.forEach((d,i)=>{
+    d.name=document.getElementById('div_name_'+i)?.value||d.name;
+    d.type=document.getElementById('div_type_'+i)?.value||d.type;
+  });
+  saveState(); init();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+function init() {
+  loadState();
+  if(!state.months?.length){ showTab('inputs'); return; }
+  activeMonth=state.months[state.months.length-1].period;
+  renderSidebar();
+  showTab('overview');
+}
+
+init();
+</script>
+</body>
+</html>

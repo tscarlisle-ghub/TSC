@@ -1,0 +1,147 @@
+{
+  "_comment": "CFO Dashboard — Input Schema. All monetary values in whole dollars. Dates ISO 8601.",
+
+  "company": {
+    "name": { "type": "string", "required": true, "example": "Meridian Supply Co." },
+    "fiscal_year_start_month": { "type": "integer", "min": 1, "max": 12, "default": 1 },
+    "industry": { "type": "string", "options": ["product", "service", "hybrid", "retail", "saas"], "required": true },
+    "divisions": {
+      "type": "array",
+      "max_items": 8,
+      "required": true,
+      "item": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "example": "Wholesale" },
+        "type": { "type": "string", "options": ["product", "service", "subscription"] }
+      }
+    }
+  },
+
+  "monthly_entry": {
+    "_comment": "One record per month. period = YYYY-MM.",
+    "period": { "type": "string", "format": "YYYY-MM", "required": true },
+
+    "revenue": {
+      "_comment": "Revenue per division. Division IDs must match company.divisions.",
+      "by_division": {
+        "type": "array",
+        "item": {
+          "division_id": { "type": "string" },
+          "total": { "type": "integer", "required": true },
+          "new_customers": { "type": "integer" },
+          "recurring": { "type": "integer", "_comment": "Portion of total that is renewal/subscription" },
+          "units_sold": { "type": "integer", "_comment": "For product divisions" },
+          "avg_selling_price": { "type": "number" }
+        }
+      }
+    },
+
+    "cogs": {
+      "by_division": {
+        "type": "array",
+        "item": {
+          "division_id": { "type": "string" },
+          "materials": { "type": "integer" },
+          "direct_labor": { "type": "integer" },
+          "shipping": { "type": "integer" },
+          "other_direct": { "type": "integer" }
+        }
+      }
+    },
+
+    "expenses": {
+      "_comment": "Operating expenses below gross profit line.",
+      "payroll": {
+        "salary_and_wages": { "type": "integer", "required": true },
+        "payroll_taxes_benefits": { "type": "integer" },
+        "headcount_fte": { "type": "number" },
+        "headcount_parttime": { "type": "number" }
+      },
+      "contractors": {
+        "total": { "type": "integer", "required": true },
+        "fte_equivalent": { "type": "number", "_comment": "Helps flag when hire threshold is approaching" }
+      },
+      "facilities": {
+        "rent": { "type": "integer" },
+        "utilities": { "type": "integer" },
+        "maintenance": { "type": "integer" }
+      },
+      "software_and_tools": {
+        "total": { "type": "integer", "required": true },
+        "line_items": {
+          "type": "array",
+          "_comment": "Optional but enables subscription audit",
+          "item": {
+            "name": { "type": "string" },
+            "monthly_cost": { "type": "integer" },
+            "active": { "type": "boolean" }
+          }
+        }
+      },
+      "marketing": {
+        "paid_ads": { "type": "integer" },
+        "content_and_creative": { "type": "integer" },
+        "events_and_sponsorships": { "type": "integer" },
+        "other": { "type": "integer" }
+      },
+      "professional_services": {
+        "accounting": { "type": "integer" },
+        "legal": { "type": "integer" },
+        "consulting": { "type": "integer" }
+      },
+      "other_opex": {
+        "total": { "type": "integer" },
+        "notes": { "type": "string" }
+      }
+    },
+
+    "cash": {
+      "opening_balance": { "type": "integer", "required": true },
+      "ar_current": { "type": "integer", "_comment": "Receivables 0-30 days" },
+      "ar_31_60": { "type": "integer" },
+      "ar_61_90": { "type": "integer" },
+      "ar_over_90": { "type": "integer" },
+      "ap_current": { "type": "integer", "_comment": "Payables 0-30 days" },
+      "ap_over_30": { "type": "integer" },
+      "credit_line_available": { "type": "integer" },
+      "credit_line_drawn": { "type": "integer" }
+    },
+
+    "inventory": {
+      "by_sku": {
+        "type": "array",
+        "_comment": "Optional. Enables item-level analysis. Alternatively supply totals below.",
+        "item": {
+          "sku": { "type": "string" },
+          "name": { "type": "string" },
+          "division_id": { "type": "string" },
+          "units_on_hand": { "type": "integer", "required": true },
+          "cost_per_unit": { "type": "number", "required": true },
+          "units_sold_this_month": { "type": "integer", "required": true },
+          "reorder_point": { "type": "integer" },
+          "lead_time_days": { "type": "integer" }
+        }
+      },
+      "totals": {
+        "_comment": "Use if SKU-level data is not available.",
+        "total_units_on_hand": { "type": "integer" },
+        "total_inventory_value": { "type": "integer" },
+        "total_units_sold": { "type": "integer" },
+        "shrinkage": { "type": "integer" }
+      }
+    },
+
+    "budget": {
+      "_comment": "Optional. Enables variance analysis against plan.",
+      "revenue_target": { "type": "integer" },
+      "gross_profit_target": { "type": "integer" },
+      "opex_budget": { "type": "integer" },
+      "net_income_target": { "type": "integer" }
+    },
+
+    "notes": {
+      "type": "string",
+      "_comment": "Free text. Anything the owner wants the CFO to know about this month: one-time items, unusual events, context."
+    }
+  }
+}
