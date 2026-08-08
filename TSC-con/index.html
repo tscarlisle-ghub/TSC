@@ -1,0 +1,433 @@
+<!-- BUILD 2026-05-04 · TSC-CONT · Carlisle Moore Architects -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TSC-CONT · Supplementary Conditions Builder</title>
+<link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
+<link rel="stylesheet" href="styles.css?v=20260504">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-row">
+    <div class="masthead-name-block">
+      <h1>T. Scott Carlisle</h1>
+      <span class="masthead-sub">Supplementary Conditions Builder</span>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="builder">Builder</button>
+      <button class="tab" data-tab="history">History</button>
+      <button class="tab" data-tab="settings">Settings</button>
+    </nav>
+  </div>
+  <div class="status-row">
+    <span id="syncStatus" class="sync-status">offline</span>
+    <span class="sep">·</span>
+    <span class="version-cluster">
+      <span class="last-saved">v1.0</span>
+      <span class="build-stamp">build 2026-05-04</span>
+    </span>
+    <span class="sep">·</span>
+    <span id="dataSourceLabel" class="muted">no data source configured</span>
+    <span class="spacer"></span>
+    <div class="save-cluster">
+      <button id="reloadDataBtn" class="action ghost">Refresh data</button>
+      <span id="lastSyncCaption" class="last-saved-caption">—</span>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ BUILDER TAB ============ -->
+<section id="tab-builder" class="tab-pane active">
+
+  <div class="builder-grid">
+
+    <!-- LEFT: Inputs -->
+    <div class="builder-edit">
+
+      <!-- ===== CLIENT ===== -->
+      <div class="block">
+        <div class="section-header" style="margin:0 0 0.6rem;">
+          <h3>Client</h3>
+          <span class="hint">type to search, click result, or "+ Add new"</span>
+        </div>
+        <div class="client-picker">
+          <div class="client-search-wrap">
+            <input id="clientSearch" class="client-search-input" type="text" placeholder="Search clients by name…" autocomplete="off">
+            <div id="clientSuggestions" class="client-suggestions"></div>
+          </div>
+          <button id="addClientBtn" class="action ghost">+ Add new</button>
+        </div>
+
+        <!-- Selected client card -->
+        <div id="selectedClientCard" class="selected-client-card">
+          <div class="scc-row">
+            <div><span class="scc-label">Name</span><span id="sccName"></span></div>
+            <div><span class="scc-label">Full name</span><span id="sccFullName"></span></div>
+            <div><span class="scc-label">Client ID</span><span id="sccId" style="font-family: var(--font-mono);"></span></div>
+          </div>
+          <div class="scc-row" style="margin-top:0.3rem;">
+            <div><span class="scc-label">Address</span><span id="sccAddress" class="text-faint"></span></div>
+            <div><span class="scc-label">Phone</span><span id="sccPhone" class="text-faint"></span></div>
+            <div><span class="scc-label">Email</span><span id="sccEmail" class="text-faint"></span></div>
+          </div>
+          <div class="scc-row" style="margin-top:0.3rem;">
+            <span class="muted" id="sccFeeSummary"></span>
+            <span class="spacer"></span>
+            <button id="editClientBtn" class="action ghost small">Edit details</button>
+          </div>
+        </div>
+
+        <!-- Inline new-client form -->
+        <div id="newClientForm" class="new-client-form">
+          <div class="ncf-title" id="ncfTitle">+ Add New Client</div>
+          <div class="form-row">
+            <label class="grow">Short name<input type="text" id="ncf_name" placeholder="e.g., Davis"></label>
+            <label class="grow">Full name (for documents)<input type="text" id="ncf_full_name" placeholder="e.g., John & Mary Davis"></label>
+          </div>
+          <div class="form-row">
+            <label class="grow">Mailing address<input type="text" id="ncf_address" placeholder="Street, City, State Zip"></label>
+          </div>
+          <div class="form-row">
+            <label>Phone<input type="text" id="ncf_phone" placeholder="(205) 555-0100"></label>
+            <label class="grow">Email<input type="email" id="ncf_email" placeholder="client@example.com"></label>
+          </div>
+          <div class="ncf-actions">
+            <button id="ncf_save" class="action">Save Client</button>
+            <button id="ncf_cancel" class="action cancel">Cancel</button>
+            <span id="ncf_status" class="muted" style="margin-left:0.6rem;"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PROJECT INFO ===== -->
+      <div class="block">
+        <div class="section-header" style="margin:0 0 0.6rem;">
+          <h3>Project Information</h3>
+        </div>
+        <div class="form-row">
+          <label class="grow">Project name<input type="text" id="proj_name" placeholder="e.g., Davis Residence"></label>
+          <label>Document date<input type="date" id="proj_date"></label>
+        </div>
+        <div class="form-row">
+          <label class="grow">Project location (city, state)<input type="text" id="proj_location" placeholder="e.g., Winfield, Alabama"></label>
+        </div>
+        <div class="form-row">
+          <label class="grow">Project address (full)<input type="text" id="proj_address" placeholder="Street, City, State Zip"></label>
+          <label>Square footage<input type="text" id="proj_sf" placeholder="e.g., 4,000–5,000"></label>
+        </div>
+        <div class="form-row">
+          <label class="grow">Project description (short paragraph for the document body)
+            <textarea id="proj_description" rows="2" placeholder="The general scope of work for this contract is the design of a new residence in Winfield, Alabama."></textarea>
+          </label>
+        </div>
+      </div>
+
+      <!-- ===== GENERAL SCOPE OF WORK ===== -->
+      <div class="block">
+        <div class="section-header" style="margin:0 0 0.6rem;">
+          <h3>General Scope of Work</h3>
+          <span class="hint">project-specific bullets that appear in the document</span>
+        </div>
+        <div id="genScopeItems" class="gen-scope-items"></div>
+        <div class="scope-add-row">
+          <input type="text" id="genScopeAddInput" placeholder="Add a scope item…">
+          <button id="genScopeAddBtn" class="action ghost small">+ Add</button>
+        </div>
+      </div>
+
+      <!-- ===== FEE STRUCTURE ===== -->
+      <div class="block">
+        <div class="section-header" style="margin:0 0 0.6rem;">
+          <h3>Compensation</h3>
+          <span class="hint">auto-pulled from client; edit any cell to override</span>
+        </div>
+
+        <div class="form-row">
+          <label>Fee type
+            <select id="fee_type">
+              <option value="percentage">Percentage of construction cost</option>
+              <option value="fixed">Fixed fee</option>
+              <option value="tiered_percentage">Tiered percentage</option>
+            </select>
+          </label>
+          <label id="lbl_pct">Percentage (e.g. 10)<input type="number" id="fee_percentage" step="0.01"></label>
+          <label id="lbl_estimate">Construction estimate<input type="text" id="fee_estimate" class="currency-input"></label>
+          <label id="lbl_total">Total fee<input type="text" id="fee_total" class="currency-input"></label>
+          <label class="checkbox-label" style="align-self:center;">
+            <input type="checkbox" id="fee_total_override"> override total
+          </label>
+        </div>
+
+        <table class="fee-table" id="feeTable">
+          <thead>
+            <tr>
+              <th>Phase</th>
+              <th class="num pct-cell">% of total</th>
+              <th class="num amt-cell">Amount</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="feeTableBody"></tbody>
+          <tfoot id="feeTableFoot"></tfoot>
+        </table>
+
+        <div class="fee-summary">
+          <div class="item">
+            <span class="item-label">Sum of phase %</span>
+            <span class="item-value" id="feePctSum">0%</span>
+          </div>
+          <div class="item">
+            <span class="item-label">Sum of phase amounts</span>
+            <span class="item-value" id="feeAmtSum">$0</span>
+          </div>
+          <div class="item">
+            <span class="item-label">Total fee</span>
+            <span class="item-value" id="feeTotalDisplay">$0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SCOPE BY PHASE ===== -->
+      <div class="block">
+        <div class="section-header" style="margin:0 0 0.6rem;">
+          <h3>Scope by Phase</h3>
+          <span class="hint">check items to include; click to edit text; "+ Add" for custom items</span>
+          <span class="spacer"></span>
+          <button id="resetScopeBtn" class="action ghost small">Reset to defaults</button>
+        </div>
+        <p class="settings-desc" style="margin-top:0;">
+          Each phase has a description paragraph (which appears next to the bold phase heading in the document) and
+          a list of deliverables. Both are fully editable.
+        </p>
+        <div id="scopePhases"></div>
+      </div>
+
+      <!-- ===== COMPENSATION NARRATIVE ===== -->
+      <div class="block">
+        <div class="section-header" style="margin:0 0 0.6rem;">
+          <h3>Compensation Narrative</h3>
+          <span class="hint">paragraphs above and below the fee table; auto-filled, fully editable</span>
+        </div>
+        <h3 style="margin-top:0.4rem;">Above the fee table</h3>
+        <textarea id="compIntro" rows="6"></textarea>
+        <h3>Lead-in line above the fee table</h3>
+        <input type="text" id="compLeadIn" placeholder="For this project, based on the scope above and an initial estimated budget of (plus or minus) $3,000,000, the fee would be scheduled as follows:">
+        <h3>Below the fee table</h3>
+        <textarea id="compClosing" rows="6"></textarea>
+      </div>
+
+      <!-- ===== ACTIONS ===== -->
+      <div class="block">
+        <div class="form-row" style="margin:0;align-items:center;">
+          <button id="downloadDocxBtn" class="action">Download Word Document</button>
+          <button id="downloadAgainBtn" class="action ghost">Save to history</button>
+          <span class="spacer"></span>
+          <button id="clearFormBtn" class="action cancel">Clear form</button>
+        </div>
+      </div>
+    </div><!-- /.builder-edit -->
+
+    <!-- RIGHT: Live preview -->
+    <div class="builder-preview-wrap">
+      <div class="builder-preview-toolbar">
+        <strong style="font-family:var(--font-sans);font-size:0.84rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-faint);">Live Preview</strong>
+        <span class="hint">click any text in the preview to edit before download</span>
+        <span class="spacer"></span>
+        <button id="resyncPreviewBtn" class="action ghost small">Re-sync from form</button>
+      </div>
+
+      <div id="previewDoc" class="preview-doc">
+        <div class="preview-page">
+
+          <aside class="preview-letterhead">
+            <div class="ph-logo">
+              <span class="ph-logo-line">CARLISLE</span>
+              <span class="ph-logo-line">MOORE</span>
+              <span class="ph-logo-sub">ARCHITECTS</span>
+            </div>
+            <div class="ph-block">
+              <div class="ph-name">T SCOTT CARLISLE</div>
+              <div class="ph-phone">(205)587-4868</div>
+            </div>
+            <div class="ph-block">
+              <div class="ph-name">BILL MOORE</div>
+              <div class="ph-phone">(205)966-2554</div>
+            </div>
+            <div class="ph-block">
+              <div>2814 PETTICOAT LANE</div>
+              <div>MOUNTAIN BROOK, AL 35223</div>
+            </div>
+            <div class="ph-block">
+              <div>CARLISLEMOOREARCHITECTS.COM</div>
+            </div>
+          </aside>
+
+          <div class="preview-body" id="previewBody">
+            <h1 class="preview-title">SUPPLEMENTARY CONDITIONS</h1>
+            <h2 class="preview-project" data-bind="projectName">Davis Residence</h2>
+            <p class="preview-location" data-bind="projectLocation">Winfield, Alabama</p>
+            <p class="preview-date" data-bind="projectDate">May 9, 2025</p>
+
+            <p class="preamble">
+              The following supplements modify AIA Document <i>B105<sup>TM</sup>–2017, Standard Short
+              Form of Agreement Between Owner and Architect.</i> Where a portion of the
+              Agreement is modified or deleted by these Supplementary Conditions, the
+              unaltered portions of the Agreement shall remain in effect. In the event that there
+              is a conflict between these Supplementary Conditions and the AIA Document B105
+              referenced above, these Supplementary Conditions shall apply.
+            </p>
+
+            <h2 class="preview-h">The Owner and Architect agree the scope of work for this project is as follows:</h2>
+            <p data-bind="projectDescription">The general scope of work for this contract is the design of a new residence in Winfield, Alabama.</p>
+
+            <h2 class="preview-h">General Scope of Work</h2>
+            <ul class="gen-scope-bullets" id="prev_genScope"></ul>
+
+            <h2 class="preview-h">This work will be delivered in the following Phases:</h2>
+            <ul class="phases-list" id="prev_phases"></ul>
+
+            <h2 class="article-head">Article 6 — Payments and Compensation to the Architect</h2>
+            <p class="add-as">(add as follows)</p>
+            <h2 class="preview-h">The Architect's Compensation shall be:</h2>
+            <div data-bind="compIntro"></div>
+            <p data-bind="compLeadIn"></p>
+            <table class="preview-fee-table" id="prev_feeTable"><tbody></tbody></table>
+            <div data-bind="compClosing"></div>
+
+            <p class="preview-end">— END OF ADDITIONS —</p>
+          </div>
+
+          <div class="ph-page-num">Page 1</div>
+        </div>
+      </div>
+    </div><!-- /.builder-preview-wrap -->
+
+  </div><!-- /.builder-grid -->
+</section>
+
+<!-- ============ HISTORY TAB ============ -->
+<section id="tab-history" class="tab-pane">
+  <div class="section-header">
+    <h2>Document History</h2>
+    <span class="section-note">drafts you've saved or downloaded — stored locally in this browser</span>
+  </div>
+  <div id="historyList" class="history-list"></div>
+  <p class="muted" style="margin-top:1rem;">History is per-browser. To share with the office, use the Word document download.</p>
+</section>
+
+<!-- ============ SETTINGS TAB ============ -->
+<section id="tab-settings" class="tab-pane">
+  <div class="section-header"><h2>Settings &amp; Data Source</h2></div>
+
+  <div class="settings-block">
+    <h3>Data Source — TSC-BILLING repository</h3>
+    <p class="settings-desc">
+      Client list and fee structures are pulled from the same <code>data.json</code> used by your billing dashboard.
+      Provide a fine-scoped GitHub PAT with <em>Contents: Read and write</em> permission on the billing repo so this app
+      can both fetch the latest clients and save new ones you add here back to the same file.
+    </p>
+    <div class="form-row">
+      <label>Owner<input type="text" id="setOwner" placeholder="your-username-or-org"></label>
+      <label>Repo<input type="text" id="setRepo" placeholder="TSC-BILLING"></label>
+      <label>Branch<input type="text" id="setBranch" placeholder="main" value="main"></label>
+    </div>
+    <div class="form-row">
+      <label class="grow">Path to data file<input type="text" id="setPath" placeholder="data.json" value="data.json"></label>
+      <label class="grow">Personal Access Token<input type="password" id="setToken" placeholder="github_pat_…"></label>
+    </div>
+    <div class="form-row">
+      <button id="settingsSave" class="action">Save Settings</button>
+      <button id="testConnect" class="action ghost">Test Connection</button>
+      <button id="loadFromGh" class="action ghost">Load from GitHub now</button>
+      <button id="loadLocalBtn" class="action ghost">Load local data.json</button>
+      <input type="file" id="localDataInput" accept=".json" hidden>
+      <span id="settingsStatus" class="settings-status"></span>
+    </div>
+    <p class="settings-note muted">
+      No PAT? Use <em>Load local data.json</em> to pick a copy from your computer for testing —
+      you can save changes back to GitHub once you add a token.
+    </p>
+  </div>
+
+  <div class="settings-block">
+    <h3>Firm Information</h3>
+    <p class="settings-desc">Appears in the letterhead of every supplementary conditions document.</p>
+    <div class="form-row">
+      <label class="grow">Firm name<input type="text" id="setFirmName" value="Carlisle Moore Architects"></label>
+    </div>
+    <div class="form-row">
+      <label class="grow">Principal 1 name<input type="text" id="setPrincipal1" value="T Scott Carlisle"></label>
+      <label>Phone<input type="text" id="setPhoneScott" value="(205)587-4868"></label>
+    </div>
+    <div class="form-row">
+      <label class="grow">Principal 2 name<input type="text" id="setPrincipal2" value="Bill Moore"></label>
+      <label>Phone<input type="text" id="setPhoneBill" value="(205)966-2554"></label>
+    </div>
+    <div class="form-row">
+      <label class="grow">Mailing address (line 1)<input type="text" id="setAddr1" value="2814 Petticoat Lane"></label>
+      <label class="grow">Mailing address (line 2)<input type="text" id="setAddr2" value="Mountain Brook, AL 35223"></label>
+    </div>
+    <div class="form-row">
+      <label class="grow">Website<input type="text" id="setWebsite" value="carlislemoorearchitects.com"></label>
+    </div>
+    <button id="firmSave" class="action">Save Firm Info</button>
+  </div>
+
+  <div class="settings-block">
+    <h3>Scope Templates</h3>
+    <p class="settings-desc">
+      Edit the standard scope items that appear by default for each phase. These templates are stored
+      in this browser and applied when you start a new document.
+    </p>
+    <div class="form-row">
+      <button id="editScopeTemplatesBtn" class="action ghost">Edit scope templates…</button>
+      <button id="resetScopeTemplatesBtn" class="action ghost">Reset to factory defaults</button>
+    </div>
+  </div>
+
+  <div class="settings-block">
+    <h3>Backup &amp; Restore (this app's preferences)</h3>
+    <p class="settings-desc">
+      Local-only backup of the firm info, scope templates, history, and last-used GitHub repo settings (PAT not included).
+    </p>
+    <div class="form-row">
+      <button id="exportPrefsBtn" class="action ghost">Download backup</button>
+      <button id="importPrefsBtn" class="action ghost">Restore backup</button>
+      <input id="importPrefsFile" type="file" accept=".json" hidden>
+    </div>
+  </div>
+
+  <div class="settings-block">
+    <h3>About</h3>
+    <p class="settings-desc">
+      <strong>TSC-CONT</strong> generates AIA B105-2017 Supplementary Conditions documents, sharing client and fee
+      data with the TSC-BILLING dashboard. Designed using Edward Tufte's principles of analytical design.
+      Typeset in Warnock Pro, Interstate, DIN Condensed Variable, and FF Meta Correspondence.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<div id="toast" class="toast"></div>
+
+<!-- Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script>
+  // Fallback to unpkg if jsdelivr blocked
+  if (typeof window.docx === 'undefined') {
+    var s = document.createElement('script');
+    s.src = 'https://unpkg.com/docx@8.5.0/build/index.umd.js';
+    s.async = false;
+    document.head.appendChild(s);
+  }
+</script>
+<script src="app.js?v=20260505c"></script>
+</body>
+</html>
