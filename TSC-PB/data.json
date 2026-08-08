@@ -1,0 +1,456 @@
+{
+  "projects": [
+    {
+      "id": 2,
+      "name": "LaRussa",
+      "colorIdx": 10,
+      "archived": false,
+      "tasks": [
+        {
+          "id": 3,
+          "name": "Revise side elements",
+          "days": 1,
+          "done": false
+        },
+        {
+          "id": 4,
+          "name": "start interiors",
+          "days": 3,
+          "done": false
+        },
+        {
+          "id": 11,
+          "name": "Check with ivy for interior look book",
+          "days": 1,
+          "done": false
+        }
+      ],
+      "type": "new-construction",
+      "staff": "Kathleen"
+    },
+    {
+      "id": 5,
+      "name": "Young",
+      "colorIdx": 1,
+      "archived": false,
+      "tasks": [
+        {
+          "id": 6,
+          "name": "Interior redo",
+          "days": 7,
+          "done": false
+        },
+        {
+          "id": 7,
+          "name": "check drawings for permit issue",
+          "days": 1,
+          "done": false
+        },
+        {
+          "id": 62,
+          "name": "Finish construction drawings for permit",
+          "days": 7,
+          "done": false
+        }
+      ],
+      "type": "new-construction",
+      "staff": "Kat"
+    },
+    {
+      "id": 8,
+      "name": "Davis - Liberty Park",
+      "colorIdx": 7,
+      "archived": false,
+      "tasks": [
+        {
+          "id": 51,
+          "name": "Construction drawings",
+          "days": 49,
+          "done": false,
+          "due": "2026-06-12",
+          "createdAt": "2026-04-24T17:46:46.833Z"
+        },
+        {
+          "id": 52,
+          "name": "Check in with Landscape Architect on HOA submittal",
+          "days": 5,
+          "done": false,
+          "due": "2026-04-29",
+          "createdAt": "2026-04-24T17:46:55.638Z"
+        },
+        {
+          "id": 53,
+          "name": "Hoa submittal",
+          "days": 14,
+          "done": false,
+          "due": "2026-05-08",
+          "createdAt": "2026-04-24T17:47:06.273Z"
+        },
+        {
+          "id": 65,
+          "name": "Engineering",
+          "days": 7,
+          "done": false,
+          "createdAt": "2026-04-24T17:57:43.511Z",
+          "due": "2026-05-01"
+        }
+      ],
+      "type": "new-construction",
+      "staff": "Maddie"
+    },
+    {
+      "id": 9,
+      "name": "Clikas",
+      "colorIdx": 6,
+      "archived": false,
+      "tasks": [
+        {
+          "id": 12,
+          "name": "Draw new floor plan",
+          "days": 1,
+          "done": false
+        },
+        {
+          "id": 18,
+          "name": "get new survey",
+          "days": 1,
+          "done": false
+        },
+        {
+          "id": 19,
+          "name": "build 3d model of exterior",
+          "days": 1,
+          "done": false
+        }
+      ],
+      "type": "renovation",
+      "staff": "Kat"
+    },
+    {
+      "id": 10,
+      "name": "Davis Winfield",
+      "colorIdx": 4,
+      "archived": false,
+      "tasks": [
+        {
+          "id": 54,
+          "name": "Check in with the davis's about david brush",
+          "days": 17,
+          "done": false,
+          "due": "2026-05-12",
+          "createdAt": "2026-04-25T17:39:38.261Z"
+        },
+        {
+          "id": 55,
+          "name": "Update billing",
+          "days": 7,
+          "done": false,
+          "due": "2026-05-02",
+          "createdAt": "2026-04-25T17:16:26.176Z"
+        }
+      ],
+      "type": "new-construction",
+      "staff": "Maddie"
+    },
+    {
+      "id": 13,
+      "name": "Visintainer",
+      "colorIdx": 8,
+      "archived": false,
+      "tasks": [
+        {
+          "id": 22,
+          "name": "landscape architect",
+          "days": 1,
+          "done": false
+        },
+        {
+          "id": 23,
+          "name": "Design exterior",
+          "days": 1,
+          "done": false
+        },
+        {
+          "id": 59,
+          "name": "Check on interior designer",
+          "days": 1,
+          "done": false
+        }
+      ],
+      "type": "new-construction",
+      "staff": "Scott"
+    },
+    {
+      "id": 14,
+      "name": "Ford - Amber & Adam",
+      "colorIdx": 6,
+      "archived": false,
+      "tasks": [
+        {
+          "id": 15,
+          "name": "construction drawings",
+          "days": 14,
+          "done": false
+        },
+        {
+          "id": 16,
+          "name": "Setup zoom call",
+          "days": 1,
+          "done": true
+        },
+        {
+          "id": 17,
+          "name": "confirm contractor",
+          "days": 1,
+          "done": false
+        }
+      ],
+      "type": "renovation",
+      "staff": "Scott"
+    },
+    {
+      "id": 24,
+      "name": "Russell Lands",
+      "colorIdx": 0,
+      "archived": false,
+      "type": "new-construction",
+      "tasks": [
+        {
+          "id": 58,
+          "name": "New floor plans for various sites",
+          "days": 1,
+          "done": false
+        }
+      ],
+      "staff": "Scott"
+    },
+    {
+      "id": 25,
+      "name": "Fox",
+      "colorIdx": 2,
+      "archived": false,
+      "type": "new-construction",
+      "tasks": [],
+      "staff": "Scott"
+    },
+    {
+      "id": 26,
+      "name": "Taylor, Chris and Paget",
+      "colorIdx": 3,
+      "archived": false,
+      "type": "new-construction",
+      "tasks": [
+        {
+          "id": 64,
+          "name": "Check in with Dorksy on Pricing",
+          "days": 5,
+          "done": false
+        }
+      ],
+      "staff": "Scott"
+    },
+    {
+      "id": 28,
+      "name": "Ray, Webster & clay",
+      "colorIdx": 9,
+      "archived": false,
+      "type": "new-construction",
+      "tasks": [
+        {
+          "id": 56,
+          "name": "Start Interiors",
+          "days": 1,
+          "done": false,
+          "due": "2026-04-27",
+          "createdAt": "2026-04-26T13:58:17.355Z"
+        },
+        {
+          "id": 57,
+          "name": "Get interior designers contact info",
+          "days": 1,
+          "done": true
+        }
+      ],
+      "staff": "Kathleen"
+    },
+    {
+      "id": 30,
+      "name": "Ouellette",
+      "colorIdx": 0,
+      "archived": false,
+      "type": "renovation",
+      "tasks": [],
+      "staff": "Kat"
+    },
+    {
+      "id": 31,
+      "name": "Aultman",
+      "colorIdx": 1,
+      "archived": true,
+      "type": "renovation",
+      "tasks": [],
+      "staff": "Scott"
+    },
+    {
+      "id": 33,
+      "name": "Casadaban - Magnolia",
+      "colorIdx": 3,
+      "archived": false,
+      "type": "renovation",
+      "tasks": [
+        {
+          "id": 49,
+          "name": "revise kitchen layout",
+          "days": 1,
+          "done": false
+        },
+        {
+          "id": 50,
+          "name": "start 3D model of exterior",
+          "days": 3,
+          "done": false
+        }
+      ],
+      "staff": "Scott"
+    },
+    {
+      "id": 34,
+      "name": "Casadaban - Lot 18",
+      "colorIdx": 4,
+      "archived": false,
+      "type": "renovation",
+      "tasks": [],
+      "staff": "Scott"
+    },
+    {
+      "id": 35,
+      "name": "Callahan Barn",
+      "colorIdx": 5,
+      "archived": false,
+      "type": "renovation",
+      "tasks": [
+        {
+          "id": 63,
+          "name": "check with Callahan's on Barn",
+          "days": 1,
+          "done": false
+        }
+      ],
+      "staff": "Scott"
+    },
+    {
+      "id": 37,
+      "name": "Lepere",
+      "colorIdx": 7,
+      "archived": false,
+      "type": "in-construction",
+      "tasks": [],
+      "staff": "Scott"
+    },
+    {
+      "id": 38,
+      "name": "Atkins Residence (Tuscaloosa)",
+      "colorIdx": 8,
+      "archived": false,
+      "type": "in-construction",
+      "tasks": [
+        {
+          "id": 48,
+          "name": "Site Visit May 5th",
+          "days": 1,
+          "done": false
+        }
+      ],
+      "staff": "Scott"
+    },
+    {
+      "id": 39,
+      "name": "Sanders, Jim and Betsy",
+      "colorIdx": 9,
+      "archived": false,
+      "type": "in-construction",
+      "tasks": [
+        {
+          "id": 61,
+          "name": "review brick",
+          "days": 1,
+          "done": false
+        }
+      ],
+      "staff": "Scott"
+    },
+    {
+      "id": 40,
+      "name": "Weil Poolhouse",
+      "colorIdx": 10,
+      "archived": false,
+      "type": "in-construction",
+      "tasks": [],
+      "staff": "Scott"
+    },
+    {
+      "id": 41,
+      "name": "Casadaban - Payne Street",
+      "colorIdx": 11,
+      "archived": false,
+      "type": "in-construction",
+      "tasks": [],
+      "staff": "Scott"
+    },
+    {
+      "id": 42,
+      "name": "Callahan Residence & Poolhouse (Texas)",
+      "colorIdx": 0,
+      "archived": false,
+      "type": "in-construction",
+      "tasks": [],
+      "staff": "Scott"
+    },
+    {
+      "id": 43,
+      "name": "DCS Montevallo",
+      "colorIdx": 1,
+      "archived": false,
+      "type": "in-construction",
+      "tasks": [],
+      "staff": "Scott"
+    },
+    {
+      "id": 44,
+      "name": "Robinson, Brandon and Brandi",
+      "colorIdx": 2,
+      "archived": false,
+      "type": "in-construction",
+      "tasks": [],
+      "staff": "Maddie"
+    },
+    {
+      "id": 45,
+      "name": "Davis, Collins and Erin",
+      "colorIdx": 3,
+      "archived": false,
+      "type": "in-construction",
+      "tasks": [],
+      "staff": "Maddie"
+    },
+    {
+      "id": 46,
+      "name": "Mid Century Reno",
+      "colorIdx": 4,
+      "archived": false,
+      "type": "prospect",
+      "tasks": [],
+      "staff": "Scott"
+    },
+    {
+      "id": 47,
+      "name": "Matt Demo",
+      "colorIdx": 5,
+      "archived": false,
+      "type": "prospect",
+      "tasks": [],
+      "staff": "Scott"
+    }
+  ],
+  "nextId": 66
+}
