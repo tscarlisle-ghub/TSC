@@ -1,0 +1,5 @@
+{
+  "proposals": {},
+  "updatedAt": 0,
+  "_note": "This file is overwritten by the app via the GitHub API on every save. Each entry under 'proposals' is { id, projectName, updatedAt, versionCount }. Full proposal records live alongside this file as <id>.json."
+}

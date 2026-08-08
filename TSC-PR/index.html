@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TSC-PR — CMA Proposal Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+<script src="https://unpkg.com/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+<style>
+:root {
+  /* Tufte palette — restrained, paper-and-ink */
+  --paper:        #fffff8;
+  --paper-2:      #f7f5ec;
+  --ink:          #11110f;
+  --ink-soft:     #2c2c28;
+  --muted:        #6b6b62;
+  --faint:        #a8a89c;
+  --rule:         #d8d4c4;
+  --rule-soft:    #ece8d9;
+  --accent:       #1e3a5c;
+  --accent-2:     #14294a;
+  --keep-bg:      #fbf3d6;
+  --keep-rule:    #b8940a;
+  --warn:         #8b2c1a;
+  --ok:           #2c5a3a;
+
+  --serif:  'EB Garamond', Georgia, 'Palatino Linotype', serif;
+  --sans:   ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --mono:   ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body { display: flex; flex-direction: column; overflow: hidden; }
+
+/* ─── header ────────────────────────────────────────────────────── */
+.topbar {
+  display: flex; align-items: baseline; gap: 18px;
+  padding: 14px 24px 12px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+  flex-shrink: 0;
+}
+.brand { font-family: var(--serif); font-size: 19px; font-weight: 500; letter-spacing: 0.01em; }
+.brand .dot { color: var(--faint); margin: 0 6px; font-weight: 400; }
+.brand-sub {
+  font-family: var(--sans); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+}
+.topbar-right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 18px;
+  font-family: var(--sans); font-size: 11px; color: var(--muted);
+}
+.status-pip { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.pip-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); }
+.pip-dot.ok { background: var(--ok); }
+.pip-dot.warn { background: var(--warn); }
+.btn-link {
+  background: none; border: none;
+  font-family: var(--sans); font-size: 11px; font-weight: 500;
+  color: var(--ink-soft); cursor: pointer; letter-spacing: 0.02em;
+  padding: 4px 0; border-bottom: 1px solid transparent;
+}
+.btn-link:hover { border-bottom-color: var(--ink-soft); }
+
+/* ─── settings drawer ───────────────────────────────────────────── */
+.drawer { display: none; background: var(--paper-2); border-bottom: 1px solid var(--rule); padding: 16px 24px 18px; }
+.drawer.open { display: block; }
+.drawer-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px 28px; max-width: 1200px;
+}
+.drawer h4 {
+  font-family: var(--sans); font-size: 9.5px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--rule);
+}
+.drawer .field { margin-bottom: 8px; }
+.drawer .field:last-child { margin-bottom: 0; }
+.drawer label { display: block; font-family: var(--sans); font-size: 10.5px; color: var(--muted); margin-bottom: 2px; }
+.drawer input {
+  width: 100%; font-family: var(--mono); font-size: 12px;
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--rule); padding: 5px 8px; outline: none;
+}
+.drawer input:focus { border-color: var(--ink-soft); }
+.drawer .help { font-family: var(--sans); font-size: 10.5px; font-style: italic; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.drawer-actions { margin-top: 12px; display: flex; gap: 10px; align-items: center; }
+
+/* ─── body grid ─────────────────────────────────────────────────── */
+.body { display: grid; grid-template-columns: 320px 1fr 280px; flex: 1; min-height: 0; overflow: hidden; }
+
+/* ─── form column ───────────────────────────────────────────────── */
+.form-col { background: var(--paper-2); border-right: 1px solid var(--rule); overflow-y: auto; padding: 18px 18px 24px; }
+.form-section { padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--rule-soft); }
+.form-section:last-of-type { border-bottom: none; }
+.form-section-title {
+  font-family: var(--sans); font-size: 9.5px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+}
+.field { margin-bottom: 9px; }
+.field:last-child { margin-bottom: 0; }
+.field label {
+  display: block; font-family: var(--sans); font-size: 10.5px;
+  color: var(--muted); margin-bottom: 2px; letter-spacing: 0.01em;
+}
+.field input, .field textarea, .field select {
+  width: 100%; font-family: var(--serif); font-size: 13.5px; line-height: 1.4;
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--rule); border-radius: 0; padding: 5px 8px; outline: none;
+  transition: border-color 0.1s;
+}
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--ink-soft); }
+.field textarea { resize: vertical; min-height: 56px; font-family: var(--serif); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* tone sliders */
+.slider-wrap { margin-bottom: 14px; }
+.slider-wrap:last-child { margin-bottom: 0; }
+.slider-ends { display: flex; justify-content: space-between; font-family: var(--sans); font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+.slider-ends .ctr { color: var(--faint); font-style: italic; font-size: 9.5px; }
+input[type="range"] { width: 100%; appearance: none; -webkit-appearance: none; background: transparent; cursor: pointer; height: 18px; }
+input[type="range"]::-webkit-slider-runnable-track { height: 1px; background: var(--rule); border: none; }
+input[type="range"]::-moz-range-track { height: 1px; background: var(--rule); border: none; }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--ink); border: none; margin-top: -5px; cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb { width: 10px; height: 10px; border-radius: 50%; background: var(--ink); border: none; cursor: pointer; }
+.slider-readout { font-family: var(--sans); font-size: 9.5px; color: var(--faint); text-align: center; margin-top: 2px; letter-spacing: 0.04em; }
+.slider-readout.center { color: var(--ink-soft); font-weight: 600; }
+
+/* radio/checkbox groups */
+.opt-group { display: flex; flex-direction: column; gap: 4px; }
+.opt { display: flex; align-items: center; gap: 7px; cursor: pointer; font-family: var(--serif); font-size: 13px; }
+.opt input { accent-color: var(--ink); width: 12px; height: 12px; cursor: pointer; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip {
+  display: inline-flex; align-items: center;
+  font-family: var(--sans); font-size: 10.5px;
+  background: var(--paper); border: 1px solid var(--rule);
+  padding: 3px 9px; cursor: pointer; user-select: none;
+  letter-spacing: 0.02em; transition: all 0.1s;
+}
+.chip:hover { border-color: var(--ink-soft); }
+.chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* fee sub-form */
+.fee-sub { display: none; margin-top: 8px; padding: 9px 10px; background: var(--paper); border: 1px solid var(--rule); }
+.fee-sub.on { display: block; }
+.fee-row { display: grid; grid-template-columns: 90px 1fr; align-items: center; gap: 6px; margin-bottom: 5px; }
+.fee-row:last-child { margin-bottom: 0; }
+.fee-row label { font-family: var(--sans); font-size: 10px; color: var(--muted); }
+.fee-row input { font-family: var(--serif); font-size: 12.5px; border: 1px solid var(--rule); padding: 3px 6px; background: var(--paper-2); }
+
+/* buttons */
+.btn {
+  font-family: var(--sans); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  border: none; border-radius: 0; cursor: pointer;
+  padding: 9px 14px; transition: background 0.12s, color 0.12s;
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { background: var(--accent); color: var(--paper); width: 100%; padding: 11px; font-size: 11.5px; }
+.btn-primary:hover:not(:disabled) { background: var(--accent-2); }
+.btn-secondary { background: var(--ink); color: var(--paper); padding: 9px 16px; }
+.btn-secondary:hover:not(:disabled) { background: var(--ink-soft); }
+.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--rule); font-size: 10px; padding: 6px 11px; }
+.btn-ghost:hover:not(:disabled) { border-color: var(--ink-soft); color: var(--ink); }
+
+/* ─── output column ─────────────────────────────────────────────── */
+.output-col { background: var(--paper); overflow-y: auto; padding: 28px 0 60px; position: relative; }
+.output-shell { max-width: 720px; margin: 0 auto; padding: 0 56px; }
+.output-toolbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 56px 18px; margin: 0 auto 18px;
+  max-width: 720px; border-bottom: 1px solid var(--rule-soft);
+}
+.output-meta { font-family: var(--sans); font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.output-meta strong { font-weight: 600; color: var(--ink-soft); }
+.output-meta-right { margin-left: auto; display: flex; gap: 12px; align-items: center; }
+
+.empty-state { max-width: 540px; margin: 80px auto 0; padding: 0 32px; font-family: var(--serif); text-align: left; }
+.empty-state h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; margin-bottom: 14px; letter-spacing: -0.005em; }
+.empty-state p { font-size: 15px; color: var(--ink-soft); margin-bottom: 12px; line-height: 1.6; }
+.empty-state em { color: var(--muted); }
+.empty-state .marginnote {
+  float: right; clear: right;
+  margin-right: -180px; width: 160px;
+  font-family: var(--sans); font-size: 10.5px; font-style: normal;
+  color: var(--muted); line-height: 1.4; letter-spacing: 0.01em;
+}
+
+/* proposal rendering */
+.proposal { font-family: var(--serif); }
+.proposal-title {
+  font-family: var(--sans); font-weight: 600;
+  font-size: 22px; letter-spacing: 0.18em;
+  text-align: center; margin-bottom: 22px; color: var(--ink);
+}
+.proposal-letterhead { font-family: var(--serif); font-size: 14px; margin-bottom: 18px; color: var(--ink-soft); }
+.proposal-letterhead .ll { display: block; }
+.proposal-section-h {
+  font-family: var(--sans); font-weight: 600;
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink);
+  margin-top: 24px; margin-bottom: 12px; padding-bottom: 4px; border-bottom: 1px solid var(--rule);
+}
+.proposal p, .proposal li { margin-bottom: 12px; font-size: 15px; line-height: 1.62; color: var(--ink-soft); }
+.proposal li::marker { color: var(--faint); }
+.proposal .label-bold { font-weight: 600; color: var(--ink); }
+.proposal .label-italic { font-style: italic; }
+.proposal-signature { margin-top: 4px; font-size: 15px; }
+.proposal-signature .sig-line { display: block; }
+
+/* lockable paragraph */
+.locktarget {
+  position: relative; cursor: pointer;
+  padding: 4px 10px 4px 26px; margin-left: -10px; margin-right: -10px;
+  border-radius: 0; transition: background 0.1s;
+}
+.locktarget::before {
+  content: "○"; position: absolute; left: 6px; top: 5px;
+  font-family: var(--sans); font-size: 11px; color: var(--faint);
+  transition: color 0.1s;
+}
+.locktarget:hover { background: var(--rule-soft); }
+.locktarget:hover::before { color: var(--ink-soft); }
+.locktarget.locked {
+  background: var(--keep-bg); border-left: 2px solid var(--keep-rule);
+  margin-left: -12px; padding-left: 28px;
+}
+.locktarget.locked::before { content: "●"; color: var(--keep-rule); }
+
+/* loading */
+.gen-status {
+  text-align: center; font-family: var(--sans); font-size: 11px;
+  letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase;
+  padding: 40px 0;
+}
+.gen-status::after { content: "…"; display: inline-block; animation: dots 1.4s infinite; }
+@keyframes dots { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+/* ─── version column ────────────────────────────────────────────── */
+.version-col { background: var(--paper-2); border-left: 1px solid var(--rule); overflow-y: auto; padding: 18px; }
+.version-list { list-style: none; margin-top: 10px; }
+.version-item {
+  border-bottom: 1px solid var(--rule-soft);
+  padding: 9px 6px 10px 8px; cursor: pointer;
+  font-family: var(--serif); position: relative;
+}
+.version-item:hover { background: var(--rule-soft); }
+.version-item.active { background: var(--paper); border-left: 2px solid var(--accent); padding-left: 6px; }
+.version-item .v-time { font-family: var(--sans); font-size: 10px; color: var(--muted); letter-spacing: 0.05em; }
+.version-item .v-num { font-family: var(--sans); font-size: 9px; font-weight: 600; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; }
+.version-item .v-snippet {
+  font-size: 12.5px; color: var(--ink-soft); margin-top: 3px;
+  font-style: italic;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.v-empty { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--muted); margin-top: 14px; line-height: 1.5; }
+
+/* toast */
+.toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--ink); color: var(--paper);
+  font-family: var(--sans); font-size: 11.5px; letter-spacing: 0.04em;
+  padding: 10px 18px; border-radius: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  opacity: 0; pointer-events: none; transition: opacity 0.18s;
+  z-index: 1000; max-width: 480px; text-align: center;
+}
+.toast.show { opacity: 0.96; }
+.toast.warn { background: var(--warn); }
+.toast.ok { background: var(--ok); }
+
+/* responsive */
+@media (max-width: 1100px) {
+  .body { grid-template-columns: 280px 1fr; }
+  .body .version-col { display: none; }
+  .empty-state .marginnote { display: none; }
+}
+@media (max-width: 760px) {
+  .body { grid-template-columns: 1fr; overflow: auto; }
+  .form-col { border-right: none; border-bottom: 1px solid var(--rule); }
+  .output-shell, .output-toolbar { padding-left: 24px; padding-right: 24px; }
+}
+
+/* modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(20,20,18,0.6); display: none; align-items: center; justify-content: center; z-index: 900; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--paper); width: min(720px, 92vw); max-height: 85vh; overflow-y: auto; padding: 24px 28px; border: 1px solid var(--rule); }
+.modal h3 { font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); margin-bottom: 14px; padding-bottom: 6px; border-bottom: 1px solid var(--rule); }
+.modal .modal-actions { margin-top: 18px; display: flex; gap: 10px; justify-content: flex-end; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="brand">TSC-PR<span class="dot">·</span><span class="brand-sub">CMA Proposal Generator</span></span>
+  <div class="topbar-right">
+    <span class="status-pip" title="Anthropic API key"><span id="pip-anthropic" class="pip-dot"></span>API</span>
+    <span class="status-pip" title="GitHub persistence"><span id="pip-github" class="pip-dot"></span>GIT</span>
+    <button class="btn-link" id="open-load">open</button>
+    <button class="btn-link" id="toggle-settings">settings</button>
+    <button class="btn-link" id="new-proposal">new</button>
+  </div>
+</div>
+
+<div class="drawer" id="drawer">
+  <div class="drawer-grid">
+    <div>
+      <h4>Anthropic API</h4>
+      <div class="field"><label for="anthropic-key">API key</label><input type="password" id="anthropic-key" placeholder="sk-ant-..."></div>
+      <div class="field"><label for="anthropic-model">Model</label><input type="text" id="anthropic-model" placeholder="claude-sonnet-4-5" value="claude-sonnet-4-5"></div>
+      <div class="help">Stored in browser localStorage. Direct browser-to-Anthropic calls use the dangerous-direct-browser-access header.</div>
+    </div>
+    <div>
+      <h4>GitHub persistence</h4>
+      <div class="field"><label for="gh-pat">Fine-grained PAT (Contents: read &amp; write on the TSC-PR repo)</label><input type="password" id="gh-pat" placeholder="github_pat_..."></div>
+      <div class="field-row">
+        <div class="field"><label for="gh-owner">Owner / org</label><input type="text" id="gh-owner" placeholder="your-username"></div>
+        <div class="field"><label for="gh-repo">Repo</label><input type="text" id="gh-repo" placeholder="TSC-PR" value="TSC-PR"></div>
+      </div>
+      <div class="field"><label for="gh-branch">Branch</label><input type="text" id="gh-branch" value="main"></div>
+      <div class="help">Each proposal lives at <span style="font-family:var(--mono)">data/proposals/&lt;id&gt;.json</span> with full version history.</div>
+    </div>
+    <div>
+      <h4>Firm details (Word export)</h4>
+      <div class="field"><label for="firm-signer">Signer</label><input type="text" id="firm-signer" value="T. Scott Carlisle"></div>
+      <div class="field"><label for="firm-line">Sig line</label><input type="text" id="firm-line" value="For the Firm"></div>
+      <div class="field"><label for="firm-footer">Footer block</label><input type="text" id="firm-footer" value="T. Scott Carlisle (205) 587-4868  ·  Bill Moore (205) 966-2554  ·  130 41st Street South, Suite 102, Birmingham, AL 35222  ·  carlislemoorearchitects.com"></div>
+    </div>
+  </div>
+  <div class="drawer-actions">
+    <button class="btn btn-secondary" id="save-settings">Save settings</button>
+    <button class="btn btn-ghost" id="close-settings">close</button>
+    <span id="settings-status" style="font-family:var(--sans);font-size:11px;color:var(--muted);"></span>
+  </div>
+</div>
+
+<div class="body" id="body">
+
+  <aside class="form-col">
+
+    <div class="form-section">
+      <div class="form-section-title">Proposal type</div>
+      <div class="chip-row" id="ptype-row">
+        <span class="chip on" data-ptype="full">Full Architectural Services</span>
+        <span class="chip" data-ptype="poc">Proof of Concept</span>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">Project</div>
+      <div class="field"><label for="f-project-name">Project name</label><input type="text" id="f-project-name" placeholder="e.g. Anderson Residence"></div>
+      <div class="field"><label for="f-client-name">Client name(s)</label><input type="text" id="f-client-name" placeholder="e.g. John &amp; Sarah Anderson"></div>
+      <div class="field"><label for="f-salutation">Salutation (first names)</label><input type="text" id="f-salutation" placeholder="e.g. John &amp; Sarah"></div>
+      <div class="field"><label for="f-address-1">Address line 1</label><input type="text" id="f-address-1" placeholder="1234 Example Lane"></div>
+      <div class="field"><label for="f-address-2">City, ST  ZIP</label><input type="text" id="f-address-2" placeholder="Mountain Brook, AL 35223"></div>
+      <div class="field-row">
+        <div class="field"><label for="f-sf">House size (sf)</label><input type="text" id="f-sf" placeholder="3,500"></div>
+        <div class="field"><label for="f-budget">Budget</label><input type="text" id="f-budget" placeholder="$1,800,000"></div>
+      </div>
+      <div class="field"><label for="f-project-desc">Brief project description</label><textarea id="f-project-desc" placeholder="What's being built. e.g. New residence, two-story, screen porch, detached garage with apartment over."></textarea></div>
+    </div>
+
+    <div class="form-section" id="full-only-1">
+      <div class="form-section-title">Phases &amp; deliverables</div>
+      <div class="opt-group">
+        <label class="opt"><input type="checkbox" class="phase" value="SD" checked><span>Schematic Design</span></label>
+        <label class="opt"><input type="checkbox" class="phase" value="DD"><span>Design Development</span></label>
+        <label class="opt"><input type="checkbox" class="phase" value="CD" checked><span>Construction Drawings</span></label>
+        <label class="opt"><input type="checkbox" class="phase" value="CA"><span>Construction Administration</span></label>
+      </div>
+      <div class="field" style="margin-top:8px;"><label for="f-deliv-notes">Deliverables notes (optional)</label><textarea id="f-deliv-notes" placeholder="Anything project-specific. e.g. Coordinate with interior designer; structural engineer engaged separately."></textarea></div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">Fee structure</div>
+      <div class="opt-group" id="fee-options">
+        <label class="opt"><input type="radio" name="fee" value="lump" checked><span>Lump sum</span></label>
+        <label class="opt"><input type="radio" name="fee" value="percent"><span>% of construction</span></label>
+        <label class="opt"><input type="radio" name="fee" value="poc-fixed"><span>POC fixed fee</span></label>
+        <label class="opt"><input type="radio" name="fee" value="hourly"><span>Hourly</span></label>
+      </div>
+      <div class="fee-sub on" id="fee-lump">
+        <div class="fee-row"><label>Total</label><input type="text" id="fee-lump-total" placeholder="$50,000"></div>
+        <div class="fee-row"><label>SD share</label><input type="text" id="fee-lump-sd" placeholder="$20,000"></div>
+        <div class="fee-row"><label>CD share</label><input type="text" id="fee-lump-cd" placeholder="$25,000"></div>
+        <div class="fee-row"><label>CA share</label><input type="text" id="fee-lump-ca" placeholder="$5,000"></div>
+      </div>
+      <div class="fee-sub" id="fee-percent">
+        <div class="fee-row"><label>%</label><input type="text" id="fee-pct-rate" value="10" placeholder="10"></div>
+        <div class="fee-row"><label>Cost basis</label><input type="text" id="fee-pct-budget" placeholder="$3,000,000"></div>
+      </div>
+      <div class="fee-sub" id="fee-poc-fixed">
+        <div class="fee-row"><label>POC fee</label><input type="text" id="fee-poc-amt" placeholder="$7,500"></div>
+        <div class="fee-row"><label>Credit</label><input type="text" id="fee-poc-credit" placeholder="Yes / No"></div>
+      </div>
+      <div class="fee-sub" id="fee-hourly">
+        <div class="fee-row"><label>Partner $/hr</label><input type="text" id="fee-hr-partner" value="200"></div>
+        <div class="fee-row"><label>Associate $/hr</label><input type="text" id="fee-hr-assoc" value="150"></div>
+      </div>
+    </div>
+
+    <div class="form-section" id="full-only-2">
+      <div class="form-section-title">Timeline (optional)</div>
+      <div class="field"><label for="f-timeline-sd">Schematic Design</label><input type="text" id="f-timeline-sd" placeholder="3–4 weeks"></div>
+      <div class="field"><label for="f-timeline-cd">Construction Drawings</label><input type="text" id="f-timeline-cd" placeholder="6–8 weeks"></div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">Tone</div>
+      <div class="slider-wrap">
+        <div class="slider-ends"><span>Formal</span><span class="ctr">center = typical</span><span>Casual</span></div>
+        <input type="range" id="tone-formal" min="-3" max="3" value="0" step="1">
+        <div class="slider-readout" id="tone-formal-r">— typical —</div>
+      </div>
+      <div class="slider-wrap">
+        <div class="slider-ends"><span>Detailed</span><span class="ctr">center = typical</span><span>Concise</span></div>
+        <input type="range" id="tone-detail" min="-3" max="3" value="0" step="1">
+        <div class="slider-readout" id="tone-detail-r">— typical —</div>
+      </div>
+      <div class="slider-wrap">
+        <div class="slider-ends"><span>Technical</span><span class="ctr">center = typical</span><span>Accessible</span></div>
+        <input type="range" id="tone-tech" min="-3" max="3" value="0" step="1">
+        <div class="slider-readout" id="tone-tech-r">— typical —</div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">Free-form notes</div>
+      <div class="field"><textarea id="f-notes" placeholder="Anything else for the AI: known constraints, prior conversations, special asks." style="min-height:70px;"></textarea></div>
+    </div>
+
+    <button class="btn btn-primary" id="generate-btn">Generate proposal</button>
+  </aside>
+
+  <main class="output-col" id="output-col">
+    <div class="output-toolbar" id="output-toolbar" style="display:none;">
+      <div class="output-meta" id="output-meta-left">Version <strong id="meta-vnum">v1</strong></div>
+      <div class="output-meta-right">
+        <button class="btn btn-ghost" id="rework-btn">Regenerate · keep locked</button>
+        <button class="btn btn-ghost" id="export-btn">Word export</button>
+      </div>
+    </div>
+
+    <div class="output-shell" id="output-shell">
+      <div class="empty-state" id="empty-state">
+        <span class="marginnote">Click any paragraph after generation to <em>lock</em> it. Locked sections are preserved verbatim when you regenerate. Iterate until done.</span>
+        <h2>A workbench for CMA proposals.</h2>
+        <p>Fill in the project on the left. Set the tone. Generate. Lock the bits you like. Regenerate the rest. Save versions to GitHub. Export to Word in CMA's letterhead format when you're done.</p>
+        <p><em>Trained on ten finished CMA proposals — voice, structure, deliverables boilerplate, payment language, and the Articles 1–7 terms — plus the Ouellette format as the export reference.</em></p>
+      </div>
+    </div>
+  </main>
+
+  <aside class="version-col" id="version-col">
+    <div class="form-section-title" style="margin-bottom:0;">Version history</div>
+    <div id="version-meta" style="font-family:var(--sans);font-size:10px;color:var(--faint);letter-spacing:0.05em;margin-top:4px;"></div>
+    <ul class="version-list" id="version-list"></ul>
+    <div class="v-empty" id="v-empty">No versions yet. Generate a proposal to start the history.</div>
+  </aside>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="load-modal">
+  <div class="modal">
+    <h3>Open a saved proposal</h3>
+    <div id="load-list"></div>
+    <div class="modal-actions"><button class="btn btn-ghost" id="load-cancel">close</button></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   TSC-PR — CMA Proposal Generator
+   ============================================================ */
+
+const LS = { settings: 'tscpr.settings.v1', draft: 'tscpr.draft.v1', proposalIndex: 'tscpr.index.v1' };
+
+const TONE_LABELS = {
+  formal: ['most formal','more formal','a touch formal','typical','a touch casual','more casual','most casual'],
+  detail: ['most detailed','more detailed','a touch detailed','typical','a touch concise','more concise','most concise'],
+  tech:   ['most technical','more technical','a touch technical','typical','a touch accessible','more accessible','most accessible']
+};
+
+/* boilerplate harvested verbatim from past CMA proposals */
+const BOILERPLATE = {
+  opening: "Thank you for considering our firm. I have outlined the scope of work as I understand it and have detailed the process, deliverables, and fee structure below for your review.",
+  sd_description: "Preliminary design concepts, consisting of plans, elevation concepts, sketches, perspective drawings, and other drawings as required to make the design intent clear. Once these concepts are approved, we will prepare a Schematic Design set of drawings suitable for pricing.",
+  cd_description: "Once the final Schematic Design set is approved, we will prepare detailed drawings suitable for permitting, final pricing, and construction.",
+  cd_intro: "The Construction Drawings will consist of the following, with notes and dimensions as required:",
+  cd_drawing_list: [
+    "Floor Plans for each level, including a foundation plan.",
+    "Exterior Elevations for all sides.",
+    "Roof Plan and details.",
+    "Building Sections and Details as required to describe the design intent.",
+    "Door, Window, and Finish Schedules.",
+    "Electrical Plans locating fixtures, switches, etc.",
+    "Interior elevations and details for cabinets, trim, built-ins and other millwork as required.",
+    "Other details as required to describe the complete design.",
+    "We recommend the builder engage a structural engineer to design foundation details suitable for the soil conditions."
+  ],
+  notes_on_deliverables: [
+    "The designs will reflect the site conditions as provided by the client.",
+    "Deliverables will be in the form of PDF files.",
+    "Landscape Design, Interior Design/decoration, Mechanical Design, Geotechnical testing, and Structural design will not be provided as part of this proposal.",
+    "Written Specification will not be provided as part of this proposal."
+  ],
+  final_pricing_set: "At the end of the construction document phase, we will release a \u201CFinal Pricing Set\u201D for use by the contractor to finalize the contract pricing. The \u201CFor Construction Set\u201D will be released once the final payment is received.",
+  termination: "Should the project be terminated prior to completion of the drawings, we will prepare a final invoice reflecting the percentage of work completed at that time.",
+  closing_thanks: "Thank you again for considering our firm for this work. If this proposal is acceptable, please sign below and return via email, Docusign, or hand delivery.",
+  closing_question: "If you have any questions or would like to discuss any part of the proposal, please feel free to give either of us a call.",
+  signature: { regards: "Regards,", signer: "T. Scott Carlisle", line: "For the Firm" },
+  terms: [
+    { h: "ARTICLE 1   ARCHITECT\u2019S RESPONSIBILITIES", p: [
+      "The Architect shall provide architectural services for the Project as described in this Agreement. The Architect shall perform its services consistent with the professional skill and care ordinarily provided by architects practicing in the same or similar locality under the same or similar circumstances. The Architect shall perform its services as expeditiously as is consistent with such professional skill and care and the orderly progress of the Project.",
+      "During the Design Phase, the Architect shall review the Owner\u2019s scope of work, budget and schedule and reach an understanding with the Owner of the Project requirements.",
+      "During the Construction Phase, the Architect shall act as the Owner\u2019s representative and provide administration of the Contract between the Owner and Contractor as set forth in this Agreement."
+    ]},
+    { h: "ARTICLE 2   OWNER\u2019S RESPONSIBILITIES", p: [
+      "The Owner shall provide full information about the objectives, schedule, constraints and existing conditions of the Project, and shall establish a budget that includes reasonable contingencies and meets the Project requirements. The Owner shall furnish the services of consultants other than those designated in this Agreement, or authorize the Architect to furnish them as an Additional Service, when the Architect requests such services and demonstrates that they are reasonably required by the scope of the Project."
+    ]},
+    { h: "ARTICLE 3   USE OF DOCUMENTS", p: [
+      "Drawings, specifications and other documents prepared by the Architect are the Architect\u2019s Instruments of Service, and are for the Owner\u2019s use solely with respect to constructing the Project. The Architect shall retain all common law, statutory and other reserved rights, including the copyright."
+    ]},
+    { h: "ARTICLE 4   TERMINATION, SUSPENSION OR ABANDONMENT", p: [
+      "In the event of termination, suspension or abandonment of the Project by the Owner, the Architect shall be compensated for services performed. Either party may terminate this Agreement upon not less than seven days\u2019 written notice should the other party fail substantially to perform in accordance with its terms through no fault of the party initiating the termination."
+    ]},
+    { h: "ARTICLE 5   MISCELLANEOUS PROVISIONS", p: [
+      "This Agreement shall be governed by the law of the place where the Project is located. Terms in this Agreement shall have the same meaning as those in the edition of AIA Document A105, Standard Short Form of Agreement Between Owner and Contractor, current as of the date of this Agreement.",
+      "Nothing contained in this Agreement shall create a contractual relationship with, or a cause of action in favor of, a third party against either the Owner or Architect.",
+      "The Architect shall have no responsibility for the discovery, presence, handling, removal or disposal of, or exposure of persons to, hazardous materials in any form at the Project site."
+    ]},
+    { h: "ARTICLE 6   FEE PROVISIONS", p: [
+      "Payments are due and payable upon receipt of the Architect\u2019s monthly invoice. Amounts unpaid sixty (60) days after the invoice date shall bear interest from the date payment is due at the rate of 1.5% per month, or the maximum rate permitted by law, whichever is less.",
+      "At the request of the Owner, the Architect shall provide additional services not included in the Scope of Work as defined above for additional fees as agreed."
+    ]},
+    { h: "ARTICLE 7   DISPUTE RESOLUTION", p: [
+      "Any claim, dispute, or other matter in question arising out of or related to this Agreement shall be subject to mediation as a condition precedent to binding dispute resolution.",
+      "The mediation shall be held in Birmingham, Alabama, unless another location is mutually agreed upon. Agreements reached in mediation shall be enforceable as settlement agreements in any court having jurisdiction thereof.",
+      "Claims, disputes, or other matters in question between the parties to this Agreement arising out of or in relation to this Agreement, if not resolved by mediation, shall be decided by binding arbitration in accordance with the Construction Industry Arbitration Rules of the American Arbitration Association then in effect."
+    ]}
+  ]
+};
+
+const state = {
+  settings: {
+    anthropicKey: '', anthropicModel: 'claude-sonnet-4-5',
+    ghPat: '', ghOwner: '', ghRepo: 'TSC-PR', ghBranch: 'main',
+    firmSigner: 'T. Scott Carlisle', firmLine: 'For the Firm',
+    firmFooter: 'T. Scott Carlisle (205) 587-4868  ·  Bill Moore (205) 966-2554  ·  130 41st Street South, Suite 102, Birmingham, AL 35222  ·  carlislemoorearchitects.com'
+  },
+  proposal: null, generating: false, ghBusy: false
+};
+
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+
+function uid(prefix='p') { return prefix + '_' + Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-3); }
+function todayLong() { return new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
+function fmtTime(ts) { return new Date(ts).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); }
+function escapeHtml(s) { return (s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function toast(msg, kind='') {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + kind;
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function loadSettings() {
+  try { Object.assign(state.settings, JSON.parse(localStorage.getItem(LS.settings) || '{}')); } catch(e) {}
+  $('#anthropic-key').value  = state.settings.anthropicKey || '';
+  $('#anthropic-model').value = state.settings.anthropicModel || 'claude-sonnet-4-5';
+  $('#gh-pat').value         = state.settings.ghPat || '';
+  $('#gh-owner').value       = state.settings.ghOwner || '';
+  $('#gh-repo').value        = state.settings.ghRepo || 'TSC-PR';
+  $('#gh-branch').value      = state.settings.ghBranch || 'main';
+  $('#firm-signer').value    = state.settings.firmSigner;
+  $('#firm-line').value      = state.settings.firmLine;
+  $('#firm-footer').value    = state.settings.firmFooter;
+  refreshPips();
+}
+
+function saveSettings() {
+  state.settings.anthropicKey   = $('#anthropic-key').value.trim();
+  state.settings.anthropicModel = $('#anthropic-model').value.trim() || 'claude-sonnet-4-5';
+  state.settings.ghPat          = $('#gh-pat').value.trim();
+  state.settings.ghOwner        = $('#gh-owner').value.trim();
+  state.settings.ghRepo         = $('#gh-repo').value.trim();
+  state.settings.ghBranch       = $('#gh-branch').value.trim() || 'main';
+  state.settings.firmSigner     = $('#firm-signer').value.trim();
+  state.settings.firmLine       = $('#firm-line').value.trim();
+  state.settings.firmFooter     = $('#firm-footer').value.trim();
+  localStorage.setItem(LS.settings, JSON.stringify(state.settings));
+  refreshPips();
+  $('#settings-status').textContent = 'saved';
+  setTimeout(() => $('#settings-status').textContent = '', 1800);
+}
+
+function refreshPips() {
+  $('#pip-anthropic').classList.toggle('ok', !!state.settings.anthropicKey);
+  $('#pip-anthropic').classList.toggle('warn', !state.settings.anthropicKey);
+  const ghOk = !!(state.settings.ghPat && state.settings.ghOwner && state.settings.ghRepo);
+  $('#pip-github').classList.toggle('ok', ghOk);
+  $('#pip-github').classList.toggle('warn', !ghOk);
+}
+
+let currentPType = 'full';
+
+function readIntake() {
+  const phases = Array.from($$('.phase:checked')).map(c => c.value);
+  const fee = (document.querySelector('input[name="fee"]:checked') || {}).value || 'lump';
+  const cName = $('#f-client-name').value.trim();
+  return {
+    ptype: currentPType, date: todayLong(),
+    projectName: $('#f-project-name').value.trim(),
+    clientName: cName,
+    salutation: ($('#f-salutation').value.trim()) || cName.split(/\s+/).slice(0, 2).join(' '),
+    address1: $('#f-address-1').value.trim(),
+    address2: $('#f-address-2').value.trim(),
+    sf: $('#f-sf').value.trim(),
+    budget: $('#f-budget').value.trim(),
+    description: $('#f-project-desc').value.trim(),
+    phases, delivNotes: $('#f-deliv-notes').value.trim(), fee,
+    feeLump: { total: $('#fee-lump-total').value.trim(), sd: $('#fee-lump-sd').value.trim(), cd: $('#fee-lump-cd').value.trim(), ca: $('#fee-lump-ca').value.trim() },
+    feePct:  { rate: $('#fee-pct-rate').value.trim(), budget: $('#fee-pct-budget').value.trim() },
+    feePoc:  { amount: $('#fee-poc-amt').value.trim(), credit: $('#fee-poc-credit').value.trim() },
+    feeHourly: { partner: $('#fee-hr-partner').value.trim(), assoc: $('#fee-hr-assoc').value.trim() },
+    timelineSD: $('#f-timeline-sd').value.trim(),
+    timelineCD: $('#f-timeline-cd').value.trim(),
+    notes: $('#f-notes').value.trim()
+  };
+}
+
+function readTone() {
+  return {
+    formal: parseInt($('#tone-formal').value, 10),
+    detail: parseInt($('#tone-detail').value, 10),
+    tech:   parseInt($('#tone-tech').value, 10)
+  };
+}
+
+function setupSliders() {
+  ['formal','detail','tech'].forEach(k => {
+    const el = $(`#tone-${k}`);
+    const r = $(`#tone-${k}-r`);
+    const update = () => {
+      const v = parseInt(el.value, 10);
+      const text = TONE_LABELS[k][v + 3];
+      r.textContent = '— ' + text + ' —';
+      r.classList.toggle('center', v === 0);
+    };
+    el.addEventListener('input', update);
+    update();
+  });
+}
+
+function setupChips() {
+  $$('#ptype-row .chip').forEach(c => c.addEventListener('click', () => {
+    $$('#ptype-row .chip').forEach(x => x.classList.remove('on'));
+    c.classList.add('on');
+    currentPType = c.dataset.ptype;
+    $('#full-only-1').style.display = (currentPType === 'full') ? '' : 'none';
+    $('#full-only-2').style.display = (currentPType === 'full') ? '' : 'none';
+    if (currentPType === 'poc') {
+      document.querySelector('input[name="fee"][value="poc-fixed"]').checked = true;
+    } else {
+      document.querySelector('input[name="fee"][value="lump"]').checked = true;
+    }
+    updateFeeSubVisibility();
+  }));
+}
+
+function setupFeeRadios() {
+  $$('input[name="fee"]').forEach(r => r.addEventListener('change', updateFeeSubVisibility));
+  updateFeeSubVisibility();
+}
+function updateFeeSubVisibility() {
+  const picked = (document.querySelector('input[name="fee"]:checked') || {}).value || 'lump';
+  ['lump','percent','poc-fixed','hourly'].forEach(k => $(`#fee-${k}`).classList.toggle('on', k === picked));
+}
+
+async function callAnthropic(systemPrompt, userPrompt) {
+  const key = state.settings.anthropicKey;
+  if (!key) throw new Error('No Anthropic API key set. Open settings.');
+  const model = state.settings.anthropicModel || 'claude-sonnet-4-5';
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({ model, max_tokens: 8000, system: systemPrompt, messages: [{ role: 'user', content: userPrompt }] })
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error('Anthropic API ' + res.status + ': ' + text.slice(0, 400));
+  }
+  const data = await res.json();
+  return (data.content || []).map(c => c.text || '').join('');
+}
+
+function describeTone(t) {
+  const lines = [
+    'Formal/Casual axis: ' + TONE_LABELS.formal[t.formal+3],
+    'Detailed/Concise axis: ' + TONE_LABELS.detail[t.detail+3],
+    'Technical/Accessible axis: ' + TONE_LABELS.tech[t.tech+3]
+  ];
+  if (t.formal === 0 && t.detail === 0 && t.tech === 0) lines.push("(Center across all three — write in the firm's typical proposal voice.)");
+  return lines.join('\n');
+}
+
+function buildSystemPrompt() {
+  return `You are writing proposals in the established voice of Carlisle Moore Architects (CMA), a custom residential architecture firm in Birmingham, Alabama. Your output will be inserted into a structured Word document, so you MUST return well-formed JSON only — no commentary outside the JSON.
+
+CMA voice characteristics, derived from ten finished proposals:
+- First-person plural ("we", "our firm"), occasional "I" for the lead architect.
+- Lowercase H2 section headers ("scope of work", "deliverables", "timeline", "compensation structure", "process", "fee").
+- Salutation uses first names with a colon (e.g., "Michael & Julie:").
+- Opens with a thank-you ("Thank you for considering our firm...") — this exact opener is canonical.
+- Closes with a thank-you and an invitation to call ("...please feel free to give either of us a call.") — these are canonical.
+- Money: "$" with commas, e.g. "$50,000".
+- Phase names capitalized: Schematic Design, Construction Drawings, Construction Administration.
+- Direct, declarative, restrained. No marketing hyperbole. No exclamation points. No emojis.
+- Use boilerplate verbatim where supplied. Do NOT paraphrase boilerplate.
+
+Return JSON object with this exact shape:
+{
+  "sections": [
+    { "id": "p_xxx", "style": "title"|"letterhead-line"|"re-line"|"salutation"|"normal"|"h2"|"list"|"list-bold"|"list-italic"|"sig-line", "text": "..." },
+    ...
+  ]
+}
+
+Style rules:
+- "title" → centered titlecase header (use only for the literal word "PROPOSAL").
+- "letterhead-line" → one line of the address block (date, client name, address rows).
+- "re-line" → the "Re: ..." or "RE: ..." line.
+- "salutation" → "Firstname & Firstname:".
+- "h2" → a lowercase section heading.
+- "normal" → body paragraph.
+- "list" → bullet item.
+- "list-bold" → a bullet that should render as bold (e.g., "Schematic Design" subheading).
+- "list-italic" → a bullet that should render as italic (e.g., the SD description, payment phase amounts).
+- "sig-line" → one line of the signature block.
+
+Each id must be unique (8-char). Do NOT include the TERMS section (Articles 1–7); the app appends those verbatim. Do not invent square footage, names, or budgets — use only what is supplied.`;
+}
+
+function buildUserPrompt(intake, tone, lockedSections=[]) {
+  const lines = [];
+  lines.push('## Intake'); lines.push(JSON.stringify(intake, null, 2));
+  lines.push(''); lines.push('## Tone'); lines.push(describeTone(tone));
+  lines.push(''); lines.push('## Boilerplate to use VERBATIM where applicable');
+  lines.push('Opening (always): ' + JSON.stringify(BOILERPLATE.opening));
+  if (intake.ptype === 'full') {
+    lines.push('SD description (list-italic following list-bold "Schematic Design"): ' + JSON.stringify(BOILERPLATE.sd_description));
+    lines.push('CD description (list-italic following list-bold "Construction Drawings"): ' + JSON.stringify(BOILERPLATE.cd_description));
+    lines.push('CD intro (list-italic before drawing list): ' + JSON.stringify(BOILERPLATE.cd_intro));
+    lines.push('CD drawing list (each as list): ' + JSON.stringify(BOILERPLATE.cd_drawing_list));
+    lines.push('Notes on Deliverables (under list-bold "Notes on Deliverables", each as list): ' + JSON.stringify(BOILERPLATE.notes_on_deliverables));
+    lines.push('Final Pricing Set (in compensation, as list): ' + JSON.stringify(BOILERPLATE.final_pricing_set));
+    lines.push('Termination clause (in compensation, as list): ' + JSON.stringify(BOILERPLATE.termination));
+    lines.push('Closing thanks (normal): ' + JSON.stringify(BOILERPLATE.closing_thanks));
+  }
+  lines.push('Closing question (normal, always): ' + JSON.stringify(BOILERPLATE.closing_question));
+  lines.push('Signature (three sig-lines, in order): ' + [BOILERPLATE.signature.regards, BOILERPLATE.signature.signer, BOILERPLATE.signature.line].map(JSON.stringify).join(', '));
+  lines.push('');
+
+  lines.push('## Required structure');
+  if (intake.ptype === 'full') {
+    lines.push(`Order:
+1. title "PROPOSAL"
+2. letterhead-line: date (already provided as "${intake.date}")
+3. letterhead-line: client name
+4. letterhead-line: address line 1
+5. letterhead-line: city/state/zip
+6. re-line: "Re: Proposal for Architectural Services"
+7. salutation: e.g., "${intake.salutation || 'Firstname'}:"
+8. normal: opening (verbatim)
+9. h2: "scope of work"
+10. normal: short intro line ("The scope of work for this proposal is as follows:" or similar)
+11. list items (1–4): scope bullets describing the project
+12. h2: "deliverables"
+13. normal: "For this project we will provide Architectural Services including the following:"
+14. for each chosen phase, include the phase block (list-bold heading + list-italic description; for CD include the cd_intro then drawing list)
+15. list-bold "Notes on Deliverables" then list items (verbatim)
+16. h2: "timeline" (only if user supplied timeline values; else skip)
+17. list items for SD/CD timeline as appropriate
+18. h2: "compensation structure"
+19. normal: brief intro
+20. list items: fee block — use exact figures from intake (e.g., "Lump Sum of $X broken out into N payments", phase splits as list-italic). Always include monthly billing language.
+21. list: Final Pricing Set (verbatim)
+22. list: termination (verbatim)
+23. normal: closing thanks (verbatim)
+24. normal: closing question (verbatim)
+25. sig-line "Regards,"
+26. sig-line firm signer
+27. sig-line firm line`);
+  } else {
+    lines.push(`Order (proof of concept — simpler):
+1. title "PROPOSAL"
+2. letterhead-line: date
+3. letterhead-line: client name
+4. letterhead-line: address line 1
+5. letterhead-line: city/state/zip
+6. re-line: "RE: Proof of Concept"
+7. salutation
+8. normal: "Thank you for considering our firm for this project."
+9. normal: brief intent paragraph
+10. h2: "scope of work"
+11. normal: brief intro
+12. list items: scope bullets
+13. h2: "process"
+14. normal: 1–2 short paragraphs about the POC process
+15. h2: "fee"
+16. normal: fee statement using the exact POC fee amount and credit terms from intake
+17. normal: closing question (verbatim)
+18. sig-line "Regards,"
+19. sig-line firm signer
+20. sig-line firm line`);
+  }
+
+  if (lockedSections.length) {
+    lines.push(''); lines.push('## LOCKED sections — preserve VERBATIM, with the SAME id and text');
+    lines.push(JSON.stringify(lockedSections, null, 2));
+  }
+  lines.push(''); lines.push('Return JSON only. No markdown code fences, no commentary.');
+  return lines.join('\n');
+}
+
+function parseJSON(text) {
+  let t = text.trim();
+  if (t.startsWith('```')) t = t.replace(/^```(json)?\s*/i, '').replace(/```\s*$/, '');
+  const first = t.indexOf('{'); const last = t.lastIndexOf('}');
+  if (first > 0 && last > first) t = t.slice(first, last + 1);
+  return JSON.parse(t);
+}
+
+async function generate(initial=true) {
+  if (state.generating) return;
+  if (!state.settings.anthropicKey) {
+    toast('Set your Anthropic API key in settings first.', 'warn');
+    openDrawer(); return;
+  }
+  const intake = readIntake();
+  if (!intake.clientName || !intake.address1) {
+    toast('Client name and address are required.', 'warn'); return;
+  }
+  state.generating = true;
+  $('#generate-btn').disabled = true;
+  if ($('#rework-btn')) $('#rework-btn').disabled = true;
+  showStatus(initial ? 'Generating' : 'Reworking');
+
+  try {
+    const tone = readTone();
+    let lockedSections = [];
+    if (!initial && state.proposal) {
+      lockedSections = currentSections().filter(s => s.locked);
+    }
+    const sys = buildSystemPrompt();
+    const usr = buildUserPrompt(intake, tone, lockedSections);
+    const raw = await callAnthropic(sys, usr);
+    let parsed;
+    try { parsed = parseJSON(raw); }
+    catch(e) { throw new Error('Model returned non-JSON. First 200 chars: ' + raw.slice(0, 200)); }
+    if (!parsed.sections || !Array.isArray(parsed.sections)) throw new Error('Model output missing "sections" array.');
+
+    const lockedMap = new Map(lockedSections.map(s => [s.id, true]));
+    parsed.sections = parsed.sections.map(s => ({
+      id: s.id || uid('p'),
+      style: s.style || 'normal',
+      text: (s.text || '').trim(),
+      locked: !!lockedMap.get(s.id)
+    })).filter(s => s.text);
+
+    commitVersion(intake, tone, parsed.sections, initial);
+    renderProposal();
+    saveProposal();
+    toast(initial ? 'Proposal generated.' : 'Reworked. Locked sections preserved.', 'ok');
+  } catch (e) {
+    console.error(e);
+    toast('Generation failed: ' + e.message, 'warn');
+    renderProposal();
+  } finally {
+    state.generating = false;
+    $('#generate-btn').disabled = false;
+    if ($('#rework-btn')) $('#rework-btn').disabled = false;
+  }
+}
+
+function showStatus(msg='Working') {
+  const shell = $('#output-shell');
+  shell.innerHTML = `<div class="gen-status">${msg}</div>`;
+  if ($('#empty-state')) $('#empty-state').style.display = 'none';
+}
+
+function commitVersion(intake, tone, sections, isInitial) {
+  if (!state.proposal || isInitial) {
+    state.proposal = { id: uid('prop'), createdAt: Date.now(), updatedAt: Date.now(), intake, tone, ptype: intake.ptype, versions: [], activeVnum: 1 };
+  }
+  state.proposal.intake = intake;
+  state.proposal.tone = tone;
+  state.proposal.ptype = intake.ptype;
+  state.proposal.updatedAt = Date.now();
+  const vnum = state.proposal.versions.length + 1;
+  state.proposal.versions.push({ vnum, ts: Date.now(), intakeSnap: intake, toneSnap: tone, sections: JSON.parse(JSON.stringify(sections)) });
+  state.proposal.activeVnum = vnum;
+}
+
+function currentSections() {
+  if (!state.proposal) return [];
+  const v = state.proposal.versions.find(v => v.vnum === state.proposal.activeVnum);
+  return v ? v.sections : [];
+}
+
+function renderProposal() {
+  const shell = $('#output-shell');
+  const p = state.proposal;
+  if (!p) {
+    shell.innerHTML = `<div class="empty-state" id="empty-state">
+      <span class="marginnote">Click any paragraph after generation to <em>lock</em> it. Locked sections are preserved verbatim when you regenerate. Iterate until done.</span>
+      <h2>A workbench for CMA proposals.</h2>
+      <p>Fill in the project on the left. Set the tone. Generate. Lock the bits you like. Regenerate the rest. Save versions to GitHub. Export to Word in CMA's letterhead format when you're done.</p>
+      <p><em>Trained on ten finished CMA proposals — voice, structure, deliverables boilerplate, payment language, and the Articles 1–7 terms — plus the Ouellette format as the export reference.</em></p>
+    </div>`;
+    $('#output-toolbar').style.display = 'none';
+    renderVersionList();
+    return;
+  }
+  $('#output-toolbar').style.display = '';
+  $('#meta-vnum').textContent = 'v' + p.activeVnum;
+
+  const sections = currentSections();
+  let html = '<div class="proposal">';
+  let i = 0;
+  while (i < sections.length && sections[i].style === 'title') {
+    const s = sections[i];
+    html += `<div class="proposal-title locktarget ${s.locked?'locked':''}" data-id="${s.id}">${escapeHtml(s.text)}</div>`;
+    i++;
+  }
+  if (i < sections.length && (sections[i].style === 'letterhead-line' || sections[i].style === 're-line' || sections[i].style === 'salutation')) {
+    html += '<div class="proposal-letterhead">';
+    while (i < sections.length && (sections[i].style === 'letterhead-line' || sections[i].style === 're-line' || sections[i].style === 'salutation')) {
+      const s = sections[i];
+      html += `<span class="ll locktarget ${s.locked?'locked':''}" data-id="${s.id}">${escapeHtml(s.text)}</span>`;
+      i++;
+    }
+    html += '</div>';
+  }
+  let inList = false;
+  const closeList = () => { if (inList) { html += '</ul>'; inList = false; } };
+  while (i < sections.length) {
+    const s = sections[i];
+    const cls = s.locked ? 'locked' : '';
+    if (s.style === 'h2') {
+      closeList();
+      html += `<div class="proposal-section-h locktarget ${cls}" data-id="${s.id}">${escapeHtml(s.text)}</div>`;
+    } else if (s.style === 'normal') {
+      closeList();
+      html += `<p class="locktarget ${cls}" data-id="${s.id}">${escapeHtml(s.text)}</p>`;
+    } else if (s.style === 'list' || s.style === 'list-bold' || s.style === 'list-italic') {
+      if (!inList) { html += '<ul style="list-style:none;padding:0;margin:0 0 12px 0;">'; inList = true; }
+      const inner = s.style === 'list-bold' ? `<span class="label-bold">${escapeHtml(s.text)}</span>` :
+                    s.style === 'list-italic' ? `<span class="label-italic">${escapeHtml(s.text)}</span>` :
+                    escapeHtml(s.text);
+      html += `<li class="locktarget ${cls}" data-id="${s.id}" style="list-style-type:disc;margin-left:22px;">${inner}</li>`;
+    } else if (s.style === 'sig-line') {
+      closeList();
+      html += `<div class="proposal-signature locktarget ${cls}" data-id="${s.id}"><span class="sig-line">${escapeHtml(s.text)}</span></div>`;
+    } else {
+      closeList();
+      html += `<p class="locktarget ${cls}" data-id="${s.id}">${escapeHtml(s.text)}</p>`;
+    }
+    i++;
+  }
+  closeList();
+  html += '</div>';
+  shell.innerHTML = html;
+  shell.querySelectorAll('.locktarget').forEach(el => el.addEventListener('click', () => toggleLock(el.dataset.id)));
+  renderVersionList();
+}
+
+function toggleLock(id) {
+  const v = state.proposal.versions.find(x => x.vnum === state.proposal.activeVnum);
+  if (!v) return;
+  const s = v.sections.find(x => x.id === id);
+  if (!s) return;
+  s.locked = !s.locked;
+  renderProposal();
+  saveProposal();
+}
+
+function renderVersionList() {
+  const ul = $('#version-list');
+  const empty = $('#v-empty');
+  ul.innerHTML = '';
+  if (!state.proposal || !state.proposal.versions.length) {
+    empty.style.display = '';
+    $('#version-meta').textContent = '';
+    return;
+  }
+  empty.style.display = 'none';
+  $('#version-meta').textContent = state.proposal.intake.projectName || state.proposal.intake.clientName || '(untitled)';
+
+  state.proposal.versions.slice().reverse().forEach(v => {
+    const li = document.createElement('li');
+    li.className = 'version-item' + (v.vnum === state.proposal.activeVnum ? ' active' : '');
+    const snippet = (v.sections.find(s => s.style === 'normal' && s.text.length > 20) || v.sections[0] || {}).text || '';
+    li.innerHTML = `
+      <div class="v-num">v${v.vnum}</div>
+      <div class="v-time">${fmtTime(v.ts)}</div>
+      <div class="v-snippet">${escapeHtml(snippet.slice(0, 140))}${snippet.length>140?'…':''}</div>`;
+    li.addEventListener('click', () => {
+      state.proposal.activeVnum = v.vnum;
+      renderProposal();
+      saveProposal();
+    });
+    ul.appendChild(li);
+  });
+}
+
+/* persistence */
+function saveProposal() {
+  if (!state.proposal) return;
+  localStorage.setItem(LS.draft, JSON.stringify(state.proposal));
+  let idx = [];
+  try { idx = JSON.parse(localStorage.getItem(LS.proposalIndex) || '[]'); } catch(e) {}
+  const entry = { id: state.proposal.id, projectName: state.proposal.intake.projectName || state.proposal.intake.clientName, updatedAt: state.proposal.updatedAt, versionCount: state.proposal.versions.length };
+  const ix = idx.findIndex(x => x.id === state.proposal.id);
+  if (ix >= 0) idx[ix] = entry; else idx.push(entry);
+  localStorage.setItem(LS.proposalIndex, JSON.stringify(idx));
+  scheduleGitHubSave();
+}
+
+let _ghTimer = null;
+function scheduleGitHubSave() {
+  clearTimeout(_ghTimer);
+  _ghTimer = setTimeout(() => { pushToGitHub().catch(err => console.warn('GitHub save failed:', err)); }, 1500);
+}
+
+function ghHeaders() {
+  const s = state.settings;
+  if (!s.ghPat) throw new Error('No GitHub PAT configured');
+  return {
+    'Authorization': 'Bearer ' + s.ghPat,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+    'Content-Type': 'application/json'
+  };
+}
+
+async function ghGetFileSha(path) {
+  const s = state.settings;
+  const url = `https://api.github.com/repos/${s.ghOwner}/${s.ghRepo}/contents/${encodeURI(path)}?ref=${s.ghBranch}`;
+  const res = await fetch(url, { headers: ghHeaders() });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error('GitHub GET ' + res.status);
+  const data = await res.json();
+  return data.sha;
+}
+
+function utf8ToBase64(str) { return btoa(unescape(encodeURIComponent(str))); }
+function base64ToUtf8(b64) { return decodeURIComponent(escape(atob(b64.replace(/\n/g, '')))); }
+
+async function ghPutFile(path, contentObj, message) {
+  const s = state.settings;
+  if (!s.ghPat || !s.ghOwner || !s.ghRepo) return;
+  const url = `https://api.github.com/repos/${s.ghOwner}/${s.ghRepo}/contents/${encodeURI(path)}`;
+  const sha = await ghGetFileSha(path);
+  const contentB64 = utf8ToBase64(JSON.stringify(contentObj, null, 2));
+  const body = { message: message || ('chore: update ' + path), content: contentB64, branch: s.ghBranch };
+  if (sha) body.sha = sha;
+  const res = await fetch(url, { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+  if (!res.ok) {
+    const t = await res.text();
+    throw new Error('GitHub PUT ' + res.status + ': ' + t.slice(0, 220));
+  }
+}
+
+async function pushToGitHub() {
+  if (!state.proposal) return;
+  if (state.ghBusy) { scheduleGitHubSave(); return; }
+  if (!state.settings.ghPat || !state.settings.ghOwner) return;
+  state.ghBusy = true;
+  try {
+    const path = `data/proposals/${state.proposal.id}.json`;
+    await ghPutFile(path, state.proposal, `proposal: ${state.proposal.intake.projectName || state.proposal.intake.clientName} (v${state.proposal.activeVnum})`);
+    let idx = { proposals: {} };
+    try {
+      const r = await fetch(`https://api.github.com/repos/${state.settings.ghOwner}/${state.settings.ghRepo}/contents/data/proposals/_index.json?ref=${state.settings.ghBranch}`, { headers: ghHeaders() });
+      if (r.ok) {
+        const j = await r.json();
+        idx = JSON.parse(base64ToUtf8(j.content));
+        if (!idx.proposals) idx.proposals = {};
+      }
+    } catch(e) {}
+    idx.proposals[state.proposal.id] = {
+      projectName: state.proposal.intake.projectName || state.proposal.intake.clientName,
+      updatedAt: state.proposal.updatedAt,
+      versionCount: state.proposal.versions.length
+    };
+    idx.updatedAt = Date.now();
+    await ghPutFile('data/proposals/_index.json', idx, 'index: update proposal index');
+    toast('Saved to GitHub.', 'ok');
+  } catch (e) {
+    toast('GitHub save: ' + e.message, 'warn');
+  } finally {
+    state.ghBusy = false;
+  }
+}
+
+async function loadProposalsList() {
+  const list = $('#load-list');
+  list.innerHTML = '<div style="font-family:var(--sans);font-size:11px;color:var(--muted)">Loading…</div>';
+  $('#load-modal').classList.add('open');
+  try {
+    let proposals = {};
+    if (state.settings.ghPat && state.settings.ghOwner) {
+      try {
+        const url = `https://api.github.com/repos/${state.settings.ghOwner}/${state.settings.ghRepo}/contents/data/proposals/_index.json?ref=${state.settings.ghBranch}`;
+        const r = await fetch(url, { headers: ghHeaders() });
+        if (r.ok) {
+          const j = await r.json();
+          const decoded = JSON.parse(base64ToUtf8(j.content));
+          proposals = decoded.proposals || {};
+        }
+      } catch(e) {}
+    }
+    let localIdx = [];
+    try { localIdx = JSON.parse(localStorage.getItem(LS.proposalIndex) || '[]'); } catch(e) {}
+    localIdx.forEach(p => { if (!proposals[p.id]) proposals[p.id] = Object.assign({}, p, { localOnly: true }); });
+
+    const ids = Object.keys(proposals).sort((a,b) => (proposals[b].updatedAt||0) - (proposals[a].updatedAt||0));
+    if (!ids.length) {
+      list.innerHTML = '<div style="font-family:var(--serif);font-style:italic;color:var(--muted)">No saved proposals yet.</div>';
+      return;
+    }
+    list.innerHTML = '';
+    ids.forEach(id => {
+      const p = proposals[id];
+      const div = document.createElement('div');
+      div.style.cssText = 'padding:10px 6px;border-bottom:1px solid var(--rule-soft);cursor:pointer;font-family:var(--serif);';
+      div.innerHTML = `<strong>${escapeHtml(p.projectName||'(untitled)')}</strong>
+        <div style="font-family:var(--sans);font-size:10.5px;color:var(--muted);margin-top:2px;">
+          ${p.versionCount||'?'} version${p.versionCount===1?'':'s'} · ${p.updatedAt?fmtTime(p.updatedAt):'—'}
+          ${p.localOnly?' · <em>local only</em>':''}
+        </div>`;
+      div.addEventListener('click', () => loadProposalById(id));
+      list.appendChild(div);
+    });
+  } catch (e) {
+    list.innerHTML = '<div style="color:var(--warn)">Couldn\'t load index: ' + escapeHtml(e.message) + '</div>';
+  }
+}
+
+async function loadProposalById(id) {
+  try {
+    if (state.settings.ghPat && state.settings.ghOwner) {
+      try {
+        const url = `https://api.github.com/repos/${state.settings.ghOwner}/${state.settings.ghRepo}/contents/data/proposals/${encodeURIComponent(id)}.json?ref=${state.settings.ghBranch}`;
+        const r = await fetch(url, { headers: ghHeaders() });
+        if (r.ok) {
+          const j = await r.json();
+          state.proposal = JSON.parse(base64ToUtf8(j.content));
+          $('#load-modal').classList.remove('open');
+          intakeIntoForm(state.proposal.intake, state.proposal.tone);
+          renderProposal();
+          toast('Loaded from GitHub.', 'ok');
+          return;
+        }
+      } catch(e) {}
+    }
+    const draftRaw = localStorage.getItem(LS.draft);
+    if (draftRaw) {
+      const d = JSON.parse(draftRaw);
+      if (d.id === id) {
+        state.proposal = d;
+        $('#load-modal').classList.remove('open');
+        intakeIntoForm(state.proposal.intake, state.proposal.tone);
+        renderProposal();
+        toast('Loaded local draft.', 'ok');
+        return;
+      }
+    }
+    toast("Couldn't load proposal.", 'warn');
+  } catch(e) {
+    toast('Load failed: ' + e.message, 'warn');
+  }
+}
+
+function intakeIntoForm(intake, tone) {
+  if (!intake) return;
+  currentPType = intake.ptype || 'full';
+  $$('#ptype-row .chip').forEach(c => c.classList.toggle('on', c.dataset.ptype === currentPType));
+  $('#full-only-1').style.display = (currentPType === 'full') ? '' : 'none';
+  $('#full-only-2').style.display = (currentPType === 'full') ? '' : 'none';
+  $('#f-project-name').value = intake.projectName || '';
+  $('#f-client-name').value  = intake.clientName || '';
+  $('#f-salutation').value   = intake.salutation || '';
+  $('#f-address-1').value    = intake.address1 || '';
+  $('#f-address-2').value    = intake.address2 || '';
+  $('#f-sf').value           = intake.sf || '';
+  $('#f-budget').value       = intake.budget || '';
+  $('#f-project-desc').value = intake.description || '';
+  $('#f-deliv-notes').value  = intake.delivNotes || '';
+  $('#f-timeline-sd').value  = intake.timelineSD || '';
+  $('#f-timeline-cd').value  = intake.timelineCD || '';
+  $('#f-notes').value        = intake.notes || '';
+  $$('.phase').forEach(p => p.checked = (intake.phases || []).includes(p.value));
+  const feeRadio = document.querySelector(`input[name="fee"][value="${intake.fee||'lump'}"]`);
+  if (feeRadio) feeRadio.checked = true;
+  updateFeeSubVisibility();
+  $('#fee-lump-total').value = (intake.feeLump||{}).total || '';
+  $('#fee-lump-sd').value    = (intake.feeLump||{}).sd || '';
+  $('#fee-lump-cd').value    = (intake.feeLump||{}).cd || '';
+  $('#fee-lump-ca').value    = (intake.feeLump||{}).ca || '';
+  $('#fee-pct-rate').value   = (intake.feePct||{}).rate || '10';
+  $('#fee-pct-budget').value = (intake.feePct||{}).budget || '';
+  $('#fee-poc-amt').value    = (intake.feePoc||{}).amount || '';
+  $('#fee-poc-credit').value = (intake.feePoc||{}).credit || '';
+  $('#fee-hr-partner').value = (intake.feeHourly||{}).partner || '200';
+  $('#fee-hr-assoc').value   = (intake.feeHourly||{}).assoc || '150';
+  if (tone) {
+    $('#tone-formal').value = tone.formal || 0;
+    $('#tone-detail').value = tone.detail || 0;
+    $('#tone-tech').value   = tone.tech || 0;
+    ['formal','detail','tech'].forEach(k => $(`#tone-${k}`).dispatchEvent(new Event('input')));
+  }
+}
+
+/* Word export — docx.js (UMD) */
+async function exportWord() {
+  if (!state.proposal) return;
+  if (typeof docx === 'undefined') { toast('Word library not loaded — check connection.', 'warn'); return; }
+  const sections = currentSections();
+  const D = docx;
+  const FONT_HEAD = "TradeGothic Bold";
+  const FONT_BODY = "Surveyor Text Light";
+  const children = [];
+  function para(opts) { return new D.Paragraph(opts); }
+  function run(text, props={}) { return new D.TextRun(Object.assign({ text: text || '', font: FONT_BODY, size: 20 }, props)); }
+  function bold(text) { return run(text, { bold: true }); }
+  function italic(text) { return run(text, { italics: true }); }
+
+  for (const s of sections) {
+    if (s.style === 'title') {
+      children.push(para({
+        alignment: D.AlignmentType.CENTER, spacing: { before: 0, after: 320 },
+        children: [ new D.TextRun({ text: s.text, font: FONT_HEAD, bold: true, size: 48 }) ]
+      }));
+    }
+  }
+  let letterheadInserted = false;
+  for (const s of sections) {
+    if (s.style === 'letterhead-line' || s.style === 're-line' || s.style === 'salutation') {
+      children.push(para({ spacing: { after: 0 }, children: [ run(s.text) ] }));
+      letterheadInserted = true;
+    }
+  }
+  if (letterheadInserted) children.push(para({ spacing: { after: 200 }, children: [ run('') ] }));
+
+  for (const s of sections) {
+    if (s.style === 'title' || s.style === 'letterhead-line' || s.style === 're-line' || s.style === 'salutation') continue;
+    if (s.style === 'h2') {
+      children.push(para({
+        spacing: { before: 320, after: 120 },
+        children: [ new D.TextRun({ text: s.text, font: FONT_HEAD, bold: true, size: 22, allCaps: true }) ]
+      }));
+    } else if (s.style === 'normal') {
+      children.push(para({ spacing: { after: 160 }, children: [ run(s.text) ] }));
+    } else if (s.style === 'list') {
+      children.push(para({ bullet: { level: 0 }, spacing: { after: 60 }, children: [ run(s.text) ] }));
+    } else if (s.style === 'list-bold') {
+      children.push(para({ bullet: { level: 0 }, spacing: { before: 80, after: 60 }, children: [ bold(s.text) ] }));
+    } else if (s.style === 'list-italic') {
+      children.push(para({ bullet: { level: 0 }, spacing: { after: 60 }, children: [ italic(s.text) ] }));
+    } else if (s.style === 'sig-line') {
+      children.push(para({ spacing: { after: 0 }, children: [ run(s.text) ] }));
+    }
+  }
+
+  if (state.proposal.ptype === 'full') {
+    children.push(para({
+      pageBreakBefore: true, alignment: D.AlignmentType.CENTER, spacing: { after: 280 },
+      children: [ new D.TextRun({ text: "TERMS", font: FONT_HEAD, bold: true, size: 48 }) ]
+    }));
+    BOILERPLATE.terms.forEach(t => {
+      children.push(para({
+        spacing: { before: 240, after: 120 },
+        children: [ new D.TextRun({ text: t.h, font: FONT_HEAD, bold: true, size: 22, allCaps: true }) ]
+      }));
+      t.p.forEach(text => children.push(para({ spacing: { after: 140 }, children: [ run(text) ] })));
+    });
+    children.push(para({
+      alignment: D.AlignmentType.CENTER, spacing: { before: 240 },
+      children: [ italic('End of Terms') ]
+    }));
+  }
+
+  const footer = new D.Footer({
+    children: [ para({
+      alignment: D.AlignmentType.CENTER,
+      children: [ new D.TextRun({ text: state.settings.firmFooter, font: FONT_BODY, size: 16, color: "6b6b62" }) ]
+    }) ]
+  });
+
+  const doc = new D.Document({
+    creator: "TSC-PR",
+    title: state.proposal.intake.projectName || state.proposal.intake.clientName || "Proposal",
+    styles: { default: { document: { run: { font: FONT_BODY, size: 20 } } } },
+    sections: [{
+      properties: {
+        page: { size: { width: 12240, height: 15840 }, margin: { top: 1440, right: 1620, bottom: 1440, left: 3240 } },
+        titlePage: true
+      },
+      footers: { default: footer, first: footer },
+      children
+    }]
+  });
+
+  const blob = await D.Packer.toBlob(doc);
+  const fname = ((state.proposal.intake.projectName || state.proposal.intake.clientName || 'proposal').replace(/[^\w\-. ]/g, '_')) + '.docx';
+  if (window.saveAs) saveAs(blob, fname);
+  else {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = fname; a.click(); URL.revokeObjectURL(url);
+  }
+  toast('Word file exported.', 'ok');
+}
+
+function openDrawer() { $('#drawer').classList.add('open'); }
+function closeDrawer() { $('#drawer').classList.remove('open'); }
+
+function newProposal() {
+  if (state.proposal && !confirm('Start a new proposal? The current one is already saved.')) return;
+  state.proposal = null;
+  ['f-project-name','f-client-name','f-salutation','f-address-1','f-address-2','f-sf','f-budget','f-project-desc','f-deliv-notes','f-timeline-sd','f-timeline-cd','f-notes','fee-lump-total','fee-lump-sd','fee-lump-cd','fee-lump-ca','fee-pct-budget','fee-poc-amt','fee-poc-credit'].forEach(id => $('#'+id).value = '');
+  ['tone-formal','tone-detail','tone-tech'].forEach(id => { $('#'+id).value = 0; $('#'+id).dispatchEvent(new Event('input')); });
+  renderProposal();
+}
+
+function init() {
+  loadSettings();
+  setupSliders();
+  setupChips();
+  setupFeeRadios();
+
+  $('#toggle-settings').addEventListener('click', () => $('#drawer').classList.toggle('open'));
+  $('#close-settings').addEventListener('click', closeDrawer);
+  $('#save-settings').addEventListener('click', saveSettings);
+  $('#new-proposal').addEventListener('click', newProposal);
+  $('#open-load').addEventListener('click', loadProposalsList);
+  $('#generate-btn').addEventListener('click', () => generate(true));
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'rework-btn') generate(false);
+    if (e.target && e.target.id === 'export-btn') exportWord();
+  });
+  $('#load-cancel').addEventListener('click', () => $('#load-modal').classList.remove('open'));
+  $('#load-modal').addEventListener('click', (e) => { if (e.target === $('#load-modal')) $('#load-modal').classList.remove('open'); });
+
+  try {
+    const raw = localStorage.getItem(LS.draft);
+    if (raw) {
+      state.proposal = JSON.parse(raw);
+      intakeIntoForm(state.proposal.intake, state.proposal.tone);
+    }
+  } catch(e) {}
+  renderProposal();
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey||e.ctrlKey) && e.key === 'Enter' && !state.generating) {
+      e.preventDefault();
+      generate(state.proposal ? false : true);
+    }
+    if (e.key === 'Escape') {
+      $('#drawer').classList.remove('open');
+      $('#load-modal').classList.remove('open');
+    }
+  });
+
+  if (!state.settings.anthropicKey) {
+    setTimeout(() => { openDrawer(); toast('Add your Anthropic API key to begin.', ''); }, 250);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
