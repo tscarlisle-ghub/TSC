@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CMA Prescriptive Specification — Residential Projects</title>
+<link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
+<style>
+  :root {
+    --ink:        #1a1a1a;
+    --rule:       #1a1a1a;
+    --soft:       #6b6b6b;
+    --softer:     #8a8a85;
+    --paper:      #fdfdfb;
+    --hairline:   #c8c4ba;
+    --serif:      "warnock-pro", "Warnock Pro", "Iowan Old Style", Georgia, serif;
+    --sans:       "interstate-condensed", "Interstate Condensed", "Helvetica Neue Condensed",
+                  "Arial Narrow", Helvetica, Arial, sans-serif;
+  }
+
+  @page { size: letter; margin: 0.4in; }
+
+  * { box-sizing: border-box; }
+  html, body { background: var(--paper); color: var(--ink); }
+  body {
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 8.4pt;
+    line-height: 1.24;
+    letter-spacing: 0.005em;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ───── Screen-only control bar ───── */
+  .controlbar {
+    position: sticky; top: 0; z-index: 10;
+    background: #ece8df;
+    border-bottom: 1px solid #c8c4ba;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--sans);
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  .controlbar .label { color: var(--soft); font-weight: 700; }
+  .controlbar .toggle { display: inline-flex; border: 1px solid var(--ink); background: var(--paper); }
+  .controlbar .toggle button {
+    appearance: none; background: transparent; border: 0;
+    padding: 6px 14px;
+    font-family: var(--sans); font-size: 8.6pt; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--ink); cursor: pointer;
+  }
+  .controlbar .toggle button.on { background: var(--ink); color: var(--paper); }
+  .controlbar .actions { margin-left: auto; display: flex; gap: 10px; }
+  .controlbar .actions button {
+    appearance: none; background: var(--paper); border: 1px solid var(--ink);
+    padding: 6px 12px;
+    font-family: var(--sans); font-size: 8.6pt; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--ink); cursor: pointer;
+  }
+  .controlbar .actions button:hover { background: var(--ink); color: var(--paper); }
+  .controlbar .hint {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    text-transform: none; letter-spacing: 0; color: var(--soft); font-size: 9pt;
+  }
+
+  /* ───── Sheet ───── */
+  .sheet {
+    background: var(--paper);
+    width: 8.5in;
+    min-height: 11in;
+    margin: 24px auto;
+    padding: 0.5in 0.55in 0.45in 0.55in;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 28px rgba(0,0,0,0.08);
+  }
+
+  .masthead {
+    display: flex; align-items: baseline; justify-content: space-between;
+    border-bottom: 1.25pt solid var(--rule);
+    padding-bottom: 6pt; margin-bottom: 8pt;
+  }
+  .masthead h1 {
+    font-family: var(--serif); font-weight: 600; font-style: normal;
+    font-size: 21pt; line-height: 1; letter-spacing: 0.005em; margin: 0;
+  }
+  .masthead h1 .tag {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    color: var(--soft); font-size: 13.5pt; margin-left: 0.35em;
+  }
+  .masthead .meta {
+    font-family: var(--sans); font-size: 7.4pt; text-transform: uppercase;
+    letter-spacing: 0.14em; color: var(--soft); text-align: right; line-height: 1.4;
+  }
+  .masthead .meta strong { color: var(--ink); font-weight: 700; }
+  .masthead .meta .ver {
+    display: inline-block; margin-top: 2pt; padding: 2px 6px;
+    border: 0.5pt solid var(--ink); color: var(--ink); font-weight: 700;
+  }
+
+  .lede {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    font-size: 9.6pt; line-height: 1.35; color: var(--ink);
+    margin: 0 0 9pt 0; padding-right: 0.5in;
+  }
+
+  .grid {
+    column-count: 2; column-gap: 20pt;
+    column-rule: 0.4pt solid var(--hairline); column-fill: balance;
+  }
+
+  section { break-inside: avoid; page-break-inside: avoid; margin-bottom: 6.5pt; }
+  section h2 {
+    font-family: var(--serif); font-weight: 600;
+    font-size: 10.2pt; line-height: 1.1; margin: 0 0 2pt 0; letter-spacing: 0.005em;
+  }
+  section h2 .num {
+    font-family: var(--sans); font-size: 7.4pt; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.18em; color: var(--soft);
+    margin-right: 0.45em; vertical-align: 0.12em;
+  }
+  section p { margin: 0 0 2.8pt 0; text-align: left; hyphens: auto; }
+  .lead {
+    font-family: var(--sans); font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; font-size: 7.5pt; margin-right: 0.35em;
+  }
+  em.term { font-family: var(--serif); font-style: italic; font-weight: 400; }
+
+  .colophon {
+    margin-top: 8pt; padding-top: 5pt;
+    border-top: 0.4pt solid var(--hairline);
+    display: flex; justify-content: space-between;
+    font-size: 7pt; text-transform: uppercase; letter-spacing: 0.14em; color: var(--soft);
+  }
+  .colophon .center { text-align: center; flex: 1; }
+  .colophon .right  { text-align: right; }
+
+  .version { display: none; }
+  .version.active { display: block; }
+
+  @media screen { html { background: #ece8df; } }
+  @media print {
+    html { background: white; }
+    .controlbar { display: none; }
+    .sheet { box-shadow: none; margin: 0; width: auto; min-height: auto; padding: 0.4in; }
+  }
+</style>
+</head>
+<body>
+
+<div class="controlbar" role="toolbar" aria-label="Specification controls">
+  <span class="label">CMA Spec</span>
+  <span class="toggle" role="tablist" aria-label="Version">
+    <button id="btn-sale"    class="on" data-v="sale">Plan-Set Sale</button>
+    <button id="btn-process" class=""   data-v="process">CMA Process</button>
+  </span>
+  <span class="hint">Toggle the version, then export to RTF for AutoCAD.</span>
+  <span class="actions">
+    <button id="btn-print" title="Print or save as PDF">Print</button>
+    <button id="btn-rtf"   title="Download .rtf for AutoCAD MTEXT paste">Export RTF</button>
+  </span>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     VERSION A — PLAN-SET SALE  (no CA, risk-transfer tone)
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="sheet version active" id="version-sale" data-title="Prescriptive Specification — Plan-Set Sale Edition">
+
+  <header class="masthead">
+    <h1>CMA <span class="tag">prescriptive specification</span></h1>
+    <div class="meta">
+      <strong>Residential&nbsp;Projects</strong><br>
+      Birmingham, Alabama<br>
+      <span class="ver">Plan-Set Sale Edition · 1.0</span>
+    </div>
+  </header>
+
+  <p class="lede">
+    These notes accompany a set of construction drawings prepared by CMA and conveyed to the
+    purchaser for use on a single residence. CMA provides design documents only; CMA does not
+    administer or observe the construction. The purchaser, owner, and the licensed builder of
+    record are wholly responsible for execution, code compliance, means and methods, and the
+    safety and adequacy of the work. These notes establish the minimum standards CMA requires of
+    any home built from its drawings.
+  </p>
+
+  <div class="grid">
+
+    <section>
+      <h2><span class="num">01</span>General Conditions &amp; Scope of Drawings</h2>
+      <p><span class="lead">Documents conveyed.</span> The drawings, schedules, and these notes
+      together constitute CMA's design documents. They convey design intent and prescribe minimum
+      finish, material, and assembly standards. They are not a contract between CMA and any
+      builder. CMA is not a party to the construction contract.</p>
+      <p><span class="lead">No construction administration.</span> CMA will not perform site
+      visits, submittal review, RFI response, change-order review, punch lists, or any other
+      construction-administration service unless engaged separately under a written supplemental
+      agreement. Absent such an agreement, no advice, comment, or silence by CMA shall be
+      construed as approval of any work.</p>
+      <p><span class="lead">Use and copyright.</span> The drawings are licensed for the
+      construction of one residence at the address indicated. Reuse, adaptation, or further
+      distribution is prohibited without written authorization. Removing CMA's seal or title
+      block voids the license.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">02</span>Drawing Interpretation &amp; Precedence</h2>
+      <p><span class="lead">Order of precedence.</span> Where conflict exists among the documents,
+      the more stringent requirement applies. Among themselves, the documents are read in this
+      order: written addenda or revisions; large-scale details; small-scale details and elevations;
+      plans; schedules; these notes. Written dimensions govern over scaled measurements.
+      <em class="term">Do not scale drawings.</em></p>
+      <p><span class="lead">Coverage.</span> Items shown on one drawing and not another are
+      required as if shown on all. Mechanical, electrical, and plumbing layouts are diagrammatic;
+      routing, sizing, and final coordination are the builder's responsibility.</p>
+      <p><span class="lead">Discrepancies.</span> The builder shall notify the owner in writing
+      of any conflict, omission, or ambiguity before proceeding. Work installed in conflict with
+      the documents is at the builder's risk.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">03</span>Site Documentation &amp; Existing Conditions</h2>
+      <p><span class="lead">Field verification.</span> All existing conditions, dimensions,
+      elevations, setbacks, easements, and utility locations shall be verified by the builder
+      before excavation, fabrication, or ordering. The drawings rely on information furnished to
+      CMA at the time of issue and are not a survey.</p>
+      <p><span class="lead">Survey, soils, &amp; engineering.</span> A current boundary and
+      topographic survey, a geotechnical report, and structural, mechanical, and civil
+      engineering stamped by Alabama-licensed engineers are required where conditions warrant.
+      None of these are provided by CMA unless specifically noted on the cover sheet.</p>
+      <p><span class="lead">Hidden conditions.</span> Discovery of hidden conditions during
+      construction does not authorize departure from the design intent without written
+      consultation with CMA, which may be obtained for an additional fee.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">04</span>Contractor Qualifications &amp; Licensing</h2>
+      <p><span class="lead">Builder of record.</span> The work shall be performed by a builder
+      properly licensed by the State of Alabama Home Builders Licensure Board (Alabama Code
+      §34-14A) and registered in the project's jurisdiction. The builder shall carry general
+      liability and builder's-risk insurance and shall name the owner as an additional insured.</p>
+      <p><span class="lead">Specialized trades.</span> Mechanical, electrical, plumbing, and
+      gas-fitting work shall be performed by trades licensed by the Alabama Plumbers and Gas
+      Fitters Examining Board, the Alabama Electrical Contractors Board, and the Alabama Board
+      of HVAC Contractors as applicable. Roofing, masonry, and stucco shall be performed by
+      tradesmen with a minimum of five years' experience in custom residential work of comparable
+      detail. Documentation of licensure and insurance shall be retained on site.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">05</span>Submittals &amp; Approvals</h2>
+      <p><span class="lead">No CMA review.</span> Under this edition, CMA does not receive,
+      review, stamp, or approve submittals, shop drawings, samples, or product data. The builder
+      and owner shall jointly review and approve all such items before fabrication or order.</p>
+      <p><span class="lead">Recommended pre-fabrication review.</span> CMA strongly recommends
+      that the owner retain CMA, or another licensed architect, to review shop drawings for
+      cabinetry, exterior millwork, windows, doors, and roof and floor framing before fabrication.
+      Failure to do so does not relieve the builder of responsibility for conformance with the
+      design.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">06</span>Material Standards &amp; Substitutions</h2>
+      <p><span class="lead">Standard quality.</span> All materials shall be new, unused, of first
+      quality, and free of defects. No reclaimed, salvaged, or seconds material unless expressly
+      indicated on the drawings.</p>
+      <p><span class="lead">CMA standing requirements.</span> Half-round copper gutters and round
+      copper downspouts. Copper flashing at all roof transitions, valleys, drip edges, pitch
+      breaks, chimneys, beam caps, and roof-to-wall conditions. Copper or lead-coated copper pans
+      at all through-wall and shower conditions. Stainless steel or silicon-bronze fasteners at
+      all exterior wood, brick mold, porches, decks, rafter tails, and any concealed fastening in
+      contact with treated lumber. No exposed galvanized fasteners on visible exterior surfaces.</p>
+      <p><span class="lead">Wood.</span> Exterior trim, rafter tails, fascia, beadboard, and
+      porch ceilings shall be a clear-grade rot-resistant species (Western Red Cedar, Spanish
+      Cedar, Cypress, or Sapele). Finger-jointed material is not permitted on the exterior.
+      Interior trim and millwork shall be solid wood — paint-grade poplar or stain-grade species
+      per the drawings.</p>
+      <p><span class="lead">Substitutions.</span> Items shown on the drawings or named in these
+      notes are required. Any substitution is the owner's and builder's decision and shall be
+      documented in writing between them. CMA does not warrant the equivalence of any substituted
+      product, and substitution does not transfer any design liability to CMA.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">07</span>Workmanship Standards</h2>
+      <p>All work shall be performed by tradesmen skilled and experienced in the work of their
+      trade, in a manner consistent with the highest standard of residential custom construction.
+      Lines shall be true, surfaces plumb and level, joints tight and consistent, reveals uniform.
+      Trim returns, miters, and scribes shall be hand-fit; caulk shall not be used to fill gaps in
+      trim. Exposed fastener heads shall be set, filled, and finished. Drywall shall be Level 4
+      minimum, Level 5 in raking light and gloss-paint conditions. Paint shall not bridge across
+      separate trim members. Flashing, weather barrier, and roofing assemblies shall be installed
+      to manufacturers' published instructions; deviation voids warranty and is not authorized.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">08</span>Change Orders &amp; Field Modifications</h2>
+      <p>No change to the design — including, without limitation, changes to plan, elevation,
+      roof form, opening sizes, exterior material, exterior color, principal interior finish, or
+      structural assembly — shall be made without written authorization from the owner. Field
+      modifications that depart from the drawings are at the builder's and owner's sole risk.
+      CMA's design liability does not extend to work as modified in the field without CMA's
+      written consultation.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">09</span>Quality Assurance &amp; Final Inspection</h2>
+      <p><span class="lead">Owner-led inspections.</span> The owner is encouraged to conduct,
+      directly or through a qualified third-party inspector, a pre-pour foundation review, a
+      pre-drywall framing/MEP/flashing review, and a substantial-completion punch walk before
+      final payment. CMA may be retained for these reviews under separate agreement.</p>
+      <p><span class="lead">Concealed work.</span> Framing, mechanical, electrical, plumbing,
+      waterproofing, and flashing shall be photographed before being concealed. Photographs shall
+      be retained by the owner for the duration of any applicable warranty.</p>
+      <p><span class="lead">Limitation.</span> Any review by CMA, if performed, is limited to
+      general conformance with the design intent and does not relieve the builder of sole
+      responsibility for means, methods, sequencing, safety, or completeness of the work.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">10</span>Code Compliance — Alabama Residential</h2>
+      <p>All work shall comply with all codes, standards, and regulations in force in the
+      project's jurisdiction at the time of permit, including without limitation the IRC, IECC,
+      NEC, IPC, and IMC as adopted by the State of Alabama and the local authority having
+      jurisdiction, and any local zoning, historic, or overlay-district requirements. Where this
+      specification is more stringent than code, this specification governs. Code compliance is
+      solely the builder's responsibility.</p>
+    </section>
+
+  </div>
+
+  <footer class="colophon">
+    <span>CMA · Birmingham, Alabama</span>
+    <span class="center">Plan-Set Sale Edition — Risk-Transfer / No CA</span>
+    <span class="right">Issue 1.0 · 2026</span>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     VERSION B — CMA PROCESS  (architect of record, full CA, enforceable)
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="sheet version" id="version-process" data-title="Prescriptive Specification — CMA Process Edition">
+
+  <header class="masthead">
+    <h1>CMA <span class="tag">prescriptive specification</span></h1>
+    <div class="meta">
+      <strong>Residential&nbsp;Projects</strong><br>
+      Birmingham, Alabama<br>
+      <span class="ver">CMA Process Edition · 1.0</span>
+    </div>
+  </header>
+
+  <p class="lede">
+    This specification governs any residence designed by CMA and built under CMA's construction
+    administration. It is incorporated by reference into the construction drawings and into the
+    owner-builder agreement. Where this specification, the drawings, and the schedules conflict,
+    the more stringent requirement applies.
+  </p>
+
+  <div class="grid">
+
+    <section>
+      <h2><span class="num">01</span>General Conditions &amp; Scope of Drawings</h2>
+      <p><span class="lead">Authority of documents.</span> The construction drawings, schedules,
+      and this specification together constitute the contract documents. CMA is the architect of
+      record and will provide construction administration consistent with AIA B101 / B105 as
+      modified by the owner-architect agreement.</p>
+      <p><span class="lead">Architect's role.</span> CMA will conduct site visits at intervals
+      appropriate to the stage of the work, review submittals, respond to RFIs, evaluate change
+      proposals, certify payment, and conduct substantial- and final-completion walks. CMA does
+      not direct or control means, methods, sequencing, or safety, and is not responsible for the
+      contractor's failure to perform the work in accordance with the contract documents.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">02</span>Drawing Interpretation &amp; Precedence</h2>
+      <p><span class="lead">Order of precedence.</span> Where conflict exists, the more stringent
+      requirement applies. Among themselves, the documents are read in this order: signed change
+      orders; addenda; large-scale details; small-scale details and elevations; plans; schedules;
+      this specification. Written dimensions govern over scaled measurements.
+      <em class="term">Do not scale drawings.</em></p>
+      <p><span class="lead">Coverage.</span> Items shown on one drawing and not another are
+      required as if shown on all. MEP layouts are diagrammatic; the contractor is responsible
+      for coordinated routing that respects framing, finishes, and ceiling heights shown.</p>
+      <p><span class="lead">Discrepancies.</span> The contractor shall notify the architect in
+      writing of any conflict, omission, or ambiguity before proceeding. Work installed in
+      conflict with the documents will be removed and replaced at the contractor's expense.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">03</span>Site Documentation &amp; Existing Conditions</h2>
+      <p><span class="lead">Field verification.</span> The contractor shall verify all existing
+      conditions, dimensions, elevations, setbacks, easements, and utility locations before
+      excavation, fabrication, or ordering, and shall promptly notify the architect in writing of
+      any discrepancy.</p>
+      <p><span class="lead">Records on site.</span> The contractor shall maintain on site at all
+      times a current set of stamped drawings, this specification, the project schedule, the
+      submittal log, and the RFI log. The contractor shall photograph all framing, MEP,
+      waterproofing, and flashing work before it is concealed and transmit those photographs to
+      the architect weekly.</p>
+      <p><span class="lead">As-builts.</span> Deviations shall be redlined on a dedicated record
+      set and delivered to the architect at substantial completion.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">04</span>Contractor Qualifications &amp; Licensing</h2>
+      <p><span class="lead">Contractor.</span> The contractor shall be properly licensed by the
+      State of Alabama Home Builders Licensure Board (Alabama Code §34-14A), registered in the
+      project's jurisdiction, and shall employ a full-time on-site superintendent with a minimum
+      of five years' experience in custom residential work of comparable scale and detail. The
+      contractor shall carry general liability and builder's-risk insurance naming the owner and
+      architect as additional insured.</p>
+      <p><span class="lead">Specialized trades.</span> Mechanical, electrical, plumbing, and
+      gas-fitting work shall be performed by trades licensed by the Alabama Plumbers and Gas
+      Fitters Examining Board, the Alabama Electrical Contractors Board, and the Alabama Board
+      of HVAC Contractors as applicable. Subcontractors for masonry, roofing, plaster/stucco,
+      millwork, and finish carpentry shall be similarly qualified and approved by the architect
+      before commencement.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">05</span>Submittals &amp; Approval Timelines</h2>
+      <p><span class="lead">Required submittals.</span> Prior to fabrication or order, the
+      contractor shall submit, for the architect's review and stamp: shop drawings for cabinetry,
+      millwork, stairs, railings, exterior trim assemblies, doors, windows, roof and floor
+      framing, and structural steel; physical samples of all exterior materials, including
+      masonry, mortar, stucco, roofing, siding, paint, and stain; and product data for any item
+      where a model, finish, or color must be selected.</p>
+      <p><span class="lead">Turnaround.</span> The architect shall be allowed
+      <em class="term">ten working days</em> for first review and
+      <em class="term">five working days</em> for re-submittal review. The contractor shall plan
+      the schedule accordingly. Fabrication or ordering before written approval is at the
+      contractor's sole risk.</p>
+      <p><span class="lead">Submittal log.</span> The contractor shall maintain a running log
+      with dates, status, and revision numbers, and shall transmit the log to the architect with
+      each pay application.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">06</span>Material Standards &amp; Substitution Policy</h2>
+      <p><span class="lead">Standard quality.</span> All materials shall be new, unused, of first
+      quality, and free of defects.</p>
+      <p><span class="lead">CMA standing requirements.</span> Half-round copper gutters and round
+      copper downspouts. Copper flashing at all roof transitions, valleys, drip edges, pitch
+      breaks, chimneys, beam caps, and roof-to-wall conditions. Copper or lead-coated copper pans
+      at through-wall and shower conditions. Stainless steel or silicon-bronze fasteners at all
+      exterior wood, brick mold, porches, decks, rafter tails, and any concealed fastening in
+      contact with treated lumber. No exposed galvanized fasteners on visible exterior surfaces.</p>
+      <p><span class="lead">Wood.</span> Exterior trim, rafter tails, fascia, beadboard, and
+      porch ceilings shall be a clear-grade rot-resistant species (Western Red Cedar, Spanish
+      Cedar, Cypress, or Sapele); finger-jointed material is not permitted on the exterior.
+      Interior trim and millwork shall be solid wood per the drawings.</p>
+      <p><span class="lead">Substitutions.</span> No substitution shall be made without the
+      architect's prior written approval. Substitution requests shall include physical samples,
+      full technical data, and a written statement that the substitution equals or exceeds the
+      specified item in performance, durability, and appearance. The architect's review of a
+      substitution does not waive any other requirement of the contract documents.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">07</span>Workmanship Standards</h2>
+      <p>All work shall be performed by tradesmen skilled and experienced in the work of their
+      trade, in a manner consistent with the highest standard of residential custom construction.
+      Lines shall be true, surfaces plumb and level, joints tight and consistent, reveals uniform.
+      Trim returns, miters, and scribes shall be hand-fit; caulk shall not be used to fill gaps
+      in trim. Exposed fastener heads shall be set, filled, and finished. Drywall shall be
+      Level 4 minimum, Level 5 in raking light and gloss-paint conditions. Paint shall not bridge
+      across separate trim members. The architect may, at any time, reject work that does not
+      conform to the contract documents — including work shown on previously stamped shop
+      drawings; such rejected work shall be removed and replaced at no cost to the owner.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">08</span>Change Order Protocol</h2>
+      <p>No change to the scope, quantity, material, finish, or method of any work shall be
+      executed without a written change order signed by the owner and reviewed by the architect.
+      Field directives from the owner do not constitute change orders; the contractor shall reduce
+      any verbal request to a written proposal stating cost, schedule impact, and a single
+      combined total, and shall not proceed until signed. Work performed without a signed change
+      order is performed at the contractor's risk and expense. Substitutions of any kind require
+      a change order.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">09</span>Quality Assurance &amp; Final Inspection</h2>
+      <p><span class="lead">Required milestone reviews.</span> A pre-pour foundation review, a
+      pre-drywall walk-through (framing, MEP rough-in, waterproofing, flashing, blocking), and an
+      outlet/switch walk-through with the owner — held after framing and before any wall finishes
+      — are required and shall be scheduled with the architect with five working days' notice.</p>
+      <p><span class="lead">Substantial &amp; final completion.</span> The architect will conduct
+      a substantial-completion walk and issue a punch list. All punch items shall be closed and
+      re-verified before final payment. A one-year warranty walk shall be scheduled by the
+      contractor at eleven months following substantial completion.</p>
+      <p><span class="lead">Limitation.</span> The architect's review, on site or through
+      submittals, is for general conformance with the design intent only and does not relieve the
+      contractor of sole responsibility for means, methods, sequencing, safety, or for the
+      correctness and completeness of the work.</p>
+    </section>
+
+    <section>
+      <h2><span class="num">10</span>Code Compliance — Alabama Residential</h2>
+      <p>All work shall comply with all codes, standards, and regulations in force in the
+      project's jurisdiction at the time of permit, including without limitation the IRC, IECC,
+      NEC, IPC, and IMC as adopted by the State of Alabama and the local authority having
+      jurisdiction, and any local zoning, historic, or overlay-district requirements. Where this
+      specification is more stringent than code, this specification governs. The contractor is
+      responsible for code compliance and for obtaining all required inspections and certificates.</p>
+    </section>
+
+  </div>
+
+  <footer class="colophon">
+    <span>CMA · Birmingham, Alabama</span>
+    <span class="center">CMA Process Edition — Architect of Record / Full CA</span>
+    <span class="right">Issue 1.0 · 2026</span>
+  </footer>
+</div>
+
+<script>
+  // ───── Toggle ─────────────────────────────────────────────────────────
+  const btnSale    = document.getElementById('btn-sale');
+  const btnProcess = document.getElementById('btn-process');
+  const verSale    = document.getElementById('version-sale');
+  const verProcess = document.getElementById('version-process');
+
+  function show(v) {
+    const sale = (v === 'sale');
+    btnSale.classList.toggle('on', sale);
+    btnProcess.classList.toggle('on', !sale);
+    verSale.classList.toggle('active', sale);
+    verProcess.classList.toggle('active', !sale);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  btnSale.addEventListener('click',    () => show('sale'));
+  btnProcess.addEventListener('click', () => show('process'));
+
+  // ───── Print ──────────────────────────────────────────────────────────
+  document.getElementById('btn-print').addEventListener('click', () => window.print());
+
+  // ───── RTF export (AutoCAD MTEXT-safe) ────────────────────────────────
+  // AutoCAD MTEXT accepts pasted RTF with basic formatting (single font,
+  // size, bold, italic, paragraphs). We emit conservative RTF so the result
+  // imports cleanly on paste. Font: Arial — universal in AutoCAD.
+  function rtfEscape(s) {
+    // Replace common typographic punctuation with ASCII equivalents that
+    // render correctly inside AutoCAD MTEXT, then escape RTF specials and
+    // convert any remaining non-ASCII to \uNNNN? sequences.
+    return s
+      .replace(/\\/g, '\\\\')
+      .replace(/\{/g,  '\\{')
+      .replace(/\}/g,  '\\}')
+      .replace(/—/g, '--')
+      .replace(/–/g, '-')
+      .replace(/[‘’]/g, "'")
+      .replace(/[“”]/g, '"')
+      .replace(/ /g, ' ')
+      .replace(/[^\x00-\x7F]/g, c => '\\u' + c.charCodeAt(0) + '?');
+  }
+
+  function buildRTF(versionEl) {
+    const title = versionEl.dataset.title || 'CMA Specification';
+    const lede  = (versionEl.querySelector('.lede')?.innerText || '').replace(/\s+/g, ' ').trim();
+    const sections = versionEl.querySelectorAll('section');
+
+    // \fs is half-points: 18=9pt, 20=10pt, 24=12pt, 28=14pt, 36=18pt
+    let rtf  = '{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang1033';
+    rtf += '{\\fonttbl{\\f0\\fnil\\fcharset0 Arial;}}';
+    rtf += '\\viewkind4\\uc1\\pard\\sa120\\f0\\fs22 ';
+
+    // Title
+    rtf += '{\\b\\fs32 ' + rtfEscape(title) + '}\\par ';
+    rtf += rtfEscape('CMA -- Birmingham, Alabama -- Issue 1.0 -- 2026') + '\\par\\par ';
+
+    // Lede
+    if (lede) rtf += '{\\i ' + rtfEscape(lede) + '}\\par\\par ';
+
+    // Sections
+    sections.forEach(sec => {
+      const num   = sec.querySelector('h2 .num')?.innerText.trim() || '';
+      const h2el  = sec.querySelector('h2');
+      let headText = h2el ? (h2el.innerText || '').replace(/\s+/g, ' ').trim() : '';
+      // h2.innerText returns e.g. "01General Conditions & Scope of Drawings" or
+      // "01 General Conditions...". Normalize to "01  General Conditions...".
+      headText = headText.replace(/^(\d{2})\s*/, '$1  ');
+
+      rtf += '{\\b\\fs26 ' + rtfEscape(headText) + '}\\par ';
+
+      sec.querySelectorAll('p').forEach(p => {
+        const lead = p.querySelector('.lead');
+        let body = (p.innerText || '').replace(/\s+/g, ' ').trim();
+        if (lead) {
+          const leadText = (lead.innerText || '').trim();
+          if (body.startsWith(leadText)) body = body.slice(leadText.length).trim();
+          rtf += '{\\b ' + rtfEscape(leadText) + '}  ' + rtfEscape(body) + '\\par ';
+        } else {
+          rtf += rtfEscape(body) + '\\par ';
+        }
+      });
+      rtf += '\\par ';
+    });
+
+    rtf += '}';
+    return rtf;
+  }
+
+  function activeVersionEl() {
+    return document.querySelector('.version.active');
+  }
+
+  document.getElementById('btn-rtf').addEventListener('click', () => {
+    const v = activeVersionEl();
+    const rtf = buildRTF(v);
+    const which = v.id === 'version-sale' ? 'PlanSetSale' : 'CMAProcess';
+    const blob = new Blob([rtf], { type: 'application/rtf' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = 'CMA_Spec_' + which + '.rtf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+</script>
+</body>
+</html>

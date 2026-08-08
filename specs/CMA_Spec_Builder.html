@@ -1,0 +1,1293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CMA Spec Builder — Prescriptive Specification</title>
+<link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
+<style>
+  :root {
+    --ink:         #1a1a1a;
+    --ink-faint:   #6b6b6b;
+    --rule:        #1a1a1a;
+    --soft:        #6b6b6b;
+    --softer:      #8a8a85;
+    --paper:       #fdfdfb;
+    --hairline:    #c8c4ba;
+    --bg:          #ece8df;
+    --tint:        #f3efe6;
+    --accent:      #7a3b1f;
+    --serif:       "warnock-pro", "Warnock Pro", "Iowan Old Style", Georgia, serif;
+    --sans:        "interstate-condensed", "Interstate Condensed", "Helvetica Neue Condensed",
+                   "Arial Narrow", Helvetica, Arial, sans-serif;
+    --sans-norm:   "interstate", "Interstate", -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --mono:        ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    margin: 0; padding: 0;
+    font-family: var(--sans-norm);
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+
+  /* ───── Top control bar ───── */
+  .topbar {
+    position: sticky; top: 0; z-index: 30;
+    background: #1a1a1a;
+    color: #f3efe6;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid #000;
+  }
+  .topbar .brand {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .topbar .brand .sub {
+    font-style: italic;
+    font-weight: 400;
+    color: #b8b1a0;
+    margin-left: 6px;
+    font-size: 14px;
+  }
+  .topbar .group {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border: 1px solid #444;
+    background: #222;
+  }
+  .topbar .group .label {
+    font-family: var(--sans);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #b8b1a0;
+  }
+  .topbar .seg {
+    display: inline-flex;
+    border: 1px solid #555;
+    overflow: hidden;
+  }
+  .topbar .seg button {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 4px 10px;
+    font-family: var(--sans);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #f3efe6;
+    cursor: pointer;
+  }
+  .topbar .seg button.on {
+    background: #f3efe6;
+    color: #1a1a1a;
+  }
+  .topbar .actions { margin-left: auto; display: flex; gap: 8px; }
+  .topbar .actions button {
+    appearance: none;
+    background: transparent;
+    border: 1px solid #f3efe6;
+    color: #f3efe6;
+    padding: 6px 12px;
+    font-family: var(--sans);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    cursor: pointer;
+  }
+  .topbar .actions button:hover { background: #f3efe6; color: #1a1a1a; }
+  .topbar .actions .primary { background: #f3efe6; color: #1a1a1a; }
+  .topbar .actions .primary:hover { background: #fff; }
+
+  /* ───── Two-pane layout ───── */
+  .workspace {
+    display: grid;
+    grid-template-columns: minmax(360px, 1fr) minmax(560px, 1.25fr);
+    gap: 0;
+    min-height: calc(100vh - 50px);
+  }
+  @media (max-width: 1100px) {
+    .workspace { grid-template-columns: 1fr; }
+  }
+
+  /* ───── Edit pane ───── */
+  .edit-pane {
+    background: var(--tint);
+    border-right: 1px solid var(--hairline);
+    padding: 18px 20px 60px 20px;
+    overflow-y: auto;
+    max-height: calc(100vh - 50px);
+  }
+  .edit-pane h2 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 18px;
+    margin: 18px 0 6px 0;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 4px;
+  }
+  .edit-pane h2:first-child { margin-top: 0; }
+  .edit-pane h3 {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    margin: 14px 0 6px 0;
+  }
+  .edit-pane .hint {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+  .edit-pane .formrow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .edit-pane .formrow.full { grid-template-columns: 1fr; }
+  .edit-pane label {
+    display: block;
+    font-family: var(--sans);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    margin-bottom: 3px;
+  }
+  .edit-pane input[type="text"],
+  .edit-pane input[type="date"],
+  .edit-pane textarea {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--hairline);
+    padding: 6px 8px;
+    font-family: var(--sans-norm);
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .edit-pane textarea {
+    font-family: var(--serif);
+    font-style: italic;
+    line-height: 1.4;
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  /* Section blocks in edit pane */
+  .secblock {
+    background: var(--paper);
+    border: 1px solid var(--hairline);
+    margin: 10px 0;
+  }
+  .secblock-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--tint);
+    border-bottom: 1px solid var(--hairline);
+    padding: 8px 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .secblock-head:hover { background: #ebe6da; }
+  .secblock-head .num {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    margin-right: 8px;
+  }
+  .secblock-head .title {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 14px;
+    flex: 1;
+  }
+  .secblock-head .meta {
+    font-family: var(--sans);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+  }
+  .secblock-head .caret {
+    margin-left: 8px;
+    font-family: var(--mono);
+    color: var(--ink-faint);
+    font-size: 12px;
+    transition: transform 0.15s;
+  }
+  .secblock.collapsed .secblock-head .caret { transform: rotate(-90deg); }
+  .secblock-body {
+    padding: 8px 12px 12px 12px;
+  }
+  .secblock.collapsed .secblock-body { display: none; }
+
+  .item-row {
+    display: grid;
+    grid-template-columns: 22px 1fr 18px;
+    gap: 6px;
+    padding: 6px 4px;
+    border-bottom: 1px dashed var(--hairline);
+    align-items: start;
+  }
+  .item-row:last-child { border-bottom: 0; }
+  .item-row input[type="checkbox"] {
+    margin: 4px 0 0 0;
+    accent-color: var(--ink);
+    transform: scale(1.05);
+  }
+  .item-row .item-edit {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+  .item-row .lead-input {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    padding: 1px 2px;
+  }
+  .item-row .lead-input:focus,
+  .item-row .body-input:focus {
+    background: var(--paper);
+    border-bottom: 1px solid var(--ink);
+    outline: 0;
+  }
+  .item-row .body-input {
+    font-family: var(--sans-norm);
+    font-size: 12.5px;
+    line-height: 1.35;
+    background: transparent;
+    border: 0;
+    padding: 1px 2px;
+    resize: vertical;
+    min-height: 38px;
+    color: var(--ink);
+  }
+  .item-row .body-input:focus {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+  }
+  .item-row .level-badge {
+    font-family: var(--sans);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    border: 1px solid var(--hairline);
+    padding: 1px 3px;
+    line-height: 1;
+    align-self: start;
+    margin-top: 5px;
+    text-align: center;
+  }
+  .item-row.is-custom .level-badge { color: var(--accent); border-color: var(--accent); }
+  .item-row .delete-btn {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: var(--ink-faint);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+  }
+  .item-row .delete-btn:hover { color: var(--accent); }
+  .item-row.disabled .item-edit { opacity: 0.4; }
+
+  .add-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .add-row input {
+    flex: 1;
+    background: var(--tint);
+    border: 1px dashed var(--hairline);
+    padding: 6px 8px;
+    font-family: var(--sans-norm);
+    font-size: 12px;
+  }
+  .add-row button {
+    appearance: none;
+    background: var(--ink);
+    color: var(--paper);
+    border: 0;
+    padding: 6px 12px;
+    font-family: var(--sans);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    cursor: pointer;
+  }
+
+  /* ───── Preview pane ───── */
+  .preview-pane {
+    background: var(--bg);
+    padding: 24px 24px 60px 24px;
+    overflow-y: auto;
+    max-height: calc(100vh - 50px);
+  }
+  .preview-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .preview-toolbar .label {
+    font-family: var(--sans);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-faint);
+    font-weight: 700;
+  }
+  .preview-toolbar .hint {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  /* The sheet — preserves the printable spec design */
+  .sheet {
+    background: var(--paper);
+    width: 100%;
+    max-width: 8.5in;
+    margin: 0 auto;
+    padding: 0.5in 0.55in 0.45in 0.55in;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 8px 28px rgba(0,0,0,0.08);
+    font-family: var(--sans);
+    font-size: 8.6pt;
+    line-height: 1.26;
+    color: var(--ink);
+  }
+  .sheet .masthead {
+    display: flex; align-items: baseline; justify-content: space-between;
+    border-bottom: 1.25pt solid var(--rule);
+    padding-bottom: 6pt; margin-bottom: 8pt;
+  }
+  .sheet .masthead h1 {
+    font-family: var(--serif); font-weight: 600;
+    font-size: 21pt; line-height: 1; margin: 0;
+  }
+  .sheet .masthead h1 .tag {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    color: var(--soft); font-size: 13.5pt; margin-left: 0.35em;
+  }
+  .sheet .masthead .meta {
+    font-family: var(--sans); font-size: 7.4pt;
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--soft); text-align: right; line-height: 1.4;
+  }
+  .sheet .masthead .meta strong { color: var(--ink); font-weight: 700; }
+  .sheet .masthead .meta .ver {
+    display: inline-block; margin-top: 2pt; padding: 2px 6px;
+    border: 0.5pt solid var(--ink); color: var(--ink); font-weight: 700;
+  }
+  .sheet .lede {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    font-size: 9.6pt; line-height: 1.35; color: var(--ink);
+    margin: 0 0 9pt 0; padding-right: 0.5in;
+  }
+  .sheet .grid {
+    column-count: 2; column-gap: 18pt;
+    column-rule: 0.4pt solid var(--hairline); column-fill: balance;
+  }
+  .sheet section {
+    break-inside: avoid; page-break-inside: avoid; margin-bottom: 6pt;
+  }
+  .sheet section h2 {
+    font-family: var(--serif); font-weight: 600;
+    font-size: 10.2pt; line-height: 1.1; margin: 0 0 2pt 0;
+  }
+  .sheet section h2 .num {
+    font-family: var(--sans); font-size: 7.4pt; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.18em; color: var(--soft);
+    margin-right: 0.45em; vertical-align: 0.12em;
+  }
+  .sheet section p { margin: 0 0 2.6pt 0; text-align: left; hyphens: auto; }
+  .sheet .lead {
+    font-family: var(--sans); font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; font-size: 7.5pt; margin-right: 0.35em;
+  }
+  .sheet em.term { font-family: var(--serif); font-style: italic; font-weight: 400; }
+  .sheet .colophon {
+    margin-top: 8pt; padding-top: 5pt;
+    border-top: 0.4pt solid var(--hairline);
+    display: flex; justify-content: space-between;
+    font-size: 7pt; text-transform: uppercase; letter-spacing: 0.14em; color: var(--soft);
+  }
+  .sheet .colophon .center { text-align: center; flex: 1; }
+  .sheet .colophon .right { text-align: right; }
+
+  /* contenteditable affordances */
+  .sheet [contenteditable="true"] {
+    outline: 0;
+    transition: background 0.1s;
+  }
+  .sheet [contenteditable="true"]:hover {
+    background: rgba(122, 59, 31, 0.06);
+  }
+  .sheet [contenteditable="true"]:focus {
+    background: rgba(122, 59, 31, 0.10);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  /* Print */
+  @media print {
+    html { background: white; }
+    .topbar, .edit-pane, .preview-toolbar { display: none; }
+    .workspace { display: block; }
+    .preview-pane { padding: 0; background: white; max-height: none; overflow: visible; }
+    .sheet { box-shadow: none; max-width: none; padding: 0.4in; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="brand">CMA <span class="sub">Spec Builder</span></span>
+
+  <span class="group">
+    <span class="label">Edition</span>
+    <span class="seg" id="versionSeg">
+      <button class="on" data-v="sale">Plan-Set Sale</button>
+      <button         data-v="process">CMA Process</button>
+    </span>
+  </span>
+
+  <span class="group">
+    <span class="label">Detail</span>
+    <span class="seg" id="detailSeg">
+      <button         data-d="light">Light</button>
+      <button class="on" data-d="standard">Standard</button>
+      <button         data-d="comprehensive">Comprehensive</button>
+    </span>
+  </span>
+
+  <span class="actions">
+    <button id="btnReset"  title="Reset to defaults for current detail level">Reset</button>
+    <button id="btnPrint"  title="Print or save as PDF">Print</button>
+    <button id="btnRtf" class="primary" title="Download .rtf for AutoCAD MTEXT paste">Export RTF</button>
+  </span>
+</div>
+
+<div class="workspace">
+
+  <!-- ════════════ EDIT PANE ════════════ -->
+  <aside class="edit-pane" id="editPane">
+
+    <h2>Project Information</h2>
+    <p class="hint">Fills the masthead, colophon, and RTF header.</p>
+    <div class="formrow">
+      <label>Project name<input type="text" id="proj_name" placeholder="e.g., Davis Residence"></label>
+      <label>Document date<input type="date" id="proj_date"></label>
+    </div>
+    <div class="formrow">
+      <label>Project location<input type="text" id="proj_location" placeholder="City, Alabama"></label>
+      <label>Issue<input type="text" id="proj_issue" placeholder="1.0" value="1.0"></label>
+    </div>
+    <div class="formrow full">
+      <label>Project address<input type="text" id="proj_address" placeholder="Street, City, State Zip"></label>
+    </div>
+
+    <h2>Document Lede</h2>
+    <p class="hint">Italic paragraph at the top of the spec sheet.</p>
+    <textarea id="proj_lede" rows="4"></textarea>
+
+    <h2>Sections</h2>
+    <p class="hint">Check items to include · click any field to edit · "+ Add" for project-specific items.</p>
+    <div id="sectionsEditor"></div>
+
+  </aside>
+
+  <!-- ════════════ PREVIEW PANE ════════════ -->
+  <main class="preview-pane">
+    <div class="preview-toolbar">
+      <span class="label">Live Preview</span>
+      <span class="hint">click any text in the sheet to edit · press <code>Esc</code> to commit</span>
+    </div>
+
+    <div class="sheet" id="sheet">
+      <header class="masthead">
+        <h1>CMA <span class="tag">prescriptive specification</span></h1>
+        <div class="meta">
+          <strong id="pv_proj_name">—</strong><br>
+          <span id="pv_proj_location">Birmingham, Alabama</span><br>
+          <span class="ver" id="pv_ver_chip">Plan-Set Sale Edition · 1.0</span>
+        </div>
+      </header>
+
+      <p class="lede" id="pv_lede" contenteditable="true"></p>
+
+      <div class="grid" id="pv_sections"></div>
+
+      <footer class="colophon">
+        <span>CMA · Birmingham, Alabama</span>
+        <span class="center" id="pv_edition_strap">Plan-Set Sale Edition</span>
+        <span class="right" id="pv_issue">Issue 1.0 · 2026</span>
+      </footer>
+    </div>
+  </main>
+
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════════════
+   DATA MODEL
+   ──────────────────────────────────────────────────────────────────────────
+   SPEC_DATA defines the *factory defaults*. Each item has:
+     - id           : stable identifier
+     - lead         : bold small-caps lead-in (e.g. "Field verification.")
+     - body         : body text
+     - level        : "L" (light) / "S" (standard) / "C" (comprehensive)
+                      The detail preset checks all items at-or-below the chosen level.
+                      Light → only L items.
+                      Standard → L + S items.
+                      Comprehensive → L + S + C items.
+
+   A copy of SPEC_DATA is mutated in `state.sections` so user edits persist
+   in localStorage without touching the defaults. Use Reset to revert.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+const STORE_KEY = 'cma-spec-builder-v2';
+
+const VERSION_LEDE = {
+  sale: "These notes accompany a set of construction drawings prepared by CMA and conveyed to the purchaser for use on a single residence. CMA provides design documents only; CMA does not administer or observe the construction. The purchaser, owner, and the licensed builder of record are wholly responsible for execution, code compliance, means and methods, and the safety and adequacy of the work. These notes establish the minimum standards CMA requires of any home built from its drawings.",
+  process: "This specification governs any residence designed by CMA and built under CMA's construction administration. It is incorporated by reference into the construction drawings and into the owner-builder agreement. Where this specification, the drawings, and the schedules conflict, the more stringent requirement applies."
+};
+
+const SPEC_DATA = {
+  sale:    [],   // populated below
+  process: []    // populated below
+};
+
+/* ──────── SECTION BLUEPRINTS (shared structure, version-specific items) ──── */
+
+const SECTIONS_BLUEPRINT = [
+  {
+    id: 'general',         num: '01', title: 'General Conditions & Scope of Drawings'
+  },
+  {
+    id: 'precedence',      num: '02', title: 'Drawing Interpretation & Precedence'
+  },
+  {
+    id: 'site',            num: '03', title: 'Site Documentation & Existing Conditions'
+  },
+  {
+    id: 'qualifications',  num: '04', title: 'Contractor Qualifications & Licensing'
+  },
+  {
+    id: 'submittals',      num: '05', title: 'Submittals & Approval Timelines'
+  },
+  {
+    id: 'materials',       num: '06', title: 'Material Standards & Substitutions'
+  },
+  {
+    id: 'workmanship',     num: '07', title: 'Workmanship Standards'
+  },
+  {
+    id: 'changes',         num: '08', title: 'Change Order Protocol'
+  },
+  {
+    id: 'qa',              num: '09', title: 'Quality Assurance & Final Inspection'
+  },
+  {
+    id: 'code',            num: '10', title: 'Code Compliance — Alabama Residential'
+  }
+];
+
+/* ──────── ITEMS — PLAN-SET SALE EDITION ───────────────────────────────────── */
+
+const ITEMS_SALE = {
+  general: [
+    { id:'sale_g_1', lead:'Documents conveyed.', body:'The drawings, schedules, and these notes together constitute CMA\'s design documents. They convey design intent and prescribe minimum finish, material, and assembly standards. They are not a contract between CMA and any builder. CMA is not a party to the construction contract.', level:'L' },
+    { id:'sale_g_2', lead:'No construction administration.', body:'CMA will not perform site visits, submittal review, RFI response, change-order review, punch lists, or any other construction-administration service unless engaged separately under a written supplemental agreement. Absent such an agreement, no advice, comment, or silence by CMA shall be construed as approval of any work.', level:'L' },
+    { id:'sale_g_3', lead:'Use and copyright.', body:'The drawings are licensed for the construction of one residence at the address indicated. Reuse, adaptation, or further distribution is prohibited without written authorization. Removing CMA\'s seal or title block voids the license.', level:'S' },
+    { id:'sale_g_4', lead:'Standard of care.', body:'CMA\'s services were performed consistent with the standard of care of architects practicing in the same locale at the time the documents were prepared. CMA does not warrant or guarantee any specific outcome of construction.', level:'C' },
+    { id:'sale_g_5', lead:'Indemnity for unauthorized use.', body:'The purchaser shall defend, indemnify, and hold CMA harmless from any claim arising out of construction performed without CMA\'s construction administration, including claims related to code compliance, life safety, and the suitability of materials and methods.', level:'C' }
+  ],
+  precedence: [
+    { id:'sale_p_1', lead:'Order of precedence.', body:'Where conflict exists among the documents, the more stringent requirement applies. Among themselves, the documents are read in this order: written addenda or revisions; large-scale details; small-scale details and elevations; plans; schedules; these notes. Written dimensions govern over scaled measurements. <em class="term">Do not scale drawings.</em>', level:'L' },
+    { id:'sale_p_2', lead:'Coverage.', body:'Items shown on one drawing and not another are required as if shown on all. Mechanical, electrical, and plumbing layouts are diagrammatic; routing, sizing, and final coordination are the builder\'s responsibility.', level:'S' },
+    { id:'sale_p_3', lead:'Discrepancies.', body:'The builder shall notify the owner in writing of any conflict, omission, or ambiguity before proceeding. Work installed in conflict with the documents is at the builder\'s risk.', level:'S' },
+    { id:'sale_p_4', lead:'Dimensioning conventions.', body:'Plan dimensions are to face of stud at exterior walls and to centerline of stud at interior walls unless noted otherwise. Masonry walls are dimensioned face-to-face of masonry. Window and door openings in stud construction are dimensioned to centerline; in masonry, as masonry openings (M.O.).', level:'C' },
+    { id:'sale_p_5', lead:'Engineering design.', body:'Beam, header, and lintel sizes shown are design intent unless stamped by a licensed engineer. Final structural sizing, footing dimensions, and reinforcement are to be confirmed by an Alabama-licensed structural engineer based on local soil conditions.', level:'C' }
+  ],
+  site: [
+    { id:'sale_s_1', lead:'Field verification.', body:'All existing conditions, dimensions, elevations, setbacks, easements, and utility locations shall be verified by the builder before excavation, fabrication, or ordering. The drawings rely on information furnished to CMA at the time of issue and are not a survey.', level:'L' },
+    { id:'sale_s_2', lead:'Survey, soils, & engineering.', body:'A current boundary and topographic survey, a geotechnical report, and structural, mechanical, and civil engineering stamped by Alabama-licensed engineers are required where conditions warrant. None of these are provided by CMA unless specifically noted on the cover sheet.', level:'S' },
+    { id:'sale_s_3', lead:'Hidden conditions.', body:'Discovery of hidden conditions during construction does not authorize departure from the design intent without written consultation with CMA, which may be obtained for an additional fee.', level:'S' },
+    { id:'sale_s_4', lead:'Tree and vegetation protection.', body:'The builder shall protect existing trees indicated to remain with temporary fencing at the dripline. No grading, trenching, vehicle traffic, or material storage within protected zones.', level:'C' },
+    { id:'sale_s_5', lead:'Erosion and sediment control.', body:'Provide erosion and sediment control in accordance with State of Alabama ADEM and local jurisdiction requirements. Protect adjacent properties and rights-of-way; remove tracked mud and debris promptly.', level:'C' },
+    { id:'sale_s_6', lead:'Utility location.', body:'Builder is responsible for locating, protecting, and coordinating relocation of all utilities on site. Notify the appropriate utility owner immediately upon damage. No claim shall be made by the builder for delay associated with utility relocation.', level:'C' }
+  ],
+  qualifications: [
+    { id:'sale_q_1', lead:'Builder of record.', body:'The work shall be performed by a builder properly licensed by the State of Alabama Home Builders Licensure Board (Alabama Code §34-14A) and registered in the project\'s jurisdiction. The builder shall carry general liability and builder\'s-risk insurance and shall name the owner as an additional insured.', level:'L' },
+    { id:'sale_q_2', lead:'Specialized trades.', body:'Mechanical, electrical, plumbing, and gas-fitting work shall be performed by trades licensed by the Alabama Plumbers and Gas Fitters Examining Board, the Alabama Electrical Contractors Board, and the Alabama Board of HVAC Contractors as applicable.', level:'S' },
+    { id:'sale_q_3', lead:'Trade experience.', body:'Roofing, masonry, and stucco shall be performed by tradesmen with a minimum of five years\' experience in custom residential work of comparable detail. Documentation of licensure and insurance shall be retained on site.', level:'S' },
+    { id:'sale_q_4', lead:'Superintendent.', body:'A full-time, on-site superintendent shall be present during all active construction with documented experience in custom residential work of comparable scale.', level:'C' },
+    { id:'sale_q_5', lead:'Lien releases.', body:'Final payment to the builder shall be conditioned on receipt of fully executed lien releases from all subcontractors and material suppliers.', level:'C' }
+  ],
+  submittals: [
+    { id:'sale_su_1', lead:'No CMA review.', body:'Under this edition, CMA does not receive, review, stamp, or approve submittals, shop drawings, samples, or product data. The builder and owner shall jointly review and approve all such items before fabrication or order.', level:'L' },
+    { id:'sale_su_2', lead:'Recommended pre-fabrication review.', body:'CMA strongly recommends that the owner retain CMA, or another licensed architect, to review shop drawings for cabinetry, exterior millwork, windows, doors, and roof and floor framing before fabrication. Failure to do so does not relieve the builder of responsibility for conformance with the design.', level:'S' },
+    { id:'sale_su_3', lead:'Material samples.', body:'Owner is encouraged to require physical samples of all exterior finishes — masonry, mortar, stucco, roofing, siding, paint, and stain — for approval prior to installation. The owner shall retain final approval authority.', level:'C' }
+  ],
+  materials: [
+    { id:'sale_m_1', lead:'Standard quality.', body:'All materials shall be new, unused, of first quality, and free of defects. No reclaimed, salvaged, or seconds material unless expressly indicated on the drawings.', level:'L' },
+    { id:'sale_m_2', lead:'CMA standing requirements.', body:'Half-round copper gutters and round copper downspouts. Copper flashing at all roof transitions, valleys, drip edges, pitch breaks, chimneys, beam caps, and roof-to-wall conditions. Copper or lead-coated copper pans at all through-wall and shower conditions. Stainless steel or silicon-bronze fasteners at all exterior wood, brick mold, porches, decks, rafter tails, and any concealed fastening in contact with treated lumber. No exposed galvanized fasteners on visible exterior surfaces.', level:'L' },
+    { id:'sale_m_3', lead:'Wood — exterior.', body:'Exterior trim, rafter tails, fascia, beadboard, and porch ceilings shall be a clear-grade rot-resistant species (Western Red Cedar, Spanish Cedar, Cypress, or Sapele). Finger-jointed material is not permitted on the exterior.', level:'S' },
+    { id:'sale_m_4', lead:'Wood — interior.', body:'Interior trim and millwork shall be solid wood — paint-grade poplar or stain-grade species per the drawings. MDF is permitted only where expressly noted; no MDF in baths, kitchens, or wet areas.', level:'S' },
+    { id:'sale_m_5', lead:'Foundation concrete.', body:'Concrete shall be 3,000 psi minimum at 28 days for footings and slabs, 4,000 psi at exposed exterior flatwork. Reinforcement per structural engineer. Vapor retarder min 10-mil under all conditioned slabs, taped at laps and penetrations.', level:'C' },
+    { id:'sale_m_6', lead:'Framing lumber.', body:'Dimensional lumber shall be #2 Southern Yellow Pine or #2 Spruce-Pine-Fir, kiln-dried, grade-stamped. Engineered lumber (LVL, PSL, I-joists) per the structural drawings — no field substitution.', level:'C' },
+    { id:'sale_m_7', lead:'Sheathing.', body:'Wall sheathing shall be 7/16″ APA-rated OSB or 1/2″ CDX plywood. Roof sheathing 5/8″ minimum. Ring-shank or screw fasteners per code. H-clips at unsupported roof sheathing edges.', level:'C' },
+    { id:'sale_m_8', lead:'Weather-resistive barrier.', body:'Mechanically fastened housewrap or fluid-applied WRB over sheathing. All seams taped with manufacturer-approved tape. Lap shingle-fashion. Self-adhered flashing tape (min 6″) at all rough openings — sill flashing pan-formed with back dam.', level:'C' },
+    { id:'sale_m_9', lead:'Roofing underlayment.', body:'Synthetic underlayment over entire roof deck. Self-adhered ice-and-water shield at all eaves to a point 24″ inside the warm wall, in all valleys, at all penetrations, and at roof-to-wall conditions.', level:'C' },
+    { id:'sale_m_10', lead:'Copper flashing weight.', body:'Copper flashing shall be 16-oz cold-rolled minimum, lock-seamed at exposed joints, soldered where waterproofing demands. No exposed fasteners through copper face. Galvanic isolation (rosin paper or asphaltic primer) where copper contacts dissimilar metals.', level:'C' },
+    { id:'sale_m_11', lead:'Windows.', body:'Aluminum-clad solid wood windows from a manufacturer of comparable quality to Marvin, Kolbe, Pella Architect, or Loewen. Insulated glazing with low-E coating; U-factor and SHGC to comply with current Alabama energy code. True or simulated divided lites per the elevations.', level:'C' },
+    { id:'sale_m_12', lead:'Exterior doors.', body:'Exterior doors solid 1¾″ thick, weatherstripped, with adjustable thresholds. Hardware solid forged or cast brass/bronze; no plated zinc on exterior.', level:'C' },
+    { id:'sale_m_13', lead:'Insulation & air sealing.', body:'Air sealing of all top plates, bottom plates, rim joists, penetrations, and band conditions before insulation. Cavity insulation per the energy compliance path on the drawings; minimum R-values shall meet or exceed Alabama IECC for the climate zone.', level:'C' },
+    { id:'sale_m_14', lead:'Plumbing materials.', body:'PEX-A or copper supply; no CPVC in walls. Cast-iron DWV at vertical stacks where shown. No Sharkbite or push-to-connect fittings concealed in framed walls.', level:'C' },
+    { id:'sale_m_15', lead:'HVAC.', body:'Equipment sized by Manual J, ducts by Manual D, equipment by Manual S. Hard-piped refrigerant lines insulated per code. No flexible duct longer than 6′ between rigid trunks and registers.', level:'C' },
+    { id:'sale_m_16', lead:'Drywall.', body:'½″ Type X at attached garages and shared walls per code; 5/8″ Type X at applicable ceilings. Moisture-resistant board at wet walls; cement backer board at all tile substrates.', level:'C' },
+    { id:'sale_m_17', lead:'Paint and stain.', body:'Premium-line acrylic from Benjamin Moore, Sherwin-Williams, or comparable. Two finish coats over primer minimum, three on dark and saturated colors. Penetrating exterior stains; no film-forming clear coats on exterior wood.', level:'C' },
+    { id:'sale_m_18', lead:'Hardware.', body:'Door, cabinet, and bath hardware solid brass or bronze with living finish where indicated. No plated zinc or stamped steel on millwork or doors.', level:'C' },
+    { id:'sale_m_19', lead:'Substitutions.', body:'Items shown on the drawings or named in these notes are required. Any substitution is the owner\'s and builder\'s decision and shall be documented in writing between them. CMA does not warrant the equivalence of any substituted product, and substitution does not transfer any design liability to CMA.', level:'L' }
+  ],
+  workmanship: [
+    { id:'sale_w_1', lead:'Standard of work.', body:'All work shall be performed by tradesmen skilled and experienced in the work of their trade, in a manner consistent with the highest standard of residential custom construction. Lines true, surfaces plumb and level, joints tight and consistent, reveals uniform.', level:'L' },
+    { id:'sale_w_2', lead:'Trim and millwork.', body:'Trim returns, miters, and scribes shall be hand-fit; caulk shall not be used to fill gaps in trim. Exposed fastener heads shall be set, filled, and finished. Paint shall not bridge across separate trim members.', level:'S' },
+    { id:'sale_w_3', lead:'Drywall finish.', body:'Level 4 minimum throughout, Level 5 in raking light and gloss-paint conditions, ceilings under raking light, and all walls receiving sheen above eggshell.', level:'S' },
+    { id:'sale_w_4', lead:'Tolerances.', body:'Walls plumb within 1/8″ in 8\'-0″. Floors level within 1/4″ in 10\'-0″. Cabinet faces aligned within 1/32″. Window and door reveals consistent within 1/16″.', level:'C' },
+    { id:'sale_w_5', lead:'Caulking and sealants.', body:'Polyurethane or hybrid sealant at all exterior joints subject to movement; siliconized acrylic at interior paint-grade joints; pure silicone at tile and stone wet joints. Tooled smooth, recessed slightly behind faces of adjacent finishes — never proud.', level:'C' },
+    { id:'sale_w_6', lead:'Flashing & weatherproofing.', body:'Flashing, weather barrier, and roofing assemblies shall be installed to manufacturers\' published instructions; deviation voids warranty and is not authorized. Kickout flashing required at every roof-to-wall termination.', level:'C' }
+  ],
+  changes: [
+    { id:'sale_c_1', lead:'Owner authorization required.', body:'No change to the design — including, without limitation, changes to plan, elevation, roof form, opening sizes, exterior material, exterior color, principal interior finish, or structural assembly — shall be made without written authorization from the owner.', level:'L' },
+    { id:'sale_c_2', lead:'Field modification risk.', body:'Field modifications that depart from the drawings are at the builder\'s and owner\'s sole risk. CMA\'s design liability does not extend to work as modified in the field without CMA\'s written consultation.', level:'L' },
+    { id:'sale_c_3', lead:'Documentation.', body:'Any agreed change shall be documented in writing between the owner and builder, stating cost, schedule impact, and a single combined total, signed before the work proceeds.', level:'C' }
+  ],
+  qa: [
+    { id:'sale_qa_1', lead:'Owner-led inspections.', body:'The owner is encouraged to conduct, directly or through a qualified third-party inspector, a pre-pour foundation review, a pre-drywall framing/MEP/flashing review, and a substantial-completion punch walk before final payment. CMA may be retained for these reviews under separate agreement.', level:'L' },
+    { id:'sale_qa_2', lead:'Concealed work.', body:'Framing, mechanical, electrical, plumbing, waterproofing, and flashing shall be photographed before being concealed. Photographs shall be retained by the owner for the duration of any applicable warranty.', level:'S' },
+    { id:'sale_qa_3', lead:'Limitation.', body:'Any review by CMA, if performed, is limited to general conformance with the design intent and does not relieve the builder of sole responsibility for means, methods, sequencing, safety, or completeness of the work.', level:'S' },
+    { id:'sale_qa_4', lead:'Owner outlet walk.', body:'Recommended: an owner walk-through after framing and before any wall finishes are applied to confirm outlet, switch, low-voltage, and HVAC register locations. Once finishes are in place, relocations are owner-paid extras.', level:'C' },
+    { id:'sale_qa_5', lead:'Warranty.', body:'Builder shall provide a written one-year warranty against defects in materials and workmanship from substantial completion, with longer manufacturer warranties pass-through to the owner.', level:'C' }
+  ],
+  code: [
+    { id:'sale_co_1', lead:'Applicable codes.', body:'All work shall comply with all codes, standards, and regulations in force in the project\'s jurisdiction at the time of permit, including without limitation the IRC, IECC, NEC, IPC, and IMC as adopted by the State of Alabama and the local authority having jurisdiction, and any local zoning, historic, or overlay-district requirements.', level:'L' },
+    { id:'sale_co_2', lead:'Stringency.', body:'Where this specification is more stringent than code, this specification governs. Code compliance is solely the builder\'s responsibility.', level:'S' },
+    { id:'sale_co_3', lead:'Inspections & certificates.', body:'Builder is responsible for scheduling and obtaining all required jurisdictional inspections and the certificate of occupancy. Copies of all approved inspections shall be transmitted to the owner.', level:'C' }
+  ]
+};
+
+/* ──────── ITEMS — CMA PROCESS EDITION ─────────────────────────────────────── */
+
+const ITEMS_PROCESS = {
+  general: [
+    { id:'proc_g_1', lead:'Authority of documents.', body:'The construction drawings, schedules, and this specification together constitute the contract documents. CMA is the architect of record and will provide construction administration consistent with AIA B101 / B105 as modified by the owner-architect agreement.', level:'L' },
+    { id:'proc_g_2', lead:'Architect\'s role.', body:'CMA will conduct site visits at intervals appropriate to the stage of the work, review submittals, respond to RFIs, evaluate change proposals, certify payment, and conduct substantial- and final-completion walks. CMA does not direct or control means, methods, sequencing, or safety, and is not responsible for the contractor\'s failure to perform the work in accordance with the contract documents.', level:'L' },
+    { id:'proc_g_3', lead:'Communication protocol.', body:'All formal direction, RFIs, submittals, and change requests shall be transmitted in writing through the architect-of-record. Verbal field instructions are not contract direction unless reduced to writing within forty-eight hours.', level:'S' },
+    { id:'proc_g_4', lead:'Pre-construction conference.', body:'The contractor shall convene a pre-construction conference with the owner, architect, and all major subcontractors prior to commencement to review documents, schedule, submittal log, and chain-of-command.', level:'C' }
+  ],
+  precedence: [
+    { id:'proc_p_1', lead:'Order of precedence.', body:'Where conflict exists, the more stringent requirement applies. Among themselves, the documents are read in this order: signed change orders; addenda; large-scale details; small-scale details and elevations; plans; schedules; this specification. Written dimensions govern over scaled measurements. <em class="term">Do not scale drawings.</em>', level:'L' },
+    { id:'proc_p_2', lead:'Coverage.', body:'Items shown on one drawing and not another are required as if shown on all. MEP layouts are diagrammatic; the contractor is responsible for coordinated routing that respects framing, finishes, and ceiling heights shown.', level:'S' },
+    { id:'proc_p_3', lead:'Discrepancies.', body:'The contractor shall notify the architect in writing of any conflict, omission, or ambiguity before proceeding. Work installed in conflict with the documents will be removed and replaced at the contractor\'s expense.', level:'S' },
+    { id:'proc_p_4', lead:'Dimensioning conventions.', body:'Plan dimensions are to face of stud at exterior walls and to centerline of stud at interior walls unless noted otherwise. Masonry walls dimensioned face-to-face. Window and door openings in stud construction dimensioned to centerline; in masonry, as masonry openings (M.O.).', level:'C' }
+  ],
+  site: [
+    { id:'proc_s_1', lead:'Field verification.', body:'The contractor shall verify all existing conditions, dimensions, elevations, setbacks, easements, and utility locations before excavation, fabrication, or ordering, and shall promptly notify the architect in writing of any discrepancy.', level:'L' },
+    { id:'proc_s_2', lead:'Records on site.', body:'The contractor shall maintain on site at all times a current set of stamped drawings, this specification, the project schedule, the submittal log, and the RFI log.', level:'S' },
+    { id:'proc_s_3', lead:'Concealed work photo log.', body:'The contractor shall photograph all framing, MEP, waterproofing, and flashing work before it is concealed and transmit those photographs to the architect weekly.', level:'S' },
+    { id:'proc_s_4', lead:'As-builts.', body:'Deviations shall be redlined on a dedicated record set and delivered to the architect at substantial completion.', level:'S' },
+    { id:'proc_s_5', lead:'Tree and vegetation protection.', body:'Existing trees indicated to remain shall be protected with temporary fencing at the dripline. No grading, trenching, vehicle traffic, or material storage within protected zones.', level:'C' },
+    { id:'proc_s_6', lead:'Erosion and sediment control.', body:'Erosion and sediment control per ADEM and local jurisdiction. Protect adjacent properties; remove tracked material promptly.', level:'C' }
+  ],
+  qualifications: [
+    { id:'proc_q_1', lead:'Contractor.', body:'The contractor shall be properly licensed by the State of Alabama Home Builders Licensure Board (Alabama Code §34-14A), registered in the project\'s jurisdiction, and shall employ a full-time on-site superintendent with a minimum of five years\' experience in custom residential work of comparable scale and detail. The contractor shall carry general liability and builder\'s-risk insurance naming the owner and architect as additional insured.', level:'L' },
+    { id:'proc_q_2', lead:'Specialized trades.', body:'Mechanical, electrical, plumbing, and gas-fitting work shall be performed by trades licensed by the Alabama Plumbers and Gas Fitters Examining Board, the Alabama Electrical Contractors Board, and the Alabama Board of HVAC Contractors as applicable. Subcontractors for masonry, roofing, plaster/stucco, millwork, and finish carpentry shall be similarly qualified and approved by the architect before commencement.', level:'L' },
+    { id:'proc_q_3', lead:'Subcontractor list.', body:'Within ten working days of contract execution, the contractor shall furnish to the architect a list of proposed subcontractors with reference projects. The architect may, with reasonable cause, object to any name on the list.', level:'C' },
+    { id:'proc_q_4', lead:'Insurance certificates.', body:'Insurance certificates shall be provided to the owner and architect before commencement and shall be kept current for the duration of the work.', level:'C' }
+  ],
+  submittals: [
+    { id:'proc_su_1', lead:'Required submittals.', body:'Prior to fabrication or order, the contractor shall submit, for the architect\'s review and stamp: shop drawings for cabinetry, millwork, stairs, railings, exterior trim assemblies, doors, windows, roof and floor framing, and structural steel; physical samples of all exterior materials, including masonry, mortar, stucco, roofing, siding, paint, and stain; and product data for any item where a model, finish, or color must be selected.', level:'L' },
+    { id:'proc_su_2', lead:'Turnaround.', body:'The architect shall be allowed <em class="term">ten working days</em> for first review and <em class="term">five working days</em> for re-submittal review. The contractor shall plan the schedule accordingly. Fabrication or ordering before written approval is at the contractor\'s sole risk.', level:'L' },
+    { id:'proc_su_3', lead:'Submittal log.', body:'The contractor shall maintain a running log with dates, status, and revision numbers, and shall transmit the log to the architect with each pay application.', level:'S' },
+    { id:'proc_su_4', lead:'Mockups.', body:'Full-size mockups required, in this order: a 4\'×4\' brick or stone panel; a 4\'×8\' siding panel including a window and a corner; a stucco panel; an interior trim run including baseboard, casing, and crown corner. No production work to proceed until each mockup is approved.', level:'C' },
+    { id:'proc_su_5', lead:'Color and finish selection.', body:'All paint, stain, mortar, and grout colors shall be selected from physical samples drawn down on the project substrate. No selection from screen images or printed swatches.', level:'C' }
+  ],
+  materials: [
+    { id:'proc_m_1', lead:'Standard quality.', body:'All materials shall be new, unused, of first quality, and free of defects.', level:'L' },
+    { id:'proc_m_2', lead:'CMA standing requirements.', body:'Half-round copper gutters and round copper downspouts. Copper flashing at all roof transitions, valleys, drip edges, pitch breaks, chimneys, beam caps, and roof-to-wall conditions. Copper or lead-coated copper pans at through-wall and shower conditions. Stainless steel or silicon-bronze fasteners at all exterior wood, brick mold, porches, decks, rafter tails, and any concealed fastening in contact with treated lumber. No exposed galvanized fasteners on visible exterior surfaces.', level:'L' },
+    { id:'proc_m_3', lead:'Wood — exterior.', body:'Exterior trim, rafter tails, fascia, beadboard, and porch ceilings shall be a clear-grade rot-resistant species (Western Red Cedar, Spanish Cedar, Cypress, or Sapele); finger-jointed material is not permitted on the exterior.', level:'S' },
+    { id:'proc_m_4', lead:'Wood — interior.', body:'Interior trim and millwork shall be solid wood per the drawings — paint-grade poplar or stain-grade species. MDF only where expressly noted; no MDF in baths, kitchens, or wet areas.', level:'S' },
+    { id:'proc_m_5', lead:'Foundation concrete.', body:'Concrete 3,000 psi minimum at 28 days for footings and slabs, 4,000 psi at exposed exterior flatwork. Reinforcement per structural engineer. Vapor retarder min 10-mil under all conditioned slabs, taped at laps and penetrations.', level:'C' },
+    { id:'proc_m_6', lead:'Framing lumber.', body:'Dimensional lumber #2 SYP or #2 SPF, kiln-dried, grade-stamped. Engineered lumber per the structural drawings — no field substitution.', level:'C' },
+    { id:'proc_m_7', lead:'Sheathing.', body:'Wall sheathing 7/16″ APA-rated OSB or 1/2″ CDX plywood; roof 5/8″ minimum. Ring-shank or screw fasteners per code. H-clips at unsupported roof edges.', level:'C' },
+    { id:'proc_m_8', lead:'Weather-resistive barrier.', body:'Mechanically fastened housewrap or fluid-applied WRB over sheathing. All seams taped with manufacturer-approved tape. Lap shingle-fashion. Self-adhered flashing tape (min 6″) at all rough openings — sill flashing pan-formed with back dam.', level:'C' },
+    { id:'proc_m_9', lead:'Roofing underlayment.', body:'Synthetic underlayment over entire roof deck. Self-adhered ice-and-water shield at all eaves to a point 24″ inside the warm wall, in all valleys, at all penetrations, and at roof-to-wall conditions.', level:'C' },
+    { id:'proc_m_10', lead:'Copper flashing.', body:'Copper flashing 16-oz cold-rolled minimum, lock-seamed at exposed joints, soldered where waterproofing demands. No exposed fasteners through copper face. Galvanic isolation where copper contacts dissimilar metals.', level:'C' },
+    { id:'proc_m_11', lead:'Windows.', body:'Aluminum-clad solid wood windows from a manufacturer of comparable quality to Marvin, Kolbe, Pella Architect, or Loewen. Insulated glazing with low-E coating; U-factor and SHGC to comply with current Alabama energy code. True or simulated divided lites per the elevations.', level:'C' },
+    { id:'proc_m_12', lead:'Exterior doors.', body:'Exterior doors solid 1¾″ thick, weatherstripped, with adjustable thresholds. Hardware solid forged or cast brass/bronze; no plated zinc on exterior.', level:'C' },
+    { id:'proc_m_13', lead:'Insulation & air sealing.', body:'Air sealing at all top plates, bottom plates, rim joists, penetrations, and band conditions before insulation. Cavity insulation per the energy compliance path; minimum R-values per Alabama IECC for the climate zone.', level:'C' },
+    { id:'proc_m_14', lead:'Plumbing materials.', body:'PEX-A or copper supply; no CPVC in walls. Cast-iron DWV at vertical stacks where shown. No push-to-connect fittings concealed in framed walls.', level:'C' },
+    { id:'proc_m_15', lead:'HVAC.', body:'Equipment sized by Manual J, ducts by Manual D, equipment by Manual S — calculations submitted to architect. Hard-piped refrigerant lines insulated per code. No flexible duct longer than 6′ between rigid trunks and registers.', level:'C' },
+    { id:'proc_m_16', lead:'Drywall.', body:'½″ Type X at attached garages and shared walls per code; 5/8″ Type X at applicable ceilings. Moisture-resistant board at wet walls; cement backer board at all tile substrates.', level:'C' },
+    { id:'proc_m_17', lead:'Paint and stain.', body:'Premium-line acrylic from Benjamin Moore, Sherwin-Williams, or comparable. Two finish coats over primer minimum, three on dark and saturated colors. Penetrating exterior stains; no film-forming clear coats on exterior wood.', level:'C' },
+    { id:'proc_m_18', lead:'Hardware.', body:'Door, cabinet, and bath hardware solid brass or bronze with living finish where indicated. No plated zinc or stamped steel on millwork or doors.', level:'C' },
+    { id:'proc_m_19', lead:'Substitutions.', body:'No substitution shall be made without the architect\'s prior written approval. Substitution requests shall include physical samples, full technical data, and a written statement that the substitution equals or exceeds the specified item in performance, durability, and appearance. The architect\'s review of a substitution does not waive any other requirement of the contract documents.', level:'L' }
+  ],
+  workmanship: [
+    { id:'proc_w_1', lead:'Standard of work.', body:'All work shall be performed by tradesmen skilled and experienced in their trade, in a manner consistent with the highest standard of residential custom construction. Lines true, surfaces plumb and level, joints tight and consistent, reveals uniform.', level:'L' },
+    { id:'proc_w_2', lead:'Trim and millwork.', body:'Trim returns, miters, and scribes hand-fit; caulk shall not be used to fill gaps in trim. Exposed fastener heads set, filled, and finished. Paint shall not bridge across separate trim members.', level:'S' },
+    { id:'proc_w_3', lead:'Drywall finish.', body:'Level 4 minimum throughout, Level 5 in raking light and gloss-paint conditions, ceilings under raking light, and all walls receiving sheen above eggshell.', level:'S' },
+    { id:'proc_w_4', lead:'Architect\'s right to reject.', body:'The architect may, at any time, reject work that does not conform to the contract documents — including work shown on previously stamped shop drawings. Such rejected work shall be removed and replaced at no cost to the owner.', level:'L' },
+    { id:'proc_w_5', lead:'Tolerances.', body:'Walls plumb within 1/8″ in 8\'-0″. Floors level within 1/4″ in 10\'-0″. Cabinet faces aligned within 1/32″. Window and door reveals consistent within 1/16″.', level:'C' },
+    { id:'proc_w_6', lead:'Caulking and sealants.', body:'Polyurethane or hybrid sealant at all exterior joints subject to movement; siliconized acrylic at interior paint-grade joints; pure silicone at tile and stone wet joints. Tooled smooth, recessed slightly behind faces of adjacent finishes — never proud.', level:'C' },
+    { id:'proc_w_7', lead:'Flashing & weatherproofing.', body:'Flashing, weather barrier, and roofing assemblies installed to manufacturers\' published instructions. Kickout flashing required at every roof-to-wall termination.', level:'C' }
+  ],
+  changes: [
+    { id:'proc_c_1', lead:'Written change orders required.', body:'No change to the scope, quantity, material, finish, or method of any work shall be executed without a written change order signed by the owner and reviewed by the architect.', level:'L' },
+    { id:'proc_c_2', lead:'Reduce verbal to writing.', body:'Field directives from the owner do not constitute change orders; the contractor shall reduce any verbal request to a written proposal stating cost, schedule impact, and a single combined total, and shall not proceed until signed.', level:'L' },
+    { id:'proc_c_3', lead:'Risk for unauthorized work.', body:'Work performed without a signed change order is performed at the contractor\'s risk and expense. Substitutions of any kind require a change order.', level:'S' },
+    { id:'proc_c_4', lead:'Allowance reconciliation.', body:'Allowances are reconciled by change order at actual delivered cost. Mark-up on allowance reconciliations is per the contract; absent a contract figure, allowances are reconciled at cost without mark-up.', level:'C' }
+  ],
+  qa: [
+    { id:'proc_qa_1', lead:'Required milestone reviews.', body:'A pre-pour foundation review, a pre-drywall walk-through (framing, MEP rough-in, waterproofing, flashing, blocking), and an outlet/switch walk-through with the owner — held after framing and before any wall finishes — are required and shall be scheduled with the architect with five working days\' notice.', level:'L' },
+    { id:'proc_qa_2', lead:'Substantial & final completion.', body:'The architect will conduct a substantial-completion walk and issue a punch list. All punch items shall be closed and re-verified before final payment.', level:'L' },
+    { id:'proc_qa_3', lead:'Warranty walk.', body:'A one-year warranty walk shall be scheduled by the contractor at eleven months following substantial completion.', level:'S' },
+    { id:'proc_qa_4', lead:'Limitation of architect\'s review.', body:'The architect\'s review, on site or through submittals, is for general conformance with the design intent only and does not relieve the contractor of sole responsibility for means, methods, sequencing, safety, or for the correctness and completeness of the work.', level:'S' },
+    { id:'proc_qa_5', lead:'Closeout package.', body:'At final completion: redlined as-builts, all manufacturer warranties, operation and maintenance manuals, attic stock for paint and tile, and final lien releases shall be delivered to the owner.', level:'C' }
+  ],
+  code: [
+    { id:'proc_co_1', lead:'Applicable codes.', body:'All work shall comply with all codes, standards, and regulations in force in the project\'s jurisdiction at the time of permit, including without limitation the IRC, IECC, NEC, IPC, and IMC as adopted by the State of Alabama and the local authority having jurisdiction, and any local zoning, historic, or overlay-district requirements.', level:'L' },
+    { id:'proc_co_2', lead:'Stringency.', body:'Where this specification is more stringent than code, this specification governs. The contractor is responsible for code compliance and for obtaining all required inspections and certificates.', level:'S' },
+    { id:'proc_co_3', lead:'Inspections.', body:'The contractor shall schedule jurisdictional inspections and notify the architect at least 24 hours in advance. Failed inspections shall be cured at the contractor\'s expense.', level:'C' }
+  ]
+};
+
+// Build SPEC_DATA from the blueprint + items maps
+SECTIONS_BLUEPRINT.forEach(b => {
+  SPEC_DATA.sale.push({ ...b, items: ITEMS_SALE[b.id] || [] });
+  SPEC_DATA.process.push({ ...b, items: ITEMS_PROCESS[b.id] || [] });
+});
+
+/* ════════════════════════════════════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════════════════════════════════════ */
+
+const DEFAULT_STATE = {
+  version: 'sale',          // 'sale' | 'process'
+  detail: 'standard',       // 'light' | 'standard' | 'comprehensive'
+  project: {
+    name:     'CMA Residence',
+    location: 'Birmingham, Alabama',
+    address:  '',
+    date:     todayISO(),
+    issue:    '1.0'
+  },
+  ledeOverride: { sale: '', process: '' },   // empty string = use default lede
+  // Per-version, per-item: { included: bool, lead: str|null, body: str|null }
+  // null lead/body = use factory defaults; non-null = user override
+  overrides: { sale: {}, process: {} },
+  // Per-version, per-section: array of custom items added by the user
+  custom:    { sale: {}, process: {} }
+};
+
+let state = loadState();
+
+function todayISO() {
+  const d = new Date();
+  return d.toISOString().slice(0, 10);
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) return Object.assign({}, DEFAULT_STATE, JSON.parse(raw));
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_STATE));
+}
+
+function saveState() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   LEVEL LOGIC
+   ════════════════════════════════════════════════════════════════════════════ */
+
+const LEVEL_RANK = { light: 1, standard: 2, comprehensive: 3 };
+const ITEM_RANK  = { L: 1, S: 2, C: 3 };
+
+function isIncludedByDefault(itemLevel, detail) {
+  return ITEM_RANK[itemLevel] <= LEVEL_RANK[detail];
+}
+
+function getOverride(version, itemId) {
+  return state.overrides[version][itemId] || null;
+}
+
+function setOverride(version, itemId, patch) {
+  const cur = state.overrides[version][itemId] || {};
+  state.overrides[version][itemId] = Object.assign({}, cur, patch);
+  saveState();
+}
+
+// Effective items list for a (version, sectionId) — combines factory + custom
+function effectiveItems(version, sectionId) {
+  const factory = (SPEC_DATA[version].find(s => s.id === sectionId) || {}).items || [];
+  const customs = (state.custom[version][sectionId] || []);
+  return factory.concat(customs);
+}
+
+// Should an item appear in the rendered preview?
+function isItemActive(version, item) {
+  const ov = getOverride(version, item.id);
+  if (ov && typeof ov.included === 'boolean') return ov.included;
+  if (item.isCustom) return true;
+  return isIncludedByDefault(item.level, state.detail);
+}
+
+// Get effective lead/body — overrides win
+function effLead(version, item) {
+  const ov = getOverride(version, item.id);
+  return (ov && ov.lead != null) ? ov.lead : item.lead;
+}
+function effBody(version, item) {
+  const ov = getOverride(version, item.id);
+  return (ov && ov.body != null) ? ov.body : item.body;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   RENDER — EDIT PANE
+   ════════════════════════════════════════════════════════════════════════════ */
+
+function renderEditPane() {
+  // Project info bindings
+  document.getElementById('proj_name').value     = state.project.name;
+  document.getElementById('proj_location').value = state.project.location;
+  document.getElementById('proj_address').value  = state.project.address;
+  document.getElementById('proj_date').value     = state.project.date;
+  document.getElementById('proj_issue').value    = state.project.issue;
+  document.getElementById('proj_lede').value     = state.ledeOverride[state.version] || VERSION_LEDE[state.version];
+
+  // Sections
+  const root = document.getElementById('sectionsEditor');
+  root.innerHTML = '';
+
+  SPEC_DATA[state.version].forEach(sec => {
+    const items = effectiveItems(state.version, sec.id);
+    const activeCount = items.filter(it => isItemActive(state.version, it)).length;
+
+    const block = document.createElement('div');
+    block.className = 'secblock';
+    block.dataset.sec = sec.id;
+
+    const head = document.createElement('div');
+    head.className = 'secblock-head';
+    head.innerHTML = `
+      <span class="num">${sec.num}</span>
+      <span class="title">${sec.title}</span>
+      <span class="meta">${activeCount}/${items.length} items</span>
+      <span class="caret">▾</span>`;
+    head.addEventListener('click', () => {
+      block.classList.toggle('collapsed');
+    });
+    block.appendChild(head);
+
+    const body = document.createElement('div');
+    body.className = 'secblock-body';
+
+    items.forEach(it => {
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      if (it.isCustom) row.classList.add('is-custom');
+      if (!isItemActive(state.version, it)) row.classList.add('disabled');
+
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = isItemActive(state.version, it);
+      cb.addEventListener('change', () => {
+        setOverride(state.version, it.id, { included: cb.checked });
+        renderAll();
+      });
+      row.appendChild(cb);
+
+      const edit = document.createElement('div');
+      edit.className = 'item-edit';
+
+      const leadInp = document.createElement('input');
+      leadInp.type = 'text';
+      leadInp.className = 'lead-input';
+      leadInp.value = effLead(state.version, it) || '';
+      leadInp.placeholder = '(no lead-in — set blank)';
+      leadInp.addEventListener('input', () => {
+        setOverride(state.version, it.id, { lead: leadInp.value });
+        renderPreview();
+      });
+      edit.appendChild(leadInp);
+
+      const bodyInp = document.createElement('textarea');
+      bodyInp.className = 'body-input';
+      bodyInp.value = stripHtml(effBody(state.version, it) || '');
+      bodyInp.rows = 3;
+      bodyInp.addEventListener('input', () => {
+        setOverride(state.version, it.id, { body: bodyInp.value });
+        renderPreview();
+      });
+      edit.appendChild(bodyInp);
+
+      row.appendChild(edit);
+
+      const badge = document.createElement('span');
+      badge.className = 'level-badge';
+      badge.textContent = it.isCustom ? 'CUS' : it.level;
+      row.appendChild(badge);
+
+      // Delete button for custom items only
+      if (it.isCustom) {
+        const del = document.createElement('button');
+        del.className = 'delete-btn';
+        del.title = 'Remove this custom item';
+        del.textContent = '×';
+        del.addEventListener('click', () => {
+          state.custom[state.version][sec.id] =
+            (state.custom[state.version][sec.id] || []).filter(c => c.id !== it.id);
+          delete state.overrides[state.version][it.id];
+          saveState();
+          renderAll();
+        });
+        // Replace level badge with delete (keep grid)
+        row.appendChild(del);
+      }
+
+      body.appendChild(row);
+    });
+
+    // Add custom item
+    const addRow = document.createElement('div');
+    addRow.className = 'add-row';
+    const addInp = document.createElement('input');
+    addInp.type = 'text';
+    addInp.placeholder = 'Add a project-specific note for this section…';
+    const addBtn = document.createElement('button');
+    addBtn.textContent = '+ Add';
+    addBtn.addEventListener('click', () => {
+      if (!addInp.value.trim()) return;
+      const id = 'custom_' + Math.random().toString(36).slice(2, 9);
+      const newItem = {
+        id, lead: '', body: addInp.value.trim(), level: 'CUS', isCustom: true
+      };
+      state.custom[state.version][sec.id] = state.custom[state.version][sec.id] || [];
+      state.custom[state.version][sec.id].push(newItem);
+      addInp.value = '';
+      saveState();
+      renderAll();
+    });
+    addRow.appendChild(addInp);
+    addRow.appendChild(addBtn);
+    body.appendChild(addRow);
+
+    block.appendChild(body);
+    root.appendChild(block);
+  });
+}
+
+function stripHtml(s) {
+  // Convert simple <em class="term">..</em> to plain text for editing.
+  return (s || '').replace(/<[^>]+>/g, '');
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   RENDER — PREVIEW PANE
+   ════════════════════════════════════════════════════════════════════════════ */
+
+function renderPreview() {
+  const projName = state.project.name || 'CMA Residence';
+  const projLoc  = state.project.location || 'Birmingham, Alabama';
+
+  document.getElementById('pv_proj_name').textContent     = projName;
+  document.getElementById('pv_proj_location').textContent = projLoc;
+
+  const editionLabel = state.version === 'sale'
+    ? 'Plan-Set Sale Edition · ' + (state.project.issue || '1.0')
+    : 'CMA Process Edition · ' + (state.project.issue || '1.0');
+  document.getElementById('pv_ver_chip').textContent = editionLabel;
+  document.getElementById('pv_edition_strap').textContent =
+    state.version === 'sale' ? 'Plan-Set Sale Edition — Risk-Transfer / No CA'
+                              : 'CMA Process Edition — Architect of Record / Full CA';
+  document.getElementById('pv_issue').textContent = 'Issue ' + (state.project.issue || '1.0') + ' · 2026';
+
+  const lede = state.ledeOverride[state.version] || VERSION_LEDE[state.version];
+  const ledeEl = document.getElementById('pv_lede');
+  ledeEl.textContent = lede;
+
+  // Sections
+  const grid = document.getElementById('pv_sections');
+  grid.innerHTML = '';
+
+  SPEC_DATA[state.version].forEach(sec => {
+    const items = effectiveItems(state.version, sec.id)
+      .filter(it => isItemActive(state.version, it));
+    if (items.length === 0) return;
+
+    const secEl = document.createElement('section');
+    secEl.dataset.sec = sec.id;
+
+    const h2 = document.createElement('h2');
+    h2.innerHTML = `<span class="num">${sec.num}</span>${escapeHtml(sec.title)}`;
+    secEl.appendChild(h2);
+
+    items.forEach(it => {
+      const p = document.createElement('p');
+      p.dataset.item = it.id;
+      const lead = effLead(state.version, it);
+      const body = effBody(state.version, it);
+      let html = '';
+      if (lead && lead.trim()) {
+        html += `<span class="lead" contenteditable="true" data-field="lead">${escapeHtml(lead)}</span>`;
+      }
+      html += `<span contenteditable="true" data-field="body">${body}</span>`;
+      p.innerHTML = html;
+
+      // Wire contenteditable handlers
+      p.querySelectorAll('[contenteditable="true"]').forEach(node => {
+        node.addEventListener('blur', () => {
+          const field = node.dataset.field;
+          if (field === 'lead') {
+            setOverride(state.version, it.id, { lead: node.textContent });
+          } else {
+            setOverride(state.version, it.id, { body: node.innerHTML });
+          }
+          renderEditPane();   // sync the form pane
+        });
+        node.addEventListener('keydown', e => {
+          if (e.key === 'Escape') node.blur();
+        });
+      });
+
+      secEl.appendChild(p);
+    });
+
+    grid.appendChild(secEl);
+  });
+
+  // Wire lede contenteditable
+  ledeEl.onblur = () => {
+    state.ledeOverride[state.version] = ledeEl.textContent;
+    saveState();
+  };
+}
+
+function escapeHtml(s) {
+  return (s || '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+function renderAll() {
+  renderEditPane();
+  renderPreview();
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PROJECT-INFO INPUT BINDING
+   ════════════════════════════════════════════════════════════════════════════ */
+
+function bindProjectInputs() {
+  const map = {
+    proj_name: 'name',
+    proj_location: 'location',
+    proj_address: 'address',
+    proj_date: 'date',
+    proj_issue: 'issue'
+  };
+  Object.keys(map).forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      state.project[map[id]] = el.value;
+      saveState();
+      renderPreview();
+    });
+  });
+  const ledeEl = document.getElementById('proj_lede');
+  ledeEl.addEventListener('input', () => {
+    state.ledeOverride[state.version] = ledeEl.value;
+    saveState();
+    renderPreview();
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   TOP-BAR CONTROLS
+   ════════════════════════════════════════════════════════════════════════════ */
+
+function bindTopbar() {
+  document.querySelectorAll('#versionSeg button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#versionSeg button').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      state.version = btn.dataset.v;
+      saveState();
+      renderAll();
+    });
+  });
+  document.querySelectorAll('#detailSeg button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#detailSeg button').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      state.detail = btn.dataset.d;
+      // Clear "included" overrides so the preset takes effect cleanly,
+      // but PRESERVE the user's text edits on lead/body.
+      Object.keys(state.overrides[state.version]).forEach(id => {
+        if (state.overrides[state.version][id].included !== undefined) {
+          delete state.overrides[state.version][id].included;
+        }
+      });
+      saveState();
+      renderAll();
+    });
+  });
+
+  document.getElementById('btnReset').addEventListener('click', () => {
+    if (!confirm('Reset all checkboxes and edits for the ' +
+        (state.version === 'sale' ? 'Plan-Set Sale' : 'CMA Process') +
+        ' edition to factory defaults? Project info is preserved.')) return;
+    state.overrides[state.version] = {};
+    state.custom[state.version] = {};
+    state.ledeOverride[state.version] = '';
+    saveState();
+    renderAll();
+  });
+
+  document.getElementById('btnPrint').addEventListener('click', () => window.print());
+  document.getElementById('btnRtf').addEventListener('click', exportRtf);
+
+  // Set the selected detail button
+  document.querySelectorAll('#detailSeg button').forEach(b => {
+    b.classList.toggle('on', b.dataset.d === state.detail);
+  });
+  document.querySelectorAll('#versionSeg button').forEach(b => {
+    b.classList.toggle('on', b.dataset.v === state.version);
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   RTF EXPORT — reflects current state (version + checked items + edits)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+function rtfEscape(s) {
+  return (s || '')
+    .replace(/<[^>]+>/g, '')      // strip any inline HTML
+    .replace(/\\/g, '\\\\')
+    .replace(/\{/g,  '\\{')
+    .replace(/\}/g,  '\\}')
+    .replace(/—/g, '--')
+    .replace(/–/g, '-')
+    .replace(/[‘’]/g, "'")
+    .replace(/[“”]/g, '"')
+    .replace(/ /g, ' ')
+    .replace(/[^\x00-\x7F]/g, c => '\\u' + c.charCodeAt(0) + '?');
+}
+
+function exportRtf() {
+  const v = state.version;
+  const editionTitle = v === 'sale'
+    ? 'Prescriptive Specification -- Plan-Set Sale Edition'
+    : 'Prescriptive Specification -- CMA Process Edition';
+
+  let r  = '{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang1033';
+  r += '{\\fonttbl{\\f0\\fnil\\fcharset0 Arial;}}';
+  r += '\\viewkind4\\uc1\\pard\\sa120\\f0\\fs22 ';
+
+  // Title
+  r += '{\\b\\fs32 ' + rtfEscape(editionTitle) + '}\\par ';
+
+  // Project info line
+  const projParts = [
+    state.project.name,
+    state.project.location,
+    state.project.address,
+    state.project.date,
+    'Issue ' + (state.project.issue || '1.0')
+  ].filter(Boolean);
+  r += rtfEscape(projParts.join(' -- ')) + '\\par\\par ';
+
+  // Lede
+  const lede = state.ledeOverride[v] || VERSION_LEDE[v];
+  r += '{\\i ' + rtfEscape(lede) + '}\\par\\par ';
+
+  // Sections
+  SPEC_DATA[v].forEach(sec => {
+    const items = effectiveItems(v, sec.id)
+      .filter(it => isItemActive(v, it));
+    if (items.length === 0) return;
+    r += '{\\b\\fs26 ' + rtfEscape(sec.num + '  ' + sec.title) + '}\\par ';
+    items.forEach(it => {
+      const lead = effLead(v, it);
+      const body = effBody(v, it);
+      if (lead && lead.trim()) {
+        r += '{\\b ' + rtfEscape(lead) + '}  ' + rtfEscape(body) + '\\par ';
+      } else {
+        r += rtfEscape(body) + '\\par ';
+      }
+    });
+    r += '\\par ';
+  });
+
+  r += '}';
+
+  const which = v === 'sale' ? 'PlanSetSale' : 'CMAProcess';
+  const detailTag = state.detail.charAt(0).toUpperCase() + state.detail.slice(1);
+  const blob = new Blob([r], { type: 'application/rtf' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = 'CMA_Spec_' + which + '_' + detailTag + '.rtf';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════════════════════════════════ */
+
+bindTopbar();
+bindProjectInputs();
+renderAll();
+</script>
+</body>
+</html>
