@@ -1,0 +1,1445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Questionnaire &middot; Carlisle Moore Architects</title>
+<meta name="description" content="A design questionnaire for prospective clients of Carlisle Moore Architects.">
+<style>
+/* ─────────────────────────────────────────────────────────────────────
+   ET BOOK — Edward Tufte's open-source typeface (via jsDelivr CDN)
+   ───────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "et-book";
+  src: url("https://cdn.jsdelivr.net/gh/edwardtufte/et-book/et-book/et-book-roman-line-figures/et-book-roman-line-figures.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "et-book";
+  src: url("https://cdn.jsdelivr.net/gh/edwardtufte/et-book/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.woff") format("woff");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "et-book";
+  src: url("https://cdn.jsdelivr.net/gh/edwardtufte/et-book/et-book/et-book-bold-line-figures/et-book-bold-line-figures.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   ROOT
+   ───────────────────────────────────────────────────────────────────── */
+:root {
+  --paper:        #fffff8;
+  --ink:          #111111;
+  --ink-mid:      #333333;
+  --ink-light:    #5b5b5b;
+  --margin-note:  #4a4a4a;
+  --rule:         #b8b8b8;
+  --rule-faint:   #d8d8d8;
+  --accent:       #d04030;
+  --accent-dark:  #8c2818;
+  --field-bg:     #ffffff;
+  --select-bg:    #f4f1ea;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "et-book", Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-size: 19px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body, h1, h2, h3, p, label, .sidenote, .section-no {
+  font-feature-settings: "onum";
+}
+
+p { margin: 0 0 1em; }
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+a:hover { color: var(--accent-dark); }
+
+/* MASTHEAD */
+.masthead {
+  border-bottom: 1px solid var(--ink);
+  padding: 28px 0 18px;
+  margin-bottom: 28px;
+}
+.masthead-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+}
+.masthead-firm {
+  font-family: "et-book", Georgia, serif;
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: bold;
+}
+.masthead-doc {
+  font-family: "et-book", Georgia, serif;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+/* PAGE */
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 40px 96px;
+  position: relative;
+}
+article {
+  width: 100%;
+  max-width: 880px;
+  position: relative;
+}
+.doc-title {
+  font-family: "et-book", Georgia, serif;
+  font-size: 56px;
+  font-weight: normal;
+  font-style: italic;
+  line-height: 1.05;
+  margin: 0 0 0.2em;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  max-width: 580px;
+}
+.doc-rule {
+  border: none;
+  border-top: 1px solid var(--ink);
+  width: 580px;
+  max-width: 100%;
+  margin: 28px 0 36px;
+}
+.doc-intro {
+  max-width: 580px;
+  font-size: 18px;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  margin-bottom: 48px;
+}
+.doc-intro em { color: var(--ink); }
+
+/* SECTIONS */
+section {
+  position: relative;
+  margin-bottom: 60px;
+  padding-top: 28px;
+  border-top: 1px solid var(--rule);
+}
+section:first-of-type { border-top: none; padding-top: 0; }
+.section-no {
+  font-family: "et-book", Georgia, serif;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+.section-no .sigil { color: var(--accent); margin-right: 6px; }
+h2 {
+  font-family: "et-book", Georgia, serif;
+  font-style: italic;
+  font-size: 32px;
+  font-weight: normal;
+  line-height: 1.15;
+  margin: 0 0 8px;
+  max-width: 580px;
+  color: var(--ink);
+}
+.section-desc {
+  font-size: 16px;
+  font-style: italic;
+  color: var(--ink-mid);
+  max-width: 580px;
+  line-height: 1.55;
+  margin-bottom: 28px;
+}
+
+/* QUESTIONS */
+.q {
+  position: relative;
+  margin-bottom: 32px;
+  max-width: 580px;
+}
+.q + .q { margin-top: 32px; }
+.q-label {
+  display: block;
+  font-family: "et-book", Georgia, serif;
+  font-size: 19px;
+  font-weight: bold;
+  color: var(--ink);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+.q-label .opt {
+  font-weight: normal;
+  font-style: italic;
+  color: var(--ink-light);
+  font-size: 15px;
+  margin-left: 6px;
+}
+.q-label .req {
+  color: var(--accent);
+  margin-left: 4px;
+  font-weight: normal;
+}
+
+/* TUFTE SIDENOTE */
+.sidenote {
+  display: block;
+  font-style: italic;
+  color: var(--margin-note);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: -2px 0 10px;
+  padding-left: 14px;
+  border-left: 2px solid var(--rule-faint);
+}
+@media (min-width: 1024px) {
+  .sidenote {
+    position: absolute;
+    left: 620px;
+    width: 240px;
+    margin: 0;
+    padding-left: 0;
+    border-left: none;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--margin-note);
+  }
+  .sidenote::before {
+    content: "▸";
+    color: var(--accent);
+    margin-right: 6px;
+  }
+}
+
+/* FIELDS */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  background: var(--field-bg);
+  color: var(--ink);
+  font-family: "et-book", Palatino, Georgia, serif;
+  font-size: 18px;
+  line-height: 1.45;
+  border: none;
+  border-bottom: 1px solid var(--ink);
+  padding: 8px 4px 6px;
+  border-radius: 0;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.12s, background 0.12s;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  border-bottom: 2px solid var(--accent);
+  background: #fffef0;
+}
+input::placeholder, textarea::placeholder {
+  color: #9a9a93;
+  font-style: italic;
+}
+textarea {
+  min-height: 110px;
+  resize: vertical;
+  border: 1px solid var(--rule);
+  padding: 12px 14px;
+  background: var(--field-bg);
+  line-height: 1.55;
+}
+textarea:focus {
+  border-color: var(--accent);
+  border-width: 1px;
+  background: #fffef0;
+}
+select {
+  background-color: var(--select-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23111' stroke-width='1.2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  padding-right: 28px;
+  border-bottom: 1px solid var(--ink);
+  cursor: pointer;
+}
+.notes-box {
+  min-height: 160px;
+  font-size: 19px;
+  line-height: 1.6;
+  border: 1px solid var(--ink);
+}
+
+/* ROWS */
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+@media (max-width: 720px) {
+  .row { grid-template-columns: 1fr; gap: 16px; }
+}
+
+/* CHIPS */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 4px;
+}
+.chip {
+  font-family: "et-book", Georgia, serif;
+  font-size: 17px;
+  color: var(--ink-mid);
+  padding: 6px 14px 6px 0;
+  margin-right: 18px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-style: italic;
+  position: relative;
+}
+.chip:hover { color: var(--ink); }
+.chip input { display: none; }
+.chip.selected {
+  color: var(--ink);
+  font-style: normal;
+  font-weight: bold;
+}
+.chip.selected::after {
+  content: "·";
+  color: var(--accent);
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+/* STYLE CARDS */
+.styles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 28px;
+}
+@media (max-width: 720px) {
+  .styles { grid-template-columns: 1fr; }
+}
+.style {
+  cursor: pointer;
+  padding: 10px 0 12px;
+  border-bottom: 1px solid var(--rule-faint);
+  position: relative;
+}
+.style:hover { border-bottom-color: var(--ink); }
+.style.selected { border-bottom: 1px solid var(--accent); }
+.style.selected::before {
+  content: "✓";
+  position: absolute;
+  left: -22px;
+  top: 12px;
+  color: var(--accent);
+  font-weight: bold;
+}
+.style-title {
+  font-family: "et-book", Georgia, serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.style-desc {
+  font-size: 14.5px;
+  color: var(--ink-mid);
+  line-height: 1.45;
+}
+
+/* SPACES */
+.spaces {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px 22px;
+  margin-top: 4px;
+}
+@media (max-width: 720px) {
+  .spaces { grid-template-columns: 1fr 1fr; }
+}
+.space {
+  font-family: "et-book", Georgia, serif;
+  font-size: 16px;
+  color: var(--ink-mid);
+  padding: 4px 0;
+  cursor: pointer;
+  font-style: italic;
+}
+.space:hover { color: var(--ink); }
+.space input { display: none; }
+.space.selected {
+  color: var(--ink);
+  font-style: normal;
+  font-weight: bold;
+}
+.space.selected::before {
+  content: "✓ ";
+  color: var(--accent);
+  font-weight: bold;
+}
+.space:not(.selected)::before {
+  content: "  ";
+  letter-spacing: 0;
+}
+
+/* BUDGET */
+.budget {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 6px 24px;
+}
+.budget-item {
+  font-family: "et-book", Georgia, serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--ink-mid);
+  padding: 6px 0;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+}
+.budget-item:hover { color: var(--ink); }
+.budget-item.selected {
+  color: var(--ink);
+  font-style: normal;
+  font-weight: bold;
+  border-bottom-color: var(--accent);
+}
+.budget-item input { display: none; }
+
+/* SUBMIT */
+.submit-row {
+  margin-top: 64px;
+  padding-top: 28px;
+  border-top: 1px solid var(--ink);
+  max-width: 580px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.submit-btn,
+.alt-btn {
+  font-family: "et-book", Georgia, serif;
+  font-size: 19px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink);
+}
+.submit-btn {
+  font-weight: bold;
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 2px;
+  font-size: 21px;
+}
+.submit-btn:hover { color: var(--accent-dark); border-bottom-color: var(--accent-dark); }
+.alt-btn {
+  font-style: italic;
+  color: var(--ink-mid);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1px;
+}
+.alt-btn:hover { color: var(--ink); border-bottom-color: var(--ink); }
+.submit-status {
+  font-style: italic;
+  color: var(--ink-mid);
+  font-size: 15px;
+  margin-top: 16px;
+  max-width: 580px;
+}
+.submit-status.error { color: var(--accent); }
+.submit-status.ok { color: #2a7a3a; }
+
+/* CONFIRMATION */
+#confirmation {
+  display: none;
+  max-width: 580px;
+  padding: 80px 0 60px;
+}
+#confirmation h2 {
+  font-size: 44px;
+  font-style: italic;
+  margin-bottom: 18px;
+}
+#confirmation p {
+  font-size: 19px;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+#confirmation .issue-link {
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-light);
+  margin-top: 22px;
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--rule);
+  margin-top: 64px;
+  padding: 22px 40px 48px;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  text-align: center;
+}
+footer .accent { color: var(--accent); }
+
+/* CLIENT MODAL */
+.client-gate {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 248, 0.96);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 22px;
+  overflow: auto;
+}
+.client-gate.hidden { display: none; }
+body.gated { overflow: hidden; }
+.client-card {
+  max-width: 520px;
+  width: 100%;
+  background: var(--paper);
+  border-top: 4px solid var(--accent);
+  border-bottom: 1px solid var(--ink);
+  padding: 40px 44px 36px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+.client-card .eyebrow {
+  font-family: "et-book", Georgia, serif;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+.client-card .eyebrow .sigil { color: var(--accent); margin-right: 6px; }
+.client-card h2 {
+  font-family: "et-book", Georgia, serif;
+  font-style: italic;
+  font-size: 36px;
+  font-weight: normal;
+  line-height: 1.1;
+  margin: 0 0 14px;
+  color: var(--ink);
+  max-width: 100%;
+}
+.client-card p.gate-intro {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-mid);
+  margin: 0 0 22px;
+}
+.client-card label.gate-label {
+  display: block;
+  font-family: "et-book", Georgia, serif;
+  font-size: 17px;
+  font-weight: bold;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.client-card input[type="text"] {
+  width: 100%;
+  font-size: 22px;
+  padding: 8px 4px 6px;
+}
+.client-card .actions {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-end;
+}
+.client-card .begin-btn {
+  font-family: "et-book", Georgia, serif;
+  font-size: 19px;
+  font-weight: bold;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px 0;
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+}
+.client-card .begin-btn:hover { color: var(--accent-dark); border-bottom-color: var(--accent-dark); }
+.client-card .begin-btn:disabled {
+  color: var(--ink-light);
+  border-bottom-color: var(--rule);
+  cursor: not-allowed;
+}
+.client-card .gate-status {
+  font-style: italic;
+  color: var(--accent);
+  font-size: 15px;
+  margin-top: 12px;
+  min-height: 1.2em;
+}
+
+/* PROJECT BADGE — shown on the page after the gate is dismissed */
+.project-badge {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: "et-book", Georgia, serif;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 18px;
+  font-weight: bold;
+}
+.project-badge .sigil { color: var(--accent); margin-right: 6px; }
+.project-badge .name {
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: normal;
+  color: var(--ink);
+  margin-left: 8px;
+  font-size: 16px;
+}
+
+@media (max-width: 720px) {
+  .client-card { padding: 28px 22px 24px; }
+  .client-card h2 { font-size: 28px; }
+}
+
+@media print {
+  body { font-size: 11pt; }
+  .submit-row, footer, .masthead, .client-gate { display: none; }
+  section { page-break-inside: avoid; }
+  .sidenote { position: static !important; width: auto; padding-left: 14px; border-left: 2px solid #aaa; }
+}
+@media (max-width: 720px) {
+  .masthead-inner, .page { padding-left: 22px; padding-right: 22px; }
+  .doc-title { font-size: 40px; }
+  h2 { font-size: 26px; }
+  body { font-size: 17px; }
+}
+</style>
+</head>
+<body>
+
+<div class="client-gate" id="client-gate" role="dialog" aria-modal="true" aria-labelledby="client-gate-title">
+  <div class="client-card">
+    <div class="eyebrow"><span class="sigil">§</span>Carlisle Moore Architects</div>
+    <h2 id="client-gate-title">First, who is this for?</h2>
+    <p class="gate-intro">Enter a project name &mdash; usually the family or last name &mdash; so we can file your answers correctly. You'll fill out the rest in a moment.</p>
+    <label class="gate-label" for="client-input">Project name</label>
+    <input type="text" id="client-input" placeholder="e.g. Davis Family" autocomplete="off">
+    <div class="gate-status" id="gate-status"></div>
+    <div class="actions">
+      <button class="begin-btn" id="begin-btn" type="button" disabled>Begin questionnaire &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-firm">Carlisle Moore Architects</div>
+    <div class="masthead-doc">Design Questionnaire</div>
+  </div>
+</header>
+
+<div class="page">
+<article>
+
+  <div class="project-badge" id="project-badge" style="display:none;"><span class="sigil">§</span>Project<span class="name" id="project-badge-name"></span></div>
+  <h1 class="doc-title">Tell us about <em>your home</em>.</h1>
+  <hr class="doc-rule">
+
+  <p class="doc-intro">
+    This questionnaire helps us understand your vision, your daily life, and
+    the home you've been imagining. <em>There are no wrong answers.</em> The
+    more honest and specific you are, the better we can design for you. If a
+    question doesn't apply, skip it. The box at the top is for everything we
+    forgot to ask.
+  </p>
+
+  <section>
+    <span class="section-no"><span class="sigil">§</span>0 &middot; Opening</span>
+    <h2>Anything you want us to know.</h2>
+    <p class="section-desc">
+      Before any specifics: tell us a story, a feeling, a memory of a
+      place, a constraint, a worry, a half-formed idea. Whatever brought
+      you here. The questions below are a guide, not a script &mdash; this
+      box is yours to use however you'd like.
+    </p>
+    <div class="q">
+      <label class="q-label" for="q-notes">Your notes <span class="opt">(write as much or as little as you like)</span></label>
+      <textarea id="q-notes" class="notes-box" placeholder="There's a quality I'm after that I can't quite name..."></textarea>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-no"><span class="sigil">§</span>1 &middot; Contact</span>
+    <h2>Who we'll be working with.</h2>
+    <div class="q">
+      <div class="row">
+        <div>
+          <label class="q-label" for="q-name">Full name <span class="req">*</span></label>
+          <input type="text" id="q-name" placeholder="Your name" required>
+        </div>
+        <div>
+          <label class="q-label" for="q-partner">Partner / spouse <span class="opt">(if any)</span></label>
+          <input type="text" id="q-partner" placeholder="Their name">
+        </div>
+      </div>
+    </div>
+    <div class="q">
+      <div class="row">
+        <div>
+          <label class="q-label" for="q-email">Email <span class="req">*</span></label>
+          <input type="email" id="q-email" placeholder="you@example.com" required>
+        </div>
+        <div>
+          <label class="q-label" for="q-phone">Phone</label>
+          <input type="tel" id="q-phone" placeholder="(205) 000-0000">
+        </div>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-address">Project location</label>
+      <span class="sidenote">Street address if known, otherwise neighborhood, city, or general area.</span>
+      <input type="text" id="q-address" placeholder="Address or general area">
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-referral">How did you find us?</label>
+      <select id="q-referral">
+        <option value="">— Select —</option>
+        <option>Referred by a friend or colleague</option>
+        <option>A project of yours we admired</option>
+        <option>Instagram or social media</option>
+        <option>Website</option>
+        <option>Houzz or other platform</option>
+        <option>Builder referral</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-referral-detail">Referral details <span class="opt">(if applicable)</span></label>
+      <span class="sidenote">If someone sent you our way, we'd love to know who to thank.</span>
+      <input type="text" id="q-referral-detail" placeholder="Name or other context">
+    </div>
+  </section>
+
+  <section>
+    <span class="section-no"><span class="sigil">§</span>2 &middot; You</span>
+    <h2>You and your life.</h2>
+    <p class="section-desc">Help us picture how the house will actually be lived in.</p>
+    <div class="q">
+      <label class="q-label" for="q-household">Who will live in this home?</label>
+      <span class="sidenote">Names, ages, relationships. Pets too.</span>
+      <textarea id="q-household" placeholder="Myself, my spouse, two children ages 8 and 11, and our two dogs..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-rhythm">Walk us through a typical week.</label>
+      <span class="sidenote">Mornings, evenings, weekends. Where do people gather? Which rooms get used? Which are ignored?</span>
+      <textarea id="q-rhythm" placeholder="Mornings are chaotic — kids out the door by 7:30. We both work from home Tuesdays and Thursdays..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label">Which of these describe your life? <span class="opt">(check all that apply)</span></label>
+      <div class="chips" id="lifestyle-chips">
+        <label class="chip"><input type="checkbox" value="Work from home regularly"> Work from home regularly</label>
+        <label class="chip"><input type="checkbox" value="Entertain frequently"> Entertain frequently</label>
+        <label class="chip"><input type="checkbox" value="Host overnight guests often"> Host overnight guests often</label>
+        <label class="chip"><input type="checkbox" value="Serious cooks"> Serious cooks</label>
+        <label class="chip"><input type="checkbox" value="Kitchen is the heart of our home"> Kitchen is the heart of our home</label>
+        <label class="chip"><input type="checkbox" value="Active outdoors"> Active outdoors</label>
+        <label class="chip"><input type="checkbox" value="Multi-generational household"> Multi-generational</label>
+        <label class="chip"><input type="checkbox" value="Quiet, private home life"> Quiet, private home life</label>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-no"><span class="sigil">§</span>3 &middot; Project</span>
+    <h2>The project itself.</h2>
+    <div class="q">
+      <label class="q-label">Type</label>
+      <div class="chips" data-radio="type">
+        <label class="chip"><input type="radio" name="type" value="New custom home"> New custom home</label>
+        <label class="chip"><input type="radio" name="type" value="Major renovation"> Major renovation</label>
+        <label class="chip"><input type="radio" name="type" value="Addition + renovation"> Addition + renovation</label>
+        <label class="chip"><input type="radio" name="type" value="Renovation only"> Renovation only</label>
+        <label class="chip"><input type="radio" name="type" value="Not sure yet"> Not sure yet</label>
+      </div>
+    </div>
+    <div class="q">
+      <div class="row">
+        <div>
+          <label class="q-label" for="q-sqft">Target square footage</label>
+          <span class="sidenote">A range is fine. Note whether you mean conditioned space only, or include garage.</span>
+          <input type="text" id="q-sqft" placeholder="e.g. 4,000–5,000 sf">
+        </div>
+        <div>
+          <label class="q-label">Stories</label>
+          <div class="chips" data-radio="stories">
+            <label class="chip"><input type="radio" name="stories" value="One"> One</label>
+            <label class="chip"><input type="radio" name="stories" value="Two"> Two</label>
+            <label class="chip"><input type="radio" name="stories" value="Three"> Three</label>
+            <label class="chip"><input type="radio" name="stories" value="Open"> Open</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-builder">Builder <span class="opt">(name and status)</span></label>
+      <span class="sidenote">Already chosen? A few in mind? Need recommendations? Tell us.</span>
+      <input type="text" id="q-builder" placeholder="e.g. Talking to Doster and Dunn">
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-prevarch">Have you worked with another architect on this project?</label>
+      <span class="sidenote">If yes, tell us what worked, what didn't, and what you're hoping to do differently. Honesty here helps a lot.</span>
+      <textarea id="q-prevarch" placeholder="Optional, but helpful..."></textarea>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-no"><span class="sigil">§</span>4 &middot; Character</span>
+    <h2>Design character.</h2>
+    <p class="section-desc">We care more about how a home <em>feels</em> than what category it falls into.</p>
+    <div class="q">
+      <label class="q-label">Which of these resonate? <span class="opt">(any number)</span></label>
+      <div class="styles">
+        <div class="style"><div class="style-title">Timeless Traditional</div><div class="style-desc">Classical proportion, restraint, permanence. Built to age gracefully.</div></div>
+        <div class="style"><div class="style-title">New Old</div><div class="style-desc">Classical with a contemporary sensibility &mdash; warmth and craft with a modern eye.</div></div>
+        <div class="style"><div class="style-title">Shingle Style</div><div class="style-desc">Asymmetry, complex rooflines, natural materials, American vernacular charm.</div></div>
+        <div class="style"><div class="style-title">European Farmhouse</div><div class="style-desc">Plaster, aged stone, simple massing with a rural European sensibility.</div></div>
+        <div class="style"><div class="style-title">Arts &amp; Crafts</div><div class="style-desc">Handmade quality, honest materials, low eaves, human scale.</div></div>
+        <div class="style"><div class="style-title">Modern Transitional</div><div class="style-desc">Clean lines, open plan, but warm &mdash; not cold or industrial.</div></div>
+        <div class="style"><div class="style-title">Coastal / Lowcountry</div><div class="style-desc">Porches, natural ventilation, raised structures, easy living.</div></div>
+        <div class="style"><div class="style-title">I'll know it when I see it</div><div class="style-desc">I have images and references that communicate it better than words.</div></div>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-style-words">In your own words, what are you after?</label>
+      <span class="sidenote">"Warm." "Lived-in." "Serious but not stiff." Whatever feels true.</span>
+      <textarea id="q-style-words" placeholder="Timeless. Warm materials. Detailed but not fussy..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-references">Homes, places, or rooms you admire</label>
+      <span class="sidenote">Specific houses, architects, neighborhoods, hotels. Pinterest links welcome.</span>
+      <textarea id="q-references" placeholder="The Lutyens country houses..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-avoid">What do you want to avoid?</label>
+      <span class="sidenote">Just as useful as what you love.</span>
+      <textarea id="q-avoid" placeholder="Anything trendy. McMansion proportions..."></textarea>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-no"><span class="sigil">§</span>5 &middot; Spaces</span>
+    <h2>Spaces and program.</h2>
+    <div class="q">
+      <div class="row">
+        <div>
+          <label class="q-label" for="q-bedrooms">Bedrooms</label>
+          <select id="q-bedrooms">
+            <option>2</option><option>3</option><option>4</option><option selected>5</option><option>6</option><option>6+</option>
+          </select>
+        </div>
+        <div>
+          <label class="q-label" for="q-primary">Primary bedroom</label>
+          <select id="q-primary">
+            <option>First floor</option>
+            <option>Second floor</option>
+            <option>Open to either</option>
+            <option>Dual primary (one each floor)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label">Bathroom approach</label>
+      <div class="chips" data-radio="baths">
+        <label class="chip"><input type="radio" name="baths" value="All ensuite"> All ensuite</label>
+        <label class="chip"><input type="radio" name="baths" value="Ensuite where possible"> Ensuite where possible</label>
+        <label class="chip"><input type="radio" name="baths" value="Jack &amp; Jill acceptable"> Jack &amp; Jill acceptable</label>
+        <label class="chip"><input type="radio" name="baths" value="Flexible"> Flexible</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label">Spaces you want <span class="opt">(check what applies)</span></label>
+      <div class="spaces" id="spaces">
+        <label class="space"><input type="checkbox" value="Formal entry / foyer">Formal entry / foyer</label>
+        <label class="space"><input type="checkbox" value="Formal living room">Formal living room</label>
+        <label class="space"><input type="checkbox" value="Formal dining">Formal dining</label>
+        <label class="space"><input type="checkbox" value="Great room / family room">Great room / family</label>
+        <label class="space"><input type="checkbox" value="Kitchen open to family">Kitchen open to family</label>
+        <label class="space"><input type="checkbox" value="Breakfast nook">Breakfast nook</label>
+        <label class="space"><input type="checkbox" value="Scullery / dirty kitchen">Scullery / dirty kitchen</label>
+        <label class="space"><input type="checkbox" value="Butler's pantry">Butler's pantry</label>
+        <label class="space"><input type="checkbox" value="Mudroom">Mudroom</label>
+        <label class="space"><input type="checkbox" value="Laundry room">Laundry</label>
+        <label class="space"><input type="checkbox" value="Home office / study">Home office / study</label>
+        <label class="space"><input type="checkbox" value="Library">Library</label>
+        <label class="space"><input type="checkbox" value="Playroom">Playroom</label>
+        <label class="space"><input type="checkbox" value="Bonus / flex room">Bonus / flex</label>
+        <label class="space"><input type="checkbox" value="Media room">Media room</label>
+        <label class="space"><input type="checkbox" value="Basement">Basement</label>
+        <label class="space"><input type="checkbox" value="Gym">Gym</label>
+        <label class="space"><input type="checkbox" value="Golf simulator">Golf simulator</label>
+        <label class="space"><input type="checkbox" value="Wine cellar">Wine cellar</label>
+        <label class="space"><input type="checkbox" value="Craft / hobby room">Craft / hobby</label>
+        <label class="space"><input type="checkbox" value="Guest suite">Guest suite</label>
+        <label class="space"><input type="checkbox" value="In-law suite">In-law suite</label>
+        <label class="space"><input type="checkbox" value="Pool / pool house">Pool / pool house</label>
+        <label class="space"><input type="checkbox" value="Screened porch">Screened porch</label>
+        <label class="space"><input type="checkbox" value="Covered outdoor living">Covered outdoor living</label>
+        <label class="space"><input type="checkbox" value="Outdoor kitchen">Outdoor kitchen</label>
+        <label class="space"><input type="checkbox" value="Porte-cochère">Porte-cochère</label>
+        <label class="space"><input type="checkbox" value="2-car garage">2-car garage</label>
+        <label class="space"><input type="checkbox" value="3-car garage">3-car garage</label>
+        <label class="space"><input type="checkbox" value="Detached garage / carriage house">Detached / carriage</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-key-spaces">Describe the rooms that matter most.</label>
+      <span class="sidenote">Pick two or three. Tell us the size, adjacencies, character, what happens there.</span>
+      <textarea id="q-key-spaces" placeholder="The kitchen is everything. Large island, separate scullery..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-storage">Special storage or organizational needs <span class="opt">(optional)</span></label>
+      <span class="sidenote">Dog wash, gun safe, wine collection, library shelving, specific closets.</span>
+      <textarea id="q-storage" placeholder="Large book collection — built-in shelving in multiple rooms..."></textarea>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-no"><span class="sigil">§</span>6 &middot; Site</span>
+    <h2>Your site.</h2>
+    <p class="section-desc">The site is as much a part of the design as the house itself.</p>
+    <div class="q">
+      <label class="q-label" for="q-site-best">The best thing about the site</label>
+      <span class="sidenote">A view, a tree, the morning light, the grade, the street presence.</span>
+      <textarea id="q-site-best" placeholder="The rear of the property has a long view down to a pond..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-site-worst">The challenges &mdash; and any constraints we should know</label>
+      <span class="sidenote">Setbacks, easements, FAR limits, HOA, flood zone, steep grade, neighbors close, road noise.</span>
+      <textarea id="q-site-worst" placeholder="Mountain Brook 5,300 sf FAR. 30' front, 10' side setbacks..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-arrival">Arrival and outdoor living</label>
+      <span class="sidenote">Where's the driveway? Family entrance vs. front door? What outdoor spaces matter, and how do they connect to the inside?</span>
+      <textarea id="q-arrival" placeholder="Motor court with porte-cochère; family entrance through the mudroom..."></textarea>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-no"><span class="sigil">§</span>7 &middot; Budget</span>
+    <h2>Budget &amp; timeline.</h2>
+    <p class="section-desc">We believe in transparency about money. The more honest you can be, the better we can serve you.</p>
+    <div class="q">
+      <label class="q-label">Target construction budget</label>
+      <span class="sidenote">Construction only &mdash; not land, fees, furnishings, or landscape. A range is fine.</span>
+      <div class="budget" data-radio="budget">
+        <label class="budget-item"><input type="radio" name="budget" value="$500K – $1M">$500K – $1M</label>
+        <label class="budget-item"><input type="radio" name="budget" value="$1M – $1.5M">$1M – $1.5M</label>
+        <label class="budget-item"><input type="radio" name="budget" value="$1.5M – $2.5M">$1.5M – $2.5M</label>
+        <label class="budget-item"><input type="radio" name="budget" value="$2.5M – $4M">$2.5M – $4M</label>
+        <label class="budget-item"><input type="radio" name="budget" value="$4M – $6M">$4M – $6M</label>
+        <label class="budget-item"><input type="radio" name="budget" value="$6M+">$6M+</label>
+        <label class="budget-item"><input type="radio" name="budget" value="Not sure yet">Not sure yet</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label">Fee structure preference</label>
+      <div class="chips" data-radio="fee">
+        <label class="chip"><input type="radio" name="fee" value="Percentage of construction"> Percentage of construction</label>
+        <label class="chip"><input type="radio" name="fee" value="Fixed fee with cap"> Fixed fee with cap</label>
+        <label class="chip"><input type="radio" name="fee" value="No preference — let's discuss"> No preference</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label">When do you want to be in the home?</label>
+      <span class="sidenote">A move-in target tells us a lot more than a construction-start date.</span>
+      <div class="row">
+        <div>
+          <label class="q-label" for="q-start" style="font-size: 14px; font-weight: normal; font-style: italic;">Construction start</label>
+          <select id="q-start">
+            <option>As soon as possible</option>
+            <option>Within 6 months</option>
+            <option>6 – 12 months</option>
+            <option>1 – 2 years</option>
+            <option>2+ years / flexible</option>
+          </select>
+        </div>
+        <div>
+          <label class="q-label" for="q-movein" style="font-size: 14px; font-weight: normal; font-style: italic;">Target move-in</label>
+          <input type="text" id="q-movein" placeholder="e.g. Fall 2027">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="section-no"><span class="sigil">§</span>8 &middot; Last</span>
+    <h2>Last thoughts.</h2>
+    <div class="q">
+      <label class="q-label" for="q-priority">If we get only one thing right, what is it?</label>
+      <textarea id="q-priority" placeholder="The house needs to feel like it has always been there..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-concerns">What concerns you about this process?</label>
+      <span class="sidenote">Budget, timeline, communication, scope creep, the unknowns of construction.</span>
+      <textarea id="q-concerns" placeholder="We're nervous about scope creep..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-feeling">How do you want your home to <em>feel</em>?</label>
+      <span class="sidenote">Not the style &mdash; the feeling. What do you want guests to feel walking in? What do you want to feel at the end of a long day?</span>
+      <textarea id="q-feeling" placeholder="Settled. Like it belongs exactly where it is..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-other">Anything else?</label>
+      <textarea id="q-other" placeholder="Pinterest links, things we didn't ask..."></textarea>
+    </div>
+  </section>
+
+  <div class="submit-row">
+    <button class="submit-btn" id="submit-btn" type="button">Submit questionnaire &rarr;</button>
+    <button class="alt-btn" id="download-btn" type="button">Download my answers</button>
+    <button class="alt-btn" id="email-btn" type="button">Email Scott directly</button>
+  </div>
+  <div class="submit-status" id="submit-status"></div>
+
+  <div id="confirmation">
+    <h2>Thank you.</h2>
+    <p>Your questionnaire has been received. Scott will read it carefully and reach out within a day or two to schedule a conversation.</p>
+    <p>If anything else comes to mind in the meantime, feel free to email it to <a href="mailto:scott@carlislemoorearchitects.com">scott@carlislemoorearchitects.com</a>.</p>
+    <div class="issue-link" id="issue-link"></div>
+  </div>
+
+</article>
+</div>
+
+<footer>
+  Carlisle Moore Architects &middot; Mountain Brook, Alabama &middot; <span class="accent">cma</span>
+</footer>
+
+<script>
+document.querySelectorAll('.chips').forEach(group => {
+  group.querySelectorAll('label.chip').forEach(label => {
+    const input = label.querySelector('input');
+    label.addEventListener('click', () => {
+      if (input.type === 'radio') {
+        group.querySelectorAll('label.chip').forEach(l => l.classList.remove('selected'));
+        setTimeout(() => label.classList.add('selected'), 0);
+      } else {
+        setTimeout(() => label.classList.toggle('selected', input.checked), 0);
+      }
+    });
+  });
+});
+
+document.querySelectorAll('.space').forEach(label => {
+  const input = label.querySelector('input');
+  label.addEventListener('click', () => {
+    setTimeout(() => label.classList.toggle('selected', input.checked), 0);
+  });
+});
+
+document.querySelectorAll('.style').forEach(card => {
+  card.addEventListener('click', () => card.classList.toggle('selected'));
+});
+
+document.querySelectorAll('.budget-item').forEach(label => {
+  label.addEventListener('click', () => {
+    document.querySelectorAll('.budget-item').forEach(l => l.classList.remove('selected'));
+    setTimeout(() => label.classList.add('selected'), 0);
+  });
+});
+
+/* ───────── TITLE CASE (live, for name fields) ───────── */
+function toTitleCase(s) {
+  if (!s) return s;
+  return s.toLowerCase().replace(/(^|[\s'’\-])(\p{L})/gu, (_, sep, ch) => sep + ch.toUpperCase());
+}
+function applyTitleCase(input) {
+  if (!input) return;
+  const start = input.selectionStart;
+  const end = input.selectionEnd;
+  const oldVal = input.value;
+  const newVal = toTitleCase(oldVal);
+  if (newVal !== oldVal) {
+    input.value = newVal;
+    try { input.setSelectionRange(start, end); } catch (e) {}
+  }
+}
+['q-name', 'q-partner'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => applyTitleCase(el));
+});
+
+/* ───────── CLIENT GATE (modal) ───────── */
+const CLIENT_KEY = 'cma-questionnaire-client';
+const gateEl       = document.getElementById('client-gate');
+const clientInput  = document.getElementById('client-input');
+const beginBtn     = document.getElementById('begin-btn');
+const gateStatus   = document.getElementById('gate-status');
+const badgeEl      = document.getElementById('project-badge');
+const badgeNameEl  = document.getElementById('project-badge-name');
+
+let clientName = '';
+
+function setClient(value) {
+  clientName = (value || '').trim();
+  if (clientName) {
+    try { sessionStorage.setItem(CLIENT_KEY, clientName); } catch (e) {}
+    badgeNameEl.textContent = clientName;
+    badgeEl.style.display = '';
+  }
+}
+function dismissGate() {
+  gateEl.classList.add('hidden');
+  document.body.classList.remove('gated');
+}
+function validateGate() {
+  const v = clientInput.value.trim();
+  beginBtn.disabled = v.length < 2;
+  return v;
+}
+clientInput.addEventListener('input', () => {
+  applyTitleCase(clientInput);
+  validateGate();
+  gateStatus.textContent = '';
+});
+clientInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    if (!beginBtn.disabled) beginBtn.click();
+  }
+});
+beginBtn.addEventListener('click', () => {
+  const v = clientInput.value.trim();
+  if (v.length < 2) {
+    gateStatus.textContent = 'Please enter a project name to continue.';
+    clientInput.focus();
+    return;
+  }
+  setClient(v);
+  dismissGate();
+});
+
+// Pre-fill from ?client= URL param, sessionStorage gate value, or saved draft.
+const urlParams = new URLSearchParams(window.location.search);
+const preClient = urlParams.get('client');
+let initialClient = '';
+if (preClient) {
+  initialClient = decodeURIComponent(preClient.replace(/[+_]/g, ' ')).trim();
+} else {
+  try { initialClient = (sessionStorage.getItem(CLIENT_KEY) || '').trim(); } catch (e) {}
+  if (!initialClient) {
+    try {
+      const draftRaw = sessionStorage.getItem('cma-questionnaire-draft');
+      if (draftRaw) {
+        const d = JSON.parse(draftRaw);
+        if (d && d.client) initialClient = String(d.client).trim();
+      }
+    } catch (e) {}
+  }
+}
+if (initialClient) {
+  clientInput.value = initialClient;
+  applyTitleCase(clientInput);
+  setClient(clientInput.value);
+  dismissGate();
+} else {
+  document.body.classList.add('gated');
+  setTimeout(() => clientInput.focus(), 50);
+}
+validateGate();
+
+function collect() {
+  const val  = id => (document.getElementById(id) || {}).value || '';
+  const radio = name => {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : '';
+  };
+  const checks = sel => [...document.querySelectorAll(sel + ' input:checked')].map(c => c.value);
+  const styleCards = [...document.querySelectorAll('.style.selected .style-title')].map(t => t.textContent.trim());
+  return {
+    submitted_at: new Date().toISOString(),
+    client: clientName,
+    notes: val('q-notes'),
+    name: val('q-name'),
+    partner: val('q-partner'),
+    email: val('q-email'),
+    phone: val('q-phone'),
+    address: val('q-address'),
+    referral: val('q-referral'),
+    referral_detail: val('q-referral-detail'),
+    household: val('q-household'),
+    rhythm: val('q-rhythm'),
+    lifestyle: checks('#lifestyle-chips'),
+    project_type: radio('type'),
+    sqft: val('q-sqft'),
+    stories: radio('stories'),
+    builder: val('q-builder'),
+    prior_architect: val('q-prevarch'),
+    style_cards: styleCards,
+    style_words: val('q-style-words'),
+    references: val('q-references'),
+    avoid: val('q-avoid'),
+    bedrooms: val('q-bedrooms'),
+    primary_bedroom: val('q-primary'),
+    bathrooms: radio('baths'),
+    spaces: checks('#spaces'),
+    key_spaces: val('q-key-spaces'),
+    storage: val('q-storage'),
+    site_best: val('q-site-best'),
+    site_worst_and_constraints: val('q-site-worst'),
+    arrival_and_outdoor: val('q-arrival'),
+    budget: radio('budget'),
+    fee_preference: radio('fee'),
+    construction_start: val('q-start'),
+    target_movein: val('q-movein'),
+    priority: val('q-priority'),
+    concerns: val('q-concerns'),
+    feeling: val('q-feeling'),
+    other: val('q-other')
+  };
+}
+
+function asMarkdown(d) {
+  const line = (label, value) => {
+    if (!value || (Array.isArray(value) && value.length === 0)) return `**${label}:** —\n`;
+    if (Array.isArray(value)) return `**${label}:** ${value.join(', ')}\n`;
+    if (typeof value === 'string' && value.includes('\n')) {
+      return `**${label}:**\n\n${value.split('\n').map(l => '> ' + l).join('\n')}\n\n`;
+    }
+    return `**${label}:** ${value}\n`;
+  };
+  let out = `# Design Questionnaire — ${d.client || d.name || '(no name)'}\n\n`;
+  out += `*Submitted ${new Date(d.submitted_at).toLocaleString()}*\n\n---\n\n`;
+  if (d.client) {
+    out += `**Project / client:** ${d.client}\n\n---\n\n`;
+  }
+  if (d.notes && d.notes.trim()) {
+    out += `## Opening notes\n\n${d.notes.trim()}\n\n---\n\n`;
+  }
+  out += `## §1 Contact\n`;
+  out += line('Name', d.name); out += line('Partner', d.partner);
+  out += line('Email', d.email); out += line('Phone', d.phone);
+  out += line('Project location', d.address); out += line('Referral', d.referral);
+  out += line('Referral detail', d.referral_detail);
+  out += `\n## §2 You and your life\n`;
+  out += line('Household', d.household); out += line('Weekly rhythm', d.rhythm);
+  out += line('Lifestyle', d.lifestyle);
+  out += `\n## §3 Project\n`;
+  out += line('Type', d.project_type); out += line('Square footage', d.sqft);
+  out += line('Stories', d.stories); out += line('Builder', d.builder);
+  out += line('Prior architect', d.prior_architect);
+  out += `\n## §4 Character\n`;
+  out += line('Style resonance', d.style_cards); out += line('In their words', d.style_words);
+  out += line('References', d.references); out += line('What to avoid', d.avoid);
+  out += `\n## §5 Spaces\n`;
+  out += line('Bedrooms', d.bedrooms); out += line('Primary bedroom', d.primary_bedroom);
+  out += line('Bathrooms', d.bathrooms); out += line('Spaces', d.spaces);
+  out += line('Key spaces detail', d.key_spaces); out += line('Storage', d.storage);
+  out += `\n## §6 Site\n`;
+  out += line('Site strengths', d.site_best);
+  out += line('Challenges + constraints', d.site_worst_and_constraints);
+  out += line('Arrival + outdoor', d.arrival_and_outdoor);
+  out += `\n## §7 Budget & timeline\n`;
+  out += line('Budget', d.budget); out += line('Fee preference', d.fee_preference);
+  out += line('Construction start', d.construction_start);
+  out += line('Target move-in', d.target_movein);
+  out += `\n## §8 Last thoughts\n`;
+  out += line('Priority', d.priority); out += line('Concerns', d.concerns);
+  out += line('Feeling', d.feeling); out += line('Other', d.other);
+  return out;
+}
+
+const statusEl = document.getElementById('submit-status');
+function setStatus(msg, kind) {
+  statusEl.textContent = msg;
+  statusEl.className = 'submit-status' + (kind ? ' ' + kind : '');
+}
+
+function showConfirmation(issueUrl) {
+  document.querySelectorAll('section, .submit-row').forEach(el => el.style.display = 'none');
+  const conf = document.getElementById('confirmation');
+  conf.style.display = 'block';
+  if (issueUrl) {
+    document.getElementById('issue-link').innerHTML =
+      `Reference: <a href="${issueUrl}" target="_blank" rel="noopener">view submission record</a>`;
+  }
+  try { sessionStorage.removeItem('cma-questionnaire-draft'); } catch(e) {}
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function submitToServer(data) {
+  setStatus('Submitting…', '');
+  try {
+    const res = await fetch('/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || 'Submission failed');
+    }
+    const result = await res.json();
+    showConfirmation(result.issueUrl);
+  } catch (err) {
+    setStatus(
+      "We couldn't reach the server. Your answers are downloaded as a file — please email it to scott@carlislemoorearchitects.com.",
+      'error'
+    );
+    downloadJSON(data);
+  }
+}
+
+function slugify(s) {
+  return (s || 'questionnaire').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'questionnaire';
+}
+
+function downloadJSON(data) {
+  const date = new Date().toISOString().slice(0, 10);
+  const filename = `cma-questionnaire-${slugify(data.client || data.name)}-${date}.json`;
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function emailIt(data) {
+  const subject = encodeURIComponent(`Design Questionnaire — ${data.client || data.name || 'New Submission'}`);
+  const body = encodeURIComponent(asMarkdown(data));
+  window.location.href = `mailto:scott@carlislemoorearchitects.com?subject=${subject}&body=${body}`;
+}
+
+function validate(d) {
+  if (!d.name || !d.name.trim()) return 'Please enter your name.';
+  if (!d.email || !d.email.trim()) return 'Please enter an email address so we can reach you.';
+  if (!/.+@.+\..+/.test(d.email)) return "That email address doesn't look right.";
+  return null;
+}
+
+document.getElementById('submit-btn').addEventListener('click', () => {
+  const data = collect();
+  const err = validate(data);
+  if (err) { setStatus(err, 'error'); return; }
+  submitToServer(data);
+});
+
+document.getElementById('download-btn').addEventListener('click', () => {
+  const data = collect();
+  downloadJSON(data);
+  setStatus('Downloaded. You can email this file as an attachment any time.', 'ok');
+});
+
+document.getElementById('email-btn').addEventListener('click', () => {
+  const data = collect();
+  const err = validate(data);
+  if (err) { setStatus(err, 'error'); return; }
+  emailIt(data);
+});
+
+const STORAGE_KEY = 'cma-questionnaire-draft';
+function saveDraft() {
+  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(collect())); } catch (e) {}
+}
+function loadDraft() {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    const setText = (id, v) => { const el = document.getElementById(id); if (el && v) el.value = v; };
+    setText('q-notes', d.notes); setText('q-name', d.name); setText('q-partner', d.partner);
+    setText('q-email', d.email); setText('q-phone', d.phone); setText('q-address', d.address);
+    setText('q-referral', d.referral); setText('q-referral-detail', d.referral_detail);
+    setText('q-household', d.household); setText('q-rhythm', d.rhythm);
+    setText('q-sqft', d.sqft); setText('q-builder', d.builder); setText('q-prevarch', d.prior_architect);
+    setText('q-style-words', d.style_words); setText('q-references', d.references); setText('q-avoid', d.avoid);
+    setText('q-bedrooms', d.bedrooms); setText('q-primary', d.primary_bedroom);
+    setText('q-key-spaces', d.key_spaces); setText('q-storage', d.storage);
+    setText('q-site-best', d.site_best); setText('q-site-worst', d.site_worst_and_constraints);
+    setText('q-arrival', d.arrival_and_outdoor); setText('q-start', d.construction_start);
+    setText('q-movein', d.target_movein); setText('q-priority', d.priority);
+    setText('q-concerns', d.concerns); setText('q-feeling', d.feeling); setText('q-other', d.other);
+    if (Array.isArray(d.lifestyle)) {
+      d.lifestyle.forEach(v => {
+        const el = document.querySelector(`#lifestyle-chips input[value="${CSS.escape(v)}"]`);
+        if (el) { el.checked = true; el.closest('label').classList.add('selected'); }
+      });
+    }
+    const restoreRadio = (name, value) => {
+      if (!value) return;
+      const el = document.querySelector(`input[name="${name}"][value="${CSS.escape(value)}"]`);
+      if (el) { el.checked = true; const label = el.closest('label'); if (label) label.classList.add('selected'); }
+    };
+    restoreRadio('type', d.project_type); restoreRadio('stories', d.stories);
+    restoreRadio('baths', d.bathrooms); restoreRadio('budget', d.budget);
+    restoreRadio('fee', d.fee_preference);
+    if (Array.isArray(d.style_cards)) {
+      d.style_cards.forEach(t => {
+        document.querySelectorAll('.style').forEach(card => {
+          if (card.querySelector('.style-title').textContent.trim() === t) card.classList.add('selected');
+        });
+      });
+    }
+    if (Array.isArray(d.spaces)) {
+      d.spaces.forEach(v => {
+        const el = document.querySelector(`#spaces input[value="${CSS.escape(v)}"]`);
+        if (el) { el.checked = true; el.closest('label').classList.add('selected'); }
+      });
+    }
+  } catch (e) {}
+}
+loadDraft();
+window.addEventListener('input', saveDraft);
+window.addEventListener('change', saveDraft);
+</script>
+
+</body>
+</html>

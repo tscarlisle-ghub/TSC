@@ -1,0 +1,12 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Private project reference (plans, prior client tools, etc.)
+intake/
+
+# Local scratch
+test_write.tmp
+*.log

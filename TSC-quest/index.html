@@ -1,0 +1,1896 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Questionnaire &middot; Carlisle Moore Architects</title>
+<meta name="description" content="A design questionnaire for prospective clients of Carlisle Moore Architects.">
+<link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
+<style>
+/* ════════════════════════════════════════════════════════════════════════
+   Typekit kit ikf0hkb
+   Designed using Edward Tufte's principles of analytical design.
+   Typeset in Warnock Pro, Interstate (with Condensed), Trajan Sans.
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --font-body:    "warnock-pro", Georgia, serif;
+  --font-display: "interstate-condensed", "Helvetica Neue", sans-serif;
+  --font-ui:      "interstate", "Helvetica Neue", sans-serif;
+  --font-trajan:  "trajan-sans-pro", "trajan-pro-3", "trajan-pro", "Cinzel", "warnock-pro", Georgia, serif;
+
+  --ink:        #2e2e2e;     /* palette charcoal */
+  --ink-soft:   #4a4a45;
+  --ink-faint:  #7a7872;
+  --rule:       #d4d2cc;
+  --rule-soft:  #e8e6e0;
+  --paper:      #fbfaf6;
+  --paper-2:    #f4f2eb;
+  --accent:     #8b0000;     /* palette deep red */
+  --accent-dark:#5a0000;
+  --field-bg:   #ffffff;
+  --highlight:  #fafad2;     /* palette pale goldenrod — focus glow */
+  --cream:      #ede1b1;     /* palette butter cream — selected-state fill */
+  --tan:        #cdb79e;     /* palette warm tan — section rules, soft accents */
+}
+
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body, h1, h2, h3, p, label { font-feature-settings: "onum"; }
+p { margin: 0 0 1em; }
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+a:hover { color: var(--accent-dark); }
+
+/* ── MASTHEAD ───────────────────────────────────────────────────────────── */
+.masthead {
+  border-bottom: 1px solid var(--ink);
+  padding: 28px 0 22px;
+  background: var(--paper);
+  margin-bottom: 44px;
+}
+.masthead-row {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.masthead h1 {
+  font-family: var(--font-trajan);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1;
+}
+.masthead-logo {
+  display: block;
+  height: auto;
+  width: auto;
+  max-height: 64px;
+  max-width: 100%;
+  margin: 0 0 4px;
+}
+.masthead-sub {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 46px;
+  letter-spacing: 0;
+  color: var(--ink);
+  line-height: 1.05;
+  margin-top: 5px;
+}
+
+/* ── PAGE ───────────────────────────────────────────────────────────────── */
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 40px 96px;
+  position: relative;
+}
+article {
+  width: 100%;
+  max-width: 1080px;
+  position: relative;
+}
+
+/* ── SECTION HEADER ─ section-note in the LEFT margin with a hairline ───── */
+section { position: relative; margin: 40px 0 28px; }
+.section-header {
+  position: relative;
+  padding-left: 320px;
+  margin-bottom: 26px;
+}
+.section-header h2 { display: block; }
+h2 {
+  font-family: var(--font-ui);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.1;
+}
+.section-note {
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 280px;
+  padding-right: 22px;
+  border-right: 1px solid var(--rule-soft);
+  text-align: right;
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-style: normal;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.section-rule {
+  border-top: 1px solid var(--tan);
+  margin: 32px 0 0;
+}
+
+/* ── QUESTIONS ─ sidenote in the LEFT margin with a hairline ─────────────── */
+.q {
+  position: relative;
+  margin-bottom: 28px;
+  padding-left: 320px;
+  max-width: 1080px;
+}
+.q + .q { margin-top: 28px; }
+.q-label {
+  display: block;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.q-label .opt {
+  font-family: var(--font-body);
+  font-weight: normal;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-faint);
+  font-size: 14px;
+  margin-left: 4px;
+}
+.q-label .req { color: var(--accent); margin-left: 3px; font-weight: normal; }
+
+/* Sidenote — pinned to the LEFT margin on wide screens, with a hairline */
+.sidenote {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 280px;
+  padding-right: 22px;
+  border-right: 1px solid var(--rule-soft);
+  text-align: right;
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+/* ── FIELDS ─────────────────────────────────────────────────────────────── */
+input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], select, textarea {
+  width: 100%;
+  background: var(--field-bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 19px;
+  line-height: 1.45;
+  border: none;
+  border-bottom: 1px solid var(--ink-soft);
+  padding: 8px 5px 6px;
+  border-radius: 0;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.12s, background 0.12s;
+}
+input:focus, select:focus, textarea:focus {
+  border-bottom: 2px solid var(--accent);
+  background: var(--highlight);
+}
+input::placeholder, textarea::placeholder {
+  color: var(--ink-faint);
+  font-style: italic;
+}
+/* Hide the example text the moment the user clicks/focuses a field */
+input:focus::placeholder,
+textarea:focus::placeholder { color: transparent; }
+textarea {
+  min-height: 110px;
+  /* JS auto-grows textareas to fit their content — no manual resize handle,
+     no internal scrollbars. Lines wrap, and the box expands as you type. */
+  resize: none;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  padding: 12px 14px;
+  background: var(--field-bg);
+  font-size: 18px;
+  line-height: 1.55;
+  display: block;
+}
+textarea:focus { border-color: var(--accent); border-width: 2px; background: var(--highlight); }
+select {
+  background-color: var(--field-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231c1c1a' stroke-width='1.2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  padding-right: 26px;
+  cursor: pointer;
+}
+
+.notes-box {
+  min-height: 220px;
+  font-size: 19px;
+  line-height: 1.6;
+  border: 1px solid var(--ink-soft);
+  padding: 14px 18px;
+}
+
+/* ── ROWS ───────────────────────────────────────────────────────────────── */
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 720px) { .row { grid-template-columns: 1fr; gap: 14px; } }
+
+/* ── CHIPS ──────────────────────────────────────────────────────────────── */
+.chips { display: flex; flex-wrap: wrap; gap: 0; margin-top: 4px; }
+.chip {
+  font-family: var(--font-body);
+  font-size: 18px;
+  color: var(--ink-soft);
+  padding: 6px 13px 6px 0;
+  margin-right: 18px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  position: relative;
+}
+.chip:hover { color: var(--ink); }
+.chip input { display: none; }
+.chip.selected {
+  color: var(--accent);
+  font-weight: 700;
+}
+.chip.selected::after {
+  content: "·";
+  color: var(--accent);
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+/* ── STYLE CARDS ────────────────────────────────────────────────────────── */
+.styles { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; }
+@media (max-width: 720px) { .styles { grid-template-columns: 1fr; } }
+.style { cursor: pointer; padding: 8px 12px 10px; border-bottom: 1px solid var(--rule-soft); position: relative; transition: background 0.12s; }
+.style:hover { border-bottom-color: var(--ink-soft); }
+.style.selected {
+  border-bottom: 1px solid var(--accent);
+}
+.style.selected .style-title { color: var(--accent); font-weight: 700; }
+.style.selected::before {
+  content: "✓";
+  position: absolute;
+  left: -20px;
+  top: 9px;
+  color: var(--accent);
+  font-weight: bold;
+}
+.style-title {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.style-desc {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink-soft);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* ── SPACES ─────────────────────────────────────────────────────────────── */
+.spaces { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 22px; margin-top: 4px; }
+@media (max-width: 720px) { .spaces { grid-template-columns: 1fr 1fr; } }
+.space {
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--ink-soft);
+  padding: 4px 0;
+  cursor: pointer;
+}
+.space:hover { color: var(--ink); }
+.space input { display: none; }
+.space.selected {
+  color: var(--accent);
+  font-weight: 700;
+}
+.space.selected::before { content: "✓ "; color: var(--accent); font-weight: bold; }
+.space:not(.selected)::before { content: "  "; letter-spacing: 0; }
+
+/* ── BUDGET ─────────────────────────────────────────────────────────────── */
+.budget { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px 24px; }
+.budget-item {
+  font-family: var(--font-body);
+  font-size: 19px;
+  color: var(--ink-soft);
+  padding: 6px 0;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+}
+.budget-item:hover { color: var(--ink); }
+.budget-item.selected {
+  color: var(--accent);
+  font-weight: 700;
+  border-bottom-color: var(--accent);
+}
+.budget-item input { display: none; }
+
+/* ── ACTIONS ────────────────────────────────────────────────────────────── */
+.action-row {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--ink);
+  max-width: 580px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.action-btn {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--rule);
+  padding: 9px 18px;
+  color: var(--ink-soft);
+  transition: all 0.15s;
+}
+.action-btn:hover { border-color: var(--ink); color: var(--ink); background: var(--cream); }
+.action-btn.primary {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.action-btn.primary:hover { background: #000; color: var(--paper); border-color: #000; }
+.action-status {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin-top: 14px;
+  max-width: 580px;
+}
+.action-status.error { color: var(--accent); }
+.action-status.ok    { color: #2a7a3a; }
+
+/* Floating toast — keeps action feedback visible no matter which action row
+   (top or bottom) was clicked. */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.45;
+  padding: 14px 22px;
+  max-width: min(680px, calc(100vw - 32px));
+  box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+  border-left: 3px solid var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s, transform 0.18s;
+  z-index: 1100;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+.toast.error { border-left-color: var(--accent); }
+.toast.ok    { border-left-color: #2a7a3a; }
+.toast a { color: var(--paper); border-bottom: 1px solid var(--paper); }
+
+/* Project badge — appears once the client/project name has been entered. */
+.project-badge {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+}
+.project-badge .sigil { color: var(--accent); margin-right: 8px; font-weight: 700; }
+.project-badge .name {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  margin-left: 8px;
+}
+
+/* ── FOOTER ─────────────────────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--rule);
+  margin-top: 56px;
+  padding: 18px 40px 36px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: center;
+}
+footer .accent { color: var(--accent); }
+
+/* ── DOC HEAD: date stamp + friendly intro under the masthead ───────────── */
+.doc-head {
+  max-width: 1080px;
+  margin: 0 auto 36px;
+  padding: 0 40px;
+}
+.doc-stamp {
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 14px;
+}
+.doc-intro {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 880px;
+  margin-left: 0;
+}
+.doc-intro em { color: var(--ink); font-style: italic; }
+
+/* ── MAP LINK — appears below the project-location field as you type ───── */
+.map-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+}
+.map-link:hover { color: var(--accent-dark); }
+.map-link[hidden] { display: none; }
+
+/* Top action row matches the bottom but flows tighter and below the intro */
+.action-row.top {
+  margin-top: 18px;
+  padding-top: 0;
+  border-top: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 22px;
+  margin-bottom: 36px;
+  margin-left: 0;
+}
+
+/* ── CALLOUT — used to highlight the cost-estimator link in §Budget ─────── */
+.q-callout {
+  margin: 4px 0 28px;
+  padding: 16px 20px;
+  background: var(--cream);
+  border-left: 3px solid var(--accent);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 760px;
+  margin-left: 320px;
+}
+.q-callout strong { font-weight: 700; }
+.q-callout em { font-style: italic; }
+.q-callout a {
+  color: var(--accent);
+  font-weight: 600;
+  border-bottom: 1px solid var(--accent);
+}
+.q-callout a:hover { color: var(--accent-dark); border-bottom-color: var(--accent-dark); }
+
+/* ── PDF EXPORT SWAP ────────────────────────────────────────────────────────
+   The Create PDF button temporarily replaces every <textarea> with a
+   <div class="pdf-answer"> so long answers flow across pages without
+   getting clipped. On screen those swapped elements are kept invisible
+   so the brief transition (swap → print dialog → restore) has no flicker.
+   The @media print block further down un-hides the divs for printing. */
+.pdf-answer { display: none; }
+textarea.pdf-hidden { display: none !important; }
+
+/* ── MOBILE / NARROW: collapse marginalia to inline ─────────────────────── */
+@media (max-width: 1023px) {
+  .section-header { padding-left: 0; }
+  .section-note {
+    position: static;
+    width: auto;
+    text-align: left;
+    padding-right: 0;
+    padding-left: 14px;
+    border-right: none;
+    border-left: 2px solid var(--rule-soft);
+    margin: 8px 0 0;
+  }
+  .q { padding-left: 0; }
+  .sidenote {
+    position: static;
+    width: auto;
+    text-align: left;
+    padding-right: 0;
+    padding-left: 14px;
+    border-right: none;
+    border-left: 2px solid var(--rule-soft);
+    margin: 4px 0 10px;
+  }
+  .q-callout { margin-left: 0; }
+}
+
+@media print {
+  @page { margin: 0.6in 0.55in; }
+  body { font-size: 11pt; background: #fff; color: #000; }
+  .action-row, .action-status, footer, .toast, .welcome-modal, .map-link { display: none !important; }
+  /* Keep the masthead on the first page only — it's the cover */
+  .masthead { border-bottom: 1px solid #000; padding: 0 0 14px; margin-bottom: 18px; }
+  .masthead-row { padding: 0; max-width: none; }
+  .masthead-sub { font-size: 28px; }
+  .masthead-logo { max-height: 56px; }
+  .doc-head { padding: 0; margin-bottom: 22px; max-width: none; }
+  .doc-intro { font-size: 11pt; }
+  .page { padding: 0; max-width: none; }
+  article { max-width: none; }
+  section { page-break-inside: auto; break-inside: auto; margin: 18px 0 14px; }
+  .section-header { padding-left: 0; page-break-after: avoid; break-after: avoid; }
+  .section-note { position: static !important; width: auto; text-align: left; padding-left: 12px; padding-right: 0; border-right: none; border-left: 2px solid #aaa; margin-top: 4px; font-size: 9pt; }
+  .q { padding-left: 0 !important; margin-bottom: 14px; page-break-inside: avoid; break-inside: avoid; }
+  .q-label { page-break-after: avoid; break-after: avoid; }
+  .sidenote { position: static !important; width: auto; padding-right: 0; padding-left: 12px; text-align: left; border-right: none; border-left: 2px solid #aaa; margin: 4px 0 8px; font-size: 9pt; letter-spacing: 0.06em; }
+  .q-callout { margin-left: 0; }
+  /* CRITICAL: let textareas show their full content (no scrollbars in PDF).
+     The Create PDF button additionally swaps each textarea for a
+     .pdf-answer div before printing — see createPDF() in the script
+     below — because height:auto on a real <textarea> is unreliable
+     across Chrome / Safari / Firefox print engines. The rules below
+     remain as a safety net for users who hit Cmd-P / Ctrl-P directly
+     without going through the Create PDF button. */
+  textarea, .notes-box {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 1px solid #bbb !important;
+    background: #fff !important;
+    padding: 8px 10px !important;
+    font-size: 10.5pt !important;
+    line-height: 1.45 !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+  }
+  /* PDF-only answer boxes (created by createPDF() — see script).
+     These replace the live textareas while the print dialog is open,
+     so the full text flows naturally onto as many pages as it needs. */
+  .pdf-answer {
+    display: block;
+    border: 1px solid #bbb;
+    background: #fff;
+    padding: 8px 10px;
+    font-family: var(--font-body);
+    font-size: 10.5pt;
+    line-height: 1.45;
+    color: #000;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 0;
+    page-break-inside: auto;
+    break-inside: auto;
+  }
+  .pdf-answer.pdf-answer-notes {
+    /* The opening notes get a heavier rule, matching the on-screen .notes-box */
+    border: 1px solid #888;
+    padding: 12px 14px;
+  }
+  /* Empty answers don't deserve a printed box */
+  .pdf-answer.pdf-answer-empty { display: none !important; }
+  /* While the swap is active, hide the original (now-empty) textarea */
+  textarea.pdf-hidden { display: none !important; }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], select {
+    border: none !important;
+    border-bottom: 1px solid #888 !important;
+    background: #fff !important;
+    padding: 4px 2px !important;
+    font-size: 11pt !important;
+  }
+  /* Unselected chips/spaces/styles disappear so the PDF shows only the chosen items */
+  .chip:not(.selected), .space:not(.selected), .style:not(.selected), .budget-item:not(.selected) { display: none !important; }
+  .chip.selected { color: #000 !important; font-weight: 700; padding: 2px 14px 2px 0; margin-right: 14px; }
+  .chip.selected::after { content: ""; }
+  .space.selected, .style.selected, .budget-item.selected { color: #000 !important; }
+  .style.selected .style-title { color: #000 !important; }
+  /* Drop hover/focus highlights */
+  *:focus { outline: none !important; background: #fff !important; }
+  /* Page-break helpers */
+  h2 { page-break-after: avoid; break-after: avoid; }
+  .section-rule { page-break-after: avoid; break-after: avoid; }
+}
+@media (max-width: 720px) {
+  .masthead-row, .page { padding-left: 22px; padding-right: 22px; }
+  .masthead h1 { font-size: 22px; letter-spacing: 0.06em; }
+  .masthead-sub { font-size: 32px; }
+  .masthead-logo { max-height: 48px; }
+  body { font-size: 18px; }
+  h2 { font-size: 22px; }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], select, textarea { font-size: 20px; }
+}
+.welcome-modal { position: fixed; inset: 0; z-index: 1000; background: rgba(20,18,14,0.55); display: flex; align-items: center; justify-content: center; padding: 24px; font-family: var(--font-body); animation: welcome-fade-in 0.18s ease-out; }
+.welcome-modal[hidden] { display: none; }
+@keyframes welcome-fade-in { from { opacity: 0; } to { opacity: 1; } }
+.welcome-card { background: var(--paper); border: 1px solid var(--ink); max-width: 540px; width: 100%; padding: 36px 40px 30px; box-shadow: 0 14px 40px rgba(0,0,0,0.28); }
+.welcome-card h2 { font-family: var(--font-trajan); font-size: 26px; letter-spacing: 0.04em; text-transform: uppercase; margin: 0 0 8px; color: var(--ink); border-bottom: none; padding-bottom: 0; }
+.welcome-lede { font-style: italic; color: var(--ink-soft); margin: 0 0 18px; font-size: 17px; line-height: 1.45; }
+.welcome-body { font-size: 17px; line-height: 1.55; color: var(--ink); margin: 0 0 22px; }
+.welcome-row { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 8px; }
+.welcome-field { margin-bottom: 8px; }
+.welcome-label { display: block; font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+.welcome-card input[type="text"] { width: 100%; font-family: var(--font-body); font-size: 19px; padding: 8px 0; border: none; border-bottom: 1px solid var(--ink-soft); background: transparent; color: var(--ink); border-radius: 0; }
+.welcome-card input[type="text"]:focus { outline: none; border-bottom: 2px solid var(--accent); }
+.welcome-error { color: var(--accent); font-style: italic; font-size: 14px; min-height: 20px; margin: 6px 0 8px; }
+.welcome-actions { display: flex; justify-content: flex-end; margin-top: 6px; }
+@media (max-width: 520px) { .welcome-card { padding: 28px 22px 22px; } .welcome-row { grid-template-columns: 1fr; gap: 14px; } .welcome-card h2 { font-size: 22px; } }
+</style>
+</head>
+<body>
+
+<div id="welcome-modal" class="welcome-modal" role="dialog" aria-modal="true" aria-labelledby="welcome-title" hidden>
+  <div class="welcome-card">
+    <h2 id="welcome-title">Carlisle Moore Architects</h2>
+    <p class="welcome-lede">Before we begin &mdash; what should we call your project?</p>
+    <p class="welcome-body">Usually a family or last name, like <em>Davis Family</em>. This is just so we can file your answers correctly &mdash; you'll fill in the rest in a moment. Your work saves automatically in this browser as you go, so you can close the tab and come back to it later from the same device.</p>
+    <form id="welcome-form" novalidate>
+      <div class="welcome-field">
+        <label class="welcome-label" for="welcome-name">Project name</label>
+        <input type="text" id="welcome-name" placeholder="e.g. Davis Family" autocomplete="off" maxlength="80" required>
+      </div>
+      <div class="welcome-error" id="welcome-error">&nbsp;</div>
+      <div class="welcome-actions">
+        <button type="submit" class="action-btn primary">Begin questionnaire</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="masthead-row">
+    <img class="masthead-logo" src="logo.png" alt="Carlisle Moore Architects">
+    <span class="masthead-sub">Design Questionnaire</span>
+  </div>
+</header>
+
+<div class="doc-head">
+  <div class="doc-stamp" id="doc-stamp">&nbsp;</div>
+  <div class="project-badge" id="project-badge" hidden><span class="sigil">§</span>Project<span class="name" id="project-badge-name"></span></div>
+  <div class="doc-intro">
+    Welcome &mdash; and thank you for taking the time. <em>This is just a starting point &mdash; a way for us to get a feel for what you're after.</em> Nothing here is meant to be a final answer; it's the opening of our conversation. The more honest and specific you can be, the more we'll have to work with when we sit down together. Type as much or as little as you'd like in any field, skip anything that doesn't apply, and use the box at the very top for anything we forgot to ask. Your answers save automatically in this browser as you go, so you can close the tab and come back to it later &mdash; when you're done, click <em>Send back to Scott</em> to email it back. There's no clock running.
+  </div>
+  <div class="action-row top">
+    <button class="action-btn primary" data-action="email" type="button">Send back to Scott</button>
+    <button class="action-btn" data-action="share" type="button">Copy share link</button>
+    <button class="action-btn" data-action="pdf" type="button">Create PDF</button>
+    <button class="action-btn" data-action="download" type="button">Download answers</button>
+  </div>
+</div>
+
+<div class="page">
+<article>
+
+  <section>
+    <div class="section-header">
+      <h2>Opening Notes</h2>
+      <span class="section-note">a story, a feeling, a constraint, a half-formed idea &mdash; whatever brought you here</span>
+    </div>
+    <div class="q q-wide">
+      <textarea id="q-notes" class="notes-box" placeholder="There's a quality I'm after that I can't quite name..."></textarea>
+    </div>
+  </section>
+
+  <div class="section-rule"></div>
+
+  <section>
+    <div class="section-header">
+      <h2>Contact</h2>
+    </div>
+    <div class="q">
+      <div class="row">
+        <div>
+          <label class="q-label" for="q-name">Full name <span class="req">*</span></label>
+          <input type="text" id="q-name" placeholder="Your name" required>
+        </div>
+        <div>
+          <label class="q-label" for="q-partner">Partner / spouse <span class="opt">(if any)</span></label>
+          <input type="text" id="q-partner" placeholder="Their name">
+        </div>
+      </div>
+    </div>
+    <div class="q">
+      <div class="row">
+        <div>
+          <label class="q-label" for="q-email">Email <span class="req">*</span></label>
+          <input type="email" id="q-email" placeholder="you@example.com" required>
+        </div>
+        <div>
+          <label class="q-label" for="q-phone">Phone</label>
+          <input type="tel" id="q-phone" placeholder="(205) 000-0000">
+        </div>
+      </div>
+    </div>
+    <div class="q">
+      <div class="row">
+        <div>
+          <label class="q-label" for="q-partner-email">Partner email <span class="opt">(if any)</span></label>
+          <input type="email" id="q-partner-email" placeholder="partner@example.com">
+        </div>
+        <div>
+          <label class="q-label" for="q-partner-phone">Partner phone</label>
+          <input type="tel" id="q-partner-phone" placeholder="(205) 000-0000">
+        </div>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-address">Project location</label>
+      <span class="sidenote">Street address if known, otherwise neighborhood or general area.</span>
+      <input type="text" id="q-address" placeholder="Address or general area">
+      <a id="q-address-map" class="map-link" href="#" target="_blank" rel="noopener" hidden>View on Google Maps &rarr;</a>
+    </div>
+  </section>
+
+  <div class="section-rule"></div>
+
+  <section>
+    <div class="section-header">
+      <h2>You and Your Life</h2>
+      <span class="section-note">help us picture how the house will actually be lived in</span>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-household">Who will live in this home?</label>
+      <span class="sidenote">Names, ages, relationships. Pets too.</span>
+      <textarea id="q-household" placeholder="Myself, my spouse, two children ages 8 and 11, and our two dogs..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-rhythm">A typical week</label>
+      <span class="sidenote">Mornings, evenings, weekends. Where do people gather? Which rooms get used? Which are ignored?</span>
+      <textarea id="q-rhythm" placeholder="Mornings are chaotic — kids out the door by 7:30. We both work from home Tuesdays and Thursdays..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label">Which describe your life <span class="opt">(check all that apply)</span></label>
+      <div class="chips" id="lifestyle-chips">
+        <label class="chip"><input type="checkbox" value="Work from home regularly"> Work from home regularly</label>
+        <label class="chip"><input type="checkbox" value="Entertain frequently"> Entertain frequently</label>
+        <label class="chip"><input type="checkbox" value="Host overnight guests often"> Host overnight guests often</label>
+        <label class="chip"><input type="checkbox" value="Serious cooks"> Serious cooks</label>
+        <label class="chip"><input type="checkbox" value="Kitchen is the heart of our home"> Kitchen is the heart of our home</label>
+        <label class="chip"><input type="checkbox" value="Children at home"> Children at home</label>
+        <label class="chip"><input type="checkbox" value="Pets in the home"> Pets in the home</label>
+        <label class="chip"><input type="checkbox" value="Avid gardeners"> Avid gardeners</label>
+        <label class="chip"><input type="checkbox" value="Hunters or fishers"> Hunters or fishers</label>
+        <label class="chip"><input type="checkbox" value="Active outdoors"> Active outdoors</label>
+        <label class="chip"><input type="checkbox" value="Frequent travelers"> Frequent travelers</label>
+        <label class="chip"><input type="checkbox" value="Avid readers / library"> Avid readers / library</label>
+        <label class="chip"><input type="checkbox" value="Music or instruments at home"> Music or instruments</label>
+        <label class="chip"><input type="checkbox" value="Hobbies that need a workspace"> Hobby workspace (woodworking, art, sewing)</label>
+        <label class="chip"><input type="checkbox" value="Home gym or fitness"> Home gym / fitness</label>
+        <label class="chip"><input type="checkbox" value="Wine collectors"> Wine collectors</label>
+        <label class="chip"><input type="checkbox" value="Faith life at home (chapel, prayer space)"> Faith life at home</label>
+        <label class="chip"><input type="checkbox" value="Multi-generational household"> Multi-generational</label>
+        <label class="chip"><input type="checkbox" value="Quiet, private home life"> Quiet, private home life</label>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-rule"></div>
+
+  <section>
+    <div class="section-header">
+      <h2>The Project</h2>
+    </div>
+    <div class="q">
+      <label class="q-label">Type</label>
+      <div class="chips" data-radio="type">
+        <label class="chip"><input type="radio" name="type" value="New custom home"> New custom home</label>
+        <label class="chip"><input type="radio" name="type" value="Major renovation"> Major renovation</label>
+        <label class="chip"><input type="radio" name="type" value="Addition + renovation"> Addition + renovation</label>
+        <label class="chip"><input type="radio" name="type" value="Renovation only"> Renovation only</label>
+        <label class="chip"><input type="radio" name="type" value="Not sure yet"> Not sure yet</label>
+      </div>
+    </div>
+    <div class="q">
+      <div class="row">
+        <div>
+          <label class="q-label" for="q-sqft">Target square footage</label>
+          <span class="sidenote">A range is fine. Note whether you mean conditioned space only, or include garage.</span>
+          <input type="text" id="q-sqft" placeholder="e.g. 4,000–5,000 sf">
+        </div>
+        <div>
+          <label class="q-label">Stories</label>
+          <div class="chips" data-radio="stories">
+            <label class="chip"><input type="radio" name="stories" value="One"> One</label>
+            <label class="chip"><input type="radio" name="stories" value="Two"> Two</label>
+            <label class="chip"><input type="radio" name="stories" value="Open"> Open</label>
+          </div>
+          <div class="chips" id="addons-chips" style="margin-top: 10px;">
+            <label class="chip"><input type="checkbox" value="Basement"> + Basement</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-builder">Builder <span class="opt">(name and status)</span></label>
+      <span class="sidenote">Already chosen? A few in mind? Need recommendations? Don't plan to use one?</span>
+      <input type="text" id="q-builder" placeholder="e.g. Talking to Doster and Dunn">
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-interior-designer">Interior designer <span class="opt">(name and status)</span></label>
+      <span class="sidenote">Already chosen? A few in mind? Need recommendations? Don't plan to use one?</span>
+      <input type="text" id="q-interior-designer" placeholder="e.g. Already working with Suzanne Kasler">
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-landscape-architect">Landscape architect <span class="opt">(name and status)</span></label>
+      <span class="sidenote">Already chosen? A few in mind? Need recommendations? Don't plan to use one?</span>
+      <input type="text" id="q-landscape-architect" placeholder="e.g. Need recommendations">
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-sustainability">Energy and sustainability priorities</label>
+      <span class="sidenote">Solar, geothermal, EV charging, passive design, certified rating &mdash; non-negotiable, nice-to-have, or just curious?</span>
+      <textarea id="q-sustainability" placeholder="EV charging is a must; would consider solar if payback makes sense..."></textarea>
+    </div>
+  </section>
+
+  <div class="section-rule"></div>
+
+  <section>
+    <div class="section-header">
+      <h2>Spaces and Program</h2>
+    </div>
+    <div class="q">
+      <div class="row">
+        <div>
+          <label class="q-label" for="q-bedrooms">Bedrooms</label>
+          <select id="q-bedrooms">
+            <option>2</option><option>3</option><option>4</option><option selected>5</option><option>6</option><option>6+</option>
+          </select>
+        </div>
+        <div>
+          <label class="q-label" for="q-primary">Primary bedroom</label>
+          <select id="q-primary">
+            <option>First floor</option>
+            <option>Second floor</option>
+            <option>Open to either</option>
+            <option>Dual primary (one each floor)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label">Bathroom approach</label>
+      <div class="chips" data-radio="baths">
+        <label class="chip"><input type="radio" name="baths" value="All ensuite"> All ensuite</label>
+        <label class="chip"><input type="radio" name="baths" value="Ensuite where possible"> Ensuite where possible</label>
+        <label class="chip"><input type="radio" name="baths" value="Jack &amp; Jill acceptable"> Jack &amp; Jill acceptable</label>
+        <label class="chip"><input type="radio" name="baths" value="Flexible"> Flexible</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label">Spaces you want <span class="opt">(check what applies)</span></label>
+      <div class="spaces" id="spaces">
+        <label class="space"><input type="checkbox" value="Formal entry / foyer">Formal entry / foyer</label>
+        <label class="space"><input type="checkbox" value="Formal living room">Formal living room</label>
+        <label class="space"><input type="checkbox" value="Formal dining">Formal dining</label>
+        <label class="space"><input type="checkbox" value="Great room / family room">Great room / family</label>
+        <label class="space"><input type="checkbox" value="Kitchen open to family">Kitchen open to family</label>
+        <label class="space"><input type="checkbox" value="Breakfast nook">Breakfast nook</label>
+        <label class="space"><input type="checkbox" value="Scullery / dirty kitchen">Scullery / dirty kitchen</label>
+        <label class="space"><input type="checkbox" value="Butler's pantry">Butler's pantry</label>
+        <label class="space"><input type="checkbox" value="Mudroom">Mudroom</label>
+        <label class="space"><input type="checkbox" value="Laundry room">Laundry</label>
+        <label class="space"><input type="checkbox" value="Home office / study">Home office / study</label>
+        <label class="space"><input type="checkbox" value="Library">Library</label>
+        <label class="space"><input type="checkbox" value="Playroom">Playroom</label>
+        <label class="space"><input type="checkbox" value="Bonus / flex room">Bonus / flex</label>
+        <label class="space"><input type="checkbox" value="Media room">Media room</label>
+        <label class="space"><input type="checkbox" value="Basement">Basement</label>
+        <label class="space"><input type="checkbox" value="Gym">Gym</label>
+        <label class="space"><input type="checkbox" value="Golf simulator">Golf simulator</label>
+        <label class="space"><input type="checkbox" value="Wine cellar">Wine cellar</label>
+        <label class="space"><input type="checkbox" value="Craft / hobby room">Craft / hobby</label>
+        <label class="space"><input type="checkbox" value="Guest suite">Guest suite</label>
+        <label class="space"><input type="checkbox" value="In-law suite">In-law suite</label>
+        <label class="space"><input type="checkbox" value="Pool / pool house">Pool / pool house</label>
+        <label class="space"><input type="checkbox" value="Screened porch">Screened porch</label>
+        <label class="space"><input type="checkbox" value="Covered outdoor living">Covered outdoor living</label>
+        <label class="space"><input type="checkbox" value="Outdoor kitchen">Outdoor kitchen</label>
+        <label class="space"><input type="checkbox" value="Porte-cochère">Porte-cochère</label>
+        <label class="space"><input type="checkbox" value="2-car garage">2-car garage</label>
+        <label class="space"><input type="checkbox" value="3-car garage">3-car garage</label>
+        <label class="space"><input type="checkbox" value="Detached garage / carriage house">Detached / carriage</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-key-spaces">Rooms that matter most</label>
+      <span class="sidenote">Pick two or three. Tell us the size, adjacencies, character, what happens there.</span>
+      <textarea id="q-key-spaces" placeholder="The kitchen is everything. Large island, separate scullery..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-storage">Special storage or organizational needs <span class="opt">(optional)</span></label>
+      <span class="sidenote">Dog wash, gun safe, wine collection, library shelving, specific closets.</span>
+      <textarea id="q-storage" placeholder="Large book collection — built-in shelving in multiple rooms..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-heirlooms">Pieces this house needs to accommodate</label>
+      <span class="sidenote">Significant furniture, art, library, piano, an inherited hutch &mdash; anything dimensional we should design around.</span>
+      <textarea id="q-heirlooms" placeholder="Grand piano, family dining table that seats 12..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-aging">Long-term horizon</label>
+      <span class="sidenote">Planning to age in place? Anyone with mobility considerations now or expected? Informs primary-floor program, hallway widths, threshold heights.</span>
+      <textarea id="q-aging" placeholder="My mother lives with us part of the year and has mobility issues..."></textarea>
+    </div>
+  </section>
+
+  <div class="section-rule"></div>
+
+  <section>
+    <div class="section-header">
+      <h2>Character</h2>
+      <span class="section-note">we care more about how a home <em>feels</em> than what category it falls into</span>
+    </div>
+    <div class="q">
+      <label class="q-label">Which resonate <span class="opt">(any number)</span></label>
+      <div class="styles">
+        <div class="style"><div class="style-title">Timeless Traditional</div><div class="style-desc">Classical proportion, restraint, permanence. Built to age gracefully.</div></div>
+        <div class="style"><div class="style-title">New Old</div><div class="style-desc">Classical with a contemporary sensibility &mdash; warmth and craft with a modern eye.</div></div>
+        <div class="style"><div class="style-title">Shingle Style</div><div class="style-desc">Asymmetry, complex rooflines, natural materials, American vernacular charm.</div></div>
+        <div class="style"><div class="style-title">European Farmhouse</div><div class="style-desc">Plaster, aged stone, simple massing with a rural European sensibility.</div></div>
+        <div class="style"><div class="style-title">Arts &amp; Crafts</div><div class="style-desc">Handmade quality, honest materials, low eaves, human scale.</div></div>
+        <div class="style"><div class="style-title">Modern Transitional</div><div class="style-desc">Clean lines, open plan, but warm &mdash; not cold or industrial.</div></div>
+        <div class="style"><div class="style-title">Coastal / Lowcountry</div><div class="style-desc">Porches, natural ventilation, raised structures, easy living.</div></div>
+        <div class="style"><div class="style-title">I'll know it when I see it</div><div class="style-desc">I have images and references that communicate it better than words.</div></div>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-style-words">In your own words</label>
+      <span class="sidenote">"Warm." "Lived-in." "Serious but not stiff." Whatever feels true.</span>
+      <textarea id="q-style-words" placeholder="Timeless. Warm materials. Detailed but not fussy..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label">Words that describe the aesthetic <span class="opt">(check what fits)</span></label>
+      <span class="sidenote">Pick anything that resonates &mdash; opposites are fine if both feel true in different rooms.</span>
+      <div class="chips" id="aesthetic-chips">
+        <label class="chip"><input type="checkbox" value="Warm"> Warm</label>
+        <label class="chip"><input type="checkbox" value="Cool"> Cool</label>
+        <label class="chip"><input type="checkbox" value="Light-filled"> Light-filled</label>
+        <label class="chip"><input type="checkbox" value="Moody"> Moody</label>
+        <label class="chip"><input type="checkbox" value="Cocooned"> Cocooned</label>
+        <label class="chip"><input type="checkbox" value="Open"> Open</label>
+        <label class="chip"><input type="checkbox" value="Formal"> Formal</label>
+        <label class="chip"><input type="checkbox" value="Casual"> Casual</label>
+        <label class="chip"><input type="checkbox" value="Refined"> Refined</label>
+        <label class="chip"><input type="checkbox" value="Rustic"> Rustic</label>
+        <label class="chip"><input type="checkbox" value="Layered"> Layered</label>
+        <label class="chip"><input type="checkbox" value="Quiet / spare"> Quiet / spare</label>
+        <label class="chip"><input type="checkbox" value="Modern"> Modern</label>
+        <label class="chip"><input type="checkbox" value="Traditional"> Traditional</label>
+        <label class="chip"><input type="checkbox" value="Timeless"> Timeless</label>
+        <label class="chip"><input type="checkbox" value="Eclectic"> Eclectic</label>
+        <label class="chip"><input type="checkbox" value="Organic"> Organic</label>
+        <label class="chip"><input type="checkbox" value="Ordered / geometric"> Ordered / geometric</label>
+        <label class="chip"><input type="checkbox" value="Romantic"> Romantic</label>
+        <label class="chip"><input type="checkbox" value="Practical"> Practical</label>
+        <label class="chip"><input type="checkbox" value="Soft"> Soft</label>
+        <label class="chip"><input type="checkbox" value="Crisp"> Crisp</label>
+        <label class="chip"><input type="checkbox" value="Textured"> Textured</label>
+        <label class="chip"><input type="checkbox" value="Heirloom / collected"> Heirloom / collected</label>
+        <label class="chip"><input type="checkbox" value="Patinaed"> Patinaed</label>
+        <label class="chip"><input type="checkbox" value="Lived-in"> Lived-in</label>
+        <label class="chip"><input type="checkbox" value="Serene"> Serene</label>
+        <label class="chip"><input type="checkbox" value="Bold"> Bold</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-references">Homes, places, or rooms you admire</label>
+      <span class="sidenote">Specific houses, neighborhoods, hotels, rooms that stay with you.</span>
+      <textarea id="q-references" placeholder="The Lutyens country houses..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-imagery">Imagery you've collected</label>
+      <span class="sidenote">Pinterest boards, Instagram saves, a folder of photos, magazine clippings &mdash; share links or names of boards we should look at.</span>
+      <textarea id="q-imagery" placeholder="https://www.pinterest.com/...&#10;@account_we_follow on Instagram&#10;A Dropbox folder, Google Drive, etc."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-avoid">What to avoid</label>
+      <span class="sidenote">Just as useful as what you love.</span>
+      <textarea id="q-avoid"></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label">Interior materials <span class="opt">(check anything that appeals)</span></label>
+      <span class="sidenote">A starting palette &mdash; we'll refine as we go. Plaster walls feel different from painted drywall; wood ceilings change a room entirely.</span>
+      <div class="chips" id="materials-interior-chips">
+        <label class="chip"><input type="checkbox" value="Plaster walls"> Plaster walls</label>
+        <label class="chip"><input type="checkbox" value="Wood paneling"> Wood paneling</label>
+        <label class="chip"><input type="checkbox" value="Wood ceilings"> Wood ceilings</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-specialty-finishes">Specialty finishes</label>
+      <span class="sidenote">Anything beyond the basics &mdash; Venetian plaster, lime wash, custom millwork, hand-troweled, encaustic tile, exposed beams. Don't worry about being technical.</span>
+      <textarea id="q-specialty-finishes" placeholder="Lime-washed plaster in the entry, reclaimed wood beams in the keeping room..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label">Exterior materials <span class="opt">(check what feels right)</span></label>
+      <span class="sidenote">Some of these read very differently in person &mdash; reclaimed brick has a softness new brick can't match; a slate roof costs many times what asphalt does. Mark anything that resonates.</span>
+      <div class="chips" id="materials-exterior-chips">
+        <label class="chip"><input type="checkbox" value="Brick"> Brick</label>
+        <label class="chip"><input type="checkbox" value="Painted brick"> Painted brick</label>
+        <label class="chip"><input type="checkbox" value="Reclaimed brick"> Reclaimed brick</label>
+        <label class="chip"><input type="checkbox" value="Stone"> Stone</label>
+        <label class="chip"><input type="checkbox" value="Limestone details"> Limestone details</label>
+        <label class="chip"><input type="checkbox" value="Wood siding"> Wood siding</label>
+        <label class="chip"><input type="checkbox" value="Wood roof"> Wood roof</label>
+        <label class="chip"><input type="checkbox" value="Slate roof"> Slate roof</label>
+        <label class="chip"><input type="checkbox" value="Asphalt roof"> Asphalt roof</label>
+        <label class="chip"><input type="checkbox" value="Metal roof (where appropriate)"> Metal roof <span class="opt">(where appropriate)</span></label>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-rule"></div>
+
+  <section>
+    <div class="section-header">
+      <h2>The Site</h2>
+      <span class="section-note">as much a part of the design as the house itself</span>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-site-best">The best thing about the site</label>
+      <span class="sidenote">A view, a tree, the morning light, the grade, the street presence.</span>
+      <textarea id="q-site-best" placeholder="The rear of the property has a long view down to a pond..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-site-worst">Challenges and constraints</label>
+      <span class="sidenote">Setbacks, easements, FAR limits, HOA, flood zone, steep grade, neighbors close, road noise.</span>
+      <textarea id="q-site-worst" placeholder="Mountain Brook 5,300 sf FAR. 30' front, 10' side setbacks..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-arrival">Arrival and outdoor living</label>
+      <span class="sidenote">Where's the driveway? Family entrance vs. front door? What outdoor spaces matter, and how do they connect to the inside?</span>
+      <textarea id="q-arrival" placeholder="Motor court with porte-cochère; family entrance through the mudroom..."></textarea>
+    </div>
+  </section>
+
+  <div class="section-rule"></div>
+
+  <section>
+    <div class="section-header">
+      <h2>Outbuildings &amp; Grounds</h2>
+      <span class="section-note">how much of the project lives <em>outside</em> the four walls</span>
+    </div>
+    <div class="q">
+      <label class="q-label">How worked is the landscape?</label>
+      <span class="sidenote">A rough sense of intensity &mdash; a lawn and a few trees is very different from a layered garden with hardscape and outdoor rooms. Pick whichever is closest; we'll refine with a landscape architect.</span>
+      <div class="budget" data-radio="landscape_intensity">
+        <label class="budget-item"><input type="radio" name="landscape_intensity" value="Minimal — lawn, foundation planting, a few trees">Minimal &mdash; lawn, foundation planting, a few trees</label>
+        <label class="budget-item"><input type="radio" name="landscape_intensity" value="Moderate — defined beds, terraces, considered arrival">Moderate &mdash; defined beds, terraces, considered arrival</label>
+        <label class="budget-item"><input type="radio" name="landscape_intensity" value="Full — outdoor rooms, hardscape, designed garden">Full &mdash; outdoor rooms, hardscape, designed garden</label>
+        <label class="budget-item"><input type="radio" name="landscape_intensity" value="Estate-level — extensive grounds, garden structures, axes and vistas">Estate-level &mdash; extensive grounds, garden structures, axes and vistas</label>
+        <label class="budget-item"><input type="radio" name="landscape_intensity" value="Not sure yet">Not sure yet</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label">On the grounds <span class="opt">(check anything you'd like to consider)</span></label>
+      <span class="sidenote">Even a maybe is useful &mdash; a pool location set late is a pool location set badly.</span>
+      <div class="chips" id="grounds-chips">
+        <label class="chip"><input type="checkbox" value="Pool"> Pool</label>
+        <label class="chip"><input type="checkbox" value="Spa / hot tub"> Spa / hot tub</label>
+        <label class="chip"><input type="checkbox" value="Vegetable garden"> Vegetable garden</label>
+        <label class="chip"><input type="checkbox" value="Cutting garden"> Cutting garden</label>
+        <label class="chip"><input type="checkbox" value="Greenhouse"> Greenhouse</label>
+        <label class="chip"><input type="checkbox" value="Potting shed"> Potting shed</label>
+        <label class="chip"><input type="checkbox" value="Workshop"> Workshop</label>
+        <label class="chip"><input type="checkbox" value="Outdoor kitchen / grill"> Outdoor kitchen / grill</label>
+        <label class="chip"><input type="checkbox" value="Outdoor fireplace"> Outdoor fireplace</label>
+        <label class="chip"><input type="checkbox" value="Sport court"> Sport court</label>
+        <label class="chip"><input type="checkbox" value="Chicken coop"> Chicken coop</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label">Outbuildings <span class="opt">(check anything that may be in scope)</span></label>
+      <span class="sidenote">Detached structures change a project's footprint and budget materially &mdash; worth flagging early even if uncertain.</span>
+      <div class="chips" id="outbuildings-chips">
+        <label class="chip"><input type="checkbox" value="Freestanding garage"> Freestanding garage</label>
+        <label class="chip"><input type="checkbox" value="Guest house / casita"> Guest house / casita</label>
+        <label class="chip"><input type="checkbox" value="Pool house"> Pool house</label>
+        <label class="chip"><input type="checkbox" value="Garage with apartment above"> Garage with apartment above</label>
+        <label class="chip"><input type="checkbox" value="Studio / office outbuilding"> Studio / office outbuilding</label>
+        <label class="chip"><input type="checkbox" value="Barn"> Barn</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-grounds-notes">Anything else about the grounds?</label>
+      <span class="sidenote">A specific tree to save, a view to frame, an existing structure to keep or remove, who maintains it all.</span>
+      <textarea id="q-grounds-notes" placeholder="The two oaks at the rear corner stay. We'd reuse the old smokehouse if it can be saved..."></textarea>
+    </div>
+  </section>
+
+  <div class="section-rule"></div>
+
+  <section>
+    <div class="section-header">
+      <h2>Budget &amp; Timeline</h2>
+      <span class="section-note">we believe in transparency about money &mdash; the more honest you can be, the better we can serve you</span>
+    </div>
+    <div class="q-callout">
+      Want to explore budget vs. size before this conversation? Try our
+      <a href="https://tscarlisle-ghub.github.io/TSC-SQF/" target="_blank" rel="noopener">cost estimator</a>.
+      <strong>Be sure to enter your name at the top</strong> so we can match your version to this questionnaire.
+    </div>
+    <div class="q">
+      <label class="q-label">Target construction budget</label>
+      <span class="sidenote">Construction only &mdash; not land, fees, furnishings, or landscape. A range is fine.</span>
+      <div class="budget" data-radio="budget">
+        <label class="budget-item"><input type="radio" name="budget" value="$500K – $1M">$500K – $1M</label>
+        <label class="budget-item"><input type="radio" name="budget" value="$1M – $1.5M">$1M – $1.5M</label>
+        <label class="budget-item"><input type="radio" name="budget" value="$1.5M – $2.5M">$1.5M – $2.5M</label>
+        <label class="budget-item"><input type="radio" name="budget" value="$2.5M – $4M">$2.5M – $4M</label>
+        <label class="budget-item"><input type="radio" name="budget" value="$4M – $6M">$4M – $6M</label>
+        <label class="budget-item"><input type="radio" name="budget" value="$6M+">$6M+</label>
+        <label class="budget-item"><input type="radio" name="budget" value="Not sure yet">Not sure yet</label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-start">Construction start</label>
+      <span class="sidenote">Our design process typically takes about six months &mdash; factor that in when picking a start date.</span>
+      <select id="q-start">
+        <option>Within 6 months</option>
+        <option>6 – 12 months</option>
+        <option>1 – 2 years</option>
+        <option>2+ years / flexible</option>
+      </select>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-movein">Target move-in</label>
+      <span class="sidenote">A move-in target tells us a lot more than a construction-start date.</span>
+      <input type="text" id="q-movein" placeholder="e.g. Fall 2027">
+    </div>
+  </section>
+
+  <div class="section-rule"></div>
+
+  <section>
+    <div class="section-header">
+      <h2>Last Thoughts</h2>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-priority">If we get only one thing right</label>
+      <textarea id="q-priority" placeholder="The house needs to feel like it has always been there..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-concerns">What concerns you about this process?</label>
+      <span class="sidenote">Budget, timeline, communication, scope creep, the unknowns of construction.</span>
+      <textarea id="q-concerns" placeholder="We're nervous about scope creep..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-feeling">How should the home <em>feel</em>?</label>
+      <span class="sidenote">Not the style &mdash; the feeling. What do you want guests to feel walking in? What do you want to feel at the end of a long day?</span>
+      <textarea id="q-feeling" placeholder="Settled. Like it belongs exactly where it is..."></textarea>
+    </div>
+    <div class="q">
+      <label class="q-label" for="q-other">Anything else</label>
+      <textarea id="q-other" placeholder="Pinterest links, things we didn't ask..."></textarea>
+    </div>
+  </section>
+
+  <div class="action-row">
+    <button class="action-btn primary" data-action="email" type="button">Send back to Scott</button>
+    <button class="action-btn" data-action="share" type="button">Copy share link</button>
+    <button class="action-btn" data-action="pdf" type="button">Create PDF</button>
+    <button class="action-btn" data-action="download" type="button">Download answers</button>
+  </div>
+  <div class="action-status" id="action-status"></div>
+
+</article>
+</div>
+
+<footer>
+  Carlisle Moore Architects &middot; Mountain Brook, Alabama &middot; <span class="accent">cma</span>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   LZ-STRING 1.4.4 (pieroxy) — MIT — inlined for compact share links
+   ═══════════════════════════════════════════════════════════════════════ */
+var LZString=function(){var r=String.fromCharCode,n="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",e="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-$",t={};function o(r,n){if(!t[r]){t[r]={};for(var e=0;e<r.length;e++)t[r][r.charAt(e)]=e}return t[r][n]}var i={compressToBase64:function(r){if(null==r)return"";var e=i._compress(r,6,function(r){return n.charAt(r)});switch(e.length%4){default:case 0:return e;case 1:return e+"===";case 2:return e+"==";case 3:return e+"="}},decompressFromBase64:function(r){return null==r?"":""==r?null:i._decompress(r.length,32,function(e){return o(n,r.charAt(e))})},compressToEncodedURIComponent:function(r){return null==r?"":i._compress(r,6,function(r){return e.charAt(r)})},decompressFromEncodedURIComponent:function(r){return null==r?"":""==r?null:(r=r.replace(/ /g,"+"),i._decompress(r.length,32,function(n){return o(e,r.charAt(n))}))},compress:function(r){return i._compress(r,16,function(r){return String.fromCharCode(r)})},_compress:function(r,n,e){if(null==r)return"";var t,o,i,s={},u={},a="",p="",c="",l=2,f=3,h=2,d=[],m=0,v=0;for(i=0;i<r.length;i+=1)if(a=r.charAt(i),Object.prototype.hasOwnProperty.call(s,a)||(s[a]=f++,u[a]=!0),p=c+a,Object.prototype.hasOwnProperty.call(s,p))c=p;else{if(Object.prototype.hasOwnProperty.call(u,c)){if(c.charCodeAt(0)<256){for(t=0;t<h;t++)m<<=1,v==n-1?(v=0,d.push(e(m)),m=0):v++;for(o=c.charCodeAt(0),t=0;t<8;t++)m=m<<1|1&o,v==n-1?(v=0,d.push(e(m)),m=0):v++,o>>=1}else{for(o=1,t=0;t<h;t++)m=m<<1|o,v==n-1?(v=0,d.push(e(m)),m=0):v++,o=0;for(o=c.charCodeAt(0),t=0;t<16;t++)m=m<<1|1&o,v==n-1?(v=0,d.push(e(m)),m=0):v++,o>>=1}0==--l&&(l=Math.pow(2,h),h++),delete u[c]}else for(o=s[c],t=0;t<h;t++)m=m<<1|1&o,v==n-1?(v=0,d.push(e(m)),m=0):v++,o>>=1;0==--l&&(l=Math.pow(2,h),h++),s[p]=f++,c=String(a)}if(""!==c){if(Object.prototype.hasOwnProperty.call(u,c)){if(c.charCodeAt(0)<256){for(t=0;t<h;t++)m<<=1,v==n-1?(v=0,d.push(e(m)),m=0):v++;for(o=c.charCodeAt(0),t=0;t<8;t++)m=m<<1|1&o,v==n-1?(v=0,d.push(e(m)),m=0):v++,o>>=1}else{for(o=1,t=0;t<h;t++)m=m<<1|o,v==n-1?(v=0,d.push(e(m)),m=0):v++,o=0;for(o=c.charCodeAt(0),t=0;t<16;t++)m=m<<1|1&o,v==n-1?(v=0,d.push(e(m)),m=0):v++,o>>=1}0==--l&&(l=Math.pow(2,h),h++),delete u[c]}else for(o=s[c],t=0;t<h;t++)m=m<<1|1&o,v==n-1?(v=0,d.push(e(m)),m=0):v++,o>>=1;0==--l&&(l=Math.pow(2,h),h++)}for(o=2,t=0;t<h;t++)m=m<<1|1&o,v==n-1?(v=0,d.push(e(m)),m=0):v++,o>>=1;for(;;){if(m<<=1,v==n-1){d.push(e(m));break}v++}return d.join("")},_decompress:function(n,e,t){var o,i,s,u,a,p,c,l=[],f=4,h=4,d=3,m="",v=[],g={val:t(0),position:e,index:1};for(o=0;o<3;o+=1)l[o]=o;for(s=0,a=Math.pow(2,2),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=e,g.val=t(g.index++)),s|=(u>0?1:0)*p,p<<=1;switch(s){case 0:for(s=0,a=Math.pow(2,8),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=e,g.val=t(g.index++)),s|=(u>0?1:0)*p,p<<=1;c=r(s);break;case 1:for(s=0,a=Math.pow(2,16),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=e,g.val=t(g.index++)),s|=(u>0?1:0)*p,p<<=1;c=r(s);break;case 2:return""}for(l[3]=c,i=c,v.push(c);;){if(g.index>n)return"";for(s=0,a=Math.pow(2,d),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=e,g.val=t(g.index++)),s|=(u>0?1:0)*p,p<<=1;switch(c=s){case 0:for(s=0,a=Math.pow(2,8),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=e,g.val=t(g.index++)),s|=(u>0?1:0)*p,p<<=1;l[h++]=r(s),c=h-1,f--;break;case 1:for(s=0,a=Math.pow(2,16),p=1;p!=a;)u=g.val&g.position,g.position>>=1,0==g.position&&(g.position=e,g.val=t(g.index++)),s|=(u>0?1:0)*p,p<<=1;l[h++]=r(s),c=h-1,f--;break;case 2:return v.join("")}if(0==f&&(f=Math.pow(2,d),d++),l[c])m=l[c];else{if(c!==h)return null;m=i+i.charAt(0)}v.push(m),l[h++]=i+m.charAt(0),i=m,0==--f&&(f=Math.pow(2,d),d++)}}};return i}();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   FORM BEHAVIOR
+   ═══════════════════════════════════════════════════════════════════════ */
+const SCOTT_EMAIL = 'scott@carlislemoorearchitects.com';
+const STORAGE_KEY = 'cma-questionnaire-v1';
+
+/* ── CLIENT / PROJECT NAME ──────────────────────────────────────────────
+   Captured by the welcome modal up front (e.g. "Davis Family"). Stored as
+   a separate `client` field — distinct from the visitor's full name — and
+   surfaced as a small badge in the doc-head once set. */
+let clientName = '';
+function setClient(value) {
+  clientName = (value || '').trim();
+  const badge = document.getElementById('project-badge');
+  const nameSpan = document.getElementById('project-badge-name');
+  if (badge && nameSpan) {
+    if (clientName) {
+      nameSpan.textContent = clientName;
+      badge.hidden = false;
+    } else {
+      badge.hidden = true;
+    }
+  }
+}
+
+/* ── TITLE CASE (live) ──────────────────────────────────────────────────
+   Applied to the contact and partner name fields, plus the welcome-modal
+   project-name input. Handles spaces, hyphens, and apostrophes; preserves
+   cursor position so it doesn't disrupt typing. */
+function toTitleCase(s) {
+  if (!s) return s;
+  return s.toLowerCase().replace(/(^|[\s'’\-])(\p{L})/gu, (_, sep, ch) => sep + ch.toUpperCase());
+}
+function applyTitleCase(input) {
+  if (!input) return;
+  const start = input.selectionStart;
+  const end = input.selectionEnd;
+  const oldVal = input.value;
+  const newVal = toTitleCase(oldVal);
+  if (newVal !== oldVal) {
+    input.value = newVal;
+    try { input.setSelectionRange(start, end); } catch (e) {}
+  }
+}
+
+document.querySelectorAll('.chips').forEach(group => {
+  group.querySelectorAll('label.chip').forEach(label => {
+    const input = label.querySelector('input');
+    label.addEventListener('click', () => {
+      if (input.type === 'radio') {
+        group.querySelectorAll('label.chip').forEach(l => l.classList.remove('selected'));
+        setTimeout(() => label.classList.add('selected'), 0);
+      } else {
+        setTimeout(() => label.classList.toggle('selected', input.checked), 0);
+      }
+    });
+  });
+});
+document.querySelectorAll('.space').forEach(label => {
+  const input = label.querySelector('input');
+  label.addEventListener('click', () => setTimeout(() => label.classList.toggle('selected', input.checked), 0));
+});
+document.querySelectorAll('.style').forEach(card => {
+  card.addEventListener('click', () => card.classList.toggle('selected'));
+});
+document.querySelectorAll('.budget-item').forEach(label => {
+  label.addEventListener('click', () => {
+    document.querySelectorAll('.budget-item').forEach(l => l.classList.remove('selected'));
+    setTimeout(() => label.classList.add('selected'), 0);
+  });
+});
+
+/* Live title-casing on the contact + partner + welcome-modal name inputs. */
+['q-name', 'q-partner', 'welcome-name'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => applyTitleCase(el));
+});
+
+function collect() {
+  const val   = id => (document.getElementById(id) || {}).value || '';
+  const radio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; };
+  const checks = sel => [...document.querySelectorAll(sel + ' input:checked')].map(c => c.value);
+  const styleCards = [...document.querySelectorAll('.style.selected .style-title')].map(t => t.textContent.trim());
+  return {
+    v: 1,
+    submitted_at: new Date().toISOString(),
+    client: clientName,
+    notes: val('q-notes'),
+    name: val('q-name'),
+    partner: val('q-partner'),
+    email: val('q-email'),
+    phone: val('q-phone'),
+    partner_email: val('q-partner-email'),
+    partner_phone: val('q-partner-phone'),
+    address: val('q-address'),
+    household: val('q-household'),
+    rhythm: val('q-rhythm'),
+    lifestyle: checks('#lifestyle-chips'),
+    project_type: radio('type'),
+    sqft: val('q-sqft'),
+    stories: radio('stories'),
+    addons: checks('#addons-chips'),
+    builder: val('q-builder'),
+    interior_designer: val('q-interior-designer'),
+    landscape_architect: val('q-landscape-architect'),
+    sustainability: val('q-sustainability'),
+    style_cards: styleCards,
+    aesthetic_concepts: checks('#aesthetic-chips'),
+    style_words: val('q-style-words'),
+    references: val('q-references'),
+    imagery: val('q-imagery'),
+    avoid: val('q-avoid'),
+    materials_interior: checks('#materials-interior-chips'),
+    materials_exterior: checks('#materials-exterior-chips'),
+    specialty_finishes: val('q-specialty-finishes'),
+    bedrooms: val('q-bedrooms'),
+    primary_bedroom: val('q-primary'),
+    bathrooms: radio('baths'),
+    spaces: checks('#spaces'),
+    key_spaces: val('q-key-spaces'),
+    storage: val('q-storage'),
+    heirlooms: val('q-heirlooms'),
+    aging: val('q-aging'),
+    site_best: val('q-site-best'),
+    site_worst_and_constraints: val('q-site-worst'),
+    arrival_and_outdoor: val('q-arrival'),
+    landscape_intensity: radio('landscape_intensity'),
+    grounds: checks('#grounds-chips'),
+    outbuildings: checks('#outbuildings-chips'),
+    grounds_notes: val('q-grounds-notes'),
+    budget: radio('budget'),
+    construction_start: val('q-start'),
+    target_movein: val('q-movein'),
+    priority: val('q-priority'),
+    concerns: val('q-concerns'),
+    feeling: val('q-feeling'),
+    other: val('q-other')
+  };
+}
+
+function apply(d) {
+  if (!d || typeof d !== 'object') return;
+  if (typeof d.client === 'string' && d.client.trim()) setClient(d.client.trim());
+  const setText = (id, v) => { const el = document.getElementById(id); if (el && v !== undefined) el.value = v || ''; };
+  setText('q-notes', d.notes); setText('q-name', d.name); setText('q-partner', d.partner);
+  setText('q-email', d.email); setText('q-phone', d.phone);
+  setText('q-partner-email', d.partner_email); setText('q-partner-phone', d.partner_phone);
+  setText('q-address', d.address);
+  setText('q-household', d.household); setText('q-rhythm', d.rhythm);
+  setText('q-sqft', d.sqft); setText('q-builder', d.builder);
+  setText('q-interior-designer', d.interior_designer);
+  setText('q-landscape-architect', d.landscape_architect);
+  setText('q-sustainability', d.sustainability);
+  setText('q-style-words', d.style_words); setText('q-references', d.references);
+  setText('q-imagery', d.imagery); setText('q-avoid', d.avoid);
+  setText('q-specialty-finishes', d.specialty_finishes);
+  setText('q-bedrooms', d.bedrooms); setText('q-primary', d.primary_bedroom);
+  setText('q-key-spaces', d.key_spaces); setText('q-storage', d.storage);
+  setText('q-heirlooms', d.heirlooms); setText('q-aging', d.aging);
+  setText('q-site-best', d.site_best); setText('q-site-worst', d.site_worst_and_constraints);
+  setText('q-arrival', d.arrival_and_outdoor); setText('q-grounds-notes', d.grounds_notes);
+  setText('q-start', d.construction_start);
+  setText('q-movein', d.target_movein); setText('q-priority', d.priority);
+  setText('q-concerns', d.concerns); setText('q-feeling', d.feeling); setText('q-other', d.other);
+
+  const setMulti = (containerSel, values) => {
+    document.querySelectorAll(containerSel + ' input[type="checkbox"]').forEach(el => {
+      const should = Array.isArray(values) && values.includes(el.value);
+      el.checked = should;
+      el.closest('label').classList.toggle('selected', should);
+    });
+  };
+  setMulti('#lifestyle-chips', d.lifestyle);
+  setMulti('#aesthetic-chips', d.aesthetic_concepts);
+  setMulti('#addons-chips',    d.addons);
+  setMulti('#spaces',          d.spaces);
+  setMulti('#materials-interior-chips', d.materials_interior);
+  setMulti('#materials-exterior-chips', d.materials_exterior);
+  setMulti('#grounds-chips',   d.grounds);
+  setMulti('#outbuildings-chips', d.outbuildings);
+  const setRadio = (name, value) => {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(el => {
+      const on = el.value === value;
+      el.checked = on;
+      const label = el.closest('label');
+      if (label) label.classList.toggle('selected', on);
+    });
+  };
+  setRadio('type', d.project_type); setRadio('stories', d.stories);
+  setRadio('baths', d.bathrooms);   setRadio('budget', d.budget);
+  setRadio('landscape_intensity', d.landscape_intensity);
+  document.querySelectorAll('.style').forEach(card => {
+    const title = card.querySelector('.style-title').textContent.trim();
+    card.classList.toggle('selected', Array.isArray(d.style_cards) && d.style_cards.includes(title));
+  });
+}
+
+function encodeState(snap) {
+  try { return LZString.compressToEncodedURIComponent(JSON.stringify(snap)); }
+  catch (e) { return ''; }
+}
+function decodeState(s) {
+  try {
+    const json = LZString.decompressFromEncodedURIComponent(s);
+    if (json) return JSON.parse(json);
+  } catch (e) {}
+  return null;
+}
+function syncStateToURL() {
+  try {
+    const enc = encodeState(collect());
+    if (!enc) return;
+    history.replaceState(null, '', location.pathname + '?s=' + enc);
+  } catch (e) {}
+}
+function saveDraft() {
+  /* Autosave to localStorage only — DO NOT stamp state into the URL on
+     every keystroke. That kept the address bar synced for cross-device
+     resume, but it also made the URL absurdly long and meant every link
+     copied from the address bar carried the prior visitor's answers
+     forward. The explicit "Copy share link" button still generates the
+     full state-bearing URL via syncStateToURL() when someone actually
+     wants to share or resume on another device. */
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(collect())); } catch (e) {}
+}
+
+function load() {
+  const params = new URLSearchParams(location.search);
+  const s = params.get('s');
+  if (s) {
+    const snap = decodeState(s);
+    if (snap) { apply(snap); return 'url'; }
+  }
+  const preClient = params.get('client');
+  if (preClient) {
+    setClient(decodeURIComponent(preClient.replace(/[+_]/g, ' ')));
+  }
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) { apply(JSON.parse(raw)); return 'local'; }
+  } catch (e) {}
+  return 'fresh';
+}
+
+function asMarkdown(d) {
+  const line = (label, value) => {
+    if (!value || (Array.isArray(value) && value.length === 0)) return `**${label}:** —\n`;
+    if (Array.isArray(value)) return `**${label}:** ${value.join(', ')}\n`;
+    return `**${label}:** ${value}\n`;
+  };
+  let out = `Design Questionnaire — ${d.client || d.name || '(no name)'}\n`;
+  out += `Submitted ${new Date(d.submitted_at || Date.now()).toLocaleString()}\n`;
+  if (d.client && d.client.trim()) out += `Project: ${d.client.trim()}\n`;
+  out += `\n`;
+  if (d.notes && d.notes.trim()) out += `OPENING NOTES\n${d.notes.trim()}\n\n`;
+  out += `CONTACT\n` + line('Name', d.name) + line('Partner', d.partner) + line('Email', d.email) + line('Phone', d.phone) + line('Partner email', d.partner_email) + line('Partner phone', d.partner_phone) + line('Location', d.address);
+  out += `\nLIFE\n` + line('Household', d.household) + line('Weekly rhythm', d.rhythm) + line('Lifestyle', d.lifestyle);
+  out += `\nPROJECT\n` + line('Type', d.project_type) + line('Sqft', d.sqft) + line('Stories', d.stories) + line('Add-ons', d.addons) + line('Builder', d.builder) + line('Interior designer', d.interior_designer) + line('Landscape architect', d.landscape_architect) + line('Sustainability', d.sustainability);
+  out += `\nCHARACTER\n` + line('Styles', d.style_cards) + line('Aesthetic concepts', d.aesthetic_concepts) + line('In their words', d.style_words) + line('References', d.references) + line('Imagery', d.imagery) + line('Avoid', d.avoid);
+  out += `\nSPACES\n` + line('Bedrooms', d.bedrooms) + line('Primary', d.primary_bedroom) + line('Bathrooms', d.bathrooms) + line('Spaces', d.spaces) + line('Key spaces', d.key_spaces) + line('Storage', d.storage) + line('Heirlooms', d.heirlooms) + line('Aging-in-place', d.aging);
+  out += `\nSITE\n` + line('Best', d.site_best) + line('Challenges', d.site_worst_and_constraints) + line('Arrival/outdoor', d.arrival_and_outdoor);
+  out += `\nBUDGET & TIMELINE\n` + line('Budget', d.budget) + line('Start', d.construction_start) + line('Move-in', d.target_movein);
+  out += `\nLAST THOUGHTS\n` + line('Priority', d.priority) + line('Concerns', d.concerns) + line('Feeling', d.feeling) + line('Other', d.other);
+  return out;
+}
+
+const statusEl = document.getElementById('action-status');
+
+/* Toast: ensures action feedback is visible even if the user clicked the
+   top action row (the inline #action-status is at the bottom of the form). */
+let toastEl = null;
+let toastTimer = null;
+function ensureToast() {
+  if (!toastEl) {
+    toastEl = document.createElement('div');
+    toastEl.className = 'toast';
+    toastEl.setAttribute('role', 'status');
+    toastEl.setAttribute('aria-live', 'polite');
+    document.body.appendChild(toastEl);
+  }
+  return toastEl;
+}
+function showToast(msg, kind, ms) {
+  const t = ensureToast();
+  t.textContent = msg;
+  t.className = 'toast show' + (kind ? ' ' + kind : '');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), ms || 4500);
+}
+function setStatus(msg, kind) {
+  if (statusEl) {
+    statusEl.textContent = msg;
+    statusEl.className = 'action-status' + (kind ? ' ' + kind : '');
+  }
+  showToast(msg, kind);
+}
+
+function validate(d) {
+  if (!d.name || !d.name.trim()) return 'Please enter your name above before sending.';
+  if (!d.email || !d.email.trim()) return 'Please enter an email address so Scott can reach you.';
+  if (!/.+@.+\..+/.test(d.email)) return "That email address doesn't look right.";
+  return null;
+}
+
+function slugify(s) {
+  return (s || 'questionnaire')
+    .toLowerCase()
+    .normalize('NFKD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'questionnaire';
+}
+
+function sendToScott() {
+  const data = collect();
+  const err  = validate(data);
+  if (err) { setStatus(err, 'error'); return; }
+  syncStateToURL();
+  const url = location.href;
+  const subject = `Design Questionnaire — ${data.client || data.name}`;
+  /* Keep the mailto body short. The full set of answers travels with the URL,
+     which Scott opens to see the filled-in form. Stuffing the markdown in here
+     pushes some mail handlers (and some browsers' mailto: limits) over the
+     edge and they silently refuse to open. */
+  const body =
+    `Hi Scott,\n\n` +
+    `Here are my answers to the design questionnaire. Open the link below ` +
+    `to see the filled-in form:\n\n` +
+    `${url}\n\n` +
+    `Thanks,\n` +
+    `${data.name || ''}`.trim() + `\n`;
+  const mailto = `mailto:${SCOTT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  /* Use an anchor click rather than location.href — more reliable across
+     browsers when a default mail handler isn't strictly registered. */
+  const a = document.createElement('a');
+  a.href = mailto;
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setStatus('Email draft opened. If nothing happened, your mail app may not be set up — use Copy share link instead and paste it into an email to ' + SCOTT_EMAIL + '.', 'ok');
+}
+
+async function copyShareLink() {
+  syncStateToURL();
+  const url = location.href;
+  let copied = false;
+  try {
+    if (window.isSecureContext && navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(url);
+      copied = true;
+    }
+  } catch (e) { /* fall through to legacy path */ }
+  if (!copied) {
+    try {
+      const tmp = document.createElement('textarea');
+      tmp.value = url;
+      tmp.setAttribute('readonly', '');
+      tmp.style.position = 'fixed';
+      tmp.style.top = '0';
+      tmp.style.left = '0';
+      tmp.style.opacity = '0';
+      document.body.appendChild(tmp);
+      tmp.focus();
+      tmp.select();
+      copied = document.execCommand('copy');
+      document.body.removeChild(tmp);
+    } catch (e) { /* ignore */ }
+  }
+  if (copied) {
+    setStatus('Share link copied to clipboard.', 'ok');
+  } else {
+    setStatus('Could not auto-copy. Press Cmd/Ctrl + C in the prompt to copy your link.', 'error');
+    setTimeout(() => prompt('Copy this share link:', url), 50);
+  }
+}
+
+function downloadJSON() {
+  const data = collect();
+  const date = new Date().toISOString().slice(0, 10);
+  const filename = `cma-questionnaire-${slugify(data.client || data.name)}-${date}.json`;
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  setStatus(`Downloaded ${filename}.`, 'ok');
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   AUTO-GROW TEXTAREAS — every textarea expands vertically to fit its
+   content, so no answer is ever hidden behind a scrollbar (and PDFs
+   print the full text). Runs on every input event, after data is
+   loaded, and after a hard reset. Also runs on window resize because
+   wrapping changes when the column width changes.
+   ═══════════════════════════════════════════════════════════════════════ */
+function autoSizeTextarea(el) {
+  if (!el || el.tagName !== 'TEXTAREA') return;
+  /* Reset first so shrinking works as the user deletes lines. */
+  el.style.height = 'auto';
+  /* +2px so the bottom line doesn't get clipped by the border. */
+  el.style.height = (el.scrollHeight + 2) + 'px';
+}
+function autoSizeAll() {
+  document.querySelectorAll('textarea').forEach(autoSizeTextarea);
+}
+document.querySelectorAll('textarea').forEach(el => {
+  el.addEventListener('input', () => autoSizeTextarea(el));
+  /* Initial pass — handles textareas that were pre-filled by load(). */
+  autoSizeTextarea(el);
+});
+window.addEventListener('resize', autoSizeAll);
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CREATE PDF — opens the browser's print dialog. The user picks
+   "Save as PDF" (or "Microsoft Print to PDF") as the destination.
+
+   The trick that actually makes long answers print in full:
+   before opening the dialog, every <textarea> is swapped out for a
+   matching <div class="pdf-answer"> that holds the same text. A div
+   flows naturally onto the page across as many pages as it needs;
+   a textarea, even with height:auto in print CSS, clips in Chrome
+   and Safari unpredictably. After the dialog closes (or is cancelled)
+   the textareas are restored exactly as they were.
+
+   We also set the document title up front so the browser's "Save as
+   PDF" filename suggestion comes out as
+       CMA Questionnaire — <project> — <date>.pdf
+   ═══════════════════════════════════════════════════════════════════════ */
+function createPDF() {
+  const data = collect();
+  /* Belt-and-braces: size the live textareas first so the cancel/restore
+     path lands on correctly-sized boxes. */
+  autoSizeAll();
+
+  /* ── SWAP: textarea → .pdf-answer div ──────────────────────────────── */
+  const swaps = [];
+  document.querySelectorAll('textarea').forEach(ta => {
+    const div = document.createElement('div');
+    div.className = 'pdf-answer';
+    if (ta.classList.contains('notes-box')) div.classList.add('pdf-answer-notes');
+    /* textContent preserves \n; combined with white-space: pre-wrap in
+       the print CSS, line breaks render exactly as the user typed them. */
+    div.textContent = ta.value;
+    if (!ta.value.trim()) div.classList.add('pdf-answer-empty');
+    ta.classList.add('pdf-hidden');
+    ta.parentNode.insertBefore(div, ta.nextSibling);
+    swaps.push({ ta, div });
+  });
+
+  const project = (data.client || data.name || 'Questionnaire').trim();
+  const date = new Date().toISOString().slice(0, 10);
+  const oldTitle = document.title;
+  document.title = `CMA Questionnaire — ${project} — ${date}`;
+
+  /* ── RESTORE: runs after the print dialog closes (or is cancelled).
+        Uses afterprint where available, with a timeout fallback for
+        older browsers / odd cases where afterprint doesn't fire. ── */
+  let restored = false;
+  function restore() {
+    if (restored) return;
+    restored = true;
+    swaps.forEach(({ ta, div }) => {
+      if (div && div.parentNode) div.parentNode.removeChild(div);
+      ta.classList.remove('pdf-hidden');
+    });
+    autoSizeAll();
+    document.title = oldTitle;
+    window.removeEventListener('afterprint', restore);
+  }
+  window.addEventListener('afterprint', restore);
+
+  setStatus('Opening print dialog — choose "Save as PDF" as the destination.', 'ok');
+  /* Tiny defer so the toast paints before the (blocking) print dialog. */
+  setTimeout(() => {
+    try { window.print(); } catch (e) { /* user may have blocked it */ }
+    /* Safety-net restore: if afterprint never fires (rare, but it
+       happens on some mobile browsers), put the page back after 4s. */
+    setTimeout(restore, 4000);
+  }, 60);
+}
+
+document.querySelectorAll('[data-action="email"]').forEach(b => b.addEventListener('click', sendToScott));
+document.querySelectorAll('[data-action="share"]').forEach(b => b.addEventListener('click', copyShareLink));
+document.querySelectorAll('[data-action="pdf"]').forEach(b => b.addEventListener('click', createPDF));
+document.querySelectorAll('[data-action="download"]').forEach(b => b.addEventListener('click', downloadJSON));
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DATE STAMP at the top of the document — current local date/time
+   ═══════════════════════════════════════════════════════════════════════ */
+function updateDocStamp() {
+  const el = document.getElementById('doc-stamp');
+  if (!el) return;
+  const d = new Date();
+  const dateOpts = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+  const timeOpts = { hour: 'numeric', minute: '2-digit' };
+  el.textContent = d.toLocaleDateString(undefined, dateOpts) + ' · ' + d.toLocaleTimeString(undefined, timeOpts);
+}
+updateDocStamp();
+setInterval(updateDocStamp, 60000);
+
+/* ═══════════════════════════════════════════════════════════════════════
+   GOOGLE MAPS link — lives below the project-location field; updates as
+   the user types so they can pop the address open in a new tab.
+   ═══════════════════════════════════════════════════════════════════════ */
+(function () {
+  const addr = document.getElementById('q-address');
+  const lnk  = document.getElementById('q-address-map');
+  if (!addr || !lnk) return;
+  function refresh() {
+    const v = (addr.value || '').trim();
+    if (v.length < 3) { lnk.hidden = true; return; }
+    lnk.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v);
+    lnk.hidden = false;
+  }
+  addr.addEventListener('input', refresh);
+  refresh();
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   AUTO-FORMAT PHONE NUMBERS as the user types — (XXX) XXX-XXXX
+   ═══════════════════════════════════════════════════════════════════════ */
+function formatPhoneValue(raw) {
+  const d = (raw || '').replace(/\D/g, '').slice(0, 10);
+  if (d.length === 0) return '';
+  if (d.length <= 3) return '(' + d;
+  if (d.length <= 6) return '(' + d.slice(0, 3) + ') ' + d.slice(3);
+  return '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6);
+}
+['q-phone', 'q-partner-phone'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', () => {
+    const before = el.value;
+    const formatted = formatPhoneValue(before);
+    if (formatted !== before) el.value = formatted;
+  });
+});
+
+const __loadSource = load();
+/* After load() may have populated textareas from URL/localStorage, size
+   each of them to fit. */
+autoSizeAll();
+window.addEventListener('input', saveDraft);
+window.addEventListener('change', saveDraft);
+
+/* Hard reset: blank every text input, textarea, select, radio, checkbox, and
+   peel the .selected class off every chip / style card / budget tile so a
+   genuinely fresh visit starts from zero, regardless of browser autofill. */
+function resetAllFields() {
+  const root = document.querySelector('article');
+  if (root) {
+    root.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], textarea').forEach(el => { el.value = ''; });
+    root.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(el => {
+      el.checked = false;
+      const label = el.closest('label');
+      if (label) label.classList.remove('selected');
+    });
+    root.querySelectorAll('select').forEach(s => { s.selectedIndex = 0; });
+    root.querySelectorAll('.style.selected').forEach(c => c.classList.remove('selected'));
+  }
+  const mapLink = document.getElementById('q-address-map');
+  if (mapLink) mapLink.hidden = true;
+  /* Collapse every textarea back to its CSS min-height. */
+  if (typeof autoSizeAll === 'function') autoSizeAll();
+}
+
+/* WELCOME MODAL: gate every brand-new visit behind a name prompt so the URL
+   gets stamped with their unique compressed-state token from question one. */
+(function () {
+  const modal    = document.getElementById('welcome-modal');
+  const form     = document.getElementById('welcome-form');
+  const inputEl  = document.getElementById('welcome-name');
+  const errorEl  = document.getElementById('welcome-error');
+  const nameEl   = document.getElementById('q-name');
+  if (!modal || !form || !inputEl || !nameEl) return;
+
+  function showModal() {
+    /* Always start the modal field empty too, so prior browser autofill
+       or a stale value from a different visitor is wiped. */
+    inputEl.value = '';
+    errorEl.innerHTML = '&nbsp;';
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => inputEl.focus(), 50);
+  }
+  function hideModal() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  /* Block ESC and backdrop clicks while the modal is up. */
+  modal.addEventListener('click', (e) => { if (e.target === modal) e.preventDefault(); });
+  document.addEventListener('keydown', (e) => {
+    if (!modal.hidden && e.key === 'Escape') { e.preventDefault(); inputEl.focus(); }
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const project = (inputEl.value || '').trim();
+    if (project.length < 2) {
+      errorEl.textContent = 'Please enter a project name to begin.';
+      inputEl.focus();
+      return;
+    }
+    errorEl.innerHTML = '&nbsp;';
+    /* Store as `client` (the project label) — separate from the visitor's
+       own full name, which they'll fill in in §Contact. */
+    setClient(project);
+    saveDraft();
+    hideModal();
+    /* Drop focus onto the opening notes box so they can dive in. */
+    const notesEl = document.getElementById('q-notes');
+    if (notesEl) notesEl.focus();
+  });
+
+  /* Show the welcome modal any time we don't yet have a project name —
+     covers fresh visits, shared links that carried someone else's ?s=
+     state without a client value, and stale localStorage drafts. The
+     only ways to skip it are: a ?client= pre-fill in the URL, or a
+     loaded state (URL or localStorage) that already names a project.
+     This way every new visitor names their project before they see
+     the form, even if Scott's share link still has his test state in it. */
+  const hasProject  = !!(clientName && clientName.trim());
+  if (!hasProject) {
+    /* Wipe any leftover autofill / partial state behind the modal so the
+       new visitor lands on a clean slate the moment they click Begin.
+       If state was loaded from the URL or localStorage but never set a
+       project name, it's almost certainly an inadvertently-shared link
+       carrying someone else's answers — safer to start fresh. */
+    resetAllFields();
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    showModal();
+  }
+})();
+</script>
+
+</body>
+</html>
