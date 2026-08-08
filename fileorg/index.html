@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Folder Reorganizer — CMA</title>
+  <meta name="description" content="A safe, visual tool for reorganizing folders on disk. CMA internal tool.">
+
+  <!-- Adobe Fonts: Warnock Pro / Interstate / DIN Condensed -->
+  <link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
+  <link rel="stylesheet" href="styles.css?v=5">
+</head>
+<body>
+
+  <!-- Browser-compatibility gate. Shown if the File System Access API is missing. -->
+  <div id="browser-warning" hidden>
+    <div class="card">
+      <h1 class="display">Browser not supported</h1>
+      <p>This tool relies on the <em>File System Access API</em>, which is currently
+        only available in <strong>Google Chrome</strong>, <strong>Microsoft Edge</strong>,
+        and other Chromium-based browsers (Brave, Arc, Opera).</p>
+      <p>Please re-open this page in Chrome or Edge to continue.</p>
+    </div>
+  </div>
+
+  <!-- Main app shell -->
+  <div id="app" hidden>
+
+    <header class="masthead">
+      <div class="masthead__title">
+        <span class="kicker">CMA · Internal Tool</span>
+        <h1>Folder Reorganizer</h1>
+      </div>
+      <nav class="phase-indicator" aria-label="Workflow progress">
+        <ol>
+          <li data-phase="welcome">Choose</li>
+          <li data-phase="analysis">Analyze</li>
+          <li data-phase="propose">Propose</li>
+          <li data-phase="review">Review</li>
+          <li data-phase="done">Done</li>
+        </ol>
+      </nav>
+    </header>
+
+    <main>
+
+      <!-- ─────────  PHASE 1  ·  WELCOME  ───────── -->
+      <section class="phase" data-phase="welcome">
+        <div class="prose">
+          <h2 class="display">Reorganize a folder, with full control and a safety net.</h2>
+          <p>Pick a folder anywhere on disk &mdash; Dropbox, iCloud, Desktop,
+            an external drive. The tool will read its contents, propose a cleaner
+            structure, and let you reshape that structure visually before anything
+            on disk changes.</p>
+
+          <h3>What this tool will do</h3>
+          <ul class="dotted">
+            <li>Walk every file in the folder you choose and identify file types, duplicates, and likely junk.</li>
+            <li>Propose a new structure organized by type, date, or project &mdash; you pick the strategy.</li>
+            <li>Show the proposed tree visually so you can drag, rename, add, and remove folders before committing.</li>
+            <li>On execute: snapshot the current folder to a timestamped backup, then move files to their new homes.</li>
+            <li>Send duplicates and likely-junk to a <code>_Review-for-Deletion</code> folder. <em>Nothing is ever permanently deleted.</em></li>
+          </ul>
+
+          <h3>Important notes about Dropbox &amp; iCloud</h3>
+          <p>To reorganize a Dropbox or iCloud folder, point this tool at its
+            <strong>local sync folder</strong> (e.g.&nbsp;<code>~/Dropbox/Projects</code>
+            or <code>~/Library/Mobile&nbsp;Documents/com~apple~CloudDocs/Projects</code>).
+            Cloud sync will pick up the changes automatically. Files that are <em>online-only</em>
+            (not yet downloaded locally) will be skipped &mdash; download them first if you want
+            them included.</p>
+
+          <fieldset class="cloud-mode">
+            <legend>Online-only files</legend>
+            <label>
+              <input type="checkbox" id="cloud-mode">
+              <span>My folder contains <strong>online-only</strong> Dropbox or iCloud files</span>
+            </label>
+            <p class="hint">
+              When checked, the tool relocates files using a metadata-only move
+              (no bytes are read), so online-only placeholders stay online-only.
+              Trade-offs: duplicate-by-content detection is disabled, and the
+              backup is reduced to a manifest only &mdash; your cloud
+              provider&rsquo;s version history is the safety net.
+            </p>
+          </fieldset>
+
+          <div class="actions">
+            <button id="btn-pick-folder" class="btn btn--primary">Choose folder &rarr;</button>
+          </div>
+
+          <p class="footnote">
+            Tip: nothing happens on disk until you reach the <em>Review</em> step
+            and confirm. You can back out at any time before then.
+          </p>
+        </div>
+      </section>
+
+      <!-- ─────────  PHASE 2  ·  ANALYZING (in progress)  ───────── -->
+      <section class="phase" data-phase="analyzing">
+        <div class="prose">
+          <h2 class="display">Reading folder&hellip;</h2>
+          <p id="analyze-status" class="status-line">Scanning&hellip;</p>
+          <progress id="analyze-progress" max="100" value="0"></progress>
+        </div>
+      </section>
+
+      <!-- ─────────  PHASE 3  ·  ANALYSIS RESULTS  ───────── -->
+      <section class="phase" data-phase="analysis">
+        <div class="prose">
+          <h2 class="display">What's in <span id="analysis-folder-name" class="folder-name">&mdash;</span></h2>
+
+          <div class="data-grid">
+            <div class="datum"><span class="datum__num" id="stat-files">0</span><span class="datum__label">Files</span></div>
+            <div class="datum"><span class="datum__num" id="stat-folders">0</span><span class="datum__label">Subfolders</span></div>
+            <div class="datum"><span class="datum__num" id="stat-size">0&nbsp;B</span><span class="datum__label">Total size</span></div>
+            <div class="datum"><span class="datum__num" id="stat-duplicates">0</span><span class="datum__label">Duplicates</span></div>
+            <div class="datum"><span class="datum__num" id="stat-junk">0</span><span class="datum__label">System junk</span></div>
+            <div class="datum"><span class="datum__num" id="stat-empty">0</span><span class="datum__label">Empty files</span></div>
+          </div>
+
+          <h3>By file type</h3>
+          <table class="ledger" id="type-ledger">
+            <thead>
+              <tr><th>Category</th><th class="num">Files</th><th class="num">Size</th><th>Top extensions</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <h3>Heads-up</h3>
+          <ul id="findings" class="findings"></ul>
+
+          <div class="actions">
+            <button id="btn-back-to-welcome" class="btn btn--ghost">&larr; Choose a different folder</button>
+            <button id="btn-go-propose" class="btn btn--primary">Propose a new structure &rarr;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────  PHASE 4  ·  PROPOSED STRUCTURE (interactive)  ───────── -->
+      <section class="phase" data-phase="propose">
+        <div class="prose">
+          <h2 class="display">Proposed structure</h2>
+          <p>Pick an organizing strategy, then customize the result. Drag folders
+            to reorder. Click a name to rename. Use the controls beside each row
+            to add, remove, or move folders. Files are shown grouped beneath
+            their proposed folder.</p>
+
+          <fieldset class="strategies">
+            <legend>Organizing strategy</legend>
+            <label><input type="radio" name="strategy" value="smart" checked>
+              <span><strong>Smart</strong> &mdash; reads filename + folder context. Project folders preserved as units; image files that look like documents (scans, receipts, contracts) routed to <code>Documents/</code>; renderings, drawings, and photos disambiguated by filename. Recommended.</span></label>
+            <label><input type="radio" name="strategy" value="type"> By&nbsp;file&nbsp;type</label>
+            <label><input type="radio" name="strategy" value="date"> By&nbsp;date</label>
+            <label><input type="radio" name="strategy" value="project"> By&nbsp;project (keep top-level folders, no sub-organization)</label>
+            <label><input type="radio" name="strategy" value="hybrid"> Hybrid (type + date)</label>
+          </fieldset>
+
+          <div class="tree-toolbar">
+            <button id="btn-tree-add-root" class="btn btn--ghost btn--sm">+ Add top-level folder</button>
+            <button id="btn-tree-expand-all" class="btn btn--ghost btn--sm">Expand all</button>
+            <button id="btn-tree-collapse-all" class="btn btn--ghost btn--sm">Collapse all</button>
+            <span class="spacer"></span>
+            <span class="hint">Drag folders to move · click a name to rename</span>
+          </div>
+
+          <div id="tree-host" class="tree-host" aria-label="Proposed folder tree, editable">
+            <!-- Tree rendered by app.js -->
+          </div>
+
+          <div class="actions">
+            <button id="btn-back-to-analysis" class="btn btn--ghost">&larr; Back to analysis</button>
+            <button id="btn-go-review" class="btn btn--primary">Review changes &rarr;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────  PHASE 5  ·  REVIEW & APPROVE  ───────── -->
+      <section class="phase" data-phase="review">
+        <div class="prose">
+          <h2 class="display">Review &amp; approve</h2>
+
+          <h3>What's about to happen</h3>
+
+          <p id="review-cloud-hint" class="cloud-hint" hidden>
+            <strong>Cloud-friendly mode is on.</strong> Files will be relocated
+            using a metadata-only move &mdash; their bytes are never read, so
+            online-only Dropbox/iCloud files stay online-only. The backup will
+            contain a <code>manifest.json</code> only (no copies of original
+            file contents). Use your cloud provider&rsquo;s version history if
+            you need to roll the move back.
+          </p>
+
+          <ol class="numbered">
+            <li>A timestamped backup folder named
+              <code id="review-backup-name">_Backup-…</code> will be created
+              inside <span id="review-folder-name" class="folder-name">your folder</span>.
+              <strong>Every file will be copied into it</strong> (preserving its
+              current relative path) along with a <code>manifest.json</code>
+              describing where everything originally lived.</li>
+            <li><span id="review-move-count">0</span> files will then be moved into
+              the proposed structure shown below.</li>
+            <li><span id="review-deletion-count">0</span> duplicates and likely-junk
+              files will be moved into a <code>_Review-for-Deletion</code> folder
+              for you to inspect later. <em>Nothing is permanently deleted.</em></li>
+          </ol>
+
+          <h3>Move plan (preview)</h3>
+          <table class="ledger move-plan" id="move-plan">
+            <thead>
+              <tr><th>From</th><th>&rarr;</th><th>To</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p class="footnote">Showing the first 200 moves. Full list will be applied
+            on execute and recorded in <code>manifest.json</code>.</p>
+
+          <fieldset class="confirmations">
+            <legend>Confirm before continuing</legend>
+            <label><input type="checkbox" id="confirm-backup"> I understand a backup will be created inside this folder.</label>
+            <label><input type="checkbox" id="confirm-moves"> I understand files will be moved according to the plan above.</label>
+            <label><input type="checkbox" id="confirm-deletion"> I understand duplicates and junk will be moved to <code>_Review-for-Deletion</code>, not deleted.</label>
+          </fieldset>
+
+          <div class="actions">
+            <button id="btn-back-to-propose" class="btn btn--ghost">&larr; Edit structure</button>
+            <button id="btn-execute" class="btn btn--primary" disabled>Execute reorganization</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────  PHASE 6  ·  EXECUTING  ───────── -->
+      <section class="phase" data-phase="executing">
+        <div class="prose">
+          <h2 class="display">Reorganizing&hellip;</h2>
+          <p id="execute-status" class="status-line">Preparing&hellip;</p>
+          <progress id="execute-progress" max="100" value="0"></progress>
+          <ul id="execute-log" class="log"></ul>
+        </div>
+      </section>
+
+      <!-- ─────────  PHASE 7  ·  DONE  ───────── -->
+      <section class="phase" data-phase="done">
+        <div class="prose">
+          <h2 class="display">Done.</h2>
+          <p id="done-summary"></p>
+
+          <h3>Where things went</h3>
+          <ul class="dotted">
+            <li>Backup snapshot: <code id="done-backup-path">—</code></li>
+            <li>Review for deletion: <code id="done-review-path">—</code></li>
+          </ul>
+
+          <h3>Restoring</h3>
+          <p>If you want to undo this reorganization, every original file lives in
+            the backup folder. The backup also contains <code>manifest.json</code>
+            mapping <em>original path</em> &rarr; <em>new path</em> for every file
+            that was moved. You can restore manually by copying from the backup,
+            or paste the manifest to a developer to script a reverse operation.</p>
+
+          <p>The backup will remain on disk until you delete it manually. Once
+            you're satisfied with the new layout, you can drag the backup to the
+            Trash to reclaim the space.</p>
+
+          <div class="actions">
+            <button id="btn-restart" class="btn btn--ghost">Reorganize another folder</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="colophon">
+      <span>CMA Internal Tools · Folder Reorganizer · v1.0</span>
+      <span class="spacer"></span>
+      <span id="active-folder" class="folder-name"></span>
+    </footer>
+  </div>
+
+  <script type="module" src="app.js?v=5"></script>
+</body>
+</html>
