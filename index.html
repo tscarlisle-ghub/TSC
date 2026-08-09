@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Launch Pad — Carlisle Moore Architects</title>
+<title>Launch Pad — T. Scott Carlisle</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='8' fill='%23d04030'/><text x='32' y='44' font-family='Helvetica,Arial,sans-serif' font-weight='900' font-size='30' text-anchor='middle' letter-spacing='1' fill='%23fffdf6'>LP</text></svg>">
 <link rel="stylesheet" href="https://use.typekit.net/wup0iix.css">
 <style>
@@ -127,8 +127,8 @@ body{font-family:var(--font-body);font-size:18px;line-height:1.5;}
   text-transform:uppercase; color:var(--ink-light); margin-bottom:8px;
 }
 .tile-name{
-  font-family:"columbia-titling","columbia",Georgia,serif; font-weight:300; font-size:22px;
-  letter-spacing:0.08em; text-transform:uppercase; color:var(--ink); line-height:1.1; margin-bottom:6px;
+  font-family:var(--font-cond); font-weight:700; font-size:18px;
+  letter-spacing:0.02em; text-transform:uppercase; color:var(--ink); line-height:1.25; margin-bottom:6px;
 }
 .tile-desc{
   font-family:var(--font-body); font-style:italic; font-size:17px; line-height:1.45;
@@ -150,6 +150,17 @@ body{font-family:var(--font-body);font-size:18px;line-height:1.5;}
 }
 .tile-link:hover{ color:var(--brand); border-bottom-color:var(--brand); }
 .multi-links{ display:flex; flex-direction:column; gap:6px; margin-top:2px; }
+
+/* TSC section: smaller, quieter tiles */
+#tscGrid.grid{ grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+#tscGrid .tile{ min-height:auto; padding:12px 14px 10px; }
+#tscGrid .tile:hover{ background:var(--page-white); border-color:var(--ink-light); box-shadow:none; }
+#tscGrid .tile-stage{ font-size:10px; margin-bottom:4px; color:var(--ink-light); }
+#tscGrid .tile-name{ font-size:13px; letter-spacing:0.04em; color:var(--ink-mid); margin-bottom:0; }
+#tscGrid .tile-desc{ display:none; }
+#tscGrid .tile-meta{ display:none; }
+#tscGrid .tile-foot{ padding-top:8px; border-top:none; margin-top:8px; }
+#tscGrid .tile-link{ font-size:10px; letter-spacing:0.1em; }
 
 .badge{
   font-family:var(--font-cond); font-weight:700; font-size:9px; letter-spacing:0.14em;
@@ -178,7 +189,7 @@ footer a{ color:var(--teal); }
   <div class="masthead-inner">
     <div class="masthead-title">Launch Pad</div>
     <span class="masthead-rule"></span>
-    <div class="masthead-sub">Every live tool for <b>Carlisle Moore Architects</b> — scanned fresh, every visit.</div>
+    <div class="masthead-sub">Every live tool for <b>T. Scott Carlisle</b> — scanned fresh, every visit.</div>
     <div class="masthead-count" id="count">scanning…</div>
   </div>
 </header>
@@ -193,11 +204,11 @@ footer a{ color:var(--teal); }
 
 <div class="status-row" id="status">scanning…</div>
 
-<div class="section-row"><div class="section-label">TSC Projects <span class="count" id="tscCount"></span></div></div>
-<div class="grid" id="tscGrid"></div>
-
 <div class="section-row"><div class="section-label">Other Repositories <span class="count" id="repoCount"></span></div></div>
 <div class="grid" id="repoGrid"></div>
+
+<div class="section-row"><div class="section-label">TSC Projects <span class="count" id="tscCount"></span></div></div>
+<div class="grid" id="tscGrid"></div>
 
 <div class="empty-state" id="emptyState" hidden>Nothing found — check the status line above.</div>
 
