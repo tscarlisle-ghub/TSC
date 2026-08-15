@@ -1,4 +1,4 @@
-<!-- BUILD 2026-08-08 · TSC-LAUNCHPAD v3 · custom categories, compact cards -->
+<!-- BUILD 2026-08-08 · TSC-LAUNCHPAD v4 · preset categories, muted archive, sentence case -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -106,12 +106,14 @@ body{font-family:var(--font-body);font-size:18px;line-height:1.5;}
   padding-bottom:8px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:baseline;
 }
 .section-label span.count{ color:var(--ink-light); font-weight:400; }
+.section-row.archived .section-label{ color:var(--ink-light); border-bottom-color:var(--rule); font-size:11px; }
 
 .grid{
   max-width:1600px; margin:0 auto; padding:0 40px 14px;
   display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px;
 }
 .grid:last-of-type{ padding-bottom:14px; }
+.grid[data-category="Archived"]{ grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:8px; }
 
 .tile{
   position:relative; background:var(--page-white); border:1px solid var(--rule);
@@ -151,6 +153,17 @@ body{font-family:var(--font-body);font-size:18px;line-height:1.5;}
 }
 .tile-link:hover{ color:var(--brand); border-bottom-color:var(--brand); }
 .multi-links{ display:flex; flex-direction:column; gap:4px; margin-top:2px; }
+
+/* Archived: smaller, quieter tiles */
+.grid[data-category="Archived"] .tile{ min-height:auto; padding:10px 12px 8px; }
+.grid[data-category="Archived"] .tile:hover{ background:var(--page-white); border-color:var(--ink-light); box-shadow:none; }
+.grid[data-category="Archived"] .tile-stage{ font-size:9px; margin-bottom:3px; }
+.grid[data-category="Archived"] .tile-name{ font-size:14px; letter-spacing:0.03em; color:var(--ink-mid); margin-bottom:0; }
+.grid[data-category="Archived"] .tile-desc{ display:none; }
+.grid[data-category="Archived"] .tile-meta{ display:none; }
+.grid[data-category="Archived"] .tile-foot{ padding-top:6px; border-top:none; margin-top:6px; }
+.grid[data-category="Archived"] .tile-link{ font-size:9px; letter-spacing:0.1em; }
+.grid[data-category="Archived"] .badge{ font-size:8px; }
 
 .badge{
   font-family:var(--font-cond); font-weight:700; font-size:9px; letter-spacing:0.14em;
@@ -196,8 +209,8 @@ footer a{ color:var(--teal); }
 </header>
 
 <div class="intro">
-  <div class="intro-label">Live Index</div>
-  <div class="intro-note">scans your public repos and every folder inside TSC — use the small tag on each tile to sort it into your own categories</div>
+  <div class="intro-label">Live index</div>
+  <div class="intro-note" id="introNote">Scans your public repos and every folder inside TSC — use the small tag on each tile to sort it.</div>
   <div class="intro-spacer"></div>
   <a class="intro-action" href="https://github.com/tscarlisle-ghub" target="_blank" rel="noopener">→ view profile</a>
   <button class="intro-action" id="rescanBtn"><span class="spin">↻</span> rescan</button>
@@ -212,15 +225,16 @@ footer a{ color:var(--teal); }
 <footer>
   <p>Scans two things on every load: every public repo under tscarlisle-ghub with GitHub Pages enabled, and every folder inside the TSC repo (whatever its entry file is named). Private repos aren't queried and won't appear here.</p>
   <p>Repos without Pages enabled still show up, muted, linked to their source. Folders inside TSC with a proper index.html open directly; folders with differently-named HTML files list each one; folders with no HTML yet still show up.</p>
-  <p>Categories are saved in this browser only (not synced across devices) — use the small tag on each tile to move it, or add a new one.</p>
+  <p>Categories are saved in this browser only, not synced across devices — use the small tag on each tile to move it, or add a new one.</p>
 </footer>
 
 <script>
 const OWNER = 'tscarlisle-ghub';
 const TSC_REPO = 'TSC';
 const CAT_STORAGE_KEY = 'launchpad_categories_v1';
-const DEFAULT_TSC_CATEGORY = 'TSC Projects';
-const DEFAULT_REPO_CATEGORY = 'Repositories';
+const PRESET_CATEGORIES = ['Active', 'In Progress', 'Personal', 'Archived'];
+const DEFAULT_CATEGORY = 'Active';
+const DEFAULT_ARCHIVED_CATEGORY = 'Archived';
 const NEW_CATEGORY_VALUE = '__new__';
 
 const contentEl = document.getElementById('content');
@@ -236,6 +250,11 @@ function setStatus(text, cls){
 
 function prettify(slug){
   return slug.replace(/[-_]+/g, ' ').replace(/\.html$/i, '').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function sentenceCase(str){
+  if(!str) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 function nowStamp(){
@@ -270,7 +289,7 @@ async function fetchDesc(absPath){
     if(res.ok){
       const html = await res.text();
       const m = html.match(/<meta\s+name=["']description["']\s+content=["']([^"']*)["'][^>]*>/i);
-      if(m && m[1].trim()) return m[1].trim();
+      if(m && m[1].trim()) return sentenceCase(m[1].trim());
     }
   }catch(e){}
   return '';
@@ -313,24 +332,24 @@ async function getTscFolders(branch){
 async function loadTscMeta(item){
   const { folder, entries, hasIndex } = item;
   const key = `tsc:${folder}`;
-  if(entries.length === 0) return { key, source:'tsc', folder, kind: 'none', title: prettify(folder), desc: '' };
+  if(entries.length === 0) return { key, source:'tsc', folder, kind: 'none', title: prettify(folder), desc: '', archived:false };
 
   if(hasIndex){
     const e = entries.find(f => f.name.toLowerCase() === 'index.html');
     const title = (await fetchTitle(`/${TSC_REPO}/${e.path}`)) || prettify(folder);
     const desc = await fetchDesc(`/${TSC_REPO}/${e.path}`);
-    return { key, source:'tsc', folder, kind: 'single', title, desc, path: `${TSC_REPO}/${e.path}` };
+    return { key, source:'tsc', folder, kind: 'single', title, desc, path: `${TSC_REPO}/${e.path}`, archived:false };
   }
   if(entries.length === 1){
     const title = (await fetchTitle(`/${TSC_REPO}/${entries[0].path}`)) || prettify(folder);
     const desc = await fetchDesc(`/${TSC_REPO}/${entries[0].path}`);
-    return { key, source:'tsc', folder, kind: 'single', title, desc, path: `${TSC_REPO}/${entries[0].path}` };
+    return { key, source:'tsc', folder, kind: 'single', title, desc, path: `${TSC_REPO}/${entries[0].path}`, archived:false };
   }
   const labeled = await Promise.all(entries.map(async e => ({
     path: `${TSC_REPO}/${e.path}`,
     label: (await fetchTitle(`/${TSC_REPO}/${e.path}`)) || prettify(e.name)
   })));
-  return { key, source:'tsc', folder, kind: 'multi', title: prettify(folder), desc: '', entries: labeled };
+  return { key, source:'tsc', folder, kind: 'multi', title: prettify(folder), desc: '', entries: labeled, archived:false };
 }
 
 // ── standalone repo scan ──
@@ -345,11 +364,11 @@ async function loadRepoMeta(repo){
   const key = `repo:${repo.name}`;
   const base = { key, source:'repo', name: repo.name, archived: repo.archived, hasPages: repo.has_pages };
   if(!repo.has_pages){
-    return { ...base, kind: 'none', title: prettify(repo.name), desc: repo.description || '' };
+    return { ...base, kind: 'none', title: prettify(repo.name), desc: sentenceCase(repo.description || '') };
   }
   const path = `/${repo.name}/`;
   const title = (await fetchTitle(path)) || prettify(repo.name);
-  const desc = (await fetchDesc(path)) || repo.description || '';
+  const desc = (await fetchDesc(path)) || sentenceCase(repo.description || '');
   return { ...base, kind: 'single', title, desc, path };
 }
 
@@ -362,7 +381,7 @@ function tileInnerHtml(item){
         html: `
           <div class="tile-stage">${item.folder}</div>
           <div class="tile-name">${item.title}</div>
-          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'no description'}</p>
+          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'No description'}</p>
           <div class="tile-foot">
             <span class="tile-meta">${OWNER}.github.io/${item.path}</span>
             <a class="tile-link" href="/${item.path}" target="_blank" rel="noopener">→ launch site</a>
@@ -376,7 +395,7 @@ function tileInnerHtml(item){
         html: `
           <div class="tile-stage">${item.folder}<span class="badge multi">${item.entries.length} pages</span></div>
           <div class="tile-name">${item.title}</div>
-          <p class="tile-desc empty">no single entry point — ${item.entries.length} HTML files</p>
+          <p class="tile-desc empty">No single entry point — ${item.entries.length} HTML files</p>
           <div class="tile-foot">
             <span class="tile-meta">${OWNER}.github.io/${TSC_REPO}/${item.folder}</span>
             <div class="multi-links">${linksHtml}</div>
@@ -389,7 +408,7 @@ function tileInnerHtml(item){
         html: `
           <div class="tile-stage">${item.folder}<span class="badge none">no html</span></div>
           <div class="tile-name">${item.title}</div>
-          <p class="tile-desc empty">no HTML file yet</p>
+          <p class="tile-desc empty">No HTML file yet</p>
           <div class="tile-foot">
             <span class="tile-meta">${OWNER}/${TSC_REPO}/${item.folder}</span>
             <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view folder</a>
@@ -405,7 +424,7 @@ function tileInnerHtml(item){
         html: `
           <div class="tile-stage">${item.name}${archivedBadge}</div>
           <div class="tile-name">${item.title}</div>
-          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'no description'}</p>
+          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'No description'}</p>
           <div class="tile-foot">
             <span class="tile-meta">${OWNER}.github.io${item.path}</span>
             <a class="tile-link" href="${item.path}" target="_blank" rel="noopener">→ launch site</a>
@@ -418,7 +437,7 @@ function tileInnerHtml(item){
         html: `
           <div class="tile-stage">${item.name}${archivedBadge}<span class="badge none">no pages</span></div>
           <div class="tile-name">${item.title}</div>
-          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'no live site'}</p>
+          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'No live site'}</p>
           <div class="tile-foot">
             <span class="tile-meta">${OWNER}/${item.name}</span>
             <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view repo</a>
@@ -456,44 +475,48 @@ function buildTile(item, allCategories, currentCategory){
   return tile;
 }
 
+// order preset categories first, custom ones after, alphabetically
+function orderCategories(names){
+  const preset = PRESET_CATEGORIES.filter(c => names.includes(c));
+  const custom = names.filter(c => !PRESET_CATEGORIES.includes(c)).sort((a,b) => a.localeCompare(b));
+  return [...preset, ...custom];
+}
+
 function renderGrouped(allItems){
   contentEl.innerHTML = '';
   const stored = loadCategories();
 
-  // default category assignment
   for(const item of allItems){
-    item.category = stored[item.key] || (item.source === 'tsc' ? DEFAULT_TSC_CATEGORY : DEFAULT_REPO_CATEGORY);
+    item.category = stored[item.key] || (item.archived ? DEFAULT_ARCHIVED_CATEGORY : DEFAULT_CATEGORY);
   }
 
-  // full set of category names for dropdowns (always offer both defaults)
-  const categorySet = new Set([DEFAULT_TSC_CATEGORY, DEFAULT_REPO_CATEGORY]);
+  const categorySet = new Set(PRESET_CATEGORIES);
   for(const item of allItems) categorySet.add(item.category);
-  const allCategories = Array.from(categorySet).sort((a,b) => a.localeCompare(b));
+  const allCategories = orderCategories(Array.from(categorySet));
 
-  // group
   const groups = new Map();
   for(const item of allItems){
     if(!groups.has(item.category)) groups.set(item.category, []);
     groups.get(item.category).push(item);
   }
-  const groupNames = Array.from(groups.keys()).sort((a,b) => a.localeCompare(b));
+  const groupNames = orderCategories(Array.from(groups.keys()));
 
   for(const catName of groupNames){
     const items = groups.get(catName);
     const sectionRow = document.createElement('div');
-    sectionRow.className = 'section-row';
+    sectionRow.className = 'section-row' + (catName === 'Archived' ? ' archived' : '');
     sectionRow.innerHTML = `<div class="section-label">${catName} <span class="count">${items.length}</span></div>`;
     contentEl.appendChild(sectionRow);
 
     const grid = document.createElement('div');
     grid.className = 'grid';
+    grid.dataset.category = catName;
     for(const item of items){
       grid.appendChild(buildTile(item, allCategories, catName));
     }
     contentEl.appendChild(grid);
   }
 
-  // delegated change handler for category selects
   contentEl.addEventListener('change', e => {
     if(!e.target.classList.contains('cat-select')) return;
     const key = e.target.dataset.key;
@@ -501,7 +524,7 @@ function renderGrouped(allItems){
     if(value === NEW_CATEGORY_VALUE){
       const name = prompt('New category name:');
       if(!name || !name.trim()){
-        renderGrouped(allItems); // reset dropdown, discard
+        renderGrouped(allItems);
         return;
       }
       value = name.trim();
