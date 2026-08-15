@@ -1,4 +1,4 @@
-<!-- BUILD 2026-08-08 · TSC-LAUNCHPAD · scans all public repos + every TSC subfolder, live -->
+<!-- BUILD 2026-08-08 · TSC-LAUNCHPAD v3 · custom categories, compact cards -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -31,7 +31,7 @@
 
   --bar-dark:#1a1a1a;
 
-  --font-body:"eidetic-neo",Georgia,serif;
+  --font-body:"goudy-old-style",Georgia,serif;
   --font-ui:"monotype-grotesque",sans-serif;
   --font-cond:"monotype-grotesque",sans-serif;
   --font-disp:"colt-soft",sans-serif;
@@ -49,16 +49,16 @@ body{font-family:var(--font-body);font-size:18px;line-height:1.5;}
   position:sticky;top:0;z-index:200;
 }
 .masthead-inner{
-  max-width:1600px; margin:0 auto; padding:22px 40px 18px;
+  max-width:1600px; margin:0 auto; padding:18px 40px 14px;
   display:flex; align-items:baseline; gap:0; flex-wrap:wrap;
 }
 .masthead-title{
-  font-family:var(--font-disp); font-weight:700; font-size:40px;
+  font-family:var(--font-disp); font-weight:700; font-size:24px;
   text-transform:uppercase; letter-spacing:0.04em; color:var(--ink); line-height:1;
 }
 .masthead-rule{
   display:inline-block; width:1px; align-self:stretch; background:var(--rule);
-  margin:0 22px; min-height:24px;
+  margin:0 22px; min-height:20px;
 }
 .masthead-sub{ font-family:var(--font-body); font-style:italic; font-size:16px; color:var(--ink-mid); }
 .masthead-sub b{ font-style:normal; font-weight:700; color:var(--ink); letter-spacing:0.02em; }
@@ -68,7 +68,7 @@ body{font-family:var(--font-body);font-size:18px;line-height:1.5;}
 }
 
 .intro{
-  max-width:1600px; margin:0 auto; padding:30px 40px 14px;
+  max-width:1600px; margin:0 auto; padding:24px 40px 14px;
   display:flex; align-items:baseline; gap:18px; border-bottom:1px solid var(--ink-faint);
   flex-wrap:wrap;
 }
@@ -98,70 +98,59 @@ body{font-family:var(--font-body);font-size:18px;line-height:1.5;}
 .status-row.err{ color:var(--brand); }
 .status-row.ok{ color:var(--green); }
 
-.section-row{ max-width:1600px; margin:0 auto; padding:34px 40px 0; }
-.section-row:first-of-type{ padding-top:24px; }
+.section-row{ max-width:1600px; margin:0 auto; padding:26px 40px 0; }
+.section-row:first-of-type{ padding-top:20px; }
 .section-label{
   font-family:var(--font-cond); font-weight:700; font-size:12px; letter-spacing:0.20em;
   text-transform:uppercase; color:var(--ink); border-bottom:1px solid var(--ink);
-  padding-bottom:8px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:baseline;
+  padding-bottom:8px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:baseline;
 }
 .section-label span.count{ color:var(--ink-light); font-weight:400; }
 
 .grid{
-  max-width:1600px; margin:0 auto; padding:0 40px 20px;
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:20px;
+  max-width:1600px; margin:0 auto; padding:0 40px 14px;
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px;
 }
-.grid:last-of-type{ padding-bottom:20px; }
+.grid:last-of-type{ padding-bottom:14px; }
 
 .tile{
   position:relative; background:var(--page-white); border:1px solid var(--rule);
-  border-radius:2px; padding:22px 22px 16px; cursor:pointer;
+  border-radius:2px; padding:14px 16px 10px; cursor:pointer;
   transition:border-color 0.15s, box-shadow 0.15s, background 0.15s;
-  display:flex; flex-direction:column; min-height:170px;
+  display:flex; flex-direction:column; min-height:120px;
 }
 .tile:hover{ border-color:var(--sage-edge); background:var(--sage); box-shadow:0 2px 0 var(--ink-faint); }
 .tile.no-entry{ cursor:default; }
 .tile.no-entry:hover{ border-color:var(--rule); background:var(--page-white); box-shadow:none; }
 
 .tile-stage{
-  font-family:var(--font-cond); font-weight:700; font-size:12px; letter-spacing:0.16em;
-  text-transform:uppercase; color:var(--ink-light); margin-bottom:8px;
+  font-family:var(--font-cond); font-weight:700; font-size:11px; letter-spacing:0.16em;
+  text-transform:uppercase; color:var(--ink-light); margin-bottom:6px;
 }
 .tile-name{
-  font-family:var(--font-name); font-weight:400; font-size:18px;
-  letter-spacing:0.02em; text-transform:uppercase; color:var(--ink); line-height:1.25; margin-bottom:6px;
+  font-family:var(--font-name); font-weight:400; font-size:23px;
+  letter-spacing:0.02em; text-transform:uppercase; color:var(--ink); line-height:1.2; margin-bottom:4px;
 }
 .tile-desc{
-  font-family:var(--font-body); font-style:italic; font-size:17px; line-height:1.45;
-  color:var(--ink-mid); margin:0 0 14px; flex:1;
+  font-family:var(--font-body); font-style:italic; font-size:16px; line-height:1.4;
+  color:var(--ink-mid); margin:0 0 10px; flex:1;
 }
 .tile-desc.empty{ color:var(--ink-light); }
 .tile-foot{
-  display:flex; align-items:baseline; gap:14px; padding-top:12px;
+  display:flex; align-items:center; gap:12px; padding-top:8px;
   border-top:1px solid var(--ink-faint); flex-wrap:wrap;
 }
 .tile-meta{
-  font-family:var(--font-cond); font-weight:700; font-size:11px; letter-spacing:0.14em;
-  text-transform:uppercase; color:var(--ink-light); flex:1; min-width:100%; margin-bottom:6px;
+  font-family:var(--font-cond); font-weight:700; font-size:10px; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--ink-light); flex:1; min-width:100%; margin-bottom:4px;
 }
 .tile-link{
-  font-family:var(--font-cond); font-weight:700; font-size:12px; letter-spacing:0.14em;
+  font-family:var(--font-cond); font-weight:700; font-size:11px; letter-spacing:0.14em;
   text-transform:uppercase; color:var(--ink-mid); text-decoration:none; padding:2px 0;
   border-bottom:1px solid transparent; transition:color 0.15s, border-color 0.15s;
 }
 .tile-link:hover{ color:var(--brand); border-bottom-color:var(--brand); }
-.multi-links{ display:flex; flex-direction:column; gap:6px; margin-top:2px; }
-
-/* TSC section: smaller, quieter tiles */
-#tscGrid.grid{ grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
-#tscGrid .tile{ min-height:auto; padding:12px 14px 10px; }
-#tscGrid .tile:hover{ background:var(--page-white); border-color:var(--ink-light); box-shadow:none; }
-#tscGrid .tile-stage{ font-size:10px; margin-bottom:4px; color:var(--ink-light); }
-#tscGrid .tile-name{ font-size:13px; letter-spacing:0.04em; color:var(--ink-mid); margin-bottom:0; }
-#tscGrid .tile-desc{ display:none; }
-#tscGrid .tile-meta{ display:none; }
-#tscGrid .tile-foot{ padding-top:8px; border-top:none; margin-top:8px; }
-#tscGrid .tile-link{ font-size:10px; letter-spacing:0.1em; }
+.multi-links{ display:flex; flex-direction:column; gap:4px; margin-top:2px; }
 
 .badge{
   font-family:var(--font-cond); font-weight:700; font-size:9px; letter-spacing:0.14em;
@@ -171,6 +160,17 @@ body{font-family:var(--font-body);font-size:18px;line-height:1.5;}
 .badge.none{ color:var(--ink-light); border:1px solid var(--rule-strong); }
 .badge.archived{ color:var(--amber); border:1px solid var(--amber); }
 .badge.private{ color:var(--brand); border:1px solid var(--brand); }
+
+/* category picker on each tile */
+.cat-row{
+  width:100%; margin-top:6px; display:flex; align-items:center; gap:6px;
+}
+.cat-select{
+  font-family:var(--font-cond); font-weight:700; font-size:9px; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--ink-light); background:var(--page); border:1px solid var(--rule);
+  border-radius:2px; padding:3px 5px; cursor:pointer; max-width:100%;
+}
+.cat-select:hover{ border-color:var(--rule-strong); color:var(--ink-mid); }
 
 .empty-state{
   max-width:1600px; margin:0 auto; padding:60px 40px;
@@ -197,7 +197,7 @@ footer a{ color:var(--teal); }
 
 <div class="intro">
   <div class="intro-label">Live Index</div>
-  <div class="intro-note">scans your public repos and every folder inside TSC — click a tile to open it</div>
+  <div class="intro-note">scans your public repos and every folder inside TSC — use the small tag on each tile to sort it into your own categories</div>
   <div class="intro-spacer"></div>
   <a class="intro-action" href="https://github.com/tscarlisle-ghub" target="_blank" rel="noopener">→ view profile</a>
   <button class="intro-action" id="rescanBtn"><span class="spin">↻</span> rescan</button>
@@ -205,27 +205,25 @@ footer a{ color:var(--teal); }
 
 <div class="status-row" id="status">scanning…</div>
 
-<div class="section-row"><div class="section-label">Other Repositories <span class="count" id="repoCount"></span></div></div>
-<div class="grid" id="repoGrid"></div>
-
-<div class="section-row"><div class="section-label">TSC Projects <span class="count" id="tscCount"></span></div></div>
-<div class="grid" id="tscGrid"></div>
+<div id="content"></div>
 
 <div class="empty-state" id="emptyState" hidden>Nothing found — check the status line above.</div>
 
 <footer>
   <p>Scans two things on every load: every public repo under tscarlisle-ghub with GitHub Pages enabled, and every folder inside the TSC repo (whatever its entry file is named). Private repos aren't queried and won't appear here.</p>
   <p>Repos without Pages enabled still show up, muted, linked to their source. Folders inside TSC with a proper index.html open directly; folders with differently-named HTML files list each one; folders with no HTML yet still show up.</p>
+  <p>Categories are saved in this browser only (not synced across devices) — use the small tag on each tile to move it, or add a new one.</p>
 </footer>
 
 <script>
 const OWNER = 'tscarlisle-ghub';
 const TSC_REPO = 'TSC';
+const CAT_STORAGE_KEY = 'launchpad_categories_v1';
+const DEFAULT_TSC_CATEGORY = 'TSC Projects';
+const DEFAULT_REPO_CATEGORY = 'Repositories';
+const NEW_CATEGORY_VALUE = '__new__';
 
-const tscGrid = document.getElementById('tscGrid');
-const repoGrid = document.getElementById('repoGrid');
-const tscCountEl = document.getElementById('tscCount');
-const repoCountEl = document.getElementById('repoCount');
+const contentEl = document.getElementById('content');
 const emptyState = document.getElementById('emptyState');
 const statusEl = document.getElementById('status');
 const countEl = document.getElementById('count');
@@ -244,6 +242,15 @@ function nowStamp(){
   const d = new Date();
   return d.toLocaleDateString(undefined, {month:'short', day:'numeric'}) + ' · ' +
          d.toLocaleTimeString(undefined, {hour:'numeric', minute:'2-digit'});
+}
+
+function loadCategories(){
+  try{
+    return JSON.parse(localStorage.getItem(CAT_STORAGE_KEY)) || {};
+  }catch(e){ return {}; }
+}
+function saveCategories(map){
+  try{ localStorage.setItem(CAT_STORAGE_KEY, JSON.stringify(map)); }catch(e){}
 }
 
 async function fetchTitle(absPath){
@@ -305,24 +312,25 @@ async function getTscFolders(branch){
 
 async function loadTscMeta(item){
   const { folder, entries, hasIndex } = item;
-  if(entries.length === 0) return { folder, kind: 'none', title: prettify(folder), desc: '' };
+  const key = `tsc:${folder}`;
+  if(entries.length === 0) return { key, source:'tsc', folder, kind: 'none', title: prettify(folder), desc: '' };
 
   if(hasIndex){
     const e = entries.find(f => f.name.toLowerCase() === 'index.html');
     const title = (await fetchTitle(`/${TSC_REPO}/${e.path}`)) || prettify(folder);
     const desc = await fetchDesc(`/${TSC_REPO}/${e.path}`);
-    return { folder, kind: 'single', title, desc, path: `${TSC_REPO}/${e.path}` };
+    return { key, source:'tsc', folder, kind: 'single', title, desc, path: `${TSC_REPO}/${e.path}` };
   }
   if(entries.length === 1){
     const title = (await fetchTitle(`/${TSC_REPO}/${entries[0].path}`)) || prettify(folder);
     const desc = await fetchDesc(`/${TSC_REPO}/${entries[0].path}`);
-    return { folder, kind: 'single', title, desc, path: `${TSC_REPO}/${entries[0].path}` };
+    return { key, source:'tsc', folder, kind: 'single', title, desc, path: `${TSC_REPO}/${entries[0].path}` };
   }
   const labeled = await Promise.all(entries.map(async e => ({
     path: `${TSC_REPO}/${e.path}`,
     label: (await fetchTitle(`/${TSC_REPO}/${e.path}`)) || prettify(e.name)
   })));
-  return { folder, kind: 'multi', title: prettify(folder), desc: '', entries: labeled };
+  return { key, source:'tsc', folder, kind: 'multi', title: prettify(folder), desc: '', entries: labeled };
 }
 
 // ── standalone repo scan ──
@@ -334,7 +342,8 @@ async function getPublicRepos(){
 }
 
 async function loadRepoMeta(repo){
-  const base = { name: repo.name, archived: repo.archived, hasPages: repo.has_pages };
+  const key = `repo:${repo.name}`;
+  const base = { key, source:'repo', name: repo.name, archived: repo.archived, hasPages: repo.has_pages };
   if(!repo.has_pages){
     return { ...base, kind: 'none', title: prettify(repo.name), desc: repo.description || '' };
   }
@@ -345,86 +354,163 @@ async function loadRepoMeta(repo){
 }
 
 // ── rendering ──
-function tileEl(kindHtml, className, clickUrl){
+function tileInnerHtml(item){
+  if(item.source === 'tsc'){
+    const repoUrl = `https://github.com/${OWNER}/${TSC_REPO}/tree/HEAD/${item.folder}`;
+    if(item.kind === 'single'){
+      return {
+        html: `
+          <div class="tile-stage">${item.folder}</div>
+          <div class="tile-name">${item.title}</div>
+          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'no description'}</p>
+          <div class="tile-foot">
+            <span class="tile-meta">${OWNER}.github.io/${item.path}</span>
+            <a class="tile-link" href="/${item.path}" target="_blank" rel="noopener">→ launch site</a>
+            <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view folder</a>
+          </div>`,
+        className: 'tile', clickUrl: `/${item.path}`
+      };
+    } else if(item.kind === 'multi'){
+      const linksHtml = item.entries.map(e => `<a class="tile-link" href="/${e.path}" target="_blank" rel="noopener">→ ${e.label}</a>`).join('');
+      return {
+        html: `
+          <div class="tile-stage">${item.folder}<span class="badge multi">${item.entries.length} pages</span></div>
+          <div class="tile-name">${item.title}</div>
+          <p class="tile-desc empty">no single entry point — ${item.entries.length} HTML files</p>
+          <div class="tile-foot">
+            <span class="tile-meta">${OWNER}.github.io/${TSC_REPO}/${item.folder}</span>
+            <div class="multi-links">${linksHtml}</div>
+            <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view folder</a>
+          </div>`,
+        className: 'tile', clickUrl: `/${item.entries[0].path}`
+      };
+    } else {
+      return {
+        html: `
+          <div class="tile-stage">${item.folder}<span class="badge none">no html</span></div>
+          <div class="tile-name">${item.title}</div>
+          <p class="tile-desc empty">no HTML file yet</p>
+          <div class="tile-foot">
+            <span class="tile-meta">${OWNER}/${TSC_REPO}/${item.folder}</span>
+            <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view folder</a>
+          </div>`,
+        className: 'tile no-entry', clickUrl: null
+      };
+    }
+  } else {
+    const repoUrl = `https://github.com/${OWNER}/${item.name}`;
+    const archivedBadge = item.archived ? '<span class="badge archived">archived</span>' : '';
+    if(item.kind === 'single'){
+      return {
+        html: `
+          <div class="tile-stage">${item.name}${archivedBadge}</div>
+          <div class="tile-name">${item.title}</div>
+          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'no description'}</p>
+          <div class="tile-foot">
+            <span class="tile-meta">${OWNER}.github.io${item.path}</span>
+            <a class="tile-link" href="${item.path}" target="_blank" rel="noopener">→ launch site</a>
+            <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view repo</a>
+          </div>`,
+        className: 'tile', clickUrl: item.path
+      };
+    } else {
+      return {
+        html: `
+          <div class="tile-stage">${item.name}${archivedBadge}<span class="badge none">no pages</span></div>
+          <div class="tile-name">${item.title}</div>
+          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'no live site'}</p>
+          <div class="tile-foot">
+            <span class="tile-meta">${OWNER}/${item.name}</span>
+            <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view repo</a>
+          </div>`,
+        className: 'tile no-entry', clickUrl: null
+      };
+    }
+  }
+}
+
+function catSelectHtml(item, allCategories, currentCategory){
+  const opts = allCategories.map(c =>
+    `<option value="${c}" ${c === currentCategory ? 'selected' : ''}>${c}</option>`
+  ).join('');
+  return `
+    <div class="cat-row">
+      <select class="cat-select" data-key="${item.key}">
+        ${opts}
+        <option value="${NEW_CATEGORY_VALUE}">+ New category…</option>
+      </select>
+    </div>`;
+}
+
+function buildTile(item, allCategories, currentCategory){
+  const { html, className, clickUrl } = tileInnerHtml(item);
   const tile = document.createElement('div');
   tile.className = className;
+  tile.innerHTML = html + catSelectHtml(item, allCategories, currentCategory);
   if(clickUrl){
     tile.addEventListener('click', e => {
-      if(e.target.closest('.tile-link')) return;
+      if(e.target.closest('.tile-link') || e.target.closest('.cat-select')) return;
       window.open(clickUrl, '_blank', 'noopener');
     });
   }
-  tile.innerHTML = kindHtml;
   return tile;
 }
 
-function renderTsc(projects){
-  tscGrid.innerHTML = '';
-  tscCountEl.textContent = projects.length ? `${projects.length}` : '';
-  for(const p of projects){
-    const repoUrl = `https://github.com/${OWNER}/${TSC_REPO}/tree/HEAD/${p.folder}`;
-    if(p.kind === 'single'){
-      const site = `/${p.path}`;
-      tscGrid.appendChild(tileEl(`
-        <div class="tile-stage">${p.folder}</div>
-        <div class="tile-name">${p.title}</div>
-        <p class="tile-desc${p.desc ? '' : ' empty'}">${p.desc || 'no description'}</p>
-        <div class="tile-foot">
-          <span class="tile-meta">${OWNER}.github.io/${p.path}</span>
-          <a class="tile-link" href="${site}" target="_blank" rel="noopener">→ launch site</a>
-          <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view folder</a>
-        </div>`, 'tile', `/${p.path}`));
-    } else if(p.kind === 'multi'){
-      const linksHtml = p.entries.map(e => `<a class="tile-link" href="/${e.path}" target="_blank" rel="noopener">→ ${e.label}</a>`).join('');
-      tscGrid.appendChild(tileEl(`
-        <div class="tile-stage">${p.folder}<span class="badge multi">${p.entries.length} pages</span></div>
-        <div class="tile-name">${p.title}</div>
-        <p class="tile-desc empty">no single entry point — ${p.entries.length} HTML files at this folder's root</p>
-        <div class="tile-foot">
-          <span class="tile-meta">${OWNER}.github.io/${TSC_REPO}/${p.folder}</span>
-          <div class="multi-links">${linksHtml}</div>
-          <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view folder</a>
-        </div>`, 'tile', `/${p.entries[0].path}`));
-    } else {
-      tscGrid.appendChild(tileEl(`
-        <div class="tile-stage">${p.folder}<span class="badge none">no html</span></div>
-        <div class="tile-name">${p.title}</div>
-        <p class="tile-desc empty">no HTML file at this folder's root — nothing to launch yet</p>
-        <div class="tile-foot">
-          <span class="tile-meta">${OWNER}/${TSC_REPO}/${p.folder}</span>
-          <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view folder</a>
-        </div>`, 'tile no-entry', null));
-    }
-  }
-}
+function renderGrouped(allItems){
+  contentEl.innerHTML = '';
+  const stored = loadCategories();
 
-function renderRepos(repos){
-  repoGrid.innerHTML = '';
-  repoCountEl.textContent = repos.length ? `${repos.length}` : '';
-  for(const r of repos){
-    const repoUrl = `https://github.com/${OWNER}/${r.name}`;
-    const archivedBadge = r.archived ? '<span class="badge archived">archived</span>' : '';
-    if(r.kind === 'single'){
-      repoGrid.appendChild(tileEl(`
-        <div class="tile-stage">${r.name}${archivedBadge}</div>
-        <div class="tile-name">${r.title}</div>
-        <p class="tile-desc${r.desc ? '' : ' empty'}">${r.desc || 'no description'}</p>
-        <div class="tile-foot">
-          <span class="tile-meta">${OWNER}.github.io${r.path}</span>
-          <a class="tile-link" href="${r.path}" target="_blank" rel="noopener">→ launch site</a>
-          <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view repo</a>
-        </div>`, 'tile', r.path));
-    } else {
-      repoGrid.appendChild(tileEl(`
-        <div class="tile-stage">${r.name}${archivedBadge}<span class="badge none">no pages</span></div>
-        <div class="tile-name">${r.title}</div>
-        <p class="tile-desc${r.desc ? '' : ' empty'}">${r.desc || 'no live site for this repo'}</p>
-        <div class="tile-foot">
-          <span class="tile-meta">${OWNER}/${r.name}</span>
-          <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view repo</a>
-        </div>`, 'tile no-entry', null));
-    }
+  // default category assignment
+  for(const item of allItems){
+    item.category = stored[item.key] || (item.source === 'tsc' ? DEFAULT_TSC_CATEGORY : DEFAULT_REPO_CATEGORY);
   }
+
+  // full set of category names for dropdowns (always offer both defaults)
+  const categorySet = new Set([DEFAULT_TSC_CATEGORY, DEFAULT_REPO_CATEGORY]);
+  for(const item of allItems) categorySet.add(item.category);
+  const allCategories = Array.from(categorySet).sort((a,b) => a.localeCompare(b));
+
+  // group
+  const groups = new Map();
+  for(const item of allItems){
+    if(!groups.has(item.category)) groups.set(item.category, []);
+    groups.get(item.category).push(item);
+  }
+  const groupNames = Array.from(groups.keys()).sort((a,b) => a.localeCompare(b));
+
+  for(const catName of groupNames){
+    const items = groups.get(catName);
+    const sectionRow = document.createElement('div');
+    sectionRow.className = 'section-row';
+    sectionRow.innerHTML = `<div class="section-label">${catName} <span class="count">${items.length}</span></div>`;
+    contentEl.appendChild(sectionRow);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    for(const item of items){
+      grid.appendChild(buildTile(item, allCategories, catName));
+    }
+    contentEl.appendChild(grid);
+  }
+
+  // delegated change handler for category selects
+  contentEl.addEventListener('change', e => {
+    if(!e.target.classList.contains('cat-select')) return;
+    const key = e.target.dataset.key;
+    let value = e.target.value;
+    if(value === NEW_CATEGORY_VALUE){
+      const name = prompt('New category name:');
+      if(!name || !name.trim()){
+        renderGrouped(allItems); // reset dropdown, discard
+        return;
+      }
+      value = name.trim();
+    }
+    const current = loadCategories();
+    current[key] = value;
+    saveCategories(current);
+    renderGrouped(allItems);
+  });
 }
 
 async function scan(){
@@ -439,10 +525,10 @@ async function scan(){
     ]);
     const tscProjects = await Promise.all(tscFolders.map(loadTscMeta));
 
-    renderTsc(tscProjects);
-    renderRepos(repoMetas.sort((a,b) => a.name.localeCompare(b.name)));
+    const allItems = [...tscProjects, ...repoMetas.sort((a,b) => a.name.localeCompare(b.name))];
+    renderGrouped(allItems);
 
-    const total = tscProjects.length + repoMetas.length;
+    const total = allItems.length;
     emptyState.hidden = total > 0;
     countEl.textContent = `${total} total`;
     setStatus(`updated ${nowStamp()}`, 'ok');
