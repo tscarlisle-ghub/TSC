@@ -1,4 +1,4 @@
-<!-- BUILD 2026-08-08 · TSC-LAUNCHPAD v4 · preset categories, muted archive, sentence case -->
+<!-- BUILD 2026-08-08 · TSC-LAUNCHPAD v5 · cross-device category sync via GitHub Gist -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -98,6 +98,30 @@ body{font-family:var(--font-body);font-size:18px;line-height:1.5;}
 .status-row.err{ color:var(--brand); }
 .status-row.ok{ color:var(--green); }
 
+/* sync panel */
+.sync-wrap{ max-width:1600px; margin:0 auto; padding:12px 40px 0; }
+.sync-panel{
+  border:1px solid var(--rule); border-radius:2px; background:var(--page-white);
+  font-family:var(--font-cond);
+}
+.sync-panel summary{
+  padding:10px 16px; cursor:pointer; font-weight:700; font-size:11px; letter-spacing:0.16em;
+  text-transform:uppercase; color:var(--ink-mid); list-style:none; display:flex; align-items:center; gap:8px;
+}
+.sync-panel summary::-webkit-details-marker{ display:none; }
+.sync-panel summary::before{ content:"⚙"; font-size:13px; }
+.sync-body{ padding:4px 16px 16px; border-top:1px solid var(--ink-faint); }
+.sync-row{ display:flex; gap:10px; align-items:center; margin:10px 0; flex-wrap:wrap; }
+.sync-row label{ font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-light); width:140px; flex-shrink:0; }
+.sync-row input{
+  font-family:var(--font-cond); font-size:12px; color:var(--ink); background:var(--page);
+  border:1px solid var(--rule); border-radius:2px; padding:6px 8px; flex:1; min-width:180px;
+}
+.sync-note{ font-family:var(--font-body); font-style:italic; font-size:13px; color:var(--ink-light); margin:8px 0; }
+.sync-status{ font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-top:8px; }
+.sync-status.ok{ color:var(--green); }
+.sync-status.err{ color:var(--brand); }
+
 .section-row{ max-width:1600px; margin:0 auto; padding:26px 40px 0; }
 .section-row:first-of-type{ padding-top:20px; }
 .section-label{
@@ -174,10 +198,7 @@ body{font-family:var(--font-body);font-size:18px;line-height:1.5;}
 .badge.archived{ color:var(--amber); border:1px solid var(--amber); }
 .badge.private{ color:var(--brand); border:1px solid var(--brand); }
 
-/* category picker on each tile */
-.cat-row{
-  width:100%; margin-top:6px; display:flex; align-items:center; gap:6px;
-}
+.cat-row{ width:100%; margin-top:6px; display:flex; align-items:center; gap:6px; }
 .cat-select{
   font-family:var(--font-cond); font-weight:700; font-size:9px; letter-spacing:0.1em;
   text-transform:uppercase; color:var(--ink-light); background:var(--page); border:1px solid var(--rule);
@@ -216,6 +237,29 @@ footer a{ color:var(--teal); }
   <button class="intro-action" id="rescanBtn"><span class="spin">↻</span> rescan</button>
 </div>
 
+<div class="sync-wrap">
+  <details class="sync-panel" id="syncPanel">
+    <summary>GitHub access — private repos &amp; category sync</summary>
+    <div class="sync-body">
+      <p class="sync-note">One token, two jobs: it lets this page see your private repos, and keeps your category tags in sync across devices via a private Gist. Needs "Contents: Read-only" (Repository permissions) and "Gists: Read and write" (Account permissions) on a fine-grained token, All repositories. The token only ever talks directly to GitHub from this page — nothing else sees it.</p>
+      <div class="sync-row">
+        <label>GitHub token</label>
+        <input type="password" id="tokenInput" placeholder="github_pat_… ">
+      </div>
+      <div class="sync-row">
+        <label>Gist ID</label>
+        <input type="text" id="gistIdInput" placeholder="leave blank on the first device">
+      </div>
+      <div class="sync-row">
+        <button class="intro-action" id="createGistBtn">Create new gist (first device)</button>
+        <button class="intro-action" id="connectGistBtn">Connect &amp; sync</button>
+      </div>
+      <div class="sync-note">First device: paste your token, leave Gist ID blank, click "Create new gist" — it'll fill in the Gist ID for you. Copy that ID. Every other device: paste the same token and that same Gist ID, then click "Connect &amp; sync." Once a token is entered and saved, private repos show up on the next rescan automatically — no separate step.</div>
+      <div class="sync-status" id="syncStatus"></div>
+    </div>
+  </details>
+</div>
+
 <div class="status-row" id="status">scanning…</div>
 
 <div id="content"></div>
@@ -223,55 +267,145 @@ footer a{ color:var(--teal); }
 <div class="empty-state" id="emptyState" hidden>Nothing found — check the status line above.</div>
 
 <footer>
-  <p>Scans two things on every load: every public repo under tscarlisle-ghub with GitHub Pages enabled, and every folder inside the TSC repo (whatever its entry file is named). Private repos aren't queried and won't appear here.</p>
+  <p>Scans two things on every load: every repo under tscarlisle-ghub with GitHub Pages enabled (private ones included once a token is connected above), and every folder inside the TSC repo (whatever its entry file is named).</p>
   <p>Repos without Pages enabled still show up, muted, linked to their source. Folders inside TSC with a proper index.html open directly; folders with differently-named HTML files list each one; folders with no HTML yet still show up.</p>
-  <p>Categories are saved in this browser only, not synced across devices — use the small tag on each tile to move it, or add a new one.</p>
+  <p>Categories sync across devices once connected above (see "Sync categories across devices"). Without that set up, they're saved in this browser only.</p>
 </footer>
 
 <script>
 const OWNER = 'tscarlisle-ghub';
 const TSC_REPO = 'TSC';
 const CAT_STORAGE_KEY = 'launchpad_categories_v1';
+const SYNC_STORAGE_KEY = 'launchpad_sync_v1';
 const PRESET_CATEGORIES = ['Active', 'In Progress', 'Personal', 'Archived'];
 const DEFAULT_CATEGORY = 'Active';
 const DEFAULT_ARCHIVED_CATEGORY = 'Archived';
 const NEW_CATEGORY_VALUE = '__new__';
+const GIST_FILENAME = 'launchpad-categories.json';
+const GIST_DESCRIPTION = 'TSC Launch Pad — category sync (do not rename the file inside)';
 
 const contentEl = document.getElementById('content');
 const emptyState = document.getElementById('emptyState');
 const statusEl = document.getElementById('status');
 const countEl = document.getElementById('count');
 const rescanBtn = document.getElementById('rescanBtn');
+const tokenInput = document.getElementById('tokenInput');
+const gistIdInput = document.getElementById('gistIdInput');
+const createGistBtn = document.getElementById('createGistBtn');
+const connectGistBtn = document.getElementById('connectGistBtn');
+const syncStatusEl = document.getElementById('syncStatus');
+const syncPanel = document.getElementById('syncPanel');
 
 function setStatus(text, cls){
   statusEl.textContent = text;
   statusEl.className = 'status-row' + (cls ? ' ' + cls : '');
 }
+function setSyncStatus(text, cls){
+  syncStatusEl.textContent = text;
+  syncStatusEl.className = 'sync-status' + (cls ? ' ' + cls : '');
+}
 
 function prettify(slug){
   return slug.replace(/[-_]+/g, ' ').replace(/\.html$/i, '').replace(/\b\w/g, c => c.toUpperCase());
 }
-
 function sentenceCase(str){
   if(!str) return str;
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
 function nowStamp(){
   const d = new Date();
   return d.toLocaleDateString(undefined, {month:'short', day:'numeric'}) + ' · ' +
          d.toLocaleTimeString(undefined, {hour:'numeric', minute:'2-digit'});
 }
 
+// ── local category cache ──
 function loadCategories(){
-  try{
-    return JSON.parse(localStorage.getItem(CAT_STORAGE_KEY)) || {};
-  }catch(e){ return {}; }
+  try{ return JSON.parse(localStorage.getItem(CAT_STORAGE_KEY)) || {}; }catch(e){ return {}; }
 }
 function saveCategories(map){
   try{ localStorage.setItem(CAT_STORAGE_KEY, JSON.stringify(map)); }catch(e){}
 }
 
+// ── sync config (token + gist id), per device ──
+function loadSyncConfig(){
+  try{ return JSON.parse(localStorage.getItem(SYNC_STORAGE_KEY)) || {}; }catch(e){ return {}; }
+}
+function saveSyncConfig(cfg){
+  try{ localStorage.setItem(SYNC_STORAGE_KEY, JSON.stringify(cfg)); }catch(e){}
+}
+
+// ── shared GitHub auth ──
+function ghToken(){
+  return loadSyncConfig().token || null;
+}
+function ghHeaders(extra){
+  const token = ghToken();
+  return { ...(token ? { 'Authorization': `Bearer ${token}` } : {}), ...(extra || {}) };
+}
+
+// ── gist sync ──
+async function fetchGistCategories(token, gistId){
+  const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+    headers: { 'Authorization': `Bearer ${token}` }, cache: 'no-store'
+  });
+  if(!res.ok) throw new Error(`gist read failed (${res.status})`);
+  const data = await res.json();
+  const file = data.files && data.files[GIST_FILENAME];
+  if(!file) throw new Error('gist has no category file');
+  return JSON.parse(file.content || '{}');
+}
+
+async function pushGistCategories(token, gistId, categoriesObj){
+  const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+    method: 'PATCH',
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ files: { [GIST_FILENAME]: { content: JSON.stringify(categoriesObj, null, 2) } } })
+  });
+  if(!res.ok) throw new Error(`gist write failed (${res.status})`);
+}
+
+async function createGist(token, categoriesObj){
+  const res = await fetch(`https://api.github.com/gists`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      description: GIST_DESCRIPTION,
+      public: false,
+      files: { [GIST_FILENAME]: { content: JSON.stringify(categoriesObj, null, 2) } }
+    })
+  });
+  if(!res.ok) throw new Error(`gist create failed (${res.status})`);
+  const data = await res.json();
+  return data.id;
+}
+
+async function syncPullIfConfigured(){
+  const cfg = loadSyncConfig();
+  if(!cfg.token || !cfg.gistId) return null;
+  try{
+    const remote = await fetchGistCategories(cfg.token, cfg.gistId);
+    const merged = { ...loadCategories(), ...remote };
+    saveCategories(merged);
+    setSyncStatus(`synced ${nowStamp()}`, 'ok');
+    return merged;
+  }catch(err){
+    setSyncStatus(`sync failed — ${err.message}`, 'err');
+    return null;
+  }
+}
+
+async function syncPushIfConfigured(categoriesObj){
+  const cfg = loadSyncConfig();
+  if(!cfg.token || !cfg.gistId) return;
+  try{
+    await pushGistCategories(cfg.token, cfg.gistId, categoriesObj);
+    setSyncStatus(`synced ${nowStamp()}`, 'ok');
+  }catch(err){
+    setSyncStatus(`sync failed — ${err.message}`, 'err');
+  }
+}
+
+// ── content fetch helpers ──
 async function fetchTitle(absPath){
   try{
     const res = await fetch(absPath, {cache:'no-store'});
@@ -297,14 +431,14 @@ async function fetchDesc(absPath){
 
 // ── TSC subfolder scan ──
 async function getDefaultBranch(repo){
-  const res = await fetch(`https://api.github.com/repos/${OWNER}/${repo}`, {cache:'no-store'});
+  const res = await fetch(`https://api.github.com/repos/${OWNER}/${repo}`, {cache:'no-store', headers: ghHeaders()});
   if(!res.ok) throw new Error(`${repo} lookup failed (${res.status})`);
   const data = await res.json();
   return data.default_branch || 'main';
 }
 
 async function getTscFolders(branch){
-  const res = await fetch(`https://api.github.com/repos/${OWNER}/${TSC_REPO}/git/trees/${branch}?recursive=1`, {cache:'no-store'});
+  const res = await fetch(`https://api.github.com/repos/${OWNER}/${TSC_REPO}/git/trees/${branch}?recursive=1`, {cache:'no-store', headers: ghHeaders()});
   if(!res.ok) throw new Error(`TSC tree fetch failed (${res.status})`);
   const data = await res.json();
   const tree = data.tree || [];
@@ -354,7 +488,11 @@ async function loadTscMeta(item){
 
 // ── standalone repo scan ──
 async function getPublicRepos(){
-  const res = await fetch(`https://api.github.com/users/${OWNER}/repos?per_page=100`, {cache:'no-store'});
+  const token = ghToken();
+  const url = token
+    ? `https://api.github.com/user/repos?per_page=100&affiliation=owner`
+    : `https://api.github.com/users/${OWNER}/repos?per_page=100`;
+  const res = await fetch(url, {cache:'no-store', headers: ghHeaders()});
   if(!res.ok) throw new Error(`repo list fetch failed (${res.status})`);
   const data = await res.json();
   return data.filter(r => !r.fork && r.name !== TSC_REPO);
@@ -362,7 +500,7 @@ async function getPublicRepos(){
 
 async function loadRepoMeta(repo){
   const key = `repo:${repo.name}`;
-  const base = { key, source:'repo', name: repo.name, archived: repo.archived, hasPages: repo.has_pages };
+  const base = { key, source:'repo', name: repo.name, archived: repo.archived, hasPages: repo.has_pages, private: repo.private };
   if(!repo.has_pages){
     return { ...base, kind: 'none', title: prettify(repo.name), desc: sentenceCase(repo.description || '') };
   }
@@ -419,10 +557,11 @@ function tileInnerHtml(item){
   } else {
     const repoUrl = `https://github.com/${OWNER}/${item.name}`;
     const archivedBadge = item.archived ? '<span class="badge archived">archived</span>' : '';
+    const privateBadge = item.private ? '<span class="badge private">private</span>' : '';
     if(item.kind === 'single'){
       return {
         html: `
-          <div class="tile-stage">${item.name}${archivedBadge}</div>
+          <div class="tile-stage">${item.name}${privateBadge}${archivedBadge}</div>
           <div class="tile-name">${item.title}</div>
           <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'No description'}</p>
           <div class="tile-foot">
@@ -435,7 +574,7 @@ function tileInnerHtml(item){
     } else {
       return {
         html: `
-          <div class="tile-stage">${item.name}${archivedBadge}<span class="badge none">no pages</span></div>
+          <div class="tile-stage">${item.name}${privateBadge}${archivedBadge}<span class="badge none">no pages</span></div>
           <div class="tile-name">${item.title}</div>
           <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'No live site'}</p>
           <div class="tile-foot">
@@ -475,7 +614,6 @@ function buildTile(item, allCategories, currentCategory){
   return tile;
 }
 
-// order preset categories first, custom ones after, alphabetically
 function orderCategories(names){
   const preset = PRESET_CATEGORIES.filter(c => names.includes(c));
   const custom = names.filter(c => !PRESET_CATEGORIES.includes(c)).sort((a,b) => a.localeCompare(b));
@@ -517,7 +655,7 @@ function renderGrouped(allItems){
     contentEl.appendChild(grid);
   }
 
-  contentEl.addEventListener('change', e => {
+  contentEl.addEventListener('change', async e => {
     if(!e.target.classList.contains('cat-select')) return;
     const key = e.target.dataset.key;
     let value = e.target.value;
@@ -533,14 +671,19 @@ function renderGrouped(allItems){
     current[key] = value;
     saveCategories(current);
     renderGrouped(allItems);
+    await syncPushIfConfigured(current);
   });
 }
+
+let cachedItems = [];
 
 async function scan(){
   rescanBtn.disabled = true;
   rescanBtn.classList.add('spinning');
   setStatus('scanning…');
   try{
+    await syncPullIfConfigured();
+
     const [tscBranch, repos] = await Promise.all([getDefaultBranch(TSC_REPO), getPublicRepos()]);
     const [tscFolders, repoMetas] = await Promise.all([
       getTscFolders(tscBranch),
@@ -549,6 +692,7 @@ async function scan(){
     const tscProjects = await Promise.all(tscFolders.map(loadTscMeta));
 
     const allItems = [...tscProjects, ...repoMetas.sort((a,b) => a.name.localeCompare(b.name))];
+    cachedItems = allItems;
     renderGrouped(allItems);
 
     const total = allItems.length;
@@ -563,6 +707,66 @@ async function scan(){
     rescanBtn.classList.remove('spinning');
   }
 }
+
+// ── sync panel wiring ──
+(function initSyncPanel(){
+  const cfg = loadSyncConfig();
+  if(cfg.gistId) gistIdInput.value = cfg.gistId;
+  if(cfg.token && cfg.gistId){
+    setSyncStatus('connected — will sync on next scan', 'ok');
+  }else if(cfg.token){
+    setSyncStatus('token saved — private repos on next rescan; gist sync not set up', 'ok');
+  }else{
+    setSyncStatus('not connected — public repos only, categories saved on this device only');
+  }
+
+  tokenInput.addEventListener('blur', () => {
+    const token = tokenInput.value.trim();
+    if(!token) return;
+    const cfg = loadSyncConfig();
+    saveSyncConfig({ ...cfg, token });
+    if(!cfg.token){
+      setSyncStatus('token saved — private repos will show up on next rescan', 'ok');
+    }
+  });
+
+  createGistBtn.addEventListener('click', async () => {    const token = tokenInput.value.trim();
+    if(!token){ setSyncStatus('enter a token first', 'err'); return; }
+    createGistBtn.disabled = true;
+    setSyncStatus('creating gist…');
+    try{
+      const currentCats = loadCategories();
+      const id = await createGist(token, currentCats);
+      saveSyncConfig({ token, gistId: id });
+      gistIdInput.value = id;
+      setSyncStatus(`created — Gist ID: ${id} (copy this for your other devices)`, 'ok');
+    }catch(err){
+      setSyncStatus(`create failed — ${err.message}`, 'err');
+    }finally{
+      createGistBtn.disabled = false;
+    }
+  });
+
+  connectGistBtn.addEventListener('click', async () => {
+    const token = tokenInput.value.trim();
+    const gistId = gistIdInput.value.trim();
+    if(!token || !gistId){ setSyncStatus('enter both token and gist ID', 'err'); return; }
+    connectGistBtn.disabled = true;
+    setSyncStatus('connecting…');
+    try{
+      const remote = await fetchGistCategories(token, gistId);
+      const merged = { ...loadCategories(), ...remote };
+      saveCategories(merged);
+      saveSyncConfig({ token, gistId });
+      setSyncStatus(`connected & synced ${nowStamp()}`, 'ok');
+      if(cachedItems.length) renderGrouped(cachedItems);
+    }catch(err){
+      setSyncStatus(`connect failed — ${err.message}`, 'err');
+    }finally{
+      connectGistBtn.disabled = false;
+    }
+  });
+})();
 
 rescanBtn.addEventListener('click', scan);
 scan();
