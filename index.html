@@ -18,6 +18,8 @@ a{color:inherit;text-decoration:none}
 padding:44px max(32px,env(safe-area-inset-right)) calc(90px + env(safe-area-inset-bottom))
  max(32px,env(safe-area-inset-left))}
 /* masthead */
+a.home{color:inherit;text-decoration:none;border:0}
+a.home:hover{color:var(--paprika)}
 h1{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-weight:700;font-size:clamp(23px,3.5vw,36px);line-height:1;margin:0;
 letter-spacing:.055em;text-transform:uppercase}
 .meta{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline;margin-top:16px;
@@ -50,10 +52,13 @@ word-break:break-all;text-transform:uppercase;letter-spacing:.045em}
 .cell.nosite .pa{color:var(--mute)}
 /* assignment — quiet until you reach for it */
 select.mv{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
-color:var(--mute);background:transparent;border:1px solid transparent;padding:0 2px;cursor:pointer;
-line-height:1;-webkit-appearance:none;appearance:none;transition:color .15s,border-color .15s}
-.cell:hover select.mv{border-color:var(--rule2)}
-select.mv:hover{color:var(--ink)}
+color:var(--ink);background-color:transparent;border:1px solid var(--rule2);
+padding:6px 24px 6px 9px;cursor:pointer;line-height:1;border-radius:0;
+-webkit-appearance:none;appearance:none;transition:color .15s,border-color .15s;
+background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2010%207%27%3E%3Cpath%20d%3D%27M1%201l4%204%204-4%27%20fill%3D%27none%27%20stroke%3D%27%230b0e10%27%20stroke-width%3D%271.4%27%2F%3E%3C%2Fsvg%3E");
+background-repeat:no-repeat;background-position:right 8px center;background-size:9px 6px}
+.cell:hover select.mv{border-color:var(--a,var(--rule))}
+select.mv:hover{color:var(--a,var(--ink))}
 select.mv:focus{outline:none;border-color:var(--a,var(--rust));color:var(--a,var(--rust))}
 .sec+.sec{margin-top:52px}
 /* settings */
@@ -73,9 +78,10 @@ border-bottom:1px solid var(--rule2)}
 .set input[type=password]{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:15px;padding:9px 11px;
 border:1px solid var(--rule);background:transparent;color:var(--ink);width:100%;max-width:430px}
 .set label.opt{text-transform:none;letter-spacing:0;font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:16px;color:var(--ink)}
-.btn{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-size:13px;letter-spacing:.11em;text-transform:uppercase;
+.btn{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:13px;letter-spacing:.09em;text-transform:uppercase;
 border:1px solid var(--rule);background:transparent;color:var(--ink);padding:8px 14px;cursor:pointer}
 .btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+button,select,input{font-family:inherit}
 
 /* ---------- tablet ---------- */
 @media (max-width:1024px){
@@ -95,8 +101,8 @@ border:1px solid var(--rule);background:transparent;color:var(--ink);padding:8px
   padding-right:max(20px,env(safe-area-inset-right));
   padding-bottom:calc(56px + env(safe-area-inset-bottom))}
  h1{font-size:26px;letter-spacing:.05em}
- .meta{display:flex;flex-wrap:wrap;gap:5px 18px;justify-content:space-between;
-  font-size:13px;letter-spacing:.07em;margin-top:11px}
+ .meta{display:flex;flex-wrap:wrap;gap:5px 14px;justify-content:space-between;
+  font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:9px;letter-spacing:.07em;margin-top:11px}
  .meta .r{text-align:right}
  .meta a{padding:2px 0}
  .sec{margin-top:32px}
@@ -113,7 +119,10 @@ border:1px solid var(--rule);background:transparent;color:var(--ink);padding:8px
  .foot{padding-top:14px;align-items:center}
  .st{font-size:12.5px}
  /* 16px stops iOS zooming the page when a control takes focus */
- select.mv{font-size:16px;padding:7px 6px;border-color:var(--rule2);min-height:34px}
+ /* 40% smaller than the desktop control; a <select> opens the iOS picker,
+    so a sub-16px size here does not trigger the page zoom that text inputs do */
+ select.mv{font-size:9.6px;letter-spacing:.05em;padding:5px 17px 5px 7px;
+  background-position:right 6px center;background-size:7px 5px;border-color:var(--rule2)}
  .set .row{grid-template-columns:1fr;gap:8px;padding:16px 0}
  .set h3{font-size:19px}
  .set input[type=password],.set input[type=text]{max-width:none;font-size:16px;padding:12px 12px}
@@ -127,7 +136,7 @@ border:1px solid var(--rule);background:transparent;color:var(--ink);padding:8px
  select.mv{border-color:var(--rule2);color:var(--ink)}
  .cell:hover .nm,.cell:hover .pa{color:inherit}
 }
-</style></head><body><div class="pg"><h1>Launch Pad</h1><div class="meta"><span>AUGUST 16, 2026</span><span><a href="#" id="setlink">Settings</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="rescanTop">Rescan</a></span><span class="r" id="tot">19 REPOS TOTAL</span></div><div id="settings" hidden>
+</style></head><body><div class="pg"><h1><a class="home" id="homelink" href="#">Launch Pad</a></h1><div class="meta"><span>AUGUST 16, 2026</span><span><a href="#" id="setlink">Settings</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="rescanTop">Rescan</a></span><span class="r" id="tot">19 REPOS TOTAL</span></div><div id="settings" hidden>
 <section class="set">
 <h3>Settings</h3>
 <div class="row"><label>GitHub token</label><div>
@@ -425,7 +434,7 @@ window.recount=function(){window.lp.recount();};
     return '<option value="'+x[1]+'"'+(x[1]===sec?' selected':'')+'>'+x[0]+'</option>';}).join('');
   a.innerHTML='<span class="nm">'+e.name+'</span>'+
    '<span class="pa">'+e.path.toUpperCase()+'</span>'+
-   '<span class="foot"><span class="st">'+(e.priv?'PRIVATE · ':'')+e.status+'</span>'+
+   '<span class="foot">'+
    '<select class="mv" onclick="event.preventDefault();event.stopPropagation()">'+opts+'</select></span>';
   return a;
  }
@@ -462,6 +471,15 @@ window.recount=function(){window.lp.recount();};
 })();
 </script>
 <script>
+var hl=document.getElementById('homelink');
+if(hl) hl.addEventListener('click',function(e){
+ var s=document.getElementById('settings'), i=document.getElementById('index');
+ if(s&&i&&!s.hasAttribute('hidden')){
+  e.preventDefault(); s.setAttribute('hidden',''); i.removeAttribute('hidden');
+  var sl=document.getElementById('setlink'); if(sl) sl.textContent='Settings';
+  window.scrollTo(0,0);
+ }
+});
 document.getElementById('setlink').addEventListener('click',function(e){
  e.preventDefault();
  var s=document.getElementById('settings'), i=document.getElementById('index');
