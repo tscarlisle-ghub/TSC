@@ -22,10 +22,14 @@ font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-size:15px;le
 .sec h2{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-weight:700;font-size:19px;letter-spacing:.16em;
 text-transform:uppercase;margin:0 0 9px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule)}
-.cell{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule2);
+.cell{position:relative;border-bottom:1px solid var(--rule);
 padding:22px 26px 18px;min-height:214px;display:flex;flex-direction:column}
-.cell:nth-child(3n){border-right:0}
+/* vertical rules inset top and bottom */
+.cell::after{content:"";position:absolute;right:0;top:20px;bottom:20px;width:1px;background:var(--rule2)}
+.cell:nth-child(3n)::after{display:none}
 .cell.empty{border-bottom-color:transparent}
+/* last row of every section carries no bottom rule */
+.cell:nth-last-child(-n+3){border-bottom:0}
 .nm{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-weight:700;font-size:26px;line-height:1.2;letter-spacing:.018em;
 text-transform:uppercase;display:block}
 .pa{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:14px;line-height:1.42;color:var(--ink);margin-top:11px;
@@ -41,12 +45,15 @@ line-height:1;-webkit-appearance:none;appearance:none;transition:color .15s,bord
 .cell:hover select.mv{border-color:var(--rule2)}
 select.mv:hover{color:var(--ink)}
 select.mv:focus{outline:none;border-color:var(--rust);color:var(--rust)}
-.secrule{border-top:1px solid var(--rule);margin-top:34px}
+.sec+.sec{margin-top:52px}
 /* settings */
 .set{margin-top:26px;border-top:1px solid var(--rule)}
 .set h3{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-weight:700;font-size:22px;letter-spacing:.02em;text-transform:uppercase;
 margin:22px 0 6px}
 .set .note{color:var(--mute)}
+#status.ok{color:#2E6B45}
+#status.bad{color:var(--rust)}
+#status.work{color:var(--ink)}
 .set input[type=text]{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:15px;padding:9px 11px;border:1px solid var(--rule);
 background:transparent;color:var(--ink);width:100%;max-width:430px;letter-spacing:.03em}
 .set .row{display:grid;grid-template-columns:250px 1fr;gap:26px;align-items:center;padding:18px 0;
@@ -63,22 +70,24 @@ border:1px solid var(--rule);background:transparent;color:var(--ink);padding:8px
 <section class="set">
 <h3>Settings</h3>
 <div class="row"><label>GitHub token</label><div>
-<input type="password" id="tok" placeholder="ghp_… — read-only token, needed only for private repos">
+<input type="password" id="tok" autocomplete="off" spellcheck="false"
+ placeholder="ghp_… or github_pat_… — read-only token">
 <div class="v note">Scopes: <b>repo</b> (read) for private repositories, <b>gist</b> to sync sections.
-Public repos scan without a token.</div></div></div>
+Public repos scan without a token. Stored in this browser only — never sent anywhere but api.github.com.</div>
+<div style="margin-top:11px"><button class="btn" type="button" id="btnTest">Test connection</button>
+<button class="btn" type="button" id="btnForget" style="margin-left:8px">Forget token</button></div></div></div>
 
 <div class="row"><label>Gist ID</label><div>
-<input type="text" id="gist" placeholder="e.g. 4f3c1b9e2a7d… — the gist that stores section assignments">
+<input type="text" id="gist" autocomplete="off" spellcheck="false"
+ placeholder="id from the gist URL — holds launchpad-sections.json">
 <div class="v note">One secret gist holds a single JSON file, <b>launchpad-sections.json</b>, mapping each
-repo to Active / Personal / In Progress / Archive. Paste the ID from the gist URL.</div>
-<div style="margin-top:11px"><button class="btn" type="button">Test connection</button>
-<button class="btn" type="button" style="margin-left:8px">Create a new gist</button>
-<button class="btn" type="button" style="margin-left:8px">Pull from gist</button>
-<button class="btn" type="button" style="margin-left:8px">Push to gist</button></div></div></div>
+repo to Active / Personal / In Progress / Archive.</div>
+<div style="margin-top:11px"><button class="btn" type="button" id="btnCreate">Create a new gist</button>
+<button class="btn" type="button" id="btnPull" style="margin-left:8px">Pull from gist</button>
+<button class="btn" type="button" id="btnPush" style="margin-left:8px">Push to gist</button></div></div></div>
 
-<div class="row"><label>Storage</label><div class="v">
-<span class="note">Not connected — assignments are saved in this browser only.
-Add a token with gist scope and a gist ID to sync across devices.</span></div></div>
+<div class="row"><label>Status</label><div class="v"><span id="status" class="note">Not connected —
+assignments are saved in this browser only.</span></div></div>
 
 <div class="row"><label>Scan scope</label><div class="v">
 <label class="opt"><input type="checkbox" checked> Every repo under tscarlisle-ghub with Pages enabled</label><br>
@@ -86,65 +95,65 @@ Add a token with gist scope and a gist ID to sync across devices.</span></div></
 <label class="opt"><input type="checkbox"> Include repos without Pages, shown muted</label></div></div>
 
 <div class="row"><label>Index</label><div>
-<button class="btn" type="button">Rescan now</button>
-<button class="btn" type="button" style="margin-left:8px">View profile</button>
+<button class="btn" type="button" id="btnRescan">Rescan now</button>
+<a class="btn" style="margin-left:8px" href="https://github.com/tscarlisle-ghub">View profile</a>
 <div class="v note" style="margin-top:10px">Two flagged — SPECS has no single entry point,
 FONTS has no Pages.</div></div></div>
-</section></div><div id="index"><section class="sec"><h2>ACTIVE PROJECTS</h2><div class="grid" id="grid-ACTIVE"><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/CA/index.html">
+</section></div><div id="index"><section class="sec"><h2>ACTIVE PROJECTS</h2><div class="grid" id="grid-ACTIVE"><a class="cell" data-key="CA" href="https://tscarlisle-ghub.github.io/TSC/CA/index.html">
 <span class="nm">CA Task Ledger</span><span class="pa">/TSC/CA/index.html</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/SPECS">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="SPECS" href="https://tscarlisle-ghub.github.io/TSC/SPECS">
 <span class="nm">Specifications</span><span class="pa">/TSC/SPECS</span>
 <span class="foot"><span class="st">TWO PAGES</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-CON/index.html">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="TSC-CON" href="https://tscarlisle-ghub.github.io/TSC/TSC-CON/index.html">
 <span class="nm">Supplementary Conditions Builder</span><span class="pa">/TSC/TSC-CON/index.html</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-PR/index.html">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="TSC-PR" href="https://tscarlisle-ghub.github.io/TSC/TSC-PR/index.html">
 <span class="nm">Proposal Generator</span><span class="pa">/TSC/TSC-PR/index.html</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-QUEST/index.html">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="TSC-QUEST" href="https://tscarlisle-ghub.github.io/TSC/TSC-QUEST/index.html">
 <span class="nm">Design Questionnaire</span><span class="pa">/TSC/TSC-QUEST/index.html</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-SQF/index.html">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="TSC-SQF" href="https://tscarlisle-ghub.github.io/TSC/TSC-SQF/index.html">
 <span class="nm">Square Foot Cost Estimator</span><span class="pa">/TSC/TSC-SQF/index.html</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/CFO/index.html">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="CFO" href="https://tscarlisle-ghub.github.io/TSC/CFO/index.html">
 <span class="nm">CFO Dashboard</span><span class="pa">/TSC/CFO/index.html</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/cma-yearend/">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="CMA-YEAREND" href="https://tscarlisle-ghub.github.io/cma-yearend/">
 <span class="nm">Year-End Cash Flow Estimator</span><span class="pa">/cma-yearend/</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/cmaoffice/">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="CMAOFFICE" href="https://tscarlisle-ghub.github.io/cmaoffice/">
 <span class="nm">Mtn Brook Village Office Finances</span><span class="pa">/cmaoffice/</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-PB/index.html">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="TSC-PB" href="https://tscarlisle-ghub.github.io/TSC/TSC-PB/index.html">
 <span class="nm">CMA Project Board</span><span class="pa">/TSC/TSC-PB/index.html</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/design/">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="DESIGN" href="https://tscarlisle-ghub.github.io/design/">
 <span class="nm">Carlisle Design System</span><span class="pa">/design/</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><div class="cell empty"></div></div></section><div class="secrule"></div><section class="sec"><h2>PERSONAL PROJECTS</h2><div class="grid" id="grid-PERSONAL"><a class="cell" href="https://tscarlisle-ghub.github.io/fin/">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><div class="cell empty"></div></div></section><section class="sec"><h2>PERSONAL PROJECTS</h2><div class="grid" id="grid-PERSONAL"><a class="cell" data-key="FIN" href="https://tscarlisle-ghub.github.io/fin/">
 <span class="nm">TSC-Finances</span><span class="pa">/fin/</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL" selected>PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/chess/">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL" selected>PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="CHESS" href="https://tscarlisle-ghub.github.io/chess/">
 <span class="nm">The Second Year — Chess Guide</span><span class="pa">/chess/</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL" selected>PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><div class="cell empty"></div></div></section><div class="secrule"></div><section class="sec"><h2>IN PROGRESS</h2><div class="grid" id="grid-IN-PROGRESS"><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/fileorg/index.html">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL" selected>PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><div class="cell empty"></div></div></section><section class="sec"><h2>IN PROGRESS</h2><div class="grid" id="grid-IN-PROGRESS"><a class="cell" data-key="FILEORG" href="https://tscarlisle-ghub.github.io/TSC/fileorg/index.html">
 <span class="nm">Folder Reorganizer</span><span class="pa">/TSC/fileorg/index.html</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-CLAUDE/index.html">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="TSC-CLAUDE" href="https://tscarlisle-ghub.github.io/TSC/TSC-CLAUDE/index.html">
 <span class="nm">TSC-Claude</span><span class="pa">/TSC/TSC-CLAUDE/index.html</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/project-board/">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" data-key="PROJECT-BOARD" href="https://tscarlisle-ghub.github.io/project-board/">
 <span class="nm">Project Board — To-Do</span><span class="pa">/project-board/</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a></div></section><div class="secrule"></div><section class="sec"><h2>ARCHIVE</h2><div class="grid" id="grid-ARCHIVE"><a class="cell" href="https://tscarlisle-ghub.github.io/catalog/">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a></div></section><section class="sec"><h2>ARCHIVE</h2><div class="grid" id="grid-ARCHIVE"><a class="cell" data-key="CATALOG" href="https://tscarlisle-ghub.github.io/catalog/">
 <span class="nm">House Archive</span><span class="pa">/catalog/</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/cma/">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select></span></a><a class="cell" data-key="CMA" href="https://tscarlisle-ghub.github.io/cma/">
 <span class="nm">CMA</span><span class="pa">/cma/</span>
 <span class="foot"><span class="st">ACTIVE</span>
-<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/tscarlisle-ghub/fonts">
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select></span></a><a class="cell" data-key="FONTS" href="https://tscarlisle-ghub.github.io/tscarlisle-ghub/fonts">
 <span class="nm">Fonts</span><span class="pa">/tscarlisle-ghub/fonts</span>
 <span class="foot"><span class="st">NO SITE</span>
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select></span></a></div></section></div></div>
@@ -164,7 +173,121 @@ document.addEventListener('change',function(e){
  var cell=e.target.closest('.cell'), host=document.getElementById('grid-'+e.target.value);
  if(cell&&host){host.appendChild(cell);recount();}
 });
+window.recount=recount;
 document.addEventListener('DOMContentLoaded',recount);
+</script>
+<script>
+(function(){
+ var API='https://api.github.com', FILE='launchpad-sections.json', mem={};
+ function $(id){return document.getElementById(id);}
+ function put(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v);}catch(e){mem[k]=v;}}
+ function get(k){try{var v=localStorage.getItem(k);return v==null?(mem[k]||''):v;}catch(e){return mem[k]||'';}}
+ function say(msg,cls){var s=$('status'); if(!s)return; s.textContent=msg; s.className=cls||'note';}
+ function hdr(t){return {'Authorization':'Bearer '+t,'Accept':'application/vnd.github+json',
+   'X-GitHub-Api-Version':'2022-11-28'};}
+ function token(){return ($('tok')&&$('tok').value||'').trim();}
+ function gistId(){return ($('gist')&&$('gist').value||'').trim();}
+
+ function current(){
+  var map={};
+  document.querySelectorAll('.grid').forEach(function(g){
+   var sec=g.id.replace('grid-','');
+   g.querySelectorAll('.cell[data-key]').forEach(function(c){map[c.dataset.key]=sec;});
+  });
+  return map;
+ }
+ function apply(map){
+  var moved=0;
+  Object.keys(map).forEach(function(k){
+   var cell=document.querySelector('.cell[data-key="'+k+'"]'), host=$('grid-'+map[k]);
+   if(cell&&host&&cell.parentNode!==host){host.appendChild(cell);moved++;}
+   if(cell){var sel=cell.querySelector('select.mv'); if(sel) sel.value=map[k];}
+  });
+  if(window.recount) window.recount();
+  return moved;
+ }
+
+ async function api(path,opts){
+  var t=token(); if(!t){say('Enter a token first.','bad');return null;}
+  var r=await fetch(API+path,Object.assign({headers:hdr(t)},opts||{}));
+  var body=null; try{body=await r.json();}catch(e){}
+  return {ok:r.ok,status:r.status,headers:r.headers,body:body};
+ }
+
+ $('btnTest').addEventListener('click',async function(){
+  var t=token(); if(!t) return say('Enter a token first.','bad');
+  say('Checking…','work');
+  try{
+   var r=await fetch(API+'/user',{headers:hdr(t)});
+   if(r.status===401) return say('Token rejected (401). Check that it is current and not expired.','bad');
+   if(!r.ok) return say('GitHub returned '+r.status+' '+r.statusText+'.','bad');
+   var u=await r.json();
+   var sc=r.headers.get('x-oauth-scopes');
+   put('lp_token',t);
+   var note=sc===null?' Fine-grained token — scopes are not reported by the API.'
+                     :(sc?' Scopes: '+sc+'.':' No scopes on this token — gist sync will fail.');
+   say('Connected as '+u.login+'.'+note,'ok');
+  }catch(e){
+   say('Could not reach api.github.com — '+e.message+
+       '. If you opened this file directly from disk, serve it over http instead.','bad');
+  }
+ });
+
+ $('btnForget').addEventListener('click',function(){
+  put('lp_token',null); if($('tok')) $('tok').value='';
+  say('Token cleared from this browser.','note');
+ });
+
+ $('btnCreate').addEventListener('click',async function(){
+  if(!token()) return say('Enter a token first.','bad');
+  say('Creating gist…','work');
+  var files={}; files[FILE]={content:JSON.stringify(current(),null,2)};
+  var r=await api('/gists',{method:'POST',body:JSON.stringify(
+    {description:'Launch Pad — section assignments',public:false,files:files})});
+  if(!r) return;
+  if(r.status===403||r.status===404) return say('Refused ('+r.status+
+    '). The token needs gist scope.','bad');
+  if(!r.ok) return say('GitHub returned '+r.status+'.','bad');
+  $('gist').value=r.body.id; put('lp_gist',r.body.id);
+  say('Created gist '+r.body.id+' with '+Object.keys(current()).length+' assignments.','ok');
+ });
+
+ $('btnPull').addEventListener('click',async function(){
+  if(!gistId()) return say('Enter a gist ID first.','bad');
+  say('Pulling…','work');
+  var r=await api('/gists/'+gistId());
+  if(!r) return;
+  if(r.status===404) return say('Gist not found (404). Check the ID, and that the token can read it.','bad');
+  if(!r.ok) return say('GitHub returned '+r.status+'.','bad');
+  var f=r.body.files&&r.body.files[FILE];
+  if(!f) return say('That gist has no '+FILE+'.','bad');
+  var text=f.content;
+  if(f.truncated&&f.raw_url){ text=await (await fetch(f.raw_url)).text(); }
+  var map; try{map=JSON.parse(text);}catch(e){return say(FILE+' is not valid JSON.','bad');}
+  put('lp_gist',gistId());
+  say('Pulled '+Object.keys(map).length+' assignments — '+apply(map)+' moved.','ok');
+ });
+
+ $('btnPush').addEventListener('click',async function(){
+  if(!gistId()) return say('Enter a gist ID first.','bad');
+  say('Pushing…','work');
+  var files={}; files[FILE]={content:JSON.stringify(current(),null,2)};
+  var r=await api('/gists/'+gistId(),{method:'PATCH',body:JSON.stringify({files:files})});
+  if(!r) return;
+  if(r.status===404) return say('Gist not found, or the token lacks gist scope.','bad');
+  if(!r.ok) return say('GitHub returned '+r.status+'.','bad');
+  put('lp_gist',gistId());
+  say('Pushed '+Object.keys(current()).length+' assignments.','ok');
+ });
+
+ $('btnRescan').addEventListener('click',function(){location.reload();});
+
+ document.addEventListener('DOMContentLoaded',function(){
+  if($('tok')) $('tok').value=get('lp_token');
+  if($('gist')) $('gist').value=get('lp_gist');
+  if(get('lp_token')&&get('lp_gist')) say('Token and gist saved in this browser. Pull to load assignments.','note');
+ });
+})();
 </script>
 <script>
 document.getElementById('setlink').addEventListener('click',function(e){
