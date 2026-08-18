@@ -1,775 +1,178 @@
-<!-- BUILD 2026-08-08 · TSC-LAUNCHPAD v5 · cross-device category sync via GitHub Gist -->
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Launch Pad — T. Scott Carlisle</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='8' fill='%23d04030'/><text x='32' y='44' font-family='Helvetica,Arial,sans-serif' font-weight='900' font-size='30' text-anchor='middle' letter-spacing='1' fill='%23fffdf6'>LP</text></svg>">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Launch Pad</title>
 <link rel="stylesheet" href="https://use.typekit.net/icp5haj.css">
+<link rel="stylesheet" href="https://tscarlisle-ghub.github.io/fonts/tsc-fonts.css">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
+:root{--paper:#EFE7DA;--ink:#17140F;--rust:#A6391C;--rule:rgba(23,20,15,.28);
+--rule2:rgba(23,20,15,.16);--mute:#8B8375;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;
+font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;font-style:normal}
+a{color:inherit;text-decoration:none}
+.pg{max-width:1180px;margin:0 auto;padding:44px 32px 90px}
+/* masthead */
+h1{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-weight:700;font-size:clamp(23px,3.5vw,36px);line-height:1;margin:0;
+letter-spacing:.055em;text-transform:uppercase}
+.meta{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline;margin-top:16px;
+font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-size:15px;letter-spacing:.09em;text-transform:uppercase}
+.meta .r{text-align:right}
+.meta a{border-bottom:1px solid transparent}
+.meta a:hover{border-bottom-color:var(--ink)}
+/* section */
+.sec{margin-top:44px}
+.sec h2{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-weight:700;font-size:19px;letter-spacing:.16em;
+text-transform:uppercase;margin:0 0 9px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule)}
+.cell{border-bottom:1px solid var(--rule);border-right:1px solid var(--rule2);
+padding:22px 26px 18px;min-height:214px;display:flex;flex-direction:column}
+.cell:nth-child(3n){border-right:0}
+.cell.empty{border-bottom-color:transparent}
+.nm{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-weight:700;font-size:26px;line-height:1.2;letter-spacing:.018em;
+text-transform:uppercase;display:block}
+.pa{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:14px;line-height:1.42;color:var(--ink);margin-top:11px;
+word-break:break-all;text-transform:uppercase;letter-spacing:.045em}
+.foot{margin-top:auto;padding-top:22px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.st{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-size:14px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.cell:hover .nm,.cell:hover .pa{color:var(--rust)}
+.cell.hot .nm,.cell.hot .pa{color:var(--rust)}
+/* assignment — quiet until you reach for it */
+select.mv{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+color:var(--mute);background:transparent;border:1px solid transparent;padding:0 2px;cursor:pointer;
+line-height:1;-webkit-appearance:none;appearance:none;transition:color .15s,border-color .15s}
+.cell:hover select.mv{border-color:var(--rule2)}
+select.mv:hover{color:var(--ink)}
+select.mv:focus{outline:none;border-color:var(--rust);color:var(--rust)}
+.secrule{border-top:1px solid var(--rule);margin-top:34px}
+/* settings */
+.set{margin-top:26px;border-top:1px solid var(--rule)}
+.set h3{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-weight:700;font-size:22px;letter-spacing:.02em;text-transform:uppercase;
+margin:22px 0 6px}
+.set .note{color:var(--mute)}
+.set input[type=text]{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:15px;padding:9px 11px;border:1px solid var(--rule);
+background:transparent;color:var(--ink);width:100%;max-width:430px;letter-spacing:.03em}
+.set .row{display:grid;grid-template-columns:250px 1fr;gap:26px;align-items:center;padding:18px 0;
+border-bottom:1px solid var(--rule2)}
+.set label{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-size:14px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.set .v{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:16px;line-height:1.45}
+.set input[type=password]{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:15px;padding:9px 11px;
+border:1px solid var(--rule);background:transparent;color:var(--ink);width:100%;max-width:430px}
+.set label.opt{text-transform:none;letter-spacing:0;font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:16px;color:var(--ink)}
+.btn{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-size:13px;letter-spacing:.11em;text-transform:uppercase;
+border:1px solid var(--rule);background:transparent;color:var(--ink);padding:8px 14px;cursor:pointer}
+.btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+</style></head><body><div class="pg"><h1>Launch Pad</h1><div class="meta"><span>AUGUST 16, 2026</span><a href="#" id="setlink">Settings</a><span class="r" id="tot">19 REPOS TOTAL</span></div><div id="settings" hidden>
+<section class="set">
+<h3>Settings</h3>
+<div class="row"><label>GitHub token</label><div>
+<input type="password" id="tok" placeholder="ghp_… — read-only token, needed only for private repos">
+<div class="v note">Scopes: <b>repo</b> (read) for private repositories, <b>gist</b> to sync sections.
+Public repos scan without a token.</div></div></div>
 
-:root{
-  --ink:#1a1a1a;
-  --ink-mid:#615a4f;
-  --ink-light:#9a8e80;
-  --ink-faint:#e7e1d4;
+<div class="row"><label>Gist ID</label><div>
+<input type="text" id="gist" placeholder="e.g. 4f3c1b9e2a7d… — the gist that stores section assignments">
+<div class="v note">One secret gist holds a single JSON file, <b>launchpad-sections.json</b>, mapping each
+repo to Active / Personal / In Progress / Archive. Paste the ID from the gist URL.</div>
+<div style="margin-top:11px"><button class="btn" type="button">Test connection</button>
+<button class="btn" type="button" style="margin-left:8px">Create a new gist</button>
+<button class="btn" type="button" style="margin-left:8px">Pull from gist</button>
+<button class="btn" type="button" style="margin-left:8px">Push to gist</button></div></div></div>
 
-  --page:#f7f4ed;
-  --page-white:#fffdf6;
-  --rule:#d8d2c2;
-  --rule-strong:#a89e8a;
+<div class="row"><label>Storage</label><div class="v">
+<span class="note">Not connected — assignments are saved in this browser only.
+Add a token with gist scope and a gist ID to sync across devices.</span></div></div>
 
-  --sage:#e0e8d6;
-  --sage-edge:#9bb39a;
+<div class="row"><label>Scan scope</label><div class="v">
+<label class="opt"><input type="checkbox" checked> Every repo under tscarlisle-ghub with Pages enabled</label><br>
+<label class="opt"><input type="checkbox" checked> Every folder inside the TSC repo</label><br>
+<label class="opt"><input type="checkbox"> Include repos without Pages, shown muted</label></div></div>
 
-  --brand:#d04030;
-  --amber:#a06010;
-  --green:#3a7060;
-  --teal:#2a5a6a;
-
-  --bar-dark:#1a1a1a;
-
-  --font-body:"goudy-old-style",Georgia,serif;
-  --font-ui:"monotype-grotesque",sans-serif;
-  --font-cond:"monotype-grotesque",sans-serif;
-  --font-disp:"colt-soft",sans-serif;
-  --font-name:"monotype-grotesque-condensed",sans-serif;
-}
-
-html,body{min-height:100vh;background:var(--page);color:var(--ink);}
-body{font-family:var(--font-body);font-size:18px;line-height:1.5;}
-
-.top-strip{ background:var(--bar-dark); height:14px; width:100%; }
-
-.masthead{
-  border-bottom:1px solid var(--rule);
-  background:var(--page);
-  position:sticky;top:0;z-index:200;
-}
-.masthead-inner{
-  max-width:1600px; margin:0 auto; padding:18px 40px 14px;
-  display:flex; align-items:baseline; gap:0; flex-wrap:wrap;
-}
-.masthead-title{
-  font-family:var(--font-disp); font-weight:700; font-size:24px;
-  text-transform:uppercase; letter-spacing:0.04em; color:var(--ink); line-height:1;
-}
-.masthead-rule{
-  display:inline-block; width:1px; align-self:stretch; background:var(--rule);
-  margin:0 22px; min-height:20px;
-}
-.masthead-sub{ font-family:var(--font-body); font-style:italic; font-size:16px; color:var(--ink-mid); }
-.masthead-sub b{ font-style:normal; font-weight:700; color:var(--ink); letter-spacing:0.02em; }
-.masthead-count{
-  margin-left:auto; font-family:var(--font-cond); font-weight:700; font-size:11px;
-  letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-light); padding-left:18px;
-}
-
-.intro{
-  max-width:1600px; margin:0 auto; padding:24px 40px 14px;
-  display:flex; align-items:baseline; gap:18px; border-bottom:1px solid var(--ink-faint);
-  flex-wrap:wrap;
-}
-.intro-label{
-  font-family:var(--font-cond); font-weight:700; font-size:12px; letter-spacing:0.20em;
-  text-transform:uppercase; color:var(--ink-mid);
-}
-.intro-note{ font-family:var(--font-body); font-style:italic; font-size:14px; color:var(--ink-light); }
-.intro-spacer{ flex:1; }
-.intro-action{
-  font-family:var(--font-cond); font-weight:700; font-size:12px; letter-spacing:0.16em;
-  text-transform:uppercase; color:var(--ink-mid); background:none; border:1px solid var(--rule-strong);
-  cursor:pointer; padding:8px 16px; border-radius:1px; transition:color 0.15s, border-color 0.15s;
-  text-decoration:none; display:inline-flex; align-items:center; gap:6px;
-}
-.intro-action:hover{ color:var(--brand); border-color:var(--brand); }
-.intro-action[disabled]{ opacity:.5; cursor:default; color:var(--ink-mid); border-color:var(--rule-strong); }
-.intro-action .spin{ display:inline-block; }
-.spinning .spin{ animation:spin 0.8s linear infinite; }
-@keyframes spin{ to{ transform:rotate(360deg); } }
-
-.status-row{
-  max-width:1600px; margin:0 auto; padding:12px 40px 0;
-  font-family:var(--font-cond); font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
-  color:var(--ink-light);
-}
-.status-row.err{ color:var(--brand); }
-.status-row.ok{ color:var(--green); }
-
-/* sync panel */
-.sync-wrap{ max-width:1600px; margin:0 auto; padding:12px 40px 0; }
-.sync-panel{
-  border:1px solid var(--rule); border-radius:2px; background:var(--page-white);
-  font-family:var(--font-cond);
-}
-.sync-panel summary{
-  padding:10px 16px; cursor:pointer; font-weight:700; font-size:11px; letter-spacing:0.16em;
-  text-transform:uppercase; color:var(--ink-mid); list-style:none; display:flex; align-items:center; gap:8px;
-}
-.sync-panel summary::-webkit-details-marker{ display:none; }
-.sync-panel summary::before{ content:"⚙"; font-size:13px; }
-.sync-body{ padding:4px 16px 16px; border-top:1px solid var(--ink-faint); }
-.sync-row{ display:flex; gap:10px; align-items:center; margin:10px 0; flex-wrap:wrap; }
-.sync-row label{ font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-light); width:140px; flex-shrink:0; }
-.sync-row input{
-  font-family:var(--font-cond); font-size:12px; color:var(--ink); background:var(--page);
-  border:1px solid var(--rule); border-radius:2px; padding:6px 8px; flex:1; min-width:180px;
-}
-.sync-note{ font-family:var(--font-body); font-style:italic; font-size:13px; color:var(--ink-light); margin:8px 0; }
-.sync-status{ font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-top:8px; }
-.sync-status.ok{ color:var(--green); }
-.sync-status.err{ color:var(--brand); }
-
-.section-row{ max-width:1600px; margin:0 auto; padding:26px 40px 0; }
-.section-row:first-of-type{ padding-top:20px; }
-.section-label{
-  font-family:var(--font-cond); font-weight:700; font-size:12px; letter-spacing:0.20em;
-  text-transform:uppercase; color:var(--ink); border-bottom:1px solid var(--ink);
-  padding-bottom:8px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:baseline;
-}
-.section-label span.count{ color:var(--ink-light); font-weight:400; }
-.section-row.archived .section-label{ color:var(--ink-light); border-bottom-color:var(--rule); font-size:11px; }
-
-.grid{
-  max-width:1600px; margin:0 auto; padding:0 40px 14px;
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px;
-}
-.grid:last-of-type{ padding-bottom:14px; }
-.grid[data-category="Archived"]{ grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:8px; }
-
-.tile{
-  position:relative; background:var(--page-white); border:1px solid var(--rule);
-  border-radius:2px; padding:14px 16px 10px; cursor:pointer;
-  transition:border-color 0.15s, box-shadow 0.15s, background 0.15s;
-  display:flex; flex-direction:column; min-height:120px;
-}
-.tile:hover{ border-color:var(--sage-edge); background:var(--sage); box-shadow:0 2px 0 var(--ink-faint); }
-.tile.no-entry{ cursor:default; }
-.tile.no-entry:hover{ border-color:var(--rule); background:var(--page-white); box-shadow:none; }
-
-.tile-stage{
-  font-family:var(--font-cond); font-weight:700; font-size:11px; letter-spacing:0.16em;
-  text-transform:uppercase; color:var(--ink-light); margin-bottom:6px;
-}
-.tile-name{
-  font-family:var(--font-name); font-weight:400; font-size:23px;
-  letter-spacing:0.02em; text-transform:uppercase; color:var(--ink); line-height:1.2; margin-bottom:4px;
-}
-.tile-desc{
-  font-family:var(--font-body); font-style:italic; font-size:16px; line-height:1.4;
-  color:var(--ink-mid); margin:0 0 10px; flex:1;
-}
-.tile-desc.empty{ color:var(--ink-light); }
-.tile-foot{
-  display:flex; align-items:center; gap:12px; padding-top:8px;
-  border-top:1px solid var(--ink-faint); flex-wrap:wrap;
-}
-.tile-meta{
-  font-family:var(--font-cond); font-weight:700; font-size:10px; letter-spacing:0.14em;
-  text-transform:uppercase; color:var(--ink-light); flex:1; min-width:100%; margin-bottom:4px;
-}
-.tile-link{
-  font-family:var(--font-cond); font-weight:700; font-size:11px; letter-spacing:0.14em;
-  text-transform:uppercase; color:var(--ink-mid); text-decoration:none; padding:2px 0;
-  border-bottom:1px solid transparent; transition:color 0.15s, border-color 0.15s;
-}
-.tile-link:hover{ color:var(--brand); border-bottom-color:var(--brand); }
-.multi-links{ display:flex; flex-direction:column; gap:4px; margin-top:2px; }
-
-/* Archived: smaller, quieter tiles */
-.grid[data-category="Archived"] .tile{ min-height:auto; padding:10px 12px 8px; }
-.grid[data-category="Archived"] .tile:hover{ background:var(--page-white); border-color:var(--ink-light); box-shadow:none; }
-.grid[data-category="Archived"] .tile-stage{ font-size:9px; margin-bottom:3px; }
-.grid[data-category="Archived"] .tile-name{ font-size:14px; letter-spacing:0.03em; color:var(--ink-mid); margin-bottom:0; }
-.grid[data-category="Archived"] .tile-desc{ display:none; }
-.grid[data-category="Archived"] .tile-meta{ display:none; }
-.grid[data-category="Archived"] .tile-foot{ padding-top:6px; border-top:none; margin-top:6px; }
-.grid[data-category="Archived"] .tile-link{ font-size:9px; letter-spacing:0.1em; }
-.grid[data-category="Archived"] .badge{ font-size:8px; }
-
-.badge{
-  font-family:var(--font-cond); font-weight:700; font-size:9px; letter-spacing:0.14em;
-  text-transform:uppercase; padding:2px 6px; border-radius:2px; display:inline-block; margin-left:6px;
-}
-.badge.multi{ color:var(--teal); border:1px solid var(--teal); }
-.badge.none{ color:var(--ink-light); border:1px solid var(--rule-strong); }
-.badge.archived{ color:var(--amber); border:1px solid var(--amber); }
-.badge.private{ color:var(--brand); border:1px solid var(--brand); }
-
-.cat-row{ width:100%; margin-top:6px; display:flex; align-items:center; gap:6px; }
-.cat-select{
-  font-family:var(--font-cond); font-weight:700; font-size:9px; letter-spacing:0.1em;
-  text-transform:uppercase; color:var(--ink-light); background:var(--page); border:1px solid var(--rule);
-  border-radius:2px; padding:3px 5px; cursor:pointer; max-width:100%;
-}
-.cat-select:hover{ border-color:var(--rule-strong); color:var(--ink-mid); }
-
-.empty-state{
-  max-width:1600px; margin:0 auto; padding:60px 40px;
-  font-family:var(--font-body); font-style:italic; font-size:17px; color:var(--ink-light);
-}
-
-footer{ max-width:1600px; margin:0 auto; padding:0 40px 60px; }
-footer p{ font-family:var(--font-body); font-style:italic; font-size:14px; color:var(--ink-light); margin-bottom:6px; }
-footer a{ color:var(--teal); }
-</style>
-</head>
-<body>
-
-<div class="top-strip"></div>
-
-<header class="masthead">
-  <div class="masthead-inner">
-    <div class="masthead-title">Launch Pad</div>
-    <span class="masthead-rule"></span>
-    <div class="masthead-sub">Every live tool for <b>T. Scott Carlisle</b> — scanned fresh, every visit.</div>
-    <div class="masthead-count" id="count">scanning…</div>
-  </div>
-</header>
-
-<div class="intro">
-  <div class="intro-label">Live index</div>
-  <div class="intro-note" id="introNote">Scans your public repos and every folder inside TSC — use the small tag on each tile to sort it.</div>
-  <div class="intro-spacer"></div>
-  <a class="intro-action" href="https://github.com/tscarlisle-ghub" target="_blank" rel="noopener">→ view profile</a>
-  <button class="intro-action" id="rescanBtn"><span class="spin">↻</span> rescan</button>
-</div>
-
-<div class="sync-wrap">
-  <details class="sync-panel" id="syncPanel">
-    <summary>GitHub access — private repos &amp; category sync</summary>
-    <div class="sync-body">
-      <p class="sync-note">One token, two jobs: it lets this page see your private repos, and keeps your category tags in sync across devices via a private Gist. Needs "Contents: Read-only" (Repository permissions) and "Gists: Read and write" (Account permissions) on a fine-grained token, All repositories. The token only ever talks directly to GitHub from this page — nothing else sees it.</p>
-      <div class="sync-row">
-        <label>GitHub token</label>
-        <input type="password" id="tokenInput" placeholder="github_pat_… ">
-      </div>
-      <div class="sync-row">
-        <label>Gist ID</label>
-        <input type="text" id="gistIdInput" placeholder="leave blank on the first device">
-      </div>
-      <div class="sync-row">
-        <button class="intro-action" id="createGistBtn">Create new gist (first device)</button>
-        <button class="intro-action" id="connectGistBtn">Connect &amp; sync</button>
-      </div>
-      <div class="sync-note">First device: paste your token, leave Gist ID blank, click "Create new gist" — it'll fill in the Gist ID for you. Copy that ID. Every other device: paste the same token and that same Gist ID, then click "Connect &amp; sync." Once a token is entered and saved, private repos show up on the next rescan automatically — no separate step.</div>
-      <div class="sync-status" id="syncStatus"></div>
-    </div>
-  </details>
-</div>
-
-<div class="status-row" id="status">scanning…</div>
-
-<div id="content"></div>
-
-<div class="empty-state" id="emptyState" hidden>Nothing found — check the status line above.</div>
-
-<footer>
-  <p>Scans two things on every load: every repo under tscarlisle-ghub with GitHub Pages enabled (private ones included once a token is connected above), and every folder inside the TSC repo (whatever its entry file is named).</p>
-  <p>Repos without Pages enabled still show up, muted, linked to their source. Folders inside TSC with a proper index.html open directly; folders with differently-named HTML files list each one; folders with no HTML yet still show up.</p>
-  <p>Categories sync across devices once connected above (see "Sync categories across devices"). Without that set up, they're saved in this browser only.</p>
-</footer>
-
+<div class="row"><label>Index</label><div>
+<button class="btn" type="button">Rescan now</button>
+<button class="btn" type="button" style="margin-left:8px">View profile</button>
+<div class="v note" style="margin-top:10px">Two flagged — SPECS has no single entry point,
+FONTS has no Pages.</div></div></div>
+</section></div><div id="index"><section class="sec"><h2>ACTIVE PROJECTS</h2><div class="grid" id="grid-ACTIVE"><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/CA/index.html">
+<span class="nm">CA Task Ledger</span><span class="pa">/TSC/CA/index.html</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/SPECS">
+<span class="nm">Specifications</span><span class="pa">/TSC/SPECS</span>
+<span class="foot"><span class="st">TWO PAGES</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-CON/index.html">
+<span class="nm">Supplementary Conditions Builder</span><span class="pa">/TSC/TSC-CON/index.html</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-PR/index.html">
+<span class="nm">Proposal Generator</span><span class="pa">/TSC/TSC-PR/index.html</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-QUEST/index.html">
+<span class="nm">Design Questionnaire</span><span class="pa">/TSC/TSC-QUEST/index.html</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-SQF/index.html">
+<span class="nm">Square Foot Cost Estimator</span><span class="pa">/TSC/TSC-SQF/index.html</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/CFO/index.html">
+<span class="nm">CFO Dashboard</span><span class="pa">/TSC/CFO/index.html</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/cma-yearend/">
+<span class="nm">Year-End Cash Flow Estimator</span><span class="pa">/cma-yearend/</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/cmaoffice/">
+<span class="nm">Mtn Brook Village Office Finances</span><span class="pa">/cmaoffice/</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-PB/index.html">
+<span class="nm">CMA Project Board</span><span class="pa">/TSC/TSC-PB/index.html</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/design/">
+<span class="nm">Carlisle Design System</span><span class="pa">/design/</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><div class="cell empty"></div></div></section><div class="secrule"></div><section class="sec"><h2>PERSONAL PROJECTS</h2><div class="grid" id="grid-PERSONAL"><a class="cell" href="https://tscarlisle-ghub.github.io/fin/">
+<span class="nm">TSC-Finances</span><span class="pa">/fin/</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL" selected>PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/chess/">
+<span class="nm">The Second Year — Chess Guide</span><span class="pa">/chess/</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL" selected>PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><div class="cell empty"></div></div></section><div class="secrule"></div><section class="sec"><h2>IN PROGRESS</h2><div class="grid" id="grid-IN-PROGRESS"><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/fileorg/index.html">
+<span class="nm">Folder Reorganizer</span><span class="pa">/TSC/fileorg/index.html</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/TSC/TSC-CLAUDE/index.html">
+<span class="nm">TSC-Claude</span><span class="pa">/TSC/TSC-CLAUDE/index.html</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/project-board/">
+<span class="nm">Project Board — To-Do</span><span class="pa">/project-board/</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select></span></a></div></section><div class="secrule"></div><section class="sec"><h2>ARCHIVE</h2><div class="grid" id="grid-ARCHIVE"><a class="cell" href="https://tscarlisle-ghub.github.io/catalog/">
+<span class="nm">House Archive</span><span class="pa">/catalog/</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/cma/">
+<span class="nm">CMA</span><span class="pa">/cma/</span>
+<span class="foot"><span class="st">ACTIVE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select></span></a><a class="cell" href="https://tscarlisle-ghub.github.io/tscarlisle-ghub/fonts">
+<span class="nm">Fonts</span><span class="pa">/tscarlisle-ghub/fonts</span>
+<span class="foot"><span class="st">NO SITE</span>
+<select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select></span></a></div></section></div></div>
 <script>
-const OWNER = 'tscarlisle-ghub';
-const TSC_REPO = 'TSC';
-const CAT_STORAGE_KEY = 'launchpad_categories_v1';
-const SYNC_STORAGE_KEY = 'launchpad_sync_v1';
-const PRESET_CATEGORIES = ['Active', 'In Progress', 'Personal', 'Archived'];
-const DEFAULT_CATEGORY = 'Active';
-const DEFAULT_ARCHIVED_CATEGORY = 'Archived';
-const NEW_CATEGORY_VALUE = '__new__';
-const GIST_FILENAME = 'launchpad-categories.json';
-const GIST_DESCRIPTION = 'TSC Launch Pad — category sync (do not rename the file inside)';
-
-const contentEl = document.getElementById('content');
-const emptyState = document.getElementById('emptyState');
-const statusEl = document.getElementById('status');
-const countEl = document.getElementById('count');
-const rescanBtn = document.getElementById('rescanBtn');
-const tokenInput = document.getElementById('tokenInput');
-const gistIdInput = document.getElementById('gistIdInput');
-const createGistBtn = document.getElementById('createGistBtn');
-const connectGistBtn = document.getElementById('connectGistBtn');
-const syncStatusEl = document.getElementById('syncStatus');
-const syncPanel = document.getElementById('syncPanel');
-
-function setStatus(text, cls){
-  statusEl.textContent = text;
-  statusEl.className = 'status-row' + (cls ? ' ' + cls : '');
+function recount(){
+ var n=document.querySelectorAll('.cell:not(.empty)').length;
+ var t=document.getElementById('tot'); if(t) t.textContent=n+' REPOS TOTAL';
+ document.querySelectorAll('.grid').forEach(function(g){
+   g.querySelectorAll('.cell.empty').forEach(function(e){e.remove();});
+   var c=g.querySelectorAll('.cell').length, pad=(3-(c%3))%3;
+   for(var i=0;i<pad;i++){var d=document.createElement('div');d.className='cell empty';g.appendChild(d);}
+   g.closest('.sec').style.display=c?'':'none';
+ });
 }
-function setSyncStatus(text, cls){
-  syncStatusEl.textContent = text;
-  syncStatusEl.className = 'sync-status' + (cls ? ' ' + cls : '');
-}
-
-function prettify(slug){
-  return slug.replace(/[-_]+/g, ' ').replace(/\.html$/i, '').replace(/\b\w/g, c => c.toUpperCase());
-}
-function sentenceCase(str){
-  if(!str) return str;
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-function nowStamp(){
-  const d = new Date();
-  return d.toLocaleDateString(undefined, {month:'short', day:'numeric'}) + ' · ' +
-         d.toLocaleTimeString(undefined, {hour:'numeric', minute:'2-digit'});
-}
-
-// ── local category cache ──
-function loadCategories(){
-  try{ return JSON.parse(localStorage.getItem(CAT_STORAGE_KEY)) || {}; }catch(e){ return {}; }
-}
-function saveCategories(map){
-  try{ localStorage.setItem(CAT_STORAGE_KEY, JSON.stringify(map)); }catch(e){}
-}
-
-// ── sync config (token + gist id), per device ──
-function loadSyncConfig(){
-  try{ return JSON.parse(localStorage.getItem(SYNC_STORAGE_KEY)) || {}; }catch(e){ return {}; }
-}
-function saveSyncConfig(cfg){
-  try{ localStorage.setItem(SYNC_STORAGE_KEY, JSON.stringify(cfg)); }catch(e){}
-}
-
-// ── shared GitHub auth ──
-function ghToken(){
-  return loadSyncConfig().token || null;
-}
-function ghHeaders(extra){
-  const token = ghToken();
-  return { ...(token ? { 'Authorization': `Bearer ${token}` } : {}), ...(extra || {}) };
-}
-
-// ── gist sync ──
-async function fetchGistCategories(token, gistId){
-  const res = await fetch(`https://api.github.com/gists/${gistId}`, {
-    headers: { 'Authorization': `Bearer ${token}` }, cache: 'no-store'
-  });
-  if(!res.ok) throw new Error(`gist read failed (${res.status})`);
-  const data = await res.json();
-  const file = data.files && data.files[GIST_FILENAME];
-  if(!file) throw new Error('gist has no category file');
-  return JSON.parse(file.content || '{}');
-}
-
-async function pushGistCategories(token, gistId, categoriesObj){
-  const res = await fetch(`https://api.github.com/gists/${gistId}`, {
-    method: 'PATCH',
-    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ files: { [GIST_FILENAME]: { content: JSON.stringify(categoriesObj, null, 2) } } })
-  });
-  if(!res.ok) throw new Error(`gist write failed (${res.status})`);
-}
-
-async function createGist(token, categoriesObj){
-  const res = await fetch(`https://api.github.com/gists`, {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      description: GIST_DESCRIPTION,
-      public: false,
-      files: { [GIST_FILENAME]: { content: JSON.stringify(categoriesObj, null, 2) } }
-    })
-  });
-  if(!res.ok) throw new Error(`gist create failed (${res.status})`);
-  const data = await res.json();
-  return data.id;
-}
-
-async function syncPullIfConfigured(){
-  const cfg = loadSyncConfig();
-  if(!cfg.token || !cfg.gistId) return null;
-  try{
-    const remote = await fetchGistCategories(cfg.token, cfg.gistId);
-    const merged = { ...loadCategories(), ...remote };
-    saveCategories(merged);
-    setSyncStatus(`synced ${nowStamp()}`, 'ok');
-    return merged;
-  }catch(err){
-    setSyncStatus(`sync failed — ${err.message}`, 'err');
-    return null;
-  }
-}
-
-async function syncPushIfConfigured(categoriesObj){
-  const cfg = loadSyncConfig();
-  if(!cfg.token || !cfg.gistId) return;
-  try{
-    await pushGistCategories(cfg.token, cfg.gistId, categoriesObj);
-    setSyncStatus(`synced ${nowStamp()}`, 'ok');
-  }catch(err){
-    setSyncStatus(`sync failed — ${err.message}`, 'err');
-  }
-}
-
-// ── content fetch helpers ──
-async function fetchTitle(absPath){
-  try{
-    const res = await fetch(absPath, {cache:'no-store'});
-    if(res.ok){
-      const html = await res.text();
-      const m = html.match(/<title>([^<]*)<\/title>/i);
-      if(m && m[1].trim()) return m[1].trim();
-    }
-  }catch(e){}
-  return null;
-}
-async function fetchDesc(absPath){
-  try{
-    const res = await fetch(absPath, {cache:'no-store'});
-    if(res.ok){
-      const html = await res.text();
-      const m = html.match(/<meta\s+name=["']description["']\s+content=["']([^"']*)["'][^>]*>/i);
-      if(m && m[1].trim()) return sentenceCase(m[1].trim());
-    }
-  }catch(e){}
-  return '';
-}
-
-// ── TSC subfolder scan ──
-async function getDefaultBranch(repo){
-  const res = await fetch(`https://api.github.com/repos/${OWNER}/${repo}`, {cache:'no-store', headers: ghHeaders()});
-  if(!res.ok) throw new Error(`${repo} lookup failed (${res.status})`);
-  const data = await res.json();
-  return data.default_branch || 'main';
-}
-
-async function getTscFolders(branch){
-  const res = await fetch(`https://api.github.com/repos/${OWNER}/${TSC_REPO}/git/trees/${branch}?recursive=1`, {cache:'no-store', headers: ghHeaders()});
-  if(!res.ok) throw new Error(`TSC tree fetch failed (${res.status})`);
-  const data = await res.json();
-  const tree = data.tree || [];
-
-  const topFolders = new Set();
-  for(const item of tree){
-    if(item.type === 'tree' && !item.path.includes('/') && !item.path.startsWith('.') && item.path.toLowerCase() !== 'node_modules'){
-      topFolders.add(item.path);
-    }
-  }
-
-  const results = [];
-  for(const folder of topFolders){
-    const escaped = folder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const htmlFiles = tree
-      .filter(item => item.type === 'blob' && item.path.match(new RegExp(`^${escaped}/[^/]+\\.html$`, 'i')))
-      .map(item => ({ path: item.path, name: item.path.split('/').pop() }));
-    const hasIndex = htmlFiles.some(f => f.name.toLowerCase() === 'index.html');
-    results.push({ folder, entries: htmlFiles, hasIndex });
-  }
-  results.sort((a, b) => a.folder.localeCompare(b.folder));
-  return results;
-}
-
-async function loadTscMeta(item){
-  const { folder, entries, hasIndex } = item;
-  const key = `tsc:${folder}`;
-  if(entries.length === 0) return { key, source:'tsc', folder, kind: 'none', title: prettify(folder), desc: '', archived:false };
-
-  if(hasIndex){
-    const e = entries.find(f => f.name.toLowerCase() === 'index.html');
-    const title = (await fetchTitle(`/${TSC_REPO}/${e.path}`)) || prettify(folder);
-    const desc = await fetchDesc(`/${TSC_REPO}/${e.path}`);
-    return { key, source:'tsc', folder, kind: 'single', title, desc, path: `${TSC_REPO}/${e.path}`, archived:false };
-  }
-  if(entries.length === 1){
-    const title = (await fetchTitle(`/${TSC_REPO}/${entries[0].path}`)) || prettify(folder);
-    const desc = await fetchDesc(`/${TSC_REPO}/${entries[0].path}`);
-    return { key, source:'tsc', folder, kind: 'single', title, desc, path: `${TSC_REPO}/${entries[0].path}`, archived:false };
-  }
-  const labeled = await Promise.all(entries.map(async e => ({
-    path: `${TSC_REPO}/${e.path}`,
-    label: (await fetchTitle(`/${TSC_REPO}/${e.path}`)) || prettify(e.name)
-  })));
-  return { key, source:'tsc', folder, kind: 'multi', title: prettify(folder), desc: '', entries: labeled, archived:false };
-}
-
-// ── standalone repo scan ──
-async function getPublicRepos(){
-  const token = ghToken();
-  const url = token
-    ? `https://api.github.com/user/repos?per_page=100&affiliation=owner`
-    : `https://api.github.com/users/${OWNER}/repos?per_page=100`;
-  const res = await fetch(url, {cache:'no-store', headers: ghHeaders()});
-  if(!res.ok) throw new Error(`repo list fetch failed (${res.status})`);
-  const data = await res.json();
-  return data.filter(r => !r.fork && r.name !== TSC_REPO);
-}
-
-async function loadRepoMeta(repo){
-  const key = `repo:${repo.name}`;
-  const base = { key, source:'repo', name: repo.name, archived: repo.archived, hasPages: repo.has_pages, private: repo.private };
-  if(!repo.has_pages){
-    return { ...base, kind: 'none', title: prettify(repo.name), desc: sentenceCase(repo.description || '') };
-  }
-  const path = `/${repo.name}/`;
-  const title = (await fetchTitle(path)) || prettify(repo.name);
-  const desc = (await fetchDesc(path)) || sentenceCase(repo.description || '');
-  return { ...base, kind: 'single', title, desc, path };
-}
-
-// ── rendering ──
-function tileInnerHtml(item){
-  if(item.source === 'tsc'){
-    const repoUrl = `https://github.com/${OWNER}/${TSC_REPO}/tree/HEAD/${item.folder}`;
-    if(item.kind === 'single'){
-      return {
-        html: `
-          <div class="tile-stage">${item.folder}</div>
-          <div class="tile-name">${item.title}</div>
-          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'No description'}</p>
-          <div class="tile-foot">
-            <span class="tile-meta">${OWNER}.github.io/${item.path}</span>
-            <a class="tile-link" href="/${item.path}" target="_blank" rel="noopener">→ launch site</a>
-            <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view folder</a>
-          </div>`,
-        className: 'tile', clickUrl: `/${item.path}`
-      };
-    } else if(item.kind === 'multi'){
-      const linksHtml = item.entries.map(e => `<a class="tile-link" href="/${e.path}" target="_blank" rel="noopener">→ ${e.label}</a>`).join('');
-      return {
-        html: `
-          <div class="tile-stage">${item.folder}<span class="badge multi">${item.entries.length} pages</span></div>
-          <div class="tile-name">${item.title}</div>
-          <p class="tile-desc empty">No single entry point — ${item.entries.length} HTML files</p>
-          <div class="tile-foot">
-            <span class="tile-meta">${OWNER}.github.io/${TSC_REPO}/${item.folder}</span>
-            <div class="multi-links">${linksHtml}</div>
-            <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view folder</a>
-          </div>`,
-        className: 'tile', clickUrl: `/${item.entries[0].path}`
-      };
-    } else {
-      return {
-        html: `
-          <div class="tile-stage">${item.folder}<span class="badge none">no html</span></div>
-          <div class="tile-name">${item.title}</div>
-          <p class="tile-desc empty">No HTML file yet</p>
-          <div class="tile-foot">
-            <span class="tile-meta">${OWNER}/${TSC_REPO}/${item.folder}</span>
-            <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view folder</a>
-          </div>`,
-        className: 'tile no-entry', clickUrl: null
-      };
-    }
-  } else {
-    const repoUrl = `https://github.com/${OWNER}/${item.name}`;
-    const archivedBadge = item.archived ? '<span class="badge archived">archived</span>' : '';
-    const privateBadge = item.private ? '<span class="badge private">private</span>' : '';
-    if(item.kind === 'single'){
-      return {
-        html: `
-          <div class="tile-stage">${item.name}${privateBadge}${archivedBadge}</div>
-          <div class="tile-name">${item.title}</div>
-          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'No description'}</p>
-          <div class="tile-foot">
-            <span class="tile-meta">${OWNER}.github.io${item.path}</span>
-            <a class="tile-link" href="${item.path}" target="_blank" rel="noopener">→ launch site</a>
-            <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view repo</a>
-          </div>`,
-        className: 'tile', clickUrl: item.path
-      };
-    } else {
-      return {
-        html: `
-          <div class="tile-stage">${item.name}${privateBadge}${archivedBadge}<span class="badge none">no pages</span></div>
-          <div class="tile-name">${item.title}</div>
-          <p class="tile-desc${item.desc ? '' : ' empty'}">${item.desc || 'No live site'}</p>
-          <div class="tile-foot">
-            <span class="tile-meta">${OWNER}/${item.name}</span>
-            <a class="tile-link" href="${repoUrl}" target="_blank" rel="noopener">→ view repo</a>
-          </div>`,
-        className: 'tile no-entry', clickUrl: null
-      };
-    }
-  }
-}
-
-function catSelectHtml(item, allCategories, currentCategory){
-  const opts = allCategories.map(c =>
-    `<option value="${c}" ${c === currentCategory ? 'selected' : ''}>${c}</option>`
-  ).join('');
-  return `
-    <div class="cat-row">
-      <select class="cat-select" data-key="${item.key}">
-        ${opts}
-        <option value="${NEW_CATEGORY_VALUE}">+ New category…</option>
-      </select>
-    </div>`;
-}
-
-function buildTile(item, allCategories, currentCategory){
-  const { html, className, clickUrl } = tileInnerHtml(item);
-  const tile = document.createElement('div');
-  tile.className = className;
-  tile.innerHTML = html + catSelectHtml(item, allCategories, currentCategory);
-  if(clickUrl){
-    tile.addEventListener('click', e => {
-      if(e.target.closest('.tile-link') || e.target.closest('.cat-select')) return;
-      window.open(clickUrl, '_blank', 'noopener');
-    });
-  }
-  return tile;
-}
-
-function orderCategories(names){
-  const preset = PRESET_CATEGORIES.filter(c => names.includes(c));
-  const custom = names.filter(c => !PRESET_CATEGORIES.includes(c)).sort((a,b) => a.localeCompare(b));
-  return [...preset, ...custom];
-}
-
-function renderGrouped(allItems){
-  contentEl.innerHTML = '';
-  const stored = loadCategories();
-
-  for(const item of allItems){
-    item.category = stored[item.key] || (item.archived ? DEFAULT_ARCHIVED_CATEGORY : DEFAULT_CATEGORY);
-  }
-
-  const categorySet = new Set(PRESET_CATEGORIES);
-  for(const item of allItems) categorySet.add(item.category);
-  const allCategories = orderCategories(Array.from(categorySet));
-
-  const groups = new Map();
-  for(const item of allItems){
-    if(!groups.has(item.category)) groups.set(item.category, []);
-    groups.get(item.category).push(item);
-  }
-  const groupNames = orderCategories(Array.from(groups.keys()));
-
-  for(const catName of groupNames){
-    const items = groups.get(catName);
-    const sectionRow = document.createElement('div');
-    sectionRow.className = 'section-row' + (catName === 'Archived' ? ' archived' : '');
-    sectionRow.innerHTML = `<div class="section-label">${catName} <span class="count">${items.length}</span></div>`;
-    contentEl.appendChild(sectionRow);
-
-    const grid = document.createElement('div');
-    grid.className = 'grid';
-    grid.dataset.category = catName;
-    for(const item of items){
-      grid.appendChild(buildTile(item, allCategories, catName));
-    }
-    contentEl.appendChild(grid);
-  }
-
-  contentEl.addEventListener('change', async e => {
-    if(!e.target.classList.contains('cat-select')) return;
-    const key = e.target.dataset.key;
-    let value = e.target.value;
-    if(value === NEW_CATEGORY_VALUE){
-      const name = prompt('New category name:');
-      if(!name || !name.trim()){
-        renderGrouped(allItems);
-        return;
-      }
-      value = name.trim();
-    }
-    const current = loadCategories();
-    current[key] = value;
-    saveCategories(current);
-    renderGrouped(allItems);
-    await syncPushIfConfigured(current);
-  });
-}
-
-let cachedItems = [];
-
-async function scan(){
-  rescanBtn.disabled = true;
-  rescanBtn.classList.add('spinning');
-  setStatus('scanning…');
-  try{
-    await syncPullIfConfigured();
-
-    const [tscBranch, repos] = await Promise.all([getDefaultBranch(TSC_REPO), getPublicRepos()]);
-    const [tscFolders, repoMetas] = await Promise.all([
-      getTscFolders(tscBranch),
-      Promise.all(repos.map(loadRepoMeta))
-    ]);
-    const tscProjects = await Promise.all(tscFolders.map(loadTscMeta));
-
-    const allItems = [...tscProjects, ...repoMetas.sort((a,b) => a.name.localeCompare(b.name))];
-    cachedItems = allItems;
-    renderGrouped(allItems);
-
-    const total = allItems.length;
-    emptyState.hidden = total > 0;
-    countEl.textContent = `${total} total`;
-    setStatus(`updated ${nowStamp()}`, 'ok');
-  }catch(err){
-    setStatus(`scan failed — ${err.message}`, 'err');
-    countEl.textContent = '—';
-  }finally{
-    rescanBtn.disabled = false;
-    rescanBtn.classList.remove('spinning');
-  }
-}
-
-// ── sync panel wiring ──
-(function initSyncPanel(){
-  const cfg = loadSyncConfig();
-  if(cfg.gistId) gistIdInput.value = cfg.gistId;
-  if(cfg.token && cfg.gistId){
-    setSyncStatus('connected — will sync on next scan', 'ok');
-  }else if(cfg.token){
-    setSyncStatus('token saved — private repos on next rescan; gist sync not set up', 'ok');
-  }else{
-    setSyncStatus('not connected — public repos only, categories saved on this device only');
-  }
-
-  tokenInput.addEventListener('blur', () => {
-    const token = tokenInput.value.trim();
-    if(!token) return;
-    const cfg = loadSyncConfig();
-    saveSyncConfig({ ...cfg, token });
-    if(!cfg.token){
-      setSyncStatus('token saved — private repos will show up on next rescan', 'ok');
-    }
-  });
-
-  createGistBtn.addEventListener('click', async () => {    const token = tokenInput.value.trim();
-    if(!token){ setSyncStatus('enter a token first', 'err'); return; }
-    createGistBtn.disabled = true;
-    setSyncStatus('creating gist…');
-    try{
-      const currentCats = loadCategories();
-      const id = await createGist(token, currentCats);
-      saveSyncConfig({ token, gistId: id });
-      gistIdInput.value = id;
-      setSyncStatus(`created — Gist ID: ${id} (copy this for your other devices)`, 'ok');
-    }catch(err){
-      setSyncStatus(`create failed — ${err.message}`, 'err');
-    }finally{
-      createGistBtn.disabled = false;
-    }
-  });
-
-  connectGistBtn.addEventListener('click', async () => {
-    const token = tokenInput.value.trim();
-    const gistId = gistIdInput.value.trim();
-    if(!token || !gistId){ setSyncStatus('enter both token and gist ID', 'err'); return; }
-    connectGistBtn.disabled = true;
-    setSyncStatus('connecting…');
-    try{
-      const remote = await fetchGistCategories(token, gistId);
-      const merged = { ...loadCategories(), ...remote };
-      saveCategories(merged);
-      saveSyncConfig({ token, gistId });
-      setSyncStatus(`connected & synced ${nowStamp()}`, 'ok');
-      if(cachedItems.length) renderGrouped(cachedItems);
-    }catch(err){
-      setSyncStatus(`connect failed — ${err.message}`, 'err');
-    }finally{
-      connectGistBtn.disabled = false;
-    }
-  });
-})();
-
-rescanBtn.addEventListener('click', scan);
-scan();
+document.addEventListener('change',function(e){
+ if(!e.target.matches('select.mv')) return;
+ var cell=e.target.closest('.cell'), host=document.getElementById('grid-'+e.target.value);
+ if(cell&&host){host.appendChild(cell);recount();}
+});
+document.addEventListener('DOMContentLoaded',recount);
 </script>
-</body>
-</html>
+<script>
+document.getElementById('setlink').addEventListener('click',function(e){
+ e.preventDefault();
+ var s=document.getElementById('settings'), i=document.getElementById('index');
+ var open=s.hasAttribute('hidden');
+ if(open){s.removeAttribute('hidden');i.setAttribute('hidden','');this.textContent='Index';}
+ else{s.setAttribute('hidden','');i.removeAttribute('hidden');this.textContent='Settings';}
+ window.scrollTo(0,0);
+});
+</script></body></html>
