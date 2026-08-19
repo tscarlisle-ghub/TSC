@@ -8,7 +8,7 @@
 .sec[data-k="ACTIVE"]{--a:var(--paprika)}
 .sec[data-k="PERSONAL"]{--a:var(--rusty)}
 .sec[data-k="IN-PROGRESS"]{--a:var(--masala)}
-.sec[data-k="ARCHIVE"]{--a:var(--port)}
+.sec[data-k="ARCHIVE"]{--a:var(--port);--s:.5}
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;
 font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;font-style:normal;
@@ -23,7 +23,7 @@ a.home:hover{color:var(--paprika)}
 h1{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-weight:700;font-size:clamp(23px,3.5vw,36px);line-height:1;margin:0;
 letter-spacing:.055em;text-transform:uppercase}
 .meta{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline;margin-top:16px;
-font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-size:15px;letter-spacing:.09em;text-transform:uppercase}
+font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
 .meta .r{text-align:right}
 .meta a{border-bottom:1px solid transparent}
 .meta .sep{color:var(--mute)}
@@ -34,20 +34,21 @@ font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-size:15px;le
 text-transform:uppercase;margin:0 0 9px;color:var(--a,var(--ink))}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--a,var(--rule))}
 .cell{position:relative;border-bottom:1px solid var(--rule);
-padding:22px 26px 18px;min-height:214px;display:flex;flex-direction:column}
+padding:calc(22px * var(--s,1)) 26px calc(18px * var(--s,1));
+min-height:calc(214px * var(--s,1));display:flex;flex-direction:column}
 /* vertical rules inset top and bottom */
 .cell::after{content:"";position:absolute;right:0;top:20px;bottom:20px;width:1px;background:var(--rule2)}
 .cell:nth-child(3n)::after{display:none}
 .cell.empty{border-bottom-color:transparent}
 /* last row of every section carries no bottom rule */
 .cell:nth-last-child(-n+3){border-bottom:0}
-.nm{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-weight:700;font-size:26px;line-height:1.2;letter-spacing:.018em;
-text-transform:uppercase;display:block}
-.pa{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:14px;line-height:1.42;color:var(--ink);margin-top:11px;
-word-break:break-all;text-transform:uppercase;letter-spacing:.045em}
-.foot{margin-top:auto;padding-top:22px;display:flex;align-items:center;
+.nm{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-weight:700;font-size:calc(26px * var(--s,1));line-height:1.2;
+letter-spacing:.018em;text-transform:uppercase;display:block}
+.pa{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:max(9px,calc(14px * var(--s,1)));line-height:1.42;color:var(--ink);
+margin-top:calc(11px * var(--s,1));word-break:break-all;text-transform:uppercase;letter-spacing:.045em}
+.foot{margin-top:auto;padding-top:calc(22px * var(--s,1));display:flex;align-items:center;
 justify-content:space-between;gap:12px}
-.repo{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:12px;letter-spacing:.09em;text-transform:uppercase;
+.repo{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:max(9px,calc(12px * var(--s,1)));letter-spacing:.09em;text-transform:uppercase;
 color:var(--mute);border-bottom:1px solid transparent;cursor:pointer;white-space:nowrap}
 .repo:hover{color:var(--a,var(--ink));border-bottom-color:var(--a,var(--ink))}
 .st{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-size:14px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
@@ -55,7 +56,7 @@ color:var(--mute);border-bottom:1px solid transparent;cursor:pointer;white-space
 .cell.priv .pa{color:var(--port)}
 .cell.nosite .pa{color:var(--mute)}
 /* assignment — quiet until you reach for it */
-select.mv{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+select.mv{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:max(9px,calc(12px * var(--s,1)));letter-spacing:.06em;text-transform:uppercase;
 color:var(--ink);background-color:transparent;border:1px solid var(--rule2);
 padding:6px 24px 6px 9px;cursor:pointer;line-height:1;border-radius:0;
 -webkit-appearance:none;appearance:none;transition:color .15s,border-color .15s;
@@ -113,14 +114,14 @@ button,select,input{font-family:inherit}
  .sec+.sec{margin-top:38px}
  .sec h2{font-size:16px;letter-spacing:.13em;margin-bottom:7px}
  .grid{grid-template-columns:1fr}
- .cell{padding:18px 0 15px;min-height:0}
+ .cell{padding:calc(18px * var(--s,1)) 0 calc(15px * var(--s,1));min-height:0}
  a.cell::after,.cell::after{display:none}
  a.cell:nth-of-type(odd)::after{display:none}
  .cell:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
  a.cell:last-of-type{border-bottom:0}
- .nm{font-size:21px;line-height:1.16}
- .pa{font-size:12.5px;margin-top:8px;letter-spacing:.04em}
- .foot{padding-top:14px;align-items:center}
+ .nm{font-size:calc(21px * var(--s,1));line-height:1.16}
+ .pa{font-size:max(9px,calc(12.5px * var(--s,1)));margin-top:8px;letter-spacing:.04em}
+ .foot{padding-top:calc(14px * var(--s,1));align-items:center}
  .st{font-size:12.5px}
  /* 16px stops iOS zooming the page when a control takes focus */
  /* 40% smaller than the desktop control; a <select> opens the iOS picker,
@@ -140,7 +141,7 @@ button,select,input{font-family:inherit}
  select.mv{border-color:var(--rule2);color:var(--ink)}
  .cell:hover .nm,.cell:hover .pa{color:inherit}
 }
-</style></head><body><div class="pg"><h1><a class="home" id="homelink" href="#">Launch Pad</a></h1><div class="meta"><span>AUGUST 16, 2026</span><span><a href="#" id="setlink">Settings</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="rescanTop">Rescan</a></span><span class="r" id="tot">19 REPOS TOTAL</span></div><div id="settings" hidden>
+</style></head><body><div class="pg"><h1><a class="home" id="homelink" href="#">Launch Pad</a></h1><div class="meta"><span>AUGUST 16, 2026</span><span><a href="#" id="setlink">Settings</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="rescanTop">Rescan</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="pullTop">Load latest</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="pushTop">Save layout</a></span><span class="r" id="tot">19 REPOS TOTAL</span></div><div id="settings" hidden>
 <section class="set">
 <h3>Settings</h3>
 <div class="row"><label>GitHub token</label><div>
@@ -161,121 +162,139 @@ repo to Active / Personal / In Progress / Archive.</div>
 <button class="btn" type="button" id="btnPush" style="margin-left:8px">Push to gist</button></div></div></div>
 
 <div class="row"><label>Status</label><div class="v"><span id="status" class="note">Not connected —
-assignments are saved in this browser only.</span></div></div>
+assignments are saved in this browser only.</span>
+<div class="v note" style="margin-top:7px">Everything on this page saves as you type, in this browser.
+It survives a reload. Clearing site data, or opening it in another browser, starts empty — use the gist
+to carry settings across devices.</div></div></div>
 
 <div class="row"><label>Scan scope</label><div class="v">
-<label class="opt"><input type="checkbox" checked> Every repo under tscarlisle-ghub with Pages enabled</label><br>
-<label class="opt"><input type="checkbox" checked> Private repositories <span class="note">(needs a token with repo scope)</span></label><br>
-<label class="opt"><input type="checkbox" checked> Every folder inside the TSC repo</label><br>
-<label class="opt"><input type="checkbox"> Include repos without Pages, shown muted</label></div></div>
+<label class="opt"><input type="checkbox" id="sc_pages" checked> Every repo under tscarlisle-ghub with Pages enabled</label><br>
+<label class="opt"><input type="checkbox" id="sc_private" checked> Private repositories <span class="note">(needs a token with repo scope)</span></label><br>
+<label class="opt"><input type="checkbox" id="sc_tsc" checked> Every folder inside the TSC repo</label><br>
+<label class="opt"><input type="checkbox" id="sc_nopages"> Include repos without Pages, shown muted</label></div></div>
 
 <div class="row"><label>Index</label><div>
 <button class="btn" type="button" id="btnRescan">Rescan now</button>
-<a class="btn" style="margin-left:8px" href="https://github.com/tscarlisle-ghub">View profile</a>
+<a class="btn" style="margin-left:8px" href="https://github.com/tscarlisle-ghub" target="_blank" rel="noopener">View profile</a>
 <div class="v note" style="margin-top:10px">Two flagged — SPECS has no single entry point,
 FONTS has no Pages.</div></div></div>
-</section></div><div id="index"><section class="sec" data-k="ACTIVE"><h2>ACTIVE PROJECTS</h2><div class="grid" id="grid-ACTIVE"><a class="cell" data-key="CA" href="https://tscarlisle-ghub.github.io/TSC/CA/index.html">
+</section></div><div id="index"><section class="sec" data-k="ACTIVE"><h2>ACTIVE PROJECTS</h2><div class="grid" id="grid-ACTIVE"><a class="cell" data-key="CA" href="https://tscarlisle-ghub.github.io/TSC/CA/index.html" target="_blank" rel="noopener">
 <span class="nm">CA Task Ledger</span><span class="pa">/TSC/CA/index.html</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/CA">Repo</span></span></a><a class="cell" data-key="SPECS" href="https://tscarlisle-ghub.github.io/TSC/SPECS">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/CA">Repo</span></span></a><a class="cell" data-key="SPECS" href="https://tscarlisle-ghub.github.io/TSC/SPECS" target="_blank" rel="noopener">
 <span class="nm">Specifications</span><span class="pa">/TSC/SPECS</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/SPECS">Repo</span></span></a><a class="cell" data-key="TSC-CON" href="https://tscarlisle-ghub.github.io/TSC/TSC-CON/index.html">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/SPECS">Repo</span></span></a><a class="cell" data-key="TSC-CON" href="https://tscarlisle-ghub.github.io/TSC/TSC-CON/index.html" target="_blank" rel="noopener">
 <span class="nm">Supplementary Conditions Builder</span><span class="pa">/TSC/TSC-CON/index.html</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-CON">Repo</span></span></a><a class="cell" data-key="TSC-PR" href="https://tscarlisle-ghub.github.io/TSC/TSC-PR/index.html">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-CON">Repo</span></span></a><a class="cell" data-key="TSC-PR" href="https://tscarlisle-ghub.github.io/TSC/TSC-PR/index.html" target="_blank" rel="noopener">
 <span class="nm">Proposal Generator</span><span class="pa">/TSC/TSC-PR/index.html</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-PR">Repo</span></span></a><a class="cell" data-key="TSC-QUEST" href="https://tscarlisle-ghub.github.io/TSC/TSC-QUEST/index.html">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-PR">Repo</span></span></a><a class="cell" data-key="TSC-QUEST" href="https://tscarlisle-ghub.github.io/TSC/TSC-QUEST/index.html" target="_blank" rel="noopener">
 <span class="nm">Design Questionnaire</span><span class="pa">/TSC/TSC-QUEST/index.html</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-QUEST">Repo</span></span></a><a class="cell" data-key="TSC-SQF" href="https://tscarlisle-ghub.github.io/TSC/TSC-SQF/index.html">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-QUEST">Repo</span></span></a><a class="cell" data-key="TSC-SQF" href="https://tscarlisle-ghub.github.io/TSC/TSC-SQF/index.html" target="_blank" rel="noopener">
 <span class="nm">Square Foot Cost Estimator</span><span class="pa">/TSC/TSC-SQF/index.html</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-SQF">Repo</span></span></a><a class="cell" data-key="CFO" href="https://tscarlisle-ghub.github.io/TSC/CFO/index.html">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-SQF">Repo</span></span></a><a class="cell" data-key="CFO" href="https://tscarlisle-ghub.github.io/TSC/CFO/index.html" target="_blank" rel="noopener">
 <span class="nm">CFO Dashboard</span><span class="pa">/TSC/CFO/index.html</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/CFO">Repo</span></span></a><a class="cell" data-key="CMA-YEAREND" href="https://tscarlisle-ghub.github.io/cma-yearend/">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/CFO">Repo</span></span></a><a class="cell" data-key="CMA-YEAREND" href="https://tscarlisle-ghub.github.io/cma-yearend/" target="_blank" rel="noopener">
 <span class="nm">Year-End Cash Flow Estimator</span><span class="pa">/cma-yearend/</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/cma-yearend">Repo</span></span></a><a class="cell" data-key="CMAOFFICE" href="https://tscarlisle-ghub.github.io/cmaoffice/">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/cma-yearend">Repo</span></span></a><a class="cell" data-key="CMAOFFICE" href="https://tscarlisle-ghub.github.io/cmaoffice/" target="_blank" rel="noopener">
 <span class="nm">Mtn Brook Village Office Finances</span><span class="pa">/cmaoffice/</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/cmaoffice">Repo</span></span></a><a class="cell" data-key="TSC-PB" href="https://tscarlisle-ghub.github.io/TSC/TSC-PB/index.html">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/cmaoffice">Repo</span></span></a><a class="cell" data-key="TSC-PB" href="https://tscarlisle-ghub.github.io/TSC/TSC-PB/index.html" target="_blank" rel="noopener">
 <span class="nm">CMA Project Board</span><span class="pa">/TSC/TSC-PB/index.html</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-PB">Repo</span></span></a><a class="cell" data-key="DESIGN" href="https://tscarlisle-ghub.github.io/design/">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-PB">Repo</span></span></a><a class="cell" data-key="DESIGN" href="https://tscarlisle-ghub.github.io/design/" target="_blank" rel="noopener">
 <span class="nm">Carlisle Design System</span><span class="pa">/design/</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/design">Repo</span></span></a><div class="cell empty"></div></div></section><section class="sec" data-k="PERSONAL"><h2>PERSONAL PROJECTS</h2><div class="grid" id="grid-PERSONAL"><a class="cell" data-key="FIN" href="https://tscarlisle-ghub.github.io/fin/">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/design">Repo</span></span></a><div class="cell empty"></div></div></section><section class="sec" data-k="PERSONAL"><h2>PERSONAL PROJECTS</h2><div class="grid" id="grid-PERSONAL"><a class="cell" data-key="FIN" href="https://tscarlisle-ghub.github.io/fin/" target="_blank" rel="noopener">
 <span class="nm">TSC-Finances</span><span class="pa">/fin/</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL" selected>PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/fin">Repo</span></span></a><a class="cell" data-key="CHESS" href="https://tscarlisle-ghub.github.io/chess/">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/fin">Repo</span></span></a><a class="cell" data-key="CHESS" href="https://tscarlisle-ghub.github.io/chess/" target="_blank" rel="noopener">
 <span class="nm">The Second Year — Chess Guide</span><span class="pa">/chess/</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL" selected>PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/chess">Repo</span></span></a><div class="cell empty"></div></div></section><section class="sec" data-k="IN-PROGRESS"><h2>IN PROGRESS</h2><div class="grid" id="grid-IN-PROGRESS"><a class="cell" data-key="FILEORG" href="https://tscarlisle-ghub.github.io/TSC/fileorg/index.html">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/chess">Repo</span></span></a><div class="cell empty"></div></div></section><section class="sec" data-k="IN-PROGRESS"><h2>IN PROGRESS</h2><div class="grid" id="grid-IN-PROGRESS"><a class="cell" data-key="FILEORG" href="https://tscarlisle-ghub.github.io/TSC/fileorg/index.html" target="_blank" rel="noopener">
 <span class="nm">Folder Reorganizer</span><span class="pa">/TSC/fileorg/index.html</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/fileorg">Repo</span></span></a><a class="cell" data-key="TSC-CLAUDE" href="https://tscarlisle-ghub.github.io/TSC/TSC-CLAUDE/index.html">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/fileorg">Repo</span></span></a><a class="cell" data-key="TSC-CLAUDE" href="https://tscarlisle-ghub.github.io/TSC/TSC-CLAUDE/index.html" target="_blank" rel="noopener">
 <span class="nm">TSC-Claude</span><span class="pa">/TSC/TSC-CLAUDE/index.html</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-CLAUDE">Repo</span></span></a><a class="cell" data-key="PROJECT-BOARD" href="https://tscarlisle-ghub.github.io/project-board/">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-CLAUDE">Repo</span></span></a><a class="cell" data-key="PROJECT-BOARD" href="https://tscarlisle-ghub.github.io/project-board/" target="_blank" rel="noopener">
 <span class="nm">Project Board — To-Do</span><span class="pa">/project-board/</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/project-board">Repo</span></span></a></div></section><section class="sec" data-k="ARCHIVE"><h2>ARCHIVE</h2><div class="grid" id="grid-ARCHIVE"><a class="cell" data-key="CATALOG" href="https://tscarlisle-ghub.github.io/catalog/">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/project-board">Repo</span></span></a></div></section><section class="sec" data-k="ARCHIVE"><h2>ARCHIVE</h2><div class="grid" id="grid-ARCHIVE"><a class="cell" data-key="CATALOG" href="https://tscarlisle-ghub.github.io/catalog/" target="_blank" rel="noopener">
 <span class="nm">House Archive</span><span class="pa">/catalog/</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/catalog">Repo</span></span></a><a class="cell" data-key="CMA" href="https://tscarlisle-ghub.github.io/cma/">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/catalog">Repo</span></span></a><a class="cell" data-key="CMA" href="https://tscarlisle-ghub.github.io/cma/" target="_blank" rel="noopener">
 <span class="nm">CMA</span><span class="pa">/cma/</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/cma">Repo</span></span></a><a class="cell nosite" data-key="FONTS" href="https://tscarlisle-ghub.github.io/tscarlisle-ghub/fonts">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/cma">Repo</span></span></a><a class="cell nosite" data-key="FONTS" href="https://tscarlisle-ghub.github.io/tscarlisle-ghub/fonts" target="_blank" rel="noopener">
 <span class="nm">Fonts</span><span class="pa">/tscarlisle-ghub/fonts</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/fonts">Repo</span></span></a></div></section></div></div>
 <script>
 window.lp = (function(){
- var MEM={};
+ var MEM={}, KEY='lp_arr';
  function put(k,v){try{localStorage.setItem(k,v);}catch(e){MEM[k]=v;}}
  function get(k){try{var v=localStorage.getItem(k);return v==null?(MEM[k]||null):v;}catch(e){return MEM[k]||null;}}
- function current(){
-  var m={};
+
+ /* the arrangement is section membership AND order within each section */
+ function arrangement(){
+  var order={};
   document.querySelectorAll('.grid').forEach(function(g){
-   var sec=g.id.replace('grid-','');
-   g.querySelectorAll('.cell[data-key]').forEach(function(c){m[c.dataset.key]=sec;});
+   order[g.id.replace('grid-','')] =
+     [].slice.call(g.querySelectorAll('.cell[data-key]')).map(function(c){return c.dataset.key;});
   });
-  return m;
+  return {version:2, updated:new Date().toISOString(), order:order};
  }
- function save(){ put('lp_map',JSON.stringify(current())); }
- function saved(){ try{return JSON.parse(get('lp_map')||'{}');}catch(e){return {};} }
- function apply(map){
+ function normalise(p){
+  if(!p) return null;
+  if(p.order) return p;
+  var order={};                      /* v1: a flat {KEY:SECTION} map, no order */
+  Object.keys(p).forEach(function(k){ (order[p[k]]=order[p[k]]||[]).push(k); });
+  return {version:1, updated:p.updated||null, order:order};
+ }
+ function applyArrangement(p){
+  p=normalise(p); if(!p) return 0;
   var moved=0;
-  Object.keys(map||{}).forEach(function(k){
-   var cell=document.querySelector('.cell[data-key="'+k+'"]'), host=document.getElementById('grid-'+map[k]);
-   if(!cell||!host) return;
-   if(cell.parentNode!==host){host.appendChild(cell);moved++;}
-   var sel=cell.querySelector('select.mv'); if(sel) sel.value=map[k];
+  Object.keys(p.order).forEach(function(sec){
+   var host=document.getElementById('grid-'+sec); if(!host) return;
+   p.order[sec].forEach(function(k){
+    var cell=document.querySelector('.cell[data-key="'+k+'"]'); if(!cell) return;
+    if(cell.parentNode!==host || cell.nextElementSibling) moved++;
+    host.appendChild(cell);          /* appendChild also re-orders inside the section */
+    var sel=cell.querySelector('select.mv'); if(sel) sel.value=sec;
+   });
   });
   recount(); return moved;
  }
+ function save(){ var a=arrangement(); put(KEY,JSON.stringify(a)); return a; }
+ function saved(){ try{return JSON.parse(get(KEY)||get('lp_map')||'null');}catch(e){return null;} }
+ function stamp(){ var a=saved(); return (a&&a.updated)||null; }
+
  function recount(){
   var n=document.querySelectorAll('.cell[data-key]').length;
   var t=document.getElementById('tot'); if(t) t.textContent=n+' REPOS TOTAL';
@@ -287,6 +306,8 @@ window.lp = (function(){
   });
  }
  document.addEventListener('click',function(e){
+  var ext=e.target.closest('a[href^="http"]');
+  if(ext&&!ext.target){ext.target='_blank';ext.rel='noopener';}
   var r=e.target.closest('.repo');
   if(r&&r.dataset.href){e.preventDefault();e.stopPropagation();
    window.open(r.dataset.href,'_blank','noopener');}
@@ -296,8 +317,10 @@ window.lp = (function(){
   var cell=e.target.closest('.cell'), host=document.getElementById('grid-'+e.target.value);
   if(cell&&host){host.appendChild(cell);recount();save();}
  });
- document.addEventListener('DOMContentLoaded',function(){ apply(saved()); recount(); });
- return {current:current,save:save,saved:saved,apply:apply,recount:recount,get:get,put:put};
+ document.addEventListener('DOMContentLoaded',function(){ applyArrangement(saved()); recount(); });
+ return {arrangement:arrangement, applyArrangement:applyArrangement, save:save, saved:saved,
+         stamp:stamp, recount:recount, get:get, put:put,
+         current:arrangement, apply:applyArrangement};
 })();
 window.recount=function(){window.lp.recount();};
 </script>
@@ -313,8 +336,9 @@ window.recount=function(){window.lp.recount();};
  function token(){return ($('tok')&&$('tok').value||'').trim();}
  function gistId(){return ($('gist')&&$('gist').value||'').trim();}
 
- function current(){return window.lp.current();}
- function apply(map){var n=window.lp.apply(map); window.lp.save(); return n;}
+ function current(){return window.lp.arrangement();}
+ function apply(p){var n=window.lp.applyArrangement(p); window.lp.save(); return n;}
+ function count(p){var t=0,o=(p&&p.order)||{};Object.keys(o).forEach(function(k){t+=o[k].length;});return t;}
 
  async function api(path,opts){
   var t=token(); if(!t){say('Enter a token first.','bad');return null;}
@@ -385,16 +409,67 @@ window.recount=function(){window.lp.recount();};
   if(!r) return;
   if(r.status===404) return say('Gist not found, or the token lacks gist scope.','bad');
   if(!r.ok) return say('GitHub returned '+r.status+'.','bad');
-  put('lp_gist',gistId());
-  say('Pushed '+Object.keys(current()).length+' assignments.','ok');
+  put('lp_gist',gistId()); window.lp.save();
+  say('Saved '+count(current())+' tiles to the gist.','ok');
  });
 
+ window.lpPull=function(){$('btnPull').click();};
+ window.lpPush=function(){$('btnPush').click();};
+
+ function openSettings(){var s=$('settings'),i=$('index');
+  if(s&&i&&s.hasAttribute('hidden')){s.removeAttribute('hidden');i.setAttribute('hidden','');
+   var sl=$('setlink'); if(sl) sl.textContent='Index'; window.scrollTo(0,0);} }
+
+ /* pull whatever is newest, without being asked */
+ async function autoSync(){
+  if(!tok()||!gistId()) return;
+  var r=await api('/gists/'+gistId()); if(!r||!r.ok) return;
+  var f=r.body.files&&r.body.files[FILE]; if(!f) return;
+  var text=f.content;
+  if(f.truncated&&f.raw_url){ text=await (await fetch(f.raw_url)).text(); }
+  var pay; try{pay=JSON.parse(text);}catch(e){return;}
+  var mine=window.lp.stamp(), theirs=pay.updated||null;
+  if(theirs && (!mine || theirs>mine)){
+   var n=window.lp.applyArrangement(pay); window.lp.save();
+   say('Loaded the newer arrangement from the gist — '+n+' tiles repositioned.','ok');
+  } else if(mine && theirs && mine>theirs){
+   say('This device has newer changes than the gist. Save layout to publish them.','note');
+  } else {
+   say('In sync with the gist.','ok');
+  }
+ }
+ window.lpAutoSync=autoSync;
  $('btnRescan').addEventListener('click',function(){location.reload();});
 
+ var SCOPE=['sc_pages','sc_private','sc_tsc','sc_nopages'];
+ function saveScope(){
+  var o={}; SCOPE.forEach(function(id){ if($(id)) o[id]=$(id).checked; });
+  put('lp_scope',JSON.stringify(o));
+ }
+ function loadScope(){
+  var o; try{o=JSON.parse(get('lp_scope')||'null');}catch(e){o=null;}
+  if(!o) return;
+  SCOPE.forEach(function(id){ if($(id)&&typeof o[id]==='boolean') $(id).checked=o[id]; });
+ }
+ function flash(){ var s=$('status'); if(s&&/^Saved/.test(s.textContent)) return;
+  say('Saved in this browser.','ok'); }
+
  document.addEventListener('DOMContentLoaded',function(){
-  if($('tok')) $('tok').value=get('lp_token');
-  if($('gist')) $('gist').value=get('lp_gist');
-  if(get('lp_token')&&get('lp_gist')) say('Token and gist saved in this browser. Pull to load assignments.','note');
+  if($('tok')) $('tok').value=get('lp_token')||'';
+  if($('gist')) $('gist').value=get('lp_gist')||'';
+  loadScope();
+  ['tok','gist'].forEach(function(id){
+   var el=$(id); if(!el) return;
+   el.addEventListener('input',function(){
+    put(id==='tok'?'lp_token':'lp_gist', el.value.trim()); flash();
+   });
+  });
+  SCOPE.forEach(function(id){
+   var el=$(id); if(el) el.addEventListener('change',function(){saveScope();flash();});
+  });
+  if(get('lp_token')&&get('lp_gist'))
+   say('Token and gist restored from this browser. Pull to load assignments.','note');
+  else if(get('lp_token')) say('Token restored from this browser.','note');
  });
 })();
 </script>
@@ -448,17 +523,18 @@ window.recount=function(){window.lp.recount();};
     if(seen[e.key]) return false; seen[e.key]=1; return true;});
  }
 
- function assignments(){
-  var live=window.lp.current(), saved=window.lp.saved(), out={};
-  Object.keys(saved).forEach(function(k){out[k]=saved[k];});
-  Object.keys(live).forEach(function(k){out[k]=live[k];});
-  return out;
+ function sectionOf(){
+  var m={}, a=window.lp.saved(), live=window.lp.arrangement();
+  function fold(p){ var o=(p&&p.order)||{};
+   Object.keys(o).forEach(function(sec){o[sec].forEach(function(k){m[k]=sec;});}); }
+  fold(a); fold(live);
+  return m;
  }
 
  function build(e,sec,secs){
   var a=document.createElement('a');
   a.className='cell'+(e.priv?' priv':'')+(e.status==='NO SITE'?' nosite':'');
-  a.dataset.key=e.key; a.href=e.href;
+  a.dataset.key=e.key; a.href=e.href; a.target='_blank'; a.rel='noopener';
   var opts=secs.map(function(x){
     return '<option value="'+x[1]+'"'+(x[1]===sec?' selected':'')+'>'+x[0]+'</option>';}).join('');
   a.innerHTML='<span class="nm">'+e.name+'</span>'+
@@ -480,6 +556,7 @@ window.recount=function(){window.lp.recount();};
     var sec=prev[e.key]||'ACTIVE', host=$('grid-'+sec)||$('grid-ACTIVE');
     host.appendChild(build(e,sec,secs));
    });
+   window.lp.applyArrangement(window.lp.saved());
    window.lp.recount(); window.lp.save();
    var np=entries.filter(function(e){return e.priv;}).length;
    say('Scanned '+entries.length+' entries'+(tok()
@@ -496,7 +573,11 @@ window.recount=function(){window.lp.recount();};
  document.addEventListener('DOMContentLoaded',function(){
   var b=$('btnRescan'); if(b){b.replaceWith(b.cloneNode(true)); $('btnRescan').addEventListener('click',scan);}
   var t=$('rescanTop'); if(t) t.addEventListener('click',function(ev){ev.preventDefault();scan();});
-  if(tok()) scan();
+  var pl=$('pullTop'); if(pl) pl.addEventListener('click',function(ev){ev.preventDefault();
+    if(window.lpPull) window.lpPull();});
+  var ps=$('pushTop'); if(ps) ps.addEventListener('click',function(ev){ev.preventDefault();
+    if(window.lpPush) window.lpPush();});
+  if(tok()) scan().then(function(){ if(window.lpAutoSync) window.lpAutoSync(); });
  });
 })();
 </script>
