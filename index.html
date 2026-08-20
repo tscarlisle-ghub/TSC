@@ -16,7 +16,7 @@ font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;font-style:
 a{color:inherit;text-decoration:none}
 .pg{max-width:1180px;margin:0 auto;
 padding:44px max(32px,env(safe-area-inset-right)) calc(90px + env(safe-area-inset-bottom))
- max(32px,env(safe-area-inset-left))}
+max(32px,env(safe-area-inset-left))}
 /* masthead */
 a.home{color:inherit;text-decoration:none;border:0}
 a.home:hover{color:var(--paprika)}
@@ -90,63 +90,63 @@ button,select,input{font-family:inherit}
 
 /* ---------- tablet ---------- */
 @media (max-width:1024px){
- .pg{padding-top:34px}
- .grid{grid-template-columns:repeat(2,1fr)}
- .cell.empty{display:none}
- .cell{min-height:0;padding:20px 22px 16px}
- .cell::after{display:none}
- a.cell:nth-of-type(odd)::after{display:block}
- .cell:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
- a.cell:last-of-type{border-bottom:0}
+.pg{padding-top:34px}
+.grid{grid-template-columns:repeat(2,1fr)}
+.cell.empty{display:none}
+.cell{min-height:0;padding:20px 22px 16px}
+.cell::after{display:none}
+a.cell:nth-of-type(odd)::after{display:block}
+.cell:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
+a.cell:last-of-type{border-bottom:0}
 }
 /* ---------- phone: iPhone 17 Pro Max and down ---------- */
 @media (max-width:700px){
- .pg{padding-top:26px;
-  padding-left:max(20px,env(safe-area-inset-left));
-  padding-right:max(20px,env(safe-area-inset-right));
-  padding-bottom:calc(56px + env(safe-area-inset-bottom))}
- h1{font-size:26px;letter-spacing:.05em}
- .meta{display:flex;flex-wrap:wrap;gap:5px 14px;justify-content:space-between;
-  font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:9px;letter-spacing:.07em;margin-top:11px}
- .meta .r{text-align:right}
- .meta a{padding:2px 0}
- .sec{margin-top:32px}
- .sec+.sec{margin-top:38px}
- .sec h2{font-size:16px;letter-spacing:.13em;margin-bottom:7px}
- .grid{grid-template-columns:1fr}
- .cell{padding:calc(18px * var(--s,1)) 0 calc(15px * var(--s,1));min-height:0}
- a.cell::after,.cell::after{display:none}
- a.cell:nth-of-type(odd)::after{display:none}
- .cell:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
- a.cell:last-of-type{border-bottom:0}
- .nm{font-size:calc(21px * var(--s,1));line-height:1.16}
- .pa{font-size:max(9px,calc(12.5px * var(--s,1)));margin-top:8px;letter-spacing:.04em}
- .foot{padding-top:calc(14px * var(--s,1));align-items:center}
- .st{font-size:12.5px}
- /* 16px stops iOS zooming the page when a control takes focus */
- /* 40% smaller than the desktop control; a <select> opens the iOS picker,
-    so a sub-16px size here does not trigger the page zoom that text inputs do */
- select.mv{font-size:9.6px;letter-spacing:.05em;padding:5px 17px 5px 7px;
-  background-position:right 6px center;background-size:7px 5px;border-color:var(--rule2)}
- .set .row{grid-template-columns:1fr;gap:8px;padding:16px 0}
- .set h3{font-size:19px}
- .set input[type=password],.set input[type=text]{max-width:none;font-size:16px;padding:12px 12px}
- .set .v,.set .note{font-size:15px;line-height:1.45}
- .btn{min-height:44px;padding:12px 15px;margin:6px 8px 0 0;display:inline-block}
- .btn+.btn{margin-left:0}
- .set div[style*="margin-top:11px"]{margin-top:4px!important}
+.pg{padding-top:26px;
+padding-left:max(20px,env(safe-area-inset-left));
+padding-right:max(20px,env(safe-area-inset-right));
+padding-bottom:calc(56px + env(safe-area-inset-bottom))}
+h1{font-size:26px;letter-spacing:.05em}
+.meta{display:flex;flex-wrap:wrap;gap:5px 14px;justify-content:space-between;
+font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:9px;letter-spacing:.07em;margin-top:11px}
+.meta .r{text-align:right}
+.meta a{padding:2px 0}
+.sec{margin-top:32px}
+.sec+.sec{margin-top:38px}
+.sec h2{font-size:16px;letter-spacing:.13em;margin-bottom:7px}
+.grid{grid-template-columns:1fr}
+.cell{padding:calc(18px * var(--s,1)) 0 calc(15px * var(--s,1));min-height:0}
+a.cell::after,.cell::after{display:none}
+a.cell:nth-of-type(odd)::after{display:none}
+.cell:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
+a.cell:last-of-type{border-bottom:0}
+.nm{font-size:calc(21px * var(--s,1));line-height:1.16}
+.pa{font-size:max(9px,calc(12.5px * var(--s,1)));margin-top:8px;letter-spacing:.04em}
+.foot{padding-top:calc(14px * var(--s,1));align-items:center}
+.st{font-size:12.5px}
+/* 16px stops iOS zooming the page when a control takes focus */
+/* 40% smaller than the desktop control; a <select> opens the iOS picker,
+so a sub-16px size here does not trigger the page zoom that text inputs do */
+select.mv{font-size:9.6px;letter-spacing:.05em;padding:5px 17px 5px 7px;
+background-position:right 6px center;background-size:7px 5px;border-color:var(--rule2)}
+.set .row{grid-template-columns:1fr;gap:8px;padding:16px 0}
+.set h3{font-size:19px}
+.set input[type=password],.set input[type=text]{max-width:none;font-size:16px;padding:12px 12px}
+.set .v,.set .note{font-size:15px;line-height:1.45}
+.btn{min-height:44px;padding:12px 15px;margin:6px 8px 0 0;display:inline-block}
+.btn+.btn{margin-left:0}
+.set div[style*="margin-top:11px"]{margin-top:4px!important}
 }
 /* touch devices: never rely on hover to reveal a control */
 @media (hover:none){
- select.mv{border-color:var(--rule2);color:var(--ink)}
- .cell:hover .nm,.cell:hover .pa{color:inherit}
+select.mv{border-color:var(--rule2);color:var(--ink)}
+.cell:hover .nm,.cell:hover .pa{color:inherit}
 }
 </style></head><body><div class="pg"><h1><a class="home" id="homelink" href="#">Launch Pad</a></h1><div class="meta"><span>AUGUST 16, 2026</span><span><a href="#" id="setlink">Settings</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="rescanTop">Rescan</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="pullTop">Load latest</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="pushTop">Save layout</a></span><span class="r" id="tot">19 REPOS TOTAL</span></div><div id="settings" hidden>
 <section class="set">
 <h3>Settings</h3>
 <div class="row"><label>GitHub token</label><div>
 <input type="password" id="tok" autocomplete="off" spellcheck="false"
- placeholder="ghp_… or github_pat_… — read-only token">
+placeholder="ghp_… or github_pat_… — read-only token">
 <div class="v note">Scopes: <b>repo</b> (read) for private repositories, <b>gist</b> to sync sections.
 Public repos scan without a token. Stored in this browser only — never sent anywhere but api.github.com.</div>
 <div style="margin-top:11px"><button class="btn" type="button" id="btnTest">Test connection</button>
@@ -154,7 +154,7 @@ Public repos scan without a token. Stored in this browser only — never sent an
 
 <div class="row"><label>Gist ID</label><div>
 <input type="text" id="gist" autocomplete="off" spellcheck="false"
- placeholder="id from the gist URL — holds launchpad-sections.json">
+placeholder="id from the gist URL — holds launchpad-sections.json">
 <div class="v note">One secret gist holds a single JSON file, <b>launchpad-sections.json</b>, mapping each
 repo to Active / Personal / In Progress / Archive.</div>
 <div style="margin-top:11px"><button class="btn" type="button" id="btnCreate">Create a new gist</button>
@@ -238,11 +238,11 @@ FONTS has no Pages.</div></div></div>
 <span class="nm">TSC-Claude</span><span class="pa">/TSC/TSC-CLAUDE/index.html</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-CLAUDE">Repo</span></span></a><a class="cell" data-key="PROJECT-BOARD" href="https://tscarlisle-ghub.github.io/project-board/" target="_blank" rel="noopener">
-<span class="nm">Project Board — To-Do</span><span class="pa">/project-board/</span>
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-CLAUDE">Repo</span></span></a><a class="cell" data-key="PROJECT-BOARD" href="https://tscarlisle-ghub.github.io/Project-Board/" target="_blank" rel="noopener">
+<span class="nm">Project Board — To-Do</span><span class="pa">/Project-Board/</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/project-board">Repo</span></span></a></div></section><section class="sec" data-k="ARCHIVE"><h2>ARCHIVE</h2><div class="grid" id="grid-ARCHIVE"><a class="cell" data-key="CATALOG" href="https://tscarlisle-ghub.github.io/catalog/" target="_blank" rel="noopener">
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/Project-Board">Repo</span></span></a></div></section><section class="sec" data-k="ARCHIVE"><h2>ARCHIVE</h2><div class="grid" id="grid-ARCHIVE"><a class="cell" data-key="CATALOG" href="https://tscarlisle-ghub.github.io/catalog/" target="_blank" rel="noopener">
 <span class="nm">House Archive</span><span class="pa">/catalog/</span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select>
@@ -257,346 +257,346 @@ FONTS has no Pages.</div></div></div>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/fonts">Repo</span></span></a></div></section></div></div>
 <script>
 window.lp = (function(){
- var MEM={}, KEY='lp_arr';
- function put(k,v){try{localStorage.setItem(k,v);}catch(e){MEM[k]=v;}}
- function get(k){try{var v=localStorage.getItem(k);return v==null?(MEM[k]||null):v;}catch(e){return MEM[k]||null;}}
+var MEM={}, KEY='lp_arr';
+function put(k,v){try{localStorage.setItem(k,v);}catch(e){MEM[k]=v;}}
+function get(k){try{var v=localStorage.getItem(k);return v==null?(MEM[k]||null):v;}catch(e){return MEM[k]||null;}}
 
- /* the arrangement is section membership AND order within each section */
- function arrangement(){
-  var order={};
-  document.querySelectorAll('.grid').forEach(function(g){
-   order[g.id.replace('grid-','')] =
-     [].slice.call(g.querySelectorAll('.cell[data-key]')).map(function(c){return c.dataset.key;});
-  });
-  return {version:2, updated:new Date().toISOString(), order:order};
- }
- function normalise(p){
-  if(!p) return null;
-  if(p.order) return p;
-  var order={};                      /* v1: a flat {KEY:SECTION} map, no order */
-  Object.keys(p).forEach(function(k){ (order[p[k]]=order[p[k]]||[]).push(k); });
-  return {version:1, updated:p.updated||null, order:order};
- }
- function applyArrangement(p){
-  p=normalise(p); if(!p) return 0;
-  var moved=0;
-  Object.keys(p.order).forEach(function(sec){
-   var host=document.getElementById('grid-'+sec); if(!host) return;
-   p.order[sec].forEach(function(k){
-    var cell=document.querySelector('.cell[data-key="'+k+'"]'); if(!cell) return;
-    if(cell.parentNode!==host || cell.nextElementSibling) moved++;
-    host.appendChild(cell);          /* appendChild also re-orders inside the section */
-    var sel=cell.querySelector('select.mv'); if(sel) sel.value=sec;
-   });
-  });
-  recount(); return moved;
- }
- function save(){ var a=arrangement(); put(KEY,JSON.stringify(a)); return a; }
- function saved(){ try{return JSON.parse(get(KEY)||get('lp_map')||'null');}catch(e){return null;} }
- function stamp(){ var a=saved(); return (a&&a.updated)||null; }
+/* the arrangement is section membership AND order within each section */
+function arrangement(){
+var order={};
+document.querySelectorAll('.grid').forEach(function(g){
+order[g.id.replace('grid-','')] =
+[].slice.call(g.querySelectorAll('.cell[data-key]')).map(function(c){return c.dataset.key;});
+});
+return {version:2, updated:new Date().toISOString(), order:order};
+}
+function normalise(p){
+if(!p) return null;
+if(p.order) return p;
+var order={}; /* v1: a flat {KEY:SECTION} map, no order */
+Object.keys(p).forEach(function(k){ (order[p[k]]=order[p[k]]||[]).push(k); });
+return {version:1, updated:p.updated||null, order:order};
+}
+function applyArrangement(p){
+p=normalise(p); if(!p) return 0;
+var moved=0;
+Object.keys(p.order).forEach(function(sec){
+var host=document.getElementById('grid-'+sec); if(!host) return;
+p.order[sec].forEach(function(k){
+var cell=document.querySelector('.cell[data-key="'+k+'"]'); if(!cell) return;
+if(cell.parentNode!==host || cell.nextElementSibling) moved++;
+host.appendChild(cell); /* appendChild also re-orders inside the section */
+var sel=cell.querySelector('select.mv'); if(sel) sel.value=sec;
+});
+});
+recount(); return moved;
+}
+function save(){ var a=arrangement(); put(KEY,JSON.stringify(a)); return a; }
+function saved(){ try{return JSON.parse(get(KEY)||get('lp_map')||'null');}catch(e){return null;} }
+function stamp(){ var a=saved(); return (a&&a.updated)||null; }
 
- function recount(){
-  var n=document.querySelectorAll('.cell[data-key]').length;
-  var t=document.getElementById('tot'); if(t) t.textContent=n+' REPOS TOTAL';
-  document.querySelectorAll('.grid').forEach(function(g){
-   g.querySelectorAll('.cell.empty').forEach(function(e){e.remove();});
-   var c=g.querySelectorAll('.cell').length, pad=(3-(c%3))%3;
-   for(var i=0;i<pad;i++){var d=document.createElement('div');d.className='cell empty';g.appendChild(d);}
-   g.closest('.sec').style.display=c?'':'none';
-  });
- }
- document.addEventListener('click',function(e){
-  var ext=e.target.closest('a[href^="http"]');
-  if(ext&&!ext.target){ext.target='_blank';ext.rel='noopener';}
-  var r=e.target.closest('.repo');
-  if(r&&r.dataset.href){e.preventDefault();e.stopPropagation();
-   window.open(r.dataset.href,'_blank','noopener');}
- });
- document.addEventListener('change',function(e){
-  if(!e.target.matches('select.mv')) return;
-  var cell=e.target.closest('.cell'), host=document.getElementById('grid-'+e.target.value);
-  if(cell&&host){host.appendChild(cell);recount();save();}
- });
- document.addEventListener('DOMContentLoaded',function(){ applyArrangement(saved()); recount(); });
- return {arrangement:arrangement, applyArrangement:applyArrangement, save:save, saved:saved,
-         stamp:stamp, recount:recount, get:get, put:put,
-         current:arrangement, apply:applyArrangement};
+function recount(){
+var n=document.querySelectorAll('.cell[data-key]').length;
+var t=document.getElementById('tot'); if(t) t.textContent=n+' REPOS TOTAL';
+document.querySelectorAll('.grid').forEach(function(g){
+g.querySelectorAll('.cell.empty').forEach(function(e){e.remove();});
+var c=g.querySelectorAll('.cell').length, pad=(3-(c%3))%3;
+for(var i=0;i<pad;i++){var d=document.createElement('div');d.className='cell empty';g.appendChild(d);}
+g.closest('.sec').style.display=c?'':'none';
+});
+}
+document.addEventListener('click',function(e){
+var ext=e.target.closest('a[href^="http"]');
+if(ext&&!ext.target){ext.target='_blank';ext.rel='noopener';}
+var r=e.target.closest('.repo');
+if(r&&r.dataset.href){e.preventDefault();e.stopPropagation();
+window.open(r.dataset.href,'_blank','noopener');}
+});
+document.addEventListener('change',function(e){
+if(!e.target.matches('select.mv')) return;
+var cell=e.target.closest('.cell'), host=document.getElementById('grid-'+e.target.value);
+if(cell&&host){host.appendChild(cell);recount();save();}
+});
+document.addEventListener('DOMContentLoaded',function(){ applyArrangement(saved()); recount(); });
+return {arrangement:arrangement, applyArrangement:applyArrangement, save:save, saved:saved,
+stamp:stamp, recount:recount, get:get, put:put,
+current:arrangement, apply:applyArrangement};
 })();
 window.recount=function(){window.lp.recount();};
 </script>
 <script>
 (function(){
- var API='https://api.github.com', FILE='launchpad-sections.json', mem={};
- function $(id){return document.getElementById(id);}
- function put(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v);}catch(e){mem[k]=v;}}
- function get(k){try{var v=localStorage.getItem(k);return v==null?(mem[k]||''):v;}catch(e){return mem[k]||'';}}
- function say(msg,cls){var s=$('status'); if(!s)return; s.textContent=msg; s.className=cls||'note';}
- function hdr(t){return {'Authorization':'Bearer '+t,'Accept':'application/vnd.github+json',
-   'X-GitHub-Api-Version':'2022-11-28'};}
- function token(){return ($('tok')&&$('tok').value||'').trim();}
- function gistId(){return ($('gist')&&$('gist').value||'').trim();}
+var API='https://api.github.com', FILE='launchpad-sections.json', mem={};
+function $(id){return document.getElementById(id);}
+function put(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v);}catch(e){mem[k]=v;}}
+function get(k){try{var v=localStorage.getItem(k);return v==null?(mem[k]||''):v;}catch(e){return mem[k]||'';}}
+function say(msg,cls){var s=$('status'); if(!s)return; s.textContent=msg; s.className=cls||'note';}
+function hdr(t){return {'Authorization':'Bearer '+t,'Accept':'application/vnd.github+json',
+'X-GitHub-Api-Version':'2022-11-28'};}
+function token(){return ($('tok')&&$('tok').value||'').trim();}
+function gistId(){return ($('gist')&&$('gist').value||'').trim();}
 
- function current(){return window.lp.arrangement();}
- function apply(p){var n=window.lp.applyArrangement(p); window.lp.save(); return n;}
- function count(p){var t=0,o=(p&&p.order)||{};Object.keys(o).forEach(function(k){t+=o[k].length;});return t;}
+function current(){return window.lp.arrangement();}
+function apply(p){var n=window.lp.applyArrangement(p); window.lp.save(); return n;}
+function count(p){var t=0,o=(p&&p.order)||{};Object.keys(o).forEach(function(k){t+=o[k].length;});return t;}
 
- async function api(path,opts){
-  var t=token(); if(!t){say('Enter a token first.','bad');return null;}
-  var r=await fetch(API+path,Object.assign({headers:hdr(t)},opts||{}));
-  var body=null; try{body=await r.json();}catch(e){}
-  return {ok:r.ok,status:r.status,headers:r.headers,body:body};
- }
+async function api(path,opts){
+var t=token(); if(!t){say('Enter a token first.','bad');return null;}
+var r=await fetch(API+path,Object.assign({headers:hdr(t)},opts||{}));
+var body=null; try{body=await r.json();}catch(e){}
+return {ok:r.ok,status:r.status,headers:r.headers,body:body};
+}
 
- $('btnTest').addEventListener('click',async function(){
-  var t=token(); if(!t) return say('Enter a token first.','bad');
-  say('Checking…','work');
-  try{
-   var r=await fetch(API+'/user',{headers:hdr(t)});
-   if(r.status===401) return say('Token rejected (401). Check that it is current and not expired.','bad');
-   if(!r.ok) return say('GitHub returned '+r.status+' '+r.statusText+'.','bad');
-   var u=await r.json();
-   var sc=r.headers.get('x-oauth-scopes');
-   put('lp_token',t);
-   var note=sc===null?' Fine-grained token — scopes are not reported by the API.'
-                     :(sc?' Scopes: '+sc+'.':' No scopes on this token — gist sync will fail.');
-   say('Connected as '+u.login+'.'+note,'ok');
-  }catch(e){
-   say('Could not reach api.github.com — '+e.message+
-       '. If you opened this file directly from disk, serve it over http instead.','bad');
-  }
- });
+$('btnTest').addEventListener('click',async function(){
+var t=token(); if(!t) return say('Enter a token first.','bad');
+say('Checking…','work');
+try{
+var r=await fetch(API+'/user',{headers:hdr(t)});
+if(r.status===401) return say('Token rejected (401). Check that it is current and not expired.','bad');
+if(!r.ok) return say('GitHub returned '+r.status+' '+r.statusText+'.','bad');
+var u=await r.json();
+var sc=r.headers.get('x-oauth-scopes');
+put('lp_token',t);
+var note=sc===null?' Fine-grained token — scopes are not reported by the API.'
+:(sc?' Scopes: '+sc+'.':' No scopes on this token — gist sync will fail.');
+say('Connected as '+u.login+'.'+note,'ok');
+}catch(e){
+say('Could not reach api.github.com — '+e.message+
+'. If you opened this file directly from disk, serve it over http instead.','bad');
+}
+});
 
- $('btnForget').addEventListener('click',function(){
-  put('lp_token',null); if($('tok')) $('tok').value='';
-  say('Token cleared from this browser.','note');
- });
+$('btnForget').addEventListener('click',function(){
+put('lp_token',null); if($('tok')) $('tok').value='';
+say('Token cleared from this browser.','note');
+});
 
- $('btnCreate').addEventListener('click',async function(){
-  if(!token()) return say('Enter a token first.','bad');
-  say('Creating gist…','work');
-  var files={}; files[FILE]={content:JSON.stringify(current(),null,2)};
-  var r=await api('/gists',{method:'POST',body:JSON.stringify(
-    {description:'Launch Pad — section assignments',public:false,files:files})});
-  if(!r) return;
-  if(r.status===403||r.status===404) return say('Refused ('+r.status+
-    '). The token needs gist scope.','bad');
-  if(!r.ok) return say('GitHub returned '+r.status+'.','bad');
-  $('gist').value=r.body.id; put('lp_gist',r.body.id);
-  say('Created gist '+r.body.id+' with '+Object.keys(current()).length+' assignments.','ok');
- });
+$('btnCreate').addEventListener('click',async function(){
+if(!token()) return say('Enter a token first.','bad');
+say('Creating gist…','work');
+var files={}; files[FILE]={content:JSON.stringify(current(),null,2)};
+var r=await api('/gists',{method:'POST',body:JSON.stringify(
+{description:'Launch Pad — section assignments',public:false,files:files})});
+if(!r) return;
+if(r.status===403||r.status===404) return say('Refused ('+r.status+
+'). The token needs gist scope.','bad');
+if(!r.ok) return say('GitHub returned '+r.status+'.','bad');
+$('gist').value=r.body.id; put('lp_gist',r.body.id);
+say('Created gist '+r.body.id+' with '+Object.keys(current()).length+' assignments.','ok');
+});
 
- $('btnPull').addEventListener('click',async function(){
-  if(!gistId()) return say('Enter a gist ID first.','bad');
-  say('Pulling…','work');
-  var r=await api('/gists/'+gistId());
-  if(!r) return;
-  if(r.status===404) return say('Gist not found (404). Check the ID, and that the token can read it.','bad');
-  if(!r.ok) return say('GitHub returned '+r.status+'.','bad');
-  var f=r.body.files&&r.body.files[FILE];
-  if(!f) return say('That gist has no '+FILE+'.','bad');
-  var text=f.content;
-  if(f.truncated&&f.raw_url){ text=await (await fetch(f.raw_url)).text(); }
-  var map; try{map=JSON.parse(text);}catch(e){return say(FILE+' is not valid JSON.','bad');}
-  put('lp_gist',gistId());
-  say('Pulled '+Object.keys(map).length+' assignments — '+apply(map)+' moved.','ok');
- });
+$('btnPull').addEventListener('click',async function(){
+if(!gistId()) return say('Enter a gist ID first.','bad');
+say('Pulling…','work');
+var r=await api('/gists/'+gistId());
+if(!r) return;
+if(r.status===404) return say('Gist not found (404). Check the ID, and that the token can read it.','bad');
+if(!r.ok) return say('GitHub returned '+r.status+'.','bad');
+var f=r.body.files&&r.body.files[FILE];
+if(!f) return say('That gist has no '+FILE+'.','bad');
+var text=f.content;
+if(f.truncated&&f.raw_url){ text=await (await fetch(f.raw_url)).text(); }
+var map; try{map=JSON.parse(text);}catch(e){return say(FILE+' is not valid JSON.','bad');}
+put('lp_gist',gistId());
+say('Pulled '+Object.keys(map).length+' assignments — '+apply(map)+' moved.','ok');
+});
 
- $('btnPush').addEventListener('click',async function(){
-  if(!gistId()) return say('Enter a gist ID first.','bad');
-  say('Pushing…','work');
-  var files={}; files[FILE]={content:JSON.stringify(current(),null,2)};
-  var r=await api('/gists/'+gistId(),{method:'PATCH',body:JSON.stringify({files:files})});
-  if(!r) return;
-  if(r.status===404) return say('Gist not found, or the token lacks gist scope.','bad');
-  if(!r.ok) return say('GitHub returned '+r.status+'.','bad');
-  put('lp_gist',gistId()); window.lp.save();
-  say('Saved '+count(current())+' tiles to the gist.','ok');
- });
+$('btnPush').addEventListener('click',async function(){
+if(!gistId()) return say('Enter a gist ID first.','bad');
+say('Pushing…','work');
+var files={}; files[FILE]={content:JSON.stringify(current(),null,2)};
+var r=await api('/gists/'+gistId(),{method:'PATCH',body:JSON.stringify({files:files})});
+if(!r) return;
+if(r.status===404) return say('Gist not found, or the token lacks gist scope.','bad');
+if(!r.ok) return say('GitHub returned '+r.status+'.','bad');
+put('lp_gist',gistId()); window.lp.save();
+say('Saved '+count(current())+' tiles to the gist.','ok');
+});
 
- window.lpPull=function(){$('btnPull').click();};
- window.lpPush=function(){$('btnPush').click();};
+window.lpPull=function(){$('btnPull').click();};
+window.lpPush=function(){$('btnPush').click();};
 
- function openSettings(){var s=$('settings'),i=$('index');
-  if(s&&i&&s.hasAttribute('hidden')){s.removeAttribute('hidden');i.setAttribute('hidden','');
-   var sl=$('setlink'); if(sl) sl.textContent='Index'; window.scrollTo(0,0);} }
+function openSettings(){var s=$('settings'),i=$('index');
+if(s&&i&&s.hasAttribute('hidden')){s.removeAttribute('hidden');i.setAttribute('hidden','');
+var sl=$('setlink'); if(sl) sl.textContent='Index'; window.scrollTo(0,0);} }
 
- /* pull whatever is newest, without being asked */
- async function autoSync(){
-  if(!tok()||!gistId()) return;
-  var r=await api('/gists/'+gistId()); if(!r||!r.ok) return;
-  var f=r.body.files&&r.body.files[FILE]; if(!f) return;
-  var text=f.content;
-  if(f.truncated&&f.raw_url){ text=await (await fetch(f.raw_url)).text(); }
-  var pay; try{pay=JSON.parse(text);}catch(e){return;}
-  var mine=window.lp.stamp(), theirs=pay.updated||null;
-  if(theirs && (!mine || theirs>mine)){
-   var n=window.lp.applyArrangement(pay); window.lp.save();
-   say('Loaded the newer arrangement from the gist — '+n+' tiles repositioned.','ok');
-  } else if(mine && theirs && mine>theirs){
-   say('This device has newer changes than the gist. Save layout to publish them.','note');
-  } else {
-   say('In sync with the gist.','ok');
-  }
- }
- window.lpAutoSync=autoSync;
- $('btnRescan').addEventListener('click',function(){location.reload();});
+/* pull whatever is newest, without being asked */
+async function autoSync(){
+if(!tok()||!gistId()) return;
+var r=await api('/gists/'+gistId()); if(!r||!r.ok) return;
+var f=r.body.files&&r.body.files[FILE]; if(!f) return;
+var text=f.content;
+if(f.truncated&&f.raw_url){ text=await (await fetch(f.raw_url)).text(); }
+var pay; try{pay=JSON.parse(text);}catch(e){return;}
+var mine=window.lp.stamp(), theirs=pay.updated||null;
+if(theirs && (!mine || theirs>mine)){
+var n=window.lp.applyArrangement(pay); window.lp.save();
+say('Loaded the newer arrangement from the gist — '+n+' tiles repositioned.','ok');
+} else if(mine && theirs && mine>theirs){
+say('This device has newer changes than the gist. Save layout to publish them.','note');
+} else {
+say('In sync with the gist.','ok');
+}
+}
+window.lpAutoSync=autoSync;
+$('btnRescan').addEventListener('click',function(){location.reload();});
 
- var SCOPE=['sc_pages','sc_private','sc_tsc','sc_nopages'];
- function saveScope(){
-  var o={}; SCOPE.forEach(function(id){ if($(id)) o[id]=$(id).checked; });
-  put('lp_scope',JSON.stringify(o));
- }
- function loadScope(){
-  var o; try{o=JSON.parse(get('lp_scope')||'null');}catch(e){o=null;}
-  if(!o) return;
-  SCOPE.forEach(function(id){ if($(id)&&typeof o[id]==='boolean') $(id).checked=o[id]; });
- }
- function flash(){ var s=$('status'); if(s&&/^Saved/.test(s.textContent)) return;
-  say('Saved in this browser.','ok'); }
+var SCOPE=['sc_pages','sc_private','sc_tsc','sc_nopages'];
+function saveScope(){
+var o={}; SCOPE.forEach(function(id){ if($(id)) o[id]=$(id).checked; });
+put('lp_scope',JSON.stringify(o));
+}
+function loadScope(){
+var o; try{o=JSON.parse(get('lp_scope')||'null');}catch(e){o=null;}
+if(!o) return;
+SCOPE.forEach(function(id){ if($(id)&&typeof o[id]==='boolean') $(id).checked=o[id]; });
+}
+function flash(){ var s=$('status'); if(s&&/^Saved/.test(s.textContent)) return;
+say('Saved in this browser.','ok'); }
 
- document.addEventListener('DOMContentLoaded',function(){
-  if($('tok')) $('tok').value=get('lp_token')||'';
-  if($('gist')) $('gist').value=get('lp_gist')||'';
-  loadScope();
-  ['tok','gist'].forEach(function(id){
-   var el=$(id); if(!el) return;
-   el.addEventListener('input',function(){
-    put(id==='tok'?'lp_token':'lp_gist', el.value.trim()); flash();
-   });
-  });
-  SCOPE.forEach(function(id){
-   var el=$(id); if(el) el.addEventListener('change',function(){saveScope();flash();});
-  });
-  if(get('lp_token')&&get('lp_gist'))
-   say('Token and gist restored from this browser. Pull to load assignments.','note');
-  else if(get('lp_token')) say('Token restored from this browser.','note');
- });
+document.addEventListener('DOMContentLoaded',function(){
+if($('tok')) $('tok').value=get('lp_token')||'';
+if($('gist')) $('gist').value=get('lp_gist')||'';
+loadScope();
+['tok','gist'].forEach(function(id){
+var el=$(id); if(!el) return;
+el.addEventListener('input',function(){
+put(id==='tok'?'lp_token':'lp_gist', el.value.trim()); flash();
+});
+});
+SCOPE.forEach(function(id){
+var el=$(id); if(el) el.addEventListener('change',function(){saveScope();flash();});
+});
+if(get('lp_token')&&get('lp_gist'))
+say('Token and gist restored from this browser. Pull to load assignments.','note');
+else if(get('lp_token')) say('Token restored from this browser.','note');
+});
 })();
 </script>
 <script>
 (function(){
- var API='https://api.github.com', OWNER='tscarlisle-ghub', TSC='TSC';
- function $(id){return document.getElementById(id);}
- function tok(){try{return localStorage.getItem('lp_token')||(($('tok')&&$('tok').value)||'').trim();}
-   catch(e){return (($('tok')&&$('tok').value)||'').trim();}}
- function say(m,c){var s=$('status'); if(s){s.textContent=m; s.className=c||'note';}}
- function hdr(){var t=tok(),h={'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
-   if(t) h['Authorization']='Bearer '+t; return h;}
- function title(n){return n.replace(/[-_]+/g,' ').trim().toUpperCase();}
+var API='https://api.github.com', OWNER='tscarlisle-ghub', TSC='TSC';
+function $(id){return document.getElementById(id);}
+function tok(){try{return localStorage.getItem('lp_token')||(($('tok')&&$('tok').value)||'').trim();}
+catch(e){return (($('tok')&&$('tok').value)||'').trim();}}
+function say(m,c){var s=$('status'); if(s){s.textContent=m; s.className=c||'note';}}
+function hdr(){var t=tok(),h={'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+if(t) h['Authorization']='Bearer '+t; return h;}
+function title(n){return n.replace(/[-_]+/g,' ').trim().toUpperCase();}
 
- async function pages(url){
-  var out=[];
-  while(url){
-   var r=await fetch(url,{headers:hdr()});
-   if(!r.ok) throw new Error('HTTP '+r.status+' on '+url.replace(API,''));
-   out=out.concat(await r.json());
-   var link=r.headers.get('link')||'', m=/<([^>]+)>;\s*rel="next"/.exec(link);
-   url=m?m[1]:null;
-  }
-  return out;
- }
+async function pages(url){
+var out=[];
+while(url){
+var r=await fetch(url,{headers:hdr()});
+if(!r.ok) throw new Error('HTTP '+r.status+' on '+url.replace(API,''));
+out=out.concat(await r.json());
+var link=r.headers.get('link')||'', m=/<([^>]+)>;\s*rel="next"/.exec(link);
+url=m?m[1]:null;
+}
+return out;
+}
 
- async function collect(){
-  var t=tok(), entries=[], repos=[];
-  repos=await pages(API+(t?'/user/repos?per_page=100&affiliation=owner&sort=full_name'
-                          :'/users/'+OWNER+'/repos?per_page=100&sort=full_name'));
-  repos=repos.filter(function(r){return r.owner&&r.owner.login.toLowerCase()===OWNER.toLowerCase();});
-  repos.forEach(function(r){
-   if(r.name===TSC) return;
-   entries.push({key:r.name.toUpperCase(),name:title(r.name),desc:r.description||'',
-     href:r.has_pages?('https://'+OWNER+'.github.io/'+r.name+'/'):r.html_url,repo:r.html_url,
-     path:'/'+r.name+(r.has_pages?'/':''),priv:!!r.private,
-     status:r.has_pages?'ACTIVE':'NO SITE'});
-  });
-  try{
-   var c=await fetch(API+'/repos/'+OWNER+'/'+TSC+'/contents',{headers:hdr()});
-   if(c.ok){
-    (await c.json()).filter(function(f){return f.type==='dir';}).forEach(function(d){
-     entries.push({key:d.name.toUpperCase(),name:title(d.name),desc:'',
-       href:'https://'+OWNER+'.github.io/'+TSC+'/'+d.name+'/',
-       repo:'https://github.com/'+OWNER+'/'+TSC+'/tree/main/'+d.name,
-       path:'/'+TSC+'/'+d.name+'/',priv:false,status:'ACTIVE'});
-    });
-   }
-  }catch(e){}
-  var seen={}; return entries.filter(function(e){
-    if(seen[e.key]) return false; seen[e.key]=1; return true;});
- }
+async function collect(){
+var t=tok(), entries=[], repos=[];
+repos=await pages(API+(t?'/user/repos?per_page=100&affiliation=owner&sort=full_name'
+:'/users/'+OWNER+'/repos?per_page=100&sort=full_name'));
+repos=repos.filter(function(r){return r.owner&&r.owner.login.toLowerCase()===OWNER.toLowerCase();});
+repos.forEach(function(r){
+if(r.name===TSC) return;
+entries.push({key:r.name.toUpperCase(),name:title(r.name),desc:r.description||'',
+href:r.has_pages?('https://'+OWNER+'.github.io/'+r.name+'/'):r.html_url,repo:r.html_url,
+path:'/'+r.name+(r.has_pages?'/':''),priv:!!r.private,
+status:r.has_pages?'ACTIVE':'NO SITE'});
+});
+try{
+var c=await fetch(API+'/repos/'+OWNER+'/'+TSC+'/contents',{headers:hdr()});
+if(c.ok){
+(await c.json()).filter(function(f){return f.type==='dir';}).forEach(function(d){
+entries.push({key:d.name.toUpperCase(),name:title(d.name),desc:'',
+href:'https://'+OWNER+'.github.io/'+TSC+'/'+d.name+'/',
+repo:'https://github.com/'+OWNER+'/'+TSC+'/tree/main/'+d.name,
+path:'/'+TSC+'/'+d.name+'/',priv:false,status:'ACTIVE'});
+});
+}
+}catch(e){}
+var seen={}; return entries.filter(function(e){
+if(seen[e.key]) return false; seen[e.key]=1; return true;});
+}
 
- function sectionOf(){
-  var m={}, a=window.lp.saved(), live=window.lp.arrangement();
-  function fold(p){ var o=(p&&p.order)||{};
-   Object.keys(o).forEach(function(sec){o[sec].forEach(function(k){m[k]=sec;});}); }
-  fold(a); fold(live);
-  return m;
- }
+function sectionOf(){
+var m={}, a=window.lp.saved(), live=window.lp.arrangement();
+function fold(p){ var o=(p&&p.order)||{};
+Object.keys(o).forEach(function(sec){o[sec].forEach(function(k){m[k]=sec;});}); }
+fold(a); fold(live);
+return m;
+}
 
- function build(e,sec,secs){
-  var a=document.createElement('a');
-  a.className='cell'+(e.priv?' priv':'')+(e.status==='NO SITE'?' nosite':'');
-  a.dataset.key=e.key; a.href=e.href; a.target='_blank'; a.rel='noopener';
-  var opts=secs.map(function(x){
-    return '<option value="'+x[1]+'"'+(x[1]===sec?' selected':'')+'>'+x[0]+'</option>';}).join('');
-  a.innerHTML='<span class="nm">'+e.name+'</span>'+
-   '<span class="pa">'+e.path.toUpperCase()+'</span>'+
-   '<span class="foot">'+
-   '<select class="mv" onclick="event.preventDefault();event.stopPropagation()">'+opts+'</select>'+
-   '<span class="repo" data-href="'+(e.repo||'')+'">Repo</span></span>';
-  return a;
- }
+function build(e,sec,secs){
+var a=document.createElement('a');
+a.className='cell'+(e.priv?' priv':'')+(e.status==='NO SITE'?' nosite':'');
+a.dataset.key=e.key; a.href=e.href; a.target='_blank'; a.rel='noopener';
+var opts=secs.map(function(x){
+return '<option value="'+x[1]+'"'+(x[1]===sec?' selected':'')+'>'+x[0]+'</option>';}).join('');
+a.innerHTML='<span class="nm">'+e.name+'</span>'+
+'<span class="pa">'+e.path.toUpperCase()+'</span>'+
+'<span class="foot">'+
+'<select class="mv" onclick="event.preventDefault();event.stopPropagation()">'+opts+'</select>'+
+'<span class="repo" data-href="'+(e.repo||'')+'">Repo</span></span>';
+return a;
+}
 
- async function scan(){
-  say('Scanning…','work');
-  var prev=assignments();
-  try{
-   var entries=await collect();
-   var secs=[['ACTIVE','ACTIVE'],['PERSONAL','PERSONAL'],['IN PROGRESS','IN-PROGRESS'],['ARCHIVE','ARCHIVE']];
-   document.querySelectorAll('.grid').forEach(function(g){g.innerHTML='';});
-   entries.forEach(function(e){
-    var sec=prev[e.key]||'ACTIVE', host=$('grid-'+sec)||$('grid-ACTIVE');
-    host.appendChild(build(e,sec,secs));
-   });
-   window.lp.applyArrangement(window.lp.saved());
-   window.lp.recount(); window.lp.save();
-   var np=entries.filter(function(e){return e.priv;}).length;
-   say('Scanned '+entries.length+' entries'+(tok()
-     ?' — '+np+' private included.'
-     :' — public only. Add a token with repo scope to include private repositories.'),
-     tok()?'ok':'note');
-  }catch(err){
-   say('Scan failed — '+err.message+
-     (tok()?'':'. Without a token only public repos are visible.'),'bad');
-  }
- }
+async function scan(){
+say('Scanning…','work');
+var prev=sectionOf();
+try{
+var entries=await collect();
+var secs=[['ACTIVE','ACTIVE'],['PERSONAL','PERSONAL'],['IN PROGRESS','IN-PROGRESS'],['ARCHIVE','ARCHIVE']];
+document.querySelectorAll('.grid').forEach(function(g){g.innerHTML='';});
+entries.forEach(function(e){
+var sec=prev[e.key]||'ACTIVE', host=$('grid-'+sec)||$('grid-ACTIVE');
+host.appendChild(build(e,sec,secs));
+});
+window.lp.applyArrangement(window.lp.saved());
+window.lp.recount(); window.lp.save();
+var np=entries.filter(function(e){return e.priv;}).length;
+say('Scanned '+entries.length+' entries'+(tok()
+?' — '+np+' private included.'
+:' — public only. Add a token with repo scope to include private repositories.'),
+tok()?'ok':'note');
+}catch(err){
+say('Scan failed — '+err.message+
+(tok()?'':'. Without a token only public repos are visible.'),'bad');
+}
+}
 
- window.lpScan=scan;
- document.addEventListener('DOMContentLoaded',function(){
-  var b=$('btnRescan'); if(b){b.replaceWith(b.cloneNode(true)); $('btnRescan').addEventListener('click',scan);}
-  var t=$('rescanTop'); if(t) t.addEventListener('click',function(ev){ev.preventDefault();scan();});
-  var pl=$('pullTop'); if(pl) pl.addEventListener('click',function(ev){ev.preventDefault();
-    if(window.lpPull) window.lpPull();});
-  var ps=$('pushTop'); if(ps) ps.addEventListener('click',function(ev){ev.preventDefault();
-    if(window.lpPush) window.lpPush();});
-  if(tok()) scan().then(function(){ if(window.lpAutoSync) window.lpAutoSync(); });
- });
+window.lpScan=scan;
+document.addEventListener('DOMContentLoaded',function(){
+var b=$('btnRescan'); if(b){b.replaceWith(b.cloneNode(true)); $('btnRescan').addEventListener('click',scan);}
+var t=$('rescanTop'); if(t) t.addEventListener('click',function(ev){ev.preventDefault();scan();});
+var pl=$('pullTop'); if(pl) pl.addEventListener('click',function(ev){ev.preventDefault();
+if(window.lpPull) window.lpPull();});
+var ps=$('pushTop'); if(ps) ps.addEventListener('click',function(ev){ev.preventDefault();
+if(window.lpPush) window.lpPush();});
+if(tok()) scan().then(function(){ if(window.lpAutoSync) window.lpAutoSync(); });
+});
 })();
 </script>
 <script>
 var hl=document.getElementById('homelink');
 if(hl) hl.addEventListener('click',function(e){
- var s=document.getElementById('settings'), i=document.getElementById('index');
- if(s&&i&&!s.hasAttribute('hidden')){
-  e.preventDefault(); s.setAttribute('hidden',''); i.removeAttribute('hidden');
-  var sl=document.getElementById('setlink'); if(sl) sl.textContent='Settings';
-  window.scrollTo(0,0);
- }
+var s=document.getElementById('settings'), i=document.getElementById('index');
+if(s&&i&&!s.hasAttribute('hidden')){
+e.preventDefault(); s.setAttribute('hidden',''); i.removeAttribute('hidden');
+var sl=document.getElementById('setlink'); if(sl) sl.textContent='Settings';
+window.scrollTo(0,0);
+}
 });
 document.getElementById('setlink').addEventListener('click',function(e){
- e.preventDefault();
- var s=document.getElementById('settings'), i=document.getElementById('index');
- var open=s.hasAttribute('hidden');
- if(open){s.removeAttribute('hidden');i.setAttribute('hidden','');this.textContent='Index';}
- else{s.setAttribute('hidden','');i.removeAttribute('hidden');this.textContent='Settings';}
- window.scrollTo(0,0);
+e.preventDefault();
+var s=document.getElementById('settings'), i=document.getElementById('index');
+var open=s.hasAttribute('hidden');
+if(open){s.removeAttribute('hidden');i.setAttribute('hidden','');this.textContent='Index';}
+else{s.setAttribute('hidden','');i.removeAttribute('hidden');this.textContent='Settings';}
+window.scrollTo(0,0);
 });
 </script></body></html>
