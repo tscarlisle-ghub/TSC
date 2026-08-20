@@ -1,0 +1,280 @@
+<!-- DEMO · CMA Design-System fonts overlaid on the live BILLING app -->
+<!-- Identical to ../index.html except for the added overlay stylesheet. -->
+<!-- All assets load from the parent BILLING/ folder via <base href="../">. -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TSC-BILLING · DS-fonts demo</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="https://use.typekit.net/ikf0hkb.css">
+<link rel="stylesheet" href="https://use.typekit.net/tlj7yvl.css">
+<link rel="stylesheet" href="https://use.typekit.net/wup0iix.css">
+<link rel="stylesheet" href="styles.css?v=20260428P">
+<link rel="stylesheet" href="cma.css?v=20260527-s12mobile">
+<!-- ↓↓↓ THE ONLY DIFFERENCE FROM THE REAL index.html ↓↓↓ -->
+<link rel="stylesheet" href="cma-demo/cma-design-overlay.css?v=20260531">
+</head>
+<body class="cma-shell">
+
+<header class="masthead">
+  <div class="masthead-row">
+    <img class="masthead-logo" src="Logo_Only.png?v=20260524" alt="Carlisle Moore Architects">
+    <div class="masthead-titles">
+      <h1>CMA Billing</h1>
+      <span class="masthead-name">T.&nbsp;Scott&nbsp;Carlisle</span>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="side">
+    <nav class="tabs vertical">
+      <button class="tab active" data-tab="overview">Overview</button>
+      <button class="tab" data-tab="clients">Clients</button>
+      <button class="tab" data-tab="cashflow">Cash Flow</button>
+      <button class="tab" data-tab="invoices">Invoices</button>
+      <button class="tab" data-tab="newinvoice">New Invoice</button>
+      <button class="tab" data-tab="settings">Settings</button>
+    </nav>
+    <div class="side-bottom">
+      <div class="status-row">
+        <span id="syncStatus" class="sync-status">local only</span>
+        <span class="sep">&middot;</span>
+        <span id="fiscalYear" class="fy">FY <span id="fyValue">2026</span></span>
+      </div>
+      <div class="version-cluster">
+        <span id="versionLabel" class="last-saved">v1.0</span>
+        <span id="lastUpdate" class="last-update">&mdash;</span>
+        <span class="build-stamp">DS-fonts demo</span>
+      </div>
+      <div class="save-cluster">
+        <button id="sideSaveBtn" class="action save sidebar-save"
+                title="Push data.json to GitHub now">SAVE</button>
+        <span id="lastSaved" class="last-saved-caption">never saved</span>
+      </div>
+      <span id="saveFeedback" class="save-feedback" hidden></span>
+    </div>
+  </aside>
+
+  <main id="main">
+
+<!-- ============ OVERVIEW ============ -->
+<section id="tab-overview" class="tab-pane active">
+
+  <div class="section-header">
+    <h2>Fee Summary</h2>
+  </div>
+  <div class="overview-summary">
+    <div class="metric">
+      <div class="metric-label">Total <span class="dyn-fy">2026</span> Fee</div>
+      <div class="metric-value" id="metricTotalFees">&mdash;</div>
+      <div class="metric-sub" id="metricTotalFeesSub"></div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Billed YTD</div>
+      <div class="metric-value" id="metricBilled">&mdash;</div>
+      <div class="metric-sub" id="metricBilledSub"></div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Collected YTD</div>
+      <div class="metric-value" id="metricCollected">&mdash;</div>
+      <div class="metric-sub" id="metricCollectedSub"></div>
+    </div>
+    <div class="metric metric-clickable" id="metricOutstandingCard" title="Click to see the outstanding invoices">
+      <div class="metric-label">Outstanding A/R</div>
+      <div class="metric-value" id="metricOutstanding">&mdash;</div>
+      <div class="metric-sub" id="metricOutstandingSub"></div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Remaining to Bill</div>
+      <div class="metric-value" id="metricRemaining">&mdash;</div>
+      <div class="metric-sub" id="metricRemainingSub"></div>
+    </div>
+  </div>
+
+  <div class="section-rule"></div>
+  <div class="section-header billed-month-header">
+    <h2>Billed This Month, <span id="billedByMonthYear">2026</span></h2>
+    <span class="section-note">monthly billings &amp; outstanding &middot; current month highlighted</span>
+    <span class="spacer"></span>
+    <span class="billed-this-month-callout">
+      <span class="callout-label">This Month</span>
+      <span class="callout-value" id="billedThisMonth">&mdash;</span>
+      <span class="callout-sub" id="billedThisMonthSub"></span>
+    </span>
+  </div>
+  <div class="billed-by-month-wrap">
+    <table class="billed-by-month" id="billedByMonthTable">
+      <thead><tr id="billedByMonthHead"><th class="row-label"></th></tr></thead>
+      <tbody>
+        <tr class="row-billed"><th class="row-label">Billed</th></tr>
+        <tr class="row-outstanding"><th class="row-label">Outstanding</th></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cma-hide overview-chart-section">
+    <div class="section-rule"></div>
+    <div class="section-header">
+      <h2>Monthly Billing, <span id="overviewYear">2026</span></h2>
+      <span class="section-note">planned vs. invoiced vs. collected</span>
+      <span class="spacer"></span>
+      <div class="chart-nav">
+        <button id="chartPrev" class="action ghost chart-arrow" aria-label="Previous months">&lsaquo;</button>
+        <span id="chartRangeLabel" class="chart-range"></span>
+        <button id="chartNext" class="action ghost chart-arrow" aria-label="Next months">&rsaquo;</button>
+        <button id="chartToday" class="action ghost chart-today">Today</button>
+      </div>
+    </div>
+    <div id="monthlyChart" class="monthly-chart"></div>
+  </div>
+
+  <div class="section-rule"></div>
+
+  <div class="section-header" id="outstandingInvoicesSection">
+    <h2>Outstanding Invoices</h2>
+    <span class="section-note">click any row to mark it paid</span>
+  </div>
+  <table class="outstanding-invoices">
+    <thead>
+      <tr>
+        <th class="col-date" data-sort="date">Date</th>
+        <th class="col-num" data-sort="number">Invoice #</th>
+        <th class="col-name" data-sort="name">Client</th>
+        <th class="col-note" data-sort="note">Description</th>
+        <th class="col-num" data-sort="amount">Amount</th>
+        <th class="col-num" data-sort="daysOut">Days Out</th>
+      </tr>
+    </thead>
+    <tbody id="outstandingBody"></tbody>
+    <tfoot id="outstandingFoot"></tfoot>
+  </table>
+
+  <div class="section-rule"></div>
+
+  <div class="section-header">
+    <h2>Client Roster</h2>
+    <span class="section-note">click any client to open their record</span>
+  </div>
+  <table class="roster">
+    <thead>
+      <tr id="rosterTotalsRow" class="roster-totals-row"></tr>
+      <tr>
+        <th class="col-name" data-sort="name">Client</th>
+        <th class="col-num" data-sort="totalFee">Total <span class="dyn-fy">2026</span> Fee</th>
+        <th class="col-num" data-sort="billed">Billed YTD</th>
+        <th class="col-num" data-sort="collected">Collected YTD</th>
+        <th class="col-num" data-sort="outstanding">Outstanding</th>
+        <th class="col-num" data-sort="remaining">Remaining</th>
+      </tr>
+    </thead>
+    <tbody id="rosterBody"></tbody>
+  </table>
+
+  <div class="section-rule"></div>
+  <div class="section-header">
+    <h2>Year-End Projection</h2>
+    <span class="section-note">edit confidence and projected $ inline &mdash; used to estimate <span class="dyn-fy">2026</span> revenue for tax planning</span>
+  </div>
+  <table class="eoy-projection">
+    <thead>
+      <tr id="eoyTotalsRow" class="roster-totals-row"></tr>
+      <tr>
+        <th class="col-name">Client</th>
+        <th class="col-num">Billed YTD</th>
+        <th class="col-num">Remaining <span class="dyn-fy">2026</span> Fee</th>
+        <th class="col-num">Projected EOY $</th>
+        <th class="col-confidence">Confidence</th>
+        <th class="col-num">Weighted</th>
+        <th class="col-num">Projected <span class="dyn-fy">2026</span> Total</th>
+      </tr>
+    </thead>
+    <tbody id="eoyBody"></tbody>
+  </table>
+
+</section>
+
+<section id="tab-clients" class="tab-pane">
+  <div class="section-header">
+    <h2>Clients</h2>
+    <button id="addClientBtn" class="action" style="margin-left:1rem;">+ Add Client</button>
+    <span class="spacer"></span>
+    <label class="filter"><input type="checkbox" id="showArchived"> show archived</label>
+  </div>
+  <div class="client-list" id="clientList"></div>
+</section>
+
+<section id="tab-cashflow" class="tab-pane">
+  <div class="section-header">
+    <h2>Monthly Billing</h2>
+    <span class="section-note">click a cell to edit a planned monthly invoice; sent &#9682; paid &#9679;</span>
+  </div>
+  <div class="matrix-wrap"><table id="billingMatrix" class="matrix"></table></div>
+</section>
+
+<section id="tab-invoices" class="tab-pane">
+  <div class="section-header">
+    <h2>Invoices</h2>
+    <span class="spacer"></span>
+    <label class="filter">Status
+      <select id="invoiceFilter">
+        <option value="all">All</option>
+        <option value="unsent">Not yet sent</option>
+        <option value="unpaid">Sent, not paid</option>
+        <option value="paid">Paid</option>
+      </select>
+    </label>
+    <label class="filter">Client <select id="invoiceClientFilter"><option value="">All clients</option></select></label>
+    <button id="addInvoiceBtn" class="action">+ Add Invoice</button>
+  </div>
+  <div class="year-filter-row" id="invoiceYearFilter"></div>
+  <table class="invoices sortable">
+    <thead>
+      <tr id="invoicesHeadRow">
+        <th class="col-date sortable-th" data-sort="date">Date <span class="sort-ind"></span></th>
+        <th class="col-num sortable-th" data-sort="number">Invoice # <span class="sort-ind"></span></th>
+        <th class="col-name sortable-th" data-sort="client">Client <span class="sort-ind"></span></th>
+        <th class="col-num sortable-th" data-sort="amount">Amount <span class="sort-ind"></span></th>
+        <th class="col-note sortable-th" data-sort="note">Description <span class="sort-ind"></span></th>
+        <th class="col-status sortable-th" data-sort="sent">Sent <span class="sort-ind"></span></th>
+        <th class="col-status sortable-th" data-sort="paid">Paid <span class="sort-ind"></span></th>
+        <th class="col-actions"></th>
+      </tr>
+    </thead>
+    <tbody id="invoicesBody"></tbody>
+    <tfoot id="invoicesFoot"></tfoot>
+  </table>
+</section>
+
+<section id="tab-newinvoice" class="tab-pane">
+  <div class="section-header">
+    <h2>Create Invoice</h2>
+    <span class="section-note">build a Word document invoice from phase progress</span>
+  </div>
+</section>
+
+<section id="tab-settings" class="tab-pane">
+  <div class="section-header"><h2>Settings &amp; GitHub Sync</h2></div>
+  <div class="settings-block">
+    <h3>About this dashboard</h3>
+    <p class="settings-desc">
+      Designed using Edward Tufte's principles of analytical design. <em>DS-fonts demo</em> &mdash;
+      typeset in Penumbra Flare, BioRhyme Expanded, Surveyor Text, Whitney, Whitney Condensed, and Interstate Mono.
+    </p>
+  </div>
+</section>
+
+  </main>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="lib/docx.umd.js?v=20260428P"></script>
+<script src="lib/FileSaver.min.js?v=20260428P"></script>
+<script src="lib/xlsx.full.min.js?v=20260428P"></script>
+<script src="app.js?v=20260527-s12matrix"></script>
+</body>
+</html>

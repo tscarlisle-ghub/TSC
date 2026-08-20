@@ -1,0 +1,38 @@
+/* ============================================================
+   CMA Design-System overlay — FONTS ONLY
+   ============================================================
+   Drop in AFTER cma.css. Swaps the Adobe Typekit font stack
+   (Miller Text / FF Meta / Columbia Titling) for the firm's
+   self-hosted "Carlisle Moore Architects — Design System"
+   typefaces (Surveyor Text, Whitney, Whitney Condensed,
+   Penumbra Flare, BioRhyme Expanded, Interstate Mono).
+
+   No layout, color, or rule changes — those tokens in cma.css
+   already match the design system (warm paper, terracotta,
+   forest, warn rust, etc.).
+   ============================================================ */
+
+@import url('https://tscarlisle-ghub.github.io/fonts/tsc-fonts.css');
+
+:root{
+  /* Body serif (was: miller-text)  →  Surveyor Text, Warnock fallback */
+  --font-body:    "Surveyor Text", "Warnock Pro", "warnock-pro", Charter, "Iowan Old Style", Georgia, serif;
+
+  /* Section headers / display caps (was: ff-meta-web-pro-condensed)  →  BioRhyme Expanded */
+  --font-display: "BioRhyme Expanded", "Trajan Pro 3", "interstate-condensed", "Helvetica Neue", sans-serif;
+
+  /* Tab/strap labels (was: ff-meta-web-pro-condensed)  →  Whitney Condensed */
+  --font-strap:   "Whitney Condensed", "Whitney", "interstate-compressed", "Arial Narrow", sans-serif;
+
+  /* Big metric figures (was: ff-meta-correspondence)  →  Interstate Mono */
+  --font-figure:  "Interstate Mono", "Interstate Condensed Mono", "din-condensed-variable", "SF Mono", monospace;
+
+  /* UI sans (was: ff-meta-web-pro)  →  Whitney */
+  --font-ui:      "Whitney", "interstate", "Helvetica Neue", Arial, sans-serif;
+
+  /* All numbers / mono (was: ff-meta-correspondence)  →  Interstate Mono */
+  --font-mono:    "Interstate Mono", "Interstate Condensed Mono", "ff-meta-correspondence-web-p", "SF Mono", Menlo, monospace;
+
+  /* Masthead / engraved firm name (was: columbia-titling)  →  Penumbra Flare */
+  --font-trajan:  "Penumbra Flare", "Optima", "Albertus MT", "columbia-titling", "Trajan Pro 3", Georgia, serif;
+}
