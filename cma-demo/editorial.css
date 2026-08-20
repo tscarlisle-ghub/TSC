@@ -1,0 +1,265 @@
+/* ============================================================
+   EDITORIAL — full stylesheet for TSC-BILLING (rebuild)
+   Build 2026-06-29-EDITORIAL-R1
+   Ported from the approved mockup. The rebuilt markup emits the
+   mockup's structure; this file carries tokens, base, helpers,
+   inputs/sliders, and responsive rules. Inline styles in the
+   emitted markup carry per-element layout (verbatim from mockup),
+   so appearance matches the mockup exactly.
+   Fonts: Adobe kit wup0iix (loaded in index.html).
+   ============================================================ */
+:root{
+  --rust:#A2512D;--rust-mid:#B57340;--rust-soft:#E2BFA7;--rust-wash:#F2E2D2;
+  --ink:#2A2520;--ink-soft:#6E5E52;--ink-mute:#8E7E72;
+  --paper:#FBF6EE;--paper-edge:#F1E9DA;--paper-deep:#ECE3D0;--night:#1a1714;
+  --hairline:rgba(162,81,45,.32);--hairline-strong:rgba(162,81,45,.65);--hairline-ink:rgba(42,37,32,.14);
+  --forest:#3F6B4E;--forest-deep:#2C4F39;--forest-wash:#E9F0EA;--gold:#8B6A1A;--alert:#8A2A1F;--mint:#BFE0D2;
+  --display:"aviano-sans","Optima",serif;
+  --titling:"columbia-titling","Trajan Pro",serif;
+  --serif:"urw-antiqua","Iowan Old Style",Georgia,serif;
+  --sans-cond:"franklin-gothic-condensed","Franklin Gothic",sans-serif;
+  --sans-comp:"franklin-gothic-compressed","franklin-gothic-condensed",sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;}
+.ed-app, .ed-app *{box-sizing:border-box;}
+.ed-num-tab,.ci-tab,.cc-num-tab{font-variant-numeric:tabular-nums;}
+.hov-row:hover{background:var(--rust-wash);}
+.hov-cta:hover{background:var(--rust)!important;color:var(--paper)!important;}
+.hov-mint:hover{background:var(--forest)!important;color:#fff!important;}
+.hov-fd:hover{background:var(--forest)!important;color:#fff!important;}
+button{font:inherit;}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+.plate{display:grid;grid-template-columns:220px 1fr;gap:72px;align-items:start;}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);}
+.ci-in{width:100%;background:#fff;border:1px solid var(--hairline-ink);padding:10px 12px;font-family:var(--serif);font-size:16px;color:var(--ink);border-radius:0;outline:none;}
+.ci-in:focus,.cc-in:focus{border-color:var(--rust);}
+.ci-lab,.cc-lab{font-family:var(--titling);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-mute);display:block;margin-bottom:7px;}
+.ci-sec,.cc-sec{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:.16em;text-transform:uppercase;color:var(--rust);}
+.cc-sec{font-size:13px;letter-spacing:.14em;margin-bottom:16px;}
+.cc-in{width:100%;background:#fff;border:1px solid var(--hairline-ink);padding:9px 11px;font-family:var(--serif);font-size:15px;color:var(--ink);border-radius:0;outline:none;}
+.ci-amt{width:100%;background:#fff;border:1px solid var(--hairline-ink);padding:8px 10px;font-family:var(--sans-cond);font-size:15px;color:var(--ink);text-align:right;border-radius:0;outline:none;font-variant-numeric:tabular-nums;}
+/* 2026-08-15 SLIDER HIT-TARGET FIX.
+   This rule used to be `height:2px`, which made the whole <input type=range>
+   element 2px tall. Because `input[type=range]` (0,1,1) outranks
+   `.ib-phase-slider` (0,1,0), it beat styles.css's 24px everywhere, and
+   editorial.css loads last so it won every time. Result: every slider in the
+   app had a 2px-tall grab area — the thumb painted outside the element box, so
+   it looked right but was nearly impossible to drag.
+   Fix: give the ELEMENT a 24px hit area and move the 2px hairline onto the
+   TRACK pseudo-element. Identical appearance, actually draggable. */
+input[type=range]{-webkit-appearance:none;appearance:none;height:24px;background:transparent;outline:none;cursor:pointer;touch-action:none;margin:0;padding:0;}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:var(--hairline);border:none;border-radius:0;}
+input[type=range]::-moz-range-track{height:2px;background:var(--hairline);border:none;border-radius:0;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:15px;height:15px;border-radius:50%;background:var(--ink);cursor:pointer;margin-top:-6.5px;}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border:none;border-radius:50%;background:var(--ink);cursor:pointer;}
+input[type=range].done::-webkit-slider-thumb{background:var(--rust-soft);}
+input[type=range].done::-moz-range-thumb{background:var(--rust-soft);}
+.scrollx{max-width:100%;}
+@media (max-width:820px){
+  .ed-main{padding:0 20px!important;}
+  .ed-bar{padding:14px 20px!important;flex-wrap:wrap;gap:12px 18px!important;}
+  .ed-bar nav{order:3;flex-basis:100%!important;justify-content:flex-start!important;gap:18px!important;flex-wrap:wrap;}
+  .navbal{display:none!important;}
+  .plate{grid-template-columns:1fr!important;gap:18px!important;padding-top:32px!important;}
+  .side{position:static!important;top:auto!important;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;}
+  .side .rule{display:none!important;}
+  .bignum{font-size:46px!important;line-height:1!important;}
+  .kpis{grid-template-columns:repeat(2,1fr)!important;}
+  .kpis>div{border-left:1px solid var(--hairline)!important;}
+  .scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .scrollx-in{min-width:520px;}
+  .ci-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .ci-scroll-in{min-width:720px;}
+  .ci-top{grid-template-columns:1fr!important;}
+  .ci-adj{grid-template-columns:1fr!important;gap:30px!important;}
+  .ci-meta{grid-template-columns:1fr!important;}
+  .cc-grid{grid-template-columns:1fr!important;}
+  .cc-grid>div{border-right:none!important;}
+  .cc-4{grid-template-columns:repeat(2,1fr)!important;}
+  .cc-6{grid-template-columns:repeat(3,1fr)!important;}
+  .cc-foot{flex-direction:column;align-items:stretch!important;gap:12px;}
+  .cc-foot>div{flex-wrap:wrap;}
+}
+
+/* ============================================================
+   EDITORIAL SHELL (build 2026-06-29-EDITORIAL2)
+   Top-nav masthead + centered column, replacing the old sidebar
+   shell. Drives the existing .tab / .tab-pane switching.
+   ============================================================ */
+body.cma-shell{background:var(--paper);}
+.ed-head{position:sticky;top:0;z-index:30;background:rgba(251,246,238,.92);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--hairline-ink);}
+.ed-bar{max-width:1800px;margin:0 auto;padding:14px 48px 0;display:flex;
+  flex-direction:column;gap:8px;}
+.ed-bar-top{display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.ed-logo{width:112px;height:auto;display:block;flex-shrink:0;}
+.ed-nav{display:flex;justify-content:flex-start;gap:30px;flex-wrap:wrap;
+  border-top:1px solid var(--hairline-ink);padding:12px 0;margin-top:2px;}
+.ed-nav .tab{background:none;border:none;cursor:pointer;padding:6px 0;margin:0;
+  font-family:var(--titling);font-size:10px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--ink);border-bottom:1px solid transparent;
+  border-radius:0;transition:color 120ms,border-color 120ms;}
+.ed-nav .tab:hover{color:var(--rust);}
+.ed-nav .tab.active{color:var(--rust);border-bottom-color:var(--rust);}
+.ed-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+.ed-right .ed-save{margin-top:2px;}
+.ed-save{font-family:var(--titling);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--paper);background:var(--ink);
+  border:none;border-radius:0;padding:8px 18px;cursor:pointer;}
+.ed-save:hover{background:var(--rust);}
+.ed-meta{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px 8px;
+  max-width:430px;
+  font-family:var(--titling);font-size:8px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-mute);line-height:1.4;}
+.ed-meta .build-stamp{color:var(--rust-mid);}
+.ed-meta-sep{color:var(--hairline-strong);}
+body.cma-shell main#main.ed-main{max-width:1800px;margin:0 auto;padding:0 48px 40px;overflow-x:hidden;}
+main.ed-main .tab-pane{display:none;}
+main.ed-main .tab-pane.active{display:block;}
+/* tighten legacy section chrome inside the editorial column */
+main.ed-main > .tab-pane{padding-top:8px;}
+@media (max-width:820px){
+  .ed-bar{padding:10px 16px 0;}
+  .ed-bar-top{flex-wrap:wrap;gap:10px;}
+  .ed-logo{width:96px;}
+  .ed-right{flex-wrap:wrap;justify-content:flex-start;gap:8px 12px;}
+  .ed-meta{justify-content:flex-start;max-width:none;}
+  /* nav scrolls horizontally instead of stacking on narrow screens */
+  .ed-nav{gap:18px;flex-wrap:nowrap;white-space:nowrap;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;padding:10px 0;}
+  .ed-nav::-webkit-scrollbar{display:none;}
+  body.cma-shell main#main.ed-main{padding:0 16px 32px;}
+}
+
+/* ============================================================
+   EDITORIAL3 — functional-tab cohesion (Cash Flow · Invoices ·
+   New Invoice · Settings). The CMA design system (cma.css) already
+   styles these surfaces; this layer only echoes the plate header
+   aesthetic and corrects a couple of off-palette spots. No layout
+   or markup/JS changes.
+   ============================================================ */
+/* Plate-style header rule beneath each functional-tab section header */
+body.cma-shell main.ed-main .section-header{
+  position:relative;
+  padding-bottom:16px;
+  margin-bottom:22px;
+  border-bottom:1px solid var(--hairline);
+}
+body.cma-shell main.ed-main .section-header::after{
+  content:"";position:absolute;left:0;bottom:-1px;width:40px;height:2px;
+  background:var(--rust);
+}
+body.cma-shell main.ed-main > .tab-pane{ padding-top:18px; }
+
+/* New Invoice — summary "total" row: editorial tint, not the old green */
+body.cma-shell .ib-summary tr.total td{
+  background:var(--rust-wash);
+  border-top:2px solid var(--ink);
+  border-bottom:none;
+}
+body.cma-shell .ib-summary tr.total td.num{ color:var(--rust); }
+
+/* Builder + Settings subheads -> rust accent, matching the plate eyebrows */
+body.cma-shell .invoice-builder h3,
+body.cma-shell .settings-block h3{ color:var(--rust-mid); }
+
+/* Phase breakdown header rule + name in the rust hairline family */
+body.cma-shell .ib-phase-headers{ border-bottom-color:var(--ink); }
+body.cma-shell .ib-phase-name{ color:var(--ink); }
+
+/* Year-filter chips (Invoices) -> square editorial chips */
+body.cma-shell .year-filter-row .year-btn{ border-radius:0; }
+body.cma-shell .year-filter-row .year-btn.active{
+  background:var(--ink);color:var(--paper);border-color:var(--ink);
+}
+
+
+/* ===== Overview outstanding: paid toggle + delayed removal (EDITORIAL4) ===== */
+.ed-row-paid{opacity:.45;transition:opacity .35s ease;}
+.ed-row-paid .ed-out-amt{text-decoration:line-through;}
+.ed-paid-toggle{font-family:var(--titling);font-size:8px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--forest);background:transparent;
+  border:1px solid var(--hairline);border-radius:0;padding:4px 9px;margin-top:7px;
+  cursor:pointer;white-space:nowrap;}
+.ed-paid-toggle:hover{background:var(--forest);color:#fff;border-color:var(--forest);}
+.ed-paid-toggle.is-paid{color:var(--rust);border-color:var(--rust);}
+.ed-paid-toggle.is-paid:hover{background:var(--rust);color:#fff;}
+
+/* ============================================================
+   EDITORIAL5 — Client editor modal: full editorial match
+   (title italic-serif rust, rust radios, forest checkboxes,
+   inset card frame). CSS only.
+   ============================================================ */
+#clientEditor .modal-header h2,
+.modal.client-modal .modal-header h2{
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:2.1rem;line-height:1.05;letter-spacing:0;text-transform:none;
+  color:var(--rust);
+}
+/* Native control accents: radios rust, checkboxes forest green */
+#clientEditor input[type="radio"]{accent-color:var(--rust);}
+#clientEditor input[type="checkbox"]{accent-color:var(--forest);}
+/* Inset printed-card frame, like the mockup */
+#clientEditor .modal, #clientEditor .modal.client-modal{outline:none;border:none!important;}
+
+/* PoC2: shrink the fee-revision button (was a big green block) + quieter hint */
+#cf_addRevision{font-family:var(--titling)!important;font-size:9px!important;letter-spacing:.16em!important;text-transform:uppercase;font-weight:400!important;padding:7px 13px!important;background:none!important;color:var(--forest-deep)!important;border:1px solid var(--forest)!important;white-space:nowrap;line-height:1.2!important;border-radius:0!important;}
+#cf_addRevision:hover{background:var(--forest)!important;color:#fff!important;}
+.fee-revisions-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+#cf_revisionsHint,.fee-revisions-actions .hint{font-size:12px!important;font-style:italic;color:var(--ink-soft)!important;max-width:520px;}
+.poc-credit-note{font-size:12px;}
+
+/* POC4: card section titles bolder/larger; PoC field heights match */
+#clientEditor .modal-body h3{font-size:1.08rem!important;font-weight:800!important;letter-spacing:.05em;}
+.poc-row .currency-input, .poc-row input[type="date"]{height:40px;box-sizing:border-box;}
+.poc-row .dp-amount-label{flex:0 0 auto;width:150px;}
+.poc-row .grow{flex:1 1 auto;}
+
+/* ============================================================
+   POC5 — align the Client Card to the editorial mockup;
+   relocate build/sync meta to a page footer, last-saved up top
+   ============================================================ */
+/* top header: keep only the last-saved line under the Save button */
+.ed-meta{font-family:var(--titling);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute);text-align:right;margin-top:6px;}
+.ed-meta .last-saved-caption{color:var(--ink-soft);}
+/* bottom page footer: the sync/version/build "machine" text lives here now */
+.ed-foot{max-width:1180px;margin:8px auto 0;padding:14px 64px 26px;border-top:1px solid var(--hairline);display:flex;justify-content:center;gap:10px;flex-wrap:wrap;font-family:var(--titling);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mute);}
+.ed-foot .build-stamp{color:var(--ink-mute);}
+.ed-foot #versionLabel{color:var(--rust);}
+
+/* ============================================================
+   Session 21 — Fee Type card. Previously the fee-type-specific inputs
+   (fixed/percentage/tiered) were laid out with display:flex + flex-wrap and
+   mixed min-widths per field. That works only as long as everything fits on
+   one line; the tiered block has 4 fields whose min-widths (150/100/120/100
+   + 3×14px gaps ≈ 512px) don't fit the ~500px left column, so it wrapped
+   unevenly — Construction Estimate alone on one line, the two % fields on
+   another, % Above stranded by itself on a third — which is what read as
+   "not lined up." Every fee-type block, plus the Current Fee/phased-toggle
+   and PoC rows below it, now sits in one bordered card on a fixed 2-column
+   CSS grid, so fields always align into clean rows regardless of how many
+   fields a given fee type has or how narrow the column gets — the same
+   fix already used for Name & Address (.cc-4) and Phase Breakdown (.cc-6).
+   ============================================================ */
+.fee-type-card{border:1px solid var(--hairline);background:var(--paper-edge);padding:20px 22px;margin-top:14px;}
+.fee-type-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+.fee-type-tab{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);cursor:pointer;padding:9px 14px;border:1px solid var(--hairline-ink);background:#fff;}
+.fee-type-tab input{margin:0;accent-color:var(--rust);}
+.fee-type-tab:has(input:checked){background:var(--rust);border-color:var(--rust);color:#fff;}
+.fee-type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 20px;}
+.fee-type-grid .fee-type-full{grid-column:1/-1;}
+/* The fixed/percentage/tiered blocks carry BOTH this class (for their grid
+   layout) and the "hidden" attribute (for fee-type show/hide) on the same
+   element. An author-stylesheet display:grid rule beats the UA default
+   "[hidden]{display:none}" even at equal specificity, because author rules
+   win ties over UA rules — without this override, switching fee types
+   showed every block's fields stacked on top of each other at once. */
+.fee-type-grid[hidden]{display:none!important;}
+.fee-type-subrow{margin-top:18px;padding-top:18px;border-top:1px solid var(--hairline);align-items:end;}
+.fee-type-inline-check{display:flex;align-items:flex-end;padding-bottom:11px;}
+.cc-hint{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--ink-mute);display:block;margin-top:5px;}
+.cc-lab-note{text-transform:none;letter-spacing:0;font-family:var(--serif);font-style:italic;color:var(--ink-mute);}
+@media (max-width:640px){.fee-type-grid{grid-template-columns:1fr;}}

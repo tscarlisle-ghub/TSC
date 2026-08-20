@@ -1,0 +1,3111 @@
+/* BUILD 2026-05-05-Q · 2026-05-05 CDT */
+/* ============================================================
+   CMA Billing — Tufte-influenced styling
+   Type system, kit ikf0hkb:
+   - warnock-pro          serif body (regular, italic, bold, bold-italic)
+   - interstate-condensed labels & headers (400/700 + italics)
+   - interstate           form controls / buttons (400/700)
+   - interstate-compressed dense ALL-CAPS strap labels (400/500/700)
+   - din-condensed-variable big metric figures (variable 300-600)
+   - ff-meta-correspondence-web-p tabular numerals everywhere
+   ============================================================ */
+
+:root {
+  /* Type */
+  --font-body: "warnock-pro", Georgia, serif;
+  --font-display: "interstate-condensed", "Helvetica Neue", sans-serif;
+  --font-strap: "interstate-compressed", "interstate-condensed", "Helvetica Neue", sans-serif;
+  --font-figure: "din-condensed-variable", "interstate-condensed", sans-serif;
+  --font-ui: "interstate", "Helvetica Neue", sans-serif;
+  --font-mono: "ff-meta-correspondence-web-p", "SF Mono", Menlo, monospace;
+  --font-trajan: "trajan-sans-pro", "trajan-pro-3", "trajan-pro", "Cinzel", "warnock-pro", Georgia, serif;
+
+  /* Color — restrained, semantic */
+  --ink: #1c1c1a;            /* primary text — warm near-black */
+  --ink-soft: #4a4a45;       /* secondary text — readable, NOT thin */
+  --ink-faint: #7a7872;      /* metadata, axis labels — still legible */
+  --rule: #d4d2cc;           /* hairlines */
+  --rule-soft: #e8e6e0;      /* very faint divisions */
+  --paper: #fbfaf6;          /* warm off-white background */
+  --paper-2: #f4f2eb;        /* alternating row tone */
+
+  /* Semantic accents — used sparingly */
+  --planned: #999791;        /* gray for planned/expected */
+  --billed: #1c1c1a;         /* black for invoiced */
+  --collected: #2d5d3a;      /* deep green for collected */
+  --collected-bright: #3f7f4d; /* slightly brighter for the SAVE button */
+  --warn: #c0392b;           /* brighter red for problems / overdue / SAVE NO button */
+  --warn-deep: #8b2818;      /* original deep red kept for muted contexts */
+  --highlight: #b8860b;      /* dark goldenrod for emphasis */
+
+  /* Metrics */
+  --space: 1rem;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+button { font-family: var(--font-ui); }
+
+/* ----- Numerals: tabular, lining figures everywhere it matters ----- */
+.num, td.col-num, .matrix td, .matrix th, .invoices td, .roster td,
+.metric-value, .metric-sub, input[type="number"], input[type="date"] {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* ============================================================
+   Masthead — typographic, no boxes
+   ============================================================ */
+.masthead {
+  border-bottom: 1px solid var(--ink);
+  padding: 1.5rem 2rem 0.6rem;
+  background: var(--paper);
+}
+.masthead-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.masthead h1 {
+  font-family: var(--font-trajan);
+  font-weight: 400;       /* Trajan Sans Regular */
+  font-size: 1.65rem;
+  letter-spacing: 0.04em;  /* small tracking helps Trajan-style faces */
+  margin: 0;
+  color: var(--ink);
+}
+.masthead-name-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+.masthead-sub {
+  font-weight: 400;
+  font-style: italic;
+  font-family: var(--font-body);
+  font-size: 1.35rem;  /* 50% larger than original 0.9rem */
+  color: var(--ink-soft);
+  margin-left: 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  margin-left: auto;
+}
+.tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.4rem 1rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;  /* 20% larger */
+  font-weight: 400;
+  color: var(--ink-soft);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.tab:hover { color: var(--ink); }
+.tab.active {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+  font-weight: 700;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+}
+.status-row .sep { color: var(--rule); }
+.status-row .spacer { flex: 1; }
+.sync-status { letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.75rem; }
+.sync-status.synced { color: var(--collected); }
+.sync-status.error { color: var(--warn); }
+.sync-status.dirty { color: var(--highlight); }
+.last-saved { font-style: italic; }
+.version-cluster {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.05;
+  gap: 0.05rem;
+}
+.last-update {
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  color: var(--ink-faint);
+  font-style: normal;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.build-stamp {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+}
+.fy { font-weight: 700; }
+
+/* Save button + last-saved caption beneath it */
+.save-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+}
+.last-saved-caption {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-style: normal;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--collected);
+  white-space: nowrap;
+  margin-right: 2px;
+}
+
+/* Action buttons — minimal, typographic */
+.action {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+}
+.action:hover { background: #000; }
+.action.ghost {
+  background: transparent;
+  color: var(--ink);
+}
+.action.ghost:hover { background: var(--paper-2); }
+.action.danger { background: var(--warn); border-color: var(--warn); color: #fff; }
+.action.danger.ghost { background: transparent; color: var(--warn); }
+.action.danger.ghost:hover { background: #fbeae6; }
+/* Save = green, Cancel = red — used in modals */
+.action.save {
+  background: var(--collected);
+  border-color: var(--collected);
+  color: #fff;
+}
+.action.save:hover { background: var(--collected-bright); border-color: var(--collected-bright); }
+.action.cancel {
+  background: var(--warn);
+  border-color: var(--warn);
+  color: #fff;
+}
+.action.cancel:hover { background: #d44a3c; border-color: #d44a3c; }
+/* Create Invoice button — tiffany blue, wider, bold spaced text */
+.action.subtle {
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  background: #a8dcda;         /* pale tiffany blue */
+  color: #1a4a49;              /* dark teal text for contrast */
+  border: 1px solid #7bbebb;
+  padding-left: 1.95rem;       /* ~30% wider than standard 1.5rem */
+  padding-right: 1.95rem;
+}
+.action.subtle:hover { background: #8fd0ce; }
+
+/* ----- Secondary button cluster: Close Out / Archive / Delete Client ----- */
+.modal-footer .footer-secondary {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 4px;                    /* visible whitespace between each button */
+}
+.modal-footer .footer-secondary .action {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.55rem;
+  background: #c8e6c4;         /* pale green */
+  color: #2a5c26;              /* dark green text */
+  border: 1px solid #9dcc98;
+  border-radius: 3px;          /* each button has its own radius */
+  line-height: 1;
+  height: auto;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.modal-footer .footer-secondary .action:hover {
+  background: #a5d49e;         /* darker green on hover */
+  color: #1a3d18;
+  border-color: #7ab874;
+}
+.modal-footer .footer-divider {
+  width: 1px;
+  height: 1.4rem;
+  background: var(--rule);
+  margin: 0 0.75rem;
+  align-self: center;
+  display: inline-block;
+}
+
+/* ============================================================
+   Tab panes
+   ============================================================ */
+main {
+  padding: 1.5rem 2rem 4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+.section-rule {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 2.5rem 0 1.5rem;
+}
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+/* All section titles in Interstate uppercase */
+h2 {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0 0 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.section-header h2 {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin: 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.section-header .section-note {
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  font-family: var(--font-body);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.section-header .spacer { flex: 1; }
+
+h3 {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 1.4rem 0 0.6rem;
+}
+h3 .hint {
+  font-weight: 400;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+  margin-left: 0.4rem;
+  font-family: var(--font-body);
+}
+
+/* ============================================================
+   Overview — the most data-rich page
+   ============================================================ */
+.overview-summary {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 1rem 0;
+  margin-top: 0.5rem;
+}
+.metric {
+  padding: 0 1.2rem;
+  border-right: 1px solid var(--rule-soft);
+}
+.metric:last-child { border-right: 0; }
+.metric-label {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.metric-value {
+  font-family: var(--font-figure);
+  font-variation-settings: "wght" 500;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+.metric-value.warn { color: var(--warn); }
+
+/* Clickable metric card */
+.metric-clickable {
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s;
+}
+.metric-clickable:hover {
+  background: rgba(192, 57, 43, 0.05);
+}
+.metric-clickable:active {
+  transform: translateY(1px);
+}
+.metric-clickable .metric-label::after {
+  content: " →";
+  color: var(--ink-faint);
+  font-size: 0.85em;
+  margin-left: 0.1em;
+}
+
+/* ============================================================
+   Billed This Month — 12-column matrix on the Overview tab
+   ============================================================ */
+.billed-month-header { align-items: baseline; }
+.billed-this-month-callout {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.05rem;
+  padding: 0.25rem 0.8rem;
+  border-left: 3px solid var(--accent, #c7997c);
+  margin-left: 0.6rem;
+}
+.billed-this-month-callout .callout-label {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+}
+.billed-this-month-callout .callout-value {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.billed-this-month-callout .callout-sub {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.billed-by-month-wrap {
+  margin: 0.4rem 0 1.2rem;
+  overflow-x: auto;        /* graceful overflow on narrow viewports */
+  -webkit-overflow-scrolling: touch;
+}
+.billed-by-month {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  table-layout: fixed;
+}
+.billed-by-month thead th,
+.billed-by-month tbody td,
+.billed-by-month tbody th {
+  padding: 0.45rem 0.4rem;
+  border-bottom: 1px solid var(--rule-soft);
+  text-align: right;
+}
+.billed-by-month thead th {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+  border-bottom: 1px solid var(--rule);
+}
+.billed-by-month .row-label {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 800;
+  text-align: left;
+  width: 100px;
+}
+.billed-by-month thead th.row-label { color: transparent; }
+.billed-by-month .month-cell,
+.billed-by-month .total-cell {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.billed-by-month .month-cell.zero { color: var(--ink-faint); font-weight: 400; }
+.billed-by-month .row-outstanding .month-cell.warn { color: var(--warn, #b73a2a); font-weight: 700; }
+.billed-by-month .row-outstanding .total-cell.warn { color: var(--warn, #b73a2a); font-weight: 800; }
+.billed-by-month .total-col,
+.billed-by-month .total-cell {
+  border-left: 2px solid var(--rule);
+  font-weight: 800;
+}
+/* Highlight the current month column */
+.billed-by-month thead th.month-col.current,
+.billed-by-month tbody td.month-cell.current {
+  background: rgba(199, 153, 124, 0.10);
+}
+.billed-by-month thead th.month-col.current { color: var(--ink); font-weight: 800; }
+.billed-by-month tbody td.month-cell.current { font-weight: 800; }
+
+@media (max-width: 900px) {
+  .billed-by-month { font-size: 0.82rem; }
+  .billed-by-month thead th,
+  .billed-by-month tbody td,
+  .billed-by-month tbody th { padding: 0.35rem 0.25rem; }
+  .billed-by-month .row-label { width: 80px; }
+}
+
+/* Brief highlight flash on a section header when scrolled to */
+.flash-highlight {
+  animation: flash-fade 1.4s ease-out;
+}
+@keyframes flash-fade {
+  0%   { background: rgba(255, 215, 0, 0.45); }
+  100% { background: transparent; }
+}
+
+/* Invoice editor — uniform input heights, prominent Sent/Paid pills */
+.if-top-row label,
+.if-top-row select,
+.if-top-row input {
+  height: 36px;
+  box-sizing: border-box;
+}
+.if-top-row label { display: flex; flex-direction: column; gap: 0.2rem; height: auto; }
+.if-top-row label > select,
+.if-top-row label > input {
+  height: 32px;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+}
+.if-top-row .if-client { flex: 2; min-width: 200px; }
+.if-top-row .if-date { flex: 1; min-width: 130px; }
+.if-top-row .if-num { flex: 1; min-width: 130px; }
+
+.if-amount-row {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-end;
+}
+.if-amount {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.if-amount input {
+  height: 32px;
+  padding: 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+}
+.if-status-pills {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex: 1;
+}
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: all 0.1s;
+  user-select: none;
+}
+.status-pill:hover { border-color: var(--ink-soft); }
+.status-pill input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--ink);
+}
+.status-pill .pill-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #b8b6ad;
+}
+.status-pill .pill-sent { background: #feda75; box-shadow: 0 0 0 1px #c9a73c inset; }
+.status-pill .pill-paid { background: #adff00; box-shadow: 0 0 0 1px #6ea200 inset; }
+.status-pill:has(input:checked) {
+  border-color: var(--ink);
+  background: #f6f3e8;
+  color: var(--ink);
+}
+
+.if-note {
+  display: block;
+  width: 100%;
+  margin-top: 0.7rem;
+}
+.if-note input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 0.5rem;
+}
+.year-filter-row {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0.6rem 0 0.4rem;
+  flex-wrap: wrap;
+}
+.year-btn {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.85rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.1s;
+}
+.year-btn:hover { border-color: var(--ink-soft); color: var(--ink); }
+.year-btn.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+/* Generic warn coloring for any cell or text */
+.warn { color: var(--warn); }
+td.warn { color: var(--warn); }
+
+/* Advanced disclosure block — collapsed by default, contains destructive ops */
+.advanced-block {
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  padding: 0;
+}
+.advanced-block > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.7rem 1rem;
+  font-family: var(--font-ui);
+  user-select: none;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.advanced-block > summary::-webkit-details-marker { display: none; }
+.advanced-block > summary::before {
+  content: "▸";
+  color: var(--ink-soft);
+  margin-right: 0.4rem;
+  font-size: 0.85em;
+  display: inline-block;
+}
+.advanced-block[open] > summary::before { content: "▾"; }
+.advanced-block .adv-label {
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.advanced-block .adv-hint {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.advanced-inner {
+  padding: 0.4rem 1rem 1rem;
+  border-top: 1px dotted var(--rule);
+}
+
+/* Fee revision table inside the client editor */
+table.fee-revision-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  margin: 0.4rem 0 0.6rem;
+}
+table.fee-revision-table thead th {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: left;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+}
+table.fee-revision-table thead th.col-num { text-align: right; }
+table.fee-revision-table tbody tr:nth-child(even) { background: var(--paper-2); }
+table.fee-revision-table tbody td {
+  padding: 0.4rem 0.6rem;
+  font-family: var(--font-mono);
+  vertical-align: middle;
+}
+table.fee-revision-table .col-label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+table.fee-revision-table .col-num { text-align: right; }
+table.fee-revision-table .col-num.increase-pos {
+  color: var(--collected-bright);
+  font-weight: 700;
+}
+table.fee-revision-table .col-num.increase-neg {
+  color: var(--warn);
+  font-weight: 700;
+}
+table.fee-revision-table tfoot td {
+  padding: 0.55rem 0.6rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  border-top: 1px solid var(--ink);
+  font-size: 1rem;
+}
+table.fee-revision-table tfoot td.col-label {
+  font-family: var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+table.fee-revision-table tfoot td.col-num.increase-pos { color: var(--collected-bright); }
+table.fee-revision-table tfoot td.col-num.increase-neg { color: var(--warn); }
+
+/* Client invoice history table inside the client editor */
+table.client-invoices {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 0.4rem 0 0.6rem;
+}
+table.client-invoices thead th {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: left;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+}
+table.client-invoices thead th.col-num { text-align: right; }
+table.client-invoices thead th.col-status { text-align: center; width: 60px; }
+table.client-invoices tbody tr {
+  border-bottom: 1px solid var(--rule-soft);
+  cursor: pointer;
+}
+table.client-invoices tbody tr:nth-child(even) { background: var(--paper-2); }
+table.client-invoices tbody tr:hover { background: #efece5; }
+table.client-invoices tbody td {
+  padding: 0.4rem 0.6rem;
+  font-family: var(--font-mono);
+  vertical-align: middle;
+}
+table.client-invoices .col-num { text-align: right; }
+table.client-invoices .col-note { font-family: var(--font-body); font-style: italic; color: var(--ink-soft); }
+table.client-invoices .col-status { text-align: center; }
+table.client-invoices tfoot td {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 0.5rem 0.6rem;
+  border-top: 1px solid var(--rule);
+}
+table.client-invoices tfoot td.col-num { color: var(--ink); font-family: var(--font-mono); font-size: 0.95rem; }
+.client-invoices-empty {
+  padding: 0.8rem 0.6rem;
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--ink-faint);
+}
+
+/* Outstanding invoices on Overview */
+table.outstanding-invoices {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  margin-bottom: 1rem;
+}
+table.outstanding-invoices thead th {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+table.outstanding-invoices thead th.col-num { text-align: right; }
+table.outstanding-invoices thead th.col-actions { text-align: right; width: 130px; }
+table.outstanding-invoices tbody tr {
+  border-bottom: 1px solid var(--rule-soft);
+  cursor: pointer;
+}
+table.outstanding-invoices tbody tr:hover { background: #efece5; }
+table.outstanding-invoices tbody tr.overdue { background: #fbf1ef; }
+table.outstanding-invoices tbody tr.overdue:hover { background: #f8e6e2; }
+table.outstanding-invoices tbody td {
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-mono);
+  vertical-align: middle;
+}
+table.outstanding-invoices .col-name { font-family: var(--font-body); }
+table.outstanding-invoices .col-note { font-family: var(--font-body); font-style: italic; color: var(--ink-soft); }
+table.outstanding-invoices .col-num { text-align: right; }
+table.outstanding-invoices .col-num.warn { color: var(--warn); }
+table.outstanding-invoices .col-num.amount-due { color: var(--warn); font-weight: 700; }
+table.outstanding-invoices .col-actions { text-align: right; }
+table.outstanding-invoices tfoot td {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid var(--rule);
+}
+table.outstanding-invoices tfoot td.col-num { color: var(--ink); font-family: var(--font-mono); font-size: 1rem; }
+.outstanding-empty {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--ink-faint);
+  padding: 1rem 0.75rem;
+}
+.action.mark-paid {
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.7rem;
+  background: var(--collected);
+  border-color: var(--collected);
+  color: #fff;
+}
+.action.mark-paid:hover { background: var(--collected-bright); border-color: var(--collected-bright); }
+.metric-value.good { color: var(--collected); }
+.metric-sub {
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  margin-top: 0.35rem;
+  font-family: var(--font-body);
+  font-style: italic;
+}
+
+/* Monthly bar chart on overview — drawn with SVG */
+.monthly-chart {
+  width: 100%;
+  height: 320px;
+  margin: 0.5rem 0 1rem;
+}
+.monthly-chart svg { width: 100%; height: 100%; display: block; }
+
+/* Chart navigation in section header */
+.chart-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.chart-arrow {
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 0.15rem 0.6rem;
+  line-height: 1;
+}
+.chart-range {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  min-width: 14em;
+  text-align: center;
+}
+.chart-today {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.7rem;
+}
+
+/* Inline save feedback shown next to the Save to GitHub button */
+.save-feedback {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--collected);
+  padding: 0.4rem 0.8rem;
+  background: #e8f0e6;
+  border: 1px solid var(--collected);
+  margin-right: 0.6rem;
+  transition: opacity 0.4s;
+}
+.save-feedback[hidden] { display: none; }
+.save-feedback.error {
+  color: var(--warn);
+  background: #fbeae6;
+  border-color: var(--warn);
+}
+
+/* Roster */
+table.roster {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+table.roster thead th {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #2a6020;              /* darker green for headers */
+  text-align: left;
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--ink);
+  border-top: 1px solid var(--rule);
+  border-left: 1px dotted var(--rule);
+}
+table.roster thead th:first-child { border-left: none; }
+table.roster thead th.col-num { text-align: right; }
+table.roster tbody tr { border-bottom: 1px solid var(--rule-soft); }
+table.roster tbody tr:nth-child(even) { background: var(--paper-2); }
+table.roster tbody tr:hover { background: #efece5; cursor: pointer; }
+table.roster tbody td {
+  padding: 0.5rem 0.5rem;
+  vertical-align: middle;
+  border-left: 1px dotted var(--rule);
+}
+table.roster tbody td:first-child { border-left: none; }
+table.roster .col-name {
+  font-weight: 700;
+  color: var(--ink);
+  font-family: var(--font-display);   /* Interstate Condensed */
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 1.27rem;                 /* 15% larger */
+}
+table.roster .col-name .full-name {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  font-family: var(--font-body);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+table.roster .col-num {
+  text-align: right;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+table.roster .col-num.remaining { font-weight: 700; }
+.outstanding-date {
+  font-family: var(--font-body);    /* Warnock */
+  font-style: italic;
+  font-size: 0.85em;
+  color: var(--ink-soft);
+  margin-right: 0.45em;
+  font-weight: 400;
+}
+.progress-bar {
+  position: relative;
+  height: 6px;
+  background: var(--rule-soft);
+  width: 100%;
+}
+.progress-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: var(--ink);
+}
+.progress-bar > span.collected { background: var(--collected); }
+.progress-text {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  margin-top: 0.15rem;
+  font-family: var(--font-mono);
+}
+.spark { display: block; }
+
+/* ============================================================
+   Clients tab
+   ============================================================ */
+.client-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+.client-card {
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--rule-soft);
+  border-right: 1px solid var(--rule-soft);
+  cursor: pointer;
+}
+.client-card:nth-child(2n) { border-right: 0; }
+.client-card.archived { opacity: 0.5; }
+/* Alternate-row zebra striping for the Clients tab card grid (2-col) */
+.client-card:nth-child(4n+3),
+.client-card:nth-child(4n+4) {
+  background: var(--paper-2);
+}
+/* Make the hover slightly darker than the zebra tone so hover is visible on both row types */
+.client-card:hover { background: var(--rule-soft); }
+
+.client-card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.client-card h3 {
+  margin: 0;
+  font-family: var(--font-display);  /* Interstate Condensed */
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.client-card .full {
+  font-style: italic;
+  color: var(--ink-faint);
+  font-size: 1rem;
+  font-family: var(--font-body);
+  display: block;
+  margin-top: 0.1rem;
+}
+.client-card .fee-headline {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;  /* was 1.4rem; reduced 25% per user request */
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 0.5rem;
+  letter-spacing: 0;
+}
+.client-card .basis {
+  display: none;  /* hide separate basis line — fee is now part of headline */
+}
+.client-card .client-numbers {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+}
+.client-card .client-numbers > div { min-width: 0; }
+.client-card .client-numbers .l {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+}
+.client-card .client-numbers .warn { color: var(--warn); }
+
+.filter {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.filter input, .filter select {
+  margin-left: 0.4rem;
+  font-family: var(--font-ui);
+  border: 1px solid var(--rule);
+  background: white;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   Cash Flow tab — small multiples
+   ============================================================ */
+.small-multiples {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+.sm-row {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--rule-soft);
+  border-right: 1px solid var(--rule-soft);
+  display: grid;
+  grid-template-columns: 160px 1fr 110px;
+  align-items: center;
+  gap: 0.8rem;
+}
+.sm-row:nth-child(2n) { border-right: 0; }
+.sm-row .sm-name {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.sm-row .sm-total {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  text-align: right;
+}
+.sm-chart { width: 100%; height: 36px; }
+
+/* Matrix — month × client grid */
+.matrix-wrap {
+  overflow-x: auto;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+table.matrix {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  min-width: 100%;
+}
+table.matrix th {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.86rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: right;
+  padding: 0.6rem 0.72rem;    /* 15% narrower horizontally */
+  border-bottom: 1px solid var(--ink);
+  border-left: 1px dotted var(--rule);
+  white-space: nowrap;
+}
+table.matrix th.client-col {
+  text-align: left;
+  border-left: none;
+  position: sticky;
+  left: 0;
+  background: var(--paper);
+  z-index: 2;
+}
+table.matrix td {
+  padding: 0.55rem 0.72rem;   /* 15% narrower horizontally */
+  text-align: right;
+  border-bottom: 1px solid var(--rule-soft);
+  border-left: 1px dotted var(--rule);
+  cursor: pointer;
+  white-space: nowrap;
+}
+table.matrix td.client-col {
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border-left: none;
+  position: sticky;
+  left: 0;
+  background: var(--paper);
+  z-index: 1;
+}
+table.matrix tr:nth-child(even) td.client-col { background: var(--paper-2); }
+table.matrix tr:nth-child(even) { background: var(--paper-2); }
+table.matrix td:hover:not(.client-col) {
+  background: #efeadd !important;
+}
+table.matrix td.empty { color: var(--rule); }
+
+/* Inline status dot inside each matrix cell */
+.matrix-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 0.35em;
+  vertical-align: 0.05em;
+  background: #b8b6ad;
+}
+.matrix-dot.sent {
+  background: #feda75;                /* warm yellow */
+  box-shadow: 0 0 0 1px #c9a73c inset;
+}
+.matrix-dot.paid {
+  background: #adff00;                /* bright lime green */
+  box-shadow: 0 0 0 1px #6ea200 inset;
+}
+.matrix-dot.overdue {
+  background: #ff782e;                /* bright orange */
+  box-shadow: 0 0 0 1px #c45417 inset;
+}
+.matrix-num { font-family: var(--font-mono); }
+
+/* Multi-row matrix footer: Total / Sent / Paid / Overdue */
+table.matrix tfoot td {
+  border-top: none;
+  border-bottom: 0;
+  font-weight: 700;
+  background: var(--paper) !important;
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+}
+table.matrix tfoot tr.total-row td { border-top: 1px solid var(--ink); padding-top: 0.65rem; }
+table.matrix tfoot tr.total-sent td { color: #8b6a14; }
+table.matrix tfoot tr.total-paid td { color: #4a8500; }
+table.matrix tfoot tr.total-overdue td { color: #b34a18; border-bottom: 1px solid var(--ink); padding-bottom: 0.65rem; }
+table.matrix tfoot td.client-col {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.92rem;
+}
+
+/* ============================================================
+   Invoices tab
+   ============================================================ */
+table.invoices {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  margin-top: 0.5rem;
+}
+table.invoices thead th {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: left;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--ink);
+  border-top: 1px solid var(--rule);
+  border-left: 1px dotted var(--rule);
+}
+table.invoices thead th:first-child { border-left: none; }
+table.invoices thead th.sortable-th { cursor: pointer; user-select: none; }
+table.invoices thead th.sortable-th:hover { color: var(--ink); }
+.sort-ind {
+  display: inline-block;
+  width: 0.7em;
+  margin-left: 0.2em;
+  color: var(--ink-faint);
+  font-size: 0.85em;
+}
+.sort-ind.asc::after { content: "▲"; }
+.sort-ind.desc::after { content: "▼"; }
+table.invoices thead th.sortable-th.active { color: var(--ink); }
+table.invoices thead th.sortable-th.active .sort-ind { color: var(--ink); }
+table.invoices thead th.col-num { text-align: right; }
+table.invoices thead th.col-status { text-align: center; }
+table.invoices tbody tr { border-bottom: 1px solid var(--rule-soft); }
+table.invoices tbody tr:nth-child(even) { background: var(--paper-2); }
+table.invoices tbody tr:hover { background: #efece5; cursor: pointer; }
+table.invoices tbody tr.unsent { color: var(--ink-soft); }
+table.invoices tbody td {
+  padding: 0.45rem 0.6rem;
+  vertical-align: middle;
+  border-left: 1px dotted var(--rule);
+}
+table.invoices tbody td:first-child { border-left: none; }
+table.invoices td.col-date { font-family: var(--font-mono); width: 110px; }
+table.invoices td.col-num { text-align: right; font-family: var(--font-mono); width: 110px; }
+table.invoices td.col-status { text-align: center; width: 60px; }
+table.invoices td.col-note { color: var(--ink-soft); font-style: italic; }
+table.invoices tfoot td {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  border-top: 1px solid var(--ink);
+  padding: 0.6rem;
+}
+
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #b8b6ad;     /* gray = drafted / not done */
+}
+.dot.on {
+  background: #f0c419;     /* bright yellow = sent */
+  box-shadow: 0 0 0 1px #c89d10 inset;
+}
+.dot.paid {
+  background: #2bb455;     /* bright green = paid */
+  box-shadow: 0 0 0 1px #1f8a40 inset;
+}
+.dot.sent-only {
+  /* sent but not paid — keep yellow for "sent" plus shows as "unpaid" via separate paid dot */
+  background: #f0c419;
+  box-shadow: 0 0 0 1px #c89d10 inset;
+}
+.dot.unpaid {
+  /* paid column when not paid — red until paid */
+  background: #e63946;     /* bright red = not paid */
+  box-shadow: 0 0 0 1px #b32e3a inset;
+}
+
+/* ============================================================
+   Modals
+   ============================================================ */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(28,28,26,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal-backdrop[hidden] { display: none !important; }
+.modal {
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  width: min(640px, 92vw);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+/* 2026-05-23: widened from 820 to fit 2-column body */
+.modal.client-modal { width: min(1180px, 96vw); }
+
+/* Sidebar SAVE button — full-width pill so it reads as the primary action. */
+.sidebar-save {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+}
+
+/* Two-column body inside the client editor.
+   Left: identity, fee type, phase breakdown.  Right: fee tracking, past invoices, notes. */
+.cf-body-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 2rem;
+  align-items: start;
+}
+@media (max-width: 980px) {
+  .cf-body-grid { grid-template-columns: 1fr; gap: 0; }
+}
+.cf-body-left  > *:first-child,
+.cf-body-right > *:first-child { margin-top: 0; }
+.modal-header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--ink);
+  padding: 0.7rem 1rem;
+}
+.modal-header h2 {
+  font-family: var(--font-ui);
+  font-weight: 700;           /* bold */
+  font-size: 1.35rem;         /* 15% larger than 18px */
+  margin: 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.close-x {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  line-height: 1;
+}
+.modal-body {
+  padding: 1rem 1.2rem;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.form-row {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 0.6rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.form-row.phases label { min-width: 90px; }
+.form-row label {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 400;
+  flex: 1;
+  min-width: 140px;
+}
+.form-row label.grow { flex: 2; }
+.form-row label.checkbox-label {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+  text-transform: none;
+  font-size: 0.92rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--ink);
+  font-family: var(--font-ui);
+}
+input[type="text"], input[type="number"], input[type="date"], input[type="password"], textarea, select {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--rule);
+  background: white;
+  color: var(--ink);
+  margin-top: 0.25rem;
+}
+
+/* Strip the +/- spinner controls from number inputs (Scott prefers typing) */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* One-line inline label: text on the left of input on the same row */
+.form-row label.inline-label {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.8rem;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: var(--ink);
+  font-family: var(--font-ui);
+}
+.form-row label.inline-label .lbl-text {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.form-row label.inline-label input {
+  flex: 1;
+  margin-top: 0;
+}
+input[readonly] { background: var(--paper-2); color: var(--ink-soft); }
+textarea { width: 100%; resize: vertical; }
+
+table.phase-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  margin: 0.4rem 0 0.8rem;
+}
+table.phase-table th, table.phase-table td {
+  text-align: right;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 1px solid var(--rule-soft);
+}
+table.phase-table th {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--ink);
+}
+table.phase-table th:first-child, table.phase-table td:first-child { text-align: left; }
+
+.modal-footer {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.6rem;
+  padding: 0.8rem 1.2rem;
+  border-top: 1px solid var(--rule);
+  margin: 0;
+  background: var(--paper);
+  align-items: center;
+}
+.modal-footer .spacer { flex: 1; }
+
+/* ============================================================
+   Settings
+   ============================================================ */
+.settings-block {
+  border-top: 1px solid var(--rule);
+  padding: 1.2rem 0;
+}
+.settings-block:first-of-type { border-top: 0; padding-top: 0.4rem; }
+.settings-block h3 {
+  margin-top: 0;
+}
+.settings-desc {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin: 0 0 0.6rem;
+  max-width: 720px;
+}
+.settings-desc code {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background: var(--paper-2);
+  padding: 0 0.3rem;
+}
+.settings-desc a { color: var(--ink); text-decoration: underline; }
+.settings-note {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin: 0.4rem 0 0.8rem;
+  max-width: 720px;
+}
+.settings-status {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+.settings-status.success { color: var(--collected); }
+.settings-status.error { color: var(--warn); }
+
+/* ============================================================
+   Toast
+   ============================================================ */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.6rem 1rem;
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  letter-spacing: 0;
+  z-index: 200;
+  max-width: 360px;
+}
+.toast.error { background: var(--warn); }
+.toast.success { background: var(--collected); }
+
+/* ============================================================
+   Radio buttons & fee-type blocks
+   ============================================================ */
+.radio-group {
+  flex-direction: column;
+}
+.radios {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-top: 0.4rem;
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: var(--ink);
+}
+.radios .radio {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: var(--ink);
+  min-width: 0;
+}
+.radios .radio input { margin: 0; }
+
+.fee-block {
+  border-left: 2px solid var(--rule);
+  padding-left: 0.8rem;
+  margin-bottom: 0.6rem;
+}
+
+.form-hint {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  margin: -0.2rem 0 0.8rem;
+  max-width: 720px;
+}
+
+/* ============================================================
+   Invoice builder
+   ============================================================ */
+.invoice-builder {
+  max-width: 1240px;
+}
+/* 2026-05-23: Section titles inside Create Invoice — bold Columbia Titling
+   Standard so they match the invoice's small-caps label aesthetic. Falls back
+   to similar display serifs (Cinzel on Linux PDF renders, Trajan Pro on Mac
+   if Columbia Titling isn't installed). */
+.invoice-builder h3 {
+  /* 2026-06-22: section headers switched to BioRhyme Expanded (self-hosted) per Scott */
+  font-family: "BioRhyme Expanded", "columbia-titling", "Columbia Titling Standard", Cinzel,
+               "Trajan Pro", "Trajan Pro 3", "Optima",
+               "Times New Roman", serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 1.0rem 0 0.4rem;
+}
+.invoice-builder h3 .hint {
+  font-weight: 400;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-faint);
+  margin-left: 0.4rem;
+}
+/* 2026-05-23: revised layout — Past Invoices and Phase Progress are now full
+   width (above this grid) so the sliders have room to work. This 2-column grid
+   holds Adjustments + Other Items + Description on the LEFT, and Summary on
+   the RIGHT, so the bottom of the page is half as tall. Collapses below 1024px. */
+.ib-body-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 0 2rem;
+  align-items: start;
+  margin-top: 0.6rem;
+}
+.ib-body-left  > *:first-child,
+.ib-body-right > *:first-child { margin-top: 0; }
+@media (max-width: 1023px) {
+  .ib-body-grid { grid-template-columns: 1fr; gap: 0; }
+}
+/* Stacked form-row used in the right column so the two adjustment inputs
+   sit one above the other (column is narrower). */
+.invoice-builder .form-row.stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.invoice-builder .form-row.stacked label { width: 100%; }
+
+.ib-client-info {
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  /* 2026-05-23: tighter bottom margin so the gap to Past Invoices / Fee Basis row is reduced */
+  padding: 0.6rem 0;
+  margin: 0.8rem 0 0.2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 2rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+.ib-client-info.empty {
+  font-style: italic;
+  color: var(--ink-faint);
+  display: block;
+}
+.ib-client-info .ib-line { display: block; }
+.ib-client-info .ib-line strong {
+  display: inline-block;
+  min-width: 130px;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+  margin-right: 0.4rem;
+}
+
+.ib-help {
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0 0 0.6rem;
+  font-size: 0.95rem;
+}
+
+/* Catchup billing panel — locked phases with un-billed prior progress.
+   Sits above the phase header row inside #ib_phases.
+   2026-05-23: condensed — smaller padding, rows arranged in a 2-column grid
+   so the section takes less vertical space. */
+.ib-catchup {
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  padding: 0.5rem 0.7rem;
+  margin: 0 0 0.6rem 0;
+}
+.ib-catchup-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.3rem;
+}
+.ib-catchup-title {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.ib-catchup-help {
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  flex: 1 1 220px;
+}
+.ib-catchup-rows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.15rem 1rem;
+}
+.ib-catchup-row {
+  display: grid;
+  grid-template-columns: 18px 56px 1fr 6.5em;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.2rem;
+  border-bottom: 1px solid var(--rule-soft);
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.12s ease;
+}
+.ib-catchup-row:nth-last-child(-n+2) { border-bottom: none; }
+.ib-catchup-row:hover { opacity: 1; }
+.ib-catchup-row.applied { opacity: 1; }
+.ib-catchup-row .ib-catchup-cb { width: 16px; height: 16px; cursor: pointer; margin: 0; }
+.ib-catchup-phase {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.ib-catchup-note {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.ib-catchup-amt {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  text-align: right;
+  color: var(--ink);
+  font-weight: 700;
+}
+.ib-catchup-row:not(.applied) .ib-catchup-amt { color: var(--ink-faint); font-weight: 500; }
+.ib-catchup-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  padding-top: 0.5rem;
+  margin-top: 0.4rem;
+  border-top: 1px solid var(--rule);
+}
+.ib-catchup-foot .lbl {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  align-self: center;
+}
+.ib-catchup-foot .val {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+@media (max-width: 780px) {
+  .ib-catchup-row {
+    grid-template-columns: 20px 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 0.2rem 0.6rem;
+  }
+  .ib-catchup-row .ib-catchup-cb { grid-column: 1; grid-row: 1 / span 2; }
+  .ib-catchup-phase { grid-column: 2; grid-row: 1; }
+  .ib-catchup-input { grid-column: 3; grid-row: 1; }
+  .ib-catchup-note  { grid-column: 2 / span 2; grid-row: 2; font-size: 0.78rem; }
+}
+
+.ib-phases {
+  border-top: 1px solid var(--rule);
+}
+.ib-phase-row {
+  display: grid;
+  grid-template-columns: 92px 44px 92px 116px minmax(300px, 1fr) 96px 72px;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.ib-phase-name {
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.ib-phase-fee {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  text-align: right;
+}
+.ib-phase-slider {
+  width: 100%;
+  margin: 0;
+  cursor: pointer;
+  touch-action: none;          /* iOS: let slider capture touch, not scroll */
+  -webkit-appearance: auto;    /* ensure native slider on iOS Safari */
+  height: 24px;                /* bigger touch target */
+}
+.ib-phase-pct {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  text-align: right;
+  color: var(--ink);
+}
+.ib-phase-prior {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  text-align: right;
+}
+/* Catch-up column — a checkbox that mirrors this phase's slider/this-invoice
+   state (see applyPhasePct in app.js), not a separate synced number. */
+.ib-phase-catchup {
+  display: flex;
+  justify-content: flex-end;
+}
+.ib-phase-catchup-lbl {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  user-select: none;
+}
+.ib-phase-catchup-lbl input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--highlight);
+}
+.ib-phase-catchup-amt {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  font-weight: 500;
+}
+.ib-phase-catchup-amt.on {
+  color: var(--highlight);
+  font-weight: 700;
+}
+.ib-phase-catchup-note {
+  font-style: italic;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+.ib-phase-catchup-dash {
+  color: var(--rule);
+}
+.ib-phase-row.no-progress .ib-phase-catchup-dash { color: var(--ink-faint); }
+/* This-invoice column — slider on top, $ input + % readout stacked below.
+   Folds what used to be two separate grid columns (Slider, This invoice)
+   into one, freeing up the space the new Catch-up column needs. */
+.ib-phase-this {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.ib-phase-this-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--ink);
+  font-weight: 700;
+}
+.ib-phase-remaining {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  text-align: right;
+  color: var(--ink-soft);
+}
+.ib-phase-row.no-progress {
+  opacity: 0.5;
+}
+.ib-phase-headers {
+  display: grid;
+  grid-template-columns: 92px 44px 92px 116px minmax(300px, 1fr) 96px 72px;
+  gap: 1rem;
+  padding: 0.4rem 0;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+  border-bottom: 1px solid var(--ink);
+}
+.ib-phase-headers > span:nth-child(2),
+.ib-phase-headers > span:nth-child(3),
+.ib-phase-headers > span:nth-child(4),
+.ib-phase-headers > span:nth-child(6),
+.ib-phase-headers > span:nth-child(7) { text-align: right; }
+.ib-phase-headers > span:nth-child(5) { text-align: right; padding-right: 0.35rem; }
+.ib-phase-headers > span:nth-child(8) { text-align: center; }
+
+/* Toolbar above the phase table — "Catch up everything" / "Clear catch-up" */
+.ib-phase-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0 0 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* Session 20: catch-up picker — compact per-phase checklist right below the
+   toolbar buttons. Each chip mirrors the same checkbox in the phase row
+   below (see setCatchupChecked in app.js) — pick any combination of phases
+   and their flat dollar shares sum straight into the invoice total. */
+.ib-catchup-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 0.6rem;
+}
+.ib-catchup-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  cursor: pointer;
+  user-select: none;
+  background: var(--paper-2);
+}
+.ib-catchup-chip input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--highlight);
+}
+.ib-catchup-chip-phase {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.ib-catchup-chip-amt {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+  font-weight: 500;
+}
+.ib-catchup-chip-amt.on {
+  color: var(--highlight);
+  font-weight: 700;
+}
+.ib-catchup-chip:has(input:checked) {
+  border-color: var(--highlight);
+  background: var(--paper);
+}
+/* Locked-phase chips (flat add, no slider to move) get a small dot so it
+   reads differently from an open-phase chip (which drags that phase's own
+   slider to 100% when checked). */
+.ib-catchup-chip[data-kind="locked"]::after,
+.ib-phase-catchup-lbl[data-kind="locked"]::after {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  margin-left: 0.15rem;
+}
+
+/* Lump-sum catchup — trimmed to a single line below the phase table (was a
+   whole box above it; folding per-phase catchup into the table freed this
+   up to be secondary, since most invoices won't need it). */
+.ib-lumpsum-line {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.8rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--rule);
+  font-size: 0.85rem;
+}
+.ib-lumpsum-label {
+  flex: 0 0 auto;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.ib-lumpsum-help {
+  flex: 1 1 auto;
+  color: var(--ink-faint);
+}
+#ib_catchup_lumpsum {
+  width: 8em;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: inherit;
+  padding: 2px 6px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: transparent;
+}
+#ib_catchup_lumpsum:focus {
+  border-color: var(--accent, #4a8a3c);
+  outline: none;
+}
+
+/* Non-phased / flat invoice builder UI */
+.ib-flat-row {
+  border-top: 1px solid var(--rule);
+  padding: 1rem 0;
+  margin-top: 0.5rem;
+}
+.ib-flat-row .form-row {
+  margin: 0;
+}
+.ib-flat-row input {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  font-weight: 700;
+  width: 100%;
+}
+/* 5%-increment amount slider for fixed / non-phased clients */
+.ib-flat-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.2rem 0 1rem;
+}
+.ib-flat-slider {
+  flex: 1;
+  min-width: 0;
+}
+.ib-flat-slider-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  min-width: 92px;
+  line-height: 1.1;
+}
+.ib-flat-slider-pct {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.ib-flat-slider-hint {
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 0.1rem;
+}
+.ib-flat-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem 1.5rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.ib-flat-summary > div {
+  display: flex;
+  flex-direction: column;
+}
+.ib-flat-summary .ib-flat-label {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 700;
+}
+.ib-flat-summary .ib-flat-val {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  color: var(--ink);
+  margin-top: 0.2rem;
+}
+
+.ib-summary {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 540px;
+  margin-top: 0.5rem;
+}
+.ib-summary td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--rule-soft);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+.ib-summary td.num {
+  text-align: right;
+  font-family: var(--font-mono);
+}
+.ib-summary tr.total td {
+  border-top: 1px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  font-weight: 700;
+  font-size: 1.1rem;
+  background: #ecf0e6;
+}
+.ib-summary tr.separator td {
+  border: 0;
+  padding: 0.3rem 0;
+}
+
+
+
+
+/* Client editor h3 section labels — 15% larger */
+#clientEditor h3 {
+  font-size: 1.24rem;
+}
+
+/* Closed-out client card */
+.client-card.closed-out {
+  opacity: 0.6;
+}
+.client-card.closed-out h3 {
+  text-decoration: line-through;
+}
+.closed-out-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.6rem;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: var(--ink-faint);
+  color: var(--paper);
+  border-radius: 3px;
+  padding: 0.1em 0.4em;
+  vertical-align: middle;
+  text-decoration: none;
+}
+/* Fee Tracking boxes */
+.fee-tracking-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.fee-track-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.fee-track-label {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+}
+.fee-track-input {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.4rem 0.6rem;
+  background: var(--paper);
+  color: var(--ink);
+  width: 100%;
+}
+.fee-track-input[readonly] {
+  background: var(--paper-2);
+  color: var(--ink-soft);
+  border-color: transparent;
+}
+.fee-track-input.catchup-pos {
+  color: var(--collected);
+}
+.fee-track-input.catchup-neg {
+  color: var(--overdue);
+}
+.fee-track-hint {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  font-family: var(--font-ui);
+}
+
+/* Catch-up on client card */
+.card-catchup {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2rem 0;
+  margin-bottom: 0.25rem;
+}
+.card-catchup .l {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 400;
+}
+.catchup-pos { color: var(--collected); }
+.catchup-neg { color: var(--overdue); }
+
+
+.fee-tracking-row--5 {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+}
+@media (max-width: 960px) {
+  .fee-tracking-row--5 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+  .fee-tracking-row--5 { grid-template-columns: repeat(2, 1fr); }
+}
+/* Other / Misc Items */
+.ib-other-row {
+  display: grid;
+  grid-template-columns: 1fr 160px 32px;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.ib-other-row:first-child { border-top: 1px solid var(--rule-soft); }
+.ib-other-label {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.3rem 0.5rem;
+  background: var(--paper);
+  color: var(--ink);
+  width: 100%;
+}
+.ib-other-amount {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.3rem 0.5rem;
+  text-align: right;
+  background: var(--paper);
+  color: var(--ink);
+  width: 100%;
+}
+.ib-other-remove {
+  background: none;
+  border: none;
+  color: var(--ink-faint);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+.ib-other-remove:hover { color: var(--overdue); }
+button.action.ghost.small {
+  font-size: 0.78rem;
+  padding: 0.25rem 0.7rem;
+  margin-top: 0.5rem;
+}
+.ib-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+}
+.ib-footer .spacer { flex: 1; }
+
+/* ============================================================
+   Custom range slider — restrained styling
+   ============================================================ */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 3px;
+  background: var(--rule);
+  border-radius: 0;
+}
+input[type="range"]::-moz-range-track {
+  height: 3px;
+  background: var(--rule);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ink);
+  margin-top: -5.5px;
+  border: 0;
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 0;
+  cursor: pointer;
+}
+input[type="range"]:focus { outline: none; }
+input[type="range"]:focus::-webkit-slider-thumb { background: var(--collected); }
+input[type="range"]:focus::-moz-range-thumb { background: var(--collected); }
+
+
+/* ---- Sortable table headers (Overview tab) ---- */
+table.outstanding-invoices thead th[data-sort],
+table.roster thead th[data-sort] {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding-right: 1.4rem;
+}
+table.outstanding-invoices thead th[data-sort]:hover,
+table.roster thead th[data-sort]:hover {
+  color: var(--ink);
+}
+table.outstanding-invoices thead th[data-sort]::after,
+table.roster thead th[data-sort]::after {
+  content: '';
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.6rem;
+  color: var(--ink-faint);
+  opacity: 0.4;
+}
+/* Inactive headers show a faint dimmer indicator on hover for affordance */
+table.outstanding-invoices thead th[data-sort]:hover::after,
+table.roster thead th[data-sort]:hover::after {
+  content: '⇅';
+  opacity: 0.6;
+}
+table.outstanding-invoices thead th.sort-asc::after,
+table.roster thead th.sort-asc::after {
+  content: '▲';
+  color: var(--ink);
+  opacity: 1;
+}
+table.outstanding-invoices thead th.sort-desc::after,
+table.roster thead th.sort-desc::after {
+  content: '▼';
+  color: var(--ink);
+  opacity: 1;
+}
+
+
+/* Planned-but-no-invoice rows in Outstanding Invoices table — italic note + dimmed look */
+table.outstanding-invoices tbody tr.planned-row {
+  background: #f9f6ee;
+}
+table.outstanding-invoices tbody tr.planned-row:hover {
+  background: #f1ecdf;
+}
+table.outstanding-invoices tbody tr.planned-row .col-note {
+  color: var(--ink-faint);
+}
+table.outstanding-invoices tbody tr.planned-row .col-num {
+  color: var(--ink-soft);
+}
+
+/* Roster totals — top header row */
+table.roster thead tr.roster-totals-row th {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  border-top: none;
+  padding: 0.55rem 0.5rem 0.3rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+table.roster thead tr.roster-totals-row th.col-name {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+table.roster thead tr.roster-totals-row th.warn {
+  color: var(--warn);
+}
+
+/* ============================================================
+   RESPONSIVE — iPad 13" + iPhone
+   ============================================================ */
+
+/* ── iPad 13" portrait (1024px) — minor tightening ── */
+@media (max-width: 1180px) {
+  .masthead { padding: 1rem 1.5rem 0.5rem; }
+  .tab-pane  { padding: 1rem 1.5rem 3rem; }
+  .metric-value { font-size: 1.7rem; }
+  .metric { padding: 0 0.9rem; }
+}
+
+/* ── iPad mini / large phone landscape (~900px) ── */
+@media (max-width: 960px) {
+  .masthead h1 { font-size: 1.3rem; }
+  .metric-value { font-size: 1.4rem; }
+
+  /* Tabs: let them scroll if they overflow */
+  .tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  /* Tables: horizontal scroll */
+  table.roster,
+  table.outstanding-invoices,
+  table.invoices {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ── iPhone (portrait, up to ~430px) ── */
+
+/* ── Phase rows on mobile: stack to avoid overflow / slider touch issues ── */
+@media (max-width: 780px) {
+  .ib-phase-headers { display: none; }  /* hide column headers */
+  .ib-phase-row {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 0.4rem 1rem;
+    padding: 0.8rem 0;
+  }
+  .ib-phase-name { grid-column: 1; grid-row: 1; }
+  .ib-phase-pct  { grid-column: 2; grid-row: 1; text-align: right; }
+  .ib-phase-fee-input,
+  .ib-phase-prior,
+  .ib-phase-remaining { display: none; }
+  /* This-invoice cell (slider + $ input + %) takes the full width on its
+     own row — it already stacks the slider above the amount internally. */
+  .ib-phase-this {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .ib-phase-this .ib-phase-slider {
+    width: 100%;
+    height: 32px;   /* extra touch target on mobile */
+  }
+  .ib-phase-this-row { font-size: 0.85rem; }
+  /* Catch-up + Complete share the third row so neither gets lost below the fold. */
+  .ib-phase-catchup  { grid-column: 1; grid-row: 3; justify-content: flex-start; }
+  .ib-phase-complete { grid-column: 2; grid-row: 3; justify-content: flex-end; }
+}
+
+@media (max-width: 600px) {
+  /* Masthead — stack name and controls */
+  .masthead { padding: 0.8rem 1rem 0.4rem; }
+  .masthead-row { gap: 0.5rem; }
+  .masthead h1 { font-size: 1.1rem; }
+  .masthead-sub { font-size: 0.85rem; }
+
+  /* Status row — compress */
+  .status-row { font-size: 0.75rem; gap: 0.4rem; }
+
+  /* Save cluster — hide on phones (read-only on mobile) */
+  .save-cluster { display: none; }
+
+  /* Tabs — smaller, scrollable */
+  .tab { padding: 0.4rem 0.7rem; font-size: 0.85rem; }
+  .tab-pane { padding: 0.8rem 0.75rem 2rem; }
+
+  /* Metrics — 2×3 grid instead of 5-wide */
+  .overview-summary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem 0;
+    padding: 0.75rem 0;
+  }
+  .metric {
+    padding: 0.5rem 0.75rem;
+    border-right: none;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  /* 5th metric spans full width */
+  .metric:nth-child(5) {
+    grid-column: 1 / -1;
+    border-bottom: none;
+  }
+  .metric-label { font-size: 0.7rem; }
+  .metric-value { font-size: 1.5rem; }
+  .metric-sub   { font-size: 0.7rem; }
+
+  /* Section headers */
+  .section-header h2 { font-size: 0.95rem; }
+
+  /* Chart — allow horizontal scroll */
+  .cash-flow-wrap, svg { max-width: 100%; overflow-x: auto; }
+
+  /* Tables — compact + horizontal scroll */
+  table.roster,
+  table.outstanding-invoices,
+  table.invoices {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.82rem;
+  }
+  table.roster thead th,
+  table.outstanding-invoices thead th {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.5rem;
+    white-space: nowrap;
+  }
+  table.roster tbody td,
+  table.outstanding-invoices tbody td {
+    padding: 0.45rem 0.5rem;
+    white-space: nowrap;
+  }
+  table.roster tfoot td,
+  table.outstanding-invoices tfoot td {
+    padding: 0.45rem 0.5rem;
+    font-size: 0.82rem;
+  }
+
+  /* Client cards on Clients tab */
+  .client-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ============================================================
+   2026-04-27-I additions
+   ============================================================ */
+
+/* Outstanding Invoices — client name column matches roster style */
+table.outstanding-invoices td.col-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 1.05rem;
+}
+
+/* Phase slider — deposit locked/done */
+.ib-phase-row.deposit-done {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.ib-phase-row.deposit-done .ib-phase-name::after {
+  content: ' ✓';
+  font-family: var(--font-body);
+  font-size: 0.8em;
+  color: var(--collected-bright);
+  font-weight: 400;
+}
+
+/* Roster — Total Fee column: same color as other numeric columns (no special treatment) */
+table.roster td.col-num.total-fee {
+  /* inherits from col-num — no override */
+}
+
+/* Fee type radio buttons — green accent on the circle itself */
+.radios .radio input[type="radio"] {
+  accent-color: #4a8a3c;
+  width: 1.05em;
+  height: 1.05em;
+  cursor: pointer;
+}
+
+/* Past invoices — pale red row for sent-but-not-paid */
+table.client-invoices tbody tr.inv-outstanding {
+  background: #fce8e8 !important;
+}
+table.client-invoices tbody tr.inv-outstanding:nth-child(even) {
+  background: #f8dcdc !important;
+}
+table.client-invoices tbody tr.inv-outstanding:hover {
+  background: #f5d0d0 !important;
+}
+/* Paid rows keep green tint */
+table.client-invoices tbody tr.inv-paid {
+  background: #eaf7ec !important;
+}
+table.client-invoices tbody tr.inv-paid:hover {
+  background: #d8f0db !important;
+}
+
+/* Matrix — uniform column width, slightly narrower */
+table.matrix th,
+table.matrix td {
+  min-width: 72px;   /* uniform; approx April width × 0.85 */
+}
+/* Lines separating all four tfoot summary rows */
+table.matrix tfoot tr.total-row td    { border-top: 2px solid var(--ink); padding-top: 0.65rem; }
+table.matrix tfoot tr.total-sent td   { border-top: 1px solid var(--rule); }
+table.matrix tfoot tr.total-paid td   { border-top: 1px solid var(--rule); }
+table.matrix tfoot tr.total-overdue td { border-top: 1px solid var(--rule); border-bottom: 2px solid var(--ink); padding-bottom: 0.65rem; }
+
+/* Generate Word Document button — same pale tiffany green as Create Invoice */
+#ib_generate {
+  background: #a8dcda;
+  color: #1a4a49;
+  border-color: #7bbebb;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+#ib_generate:hover {
+  background: #8fd0ce;
+}
+
+
+/* === Session 7 (Build K) === */
+
+/* Estimate revisions list */
+.fee-revisions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.fee-revision-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 1fr 1fr 32px;
+  gap: 0.6rem;
+  align-items: end;
+  padding: 0.5rem 0.6rem;
+  background: var(--paper-2);
+  border-radius: 4px;
+  border: 1px solid var(--rule-soft);
+}
+.fee-revision-row .fr-tag {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  align-self: center;
+  padding-top: 1.05rem;
+}
+.fee-revision-row .fr-tag .fr-tag-num {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+.fee-revision-row .fr-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.fee-revision-row label {
+  font-family: var(--font-ui);
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--ink-faint);
+  /* Allow long labels ("Catch-up vs Original") to wrap instead of forcing
+     nowrap — nowrap was making that column's min-content balloon and steal
+     width from the New Estimate / New Fee boxes next to it. A fixed
+     min-height keeps every box's input aligned whether its label wraps to
+     one line or two. */
+  white-space: normal;
+  line-height: 1.15;
+  display: block;
+  min-height: 2.1em;
+}
+.fee-revision-row input.fee-track-input {
+  font-size: 0.72rem;
+}
+/* The editorial redesign's ".modal.client-modal .fee-track-input" rule
+   (cma.css) sets a big 1.3rem "headline number" size meant for standalone
+   figures like Current Fee — it was winning here on specificity (3 classes
+   vs. 2) and forcing 1.3rem text into these ~90px-wide revision boxes,
+   which is the real reason they read as "too small": the box was sized for
+   compact text, but was displaying oversized text that overflowed it. Beat
+   that rule's specificity so the smaller size above actually applies. */
+.modal.client-modal .fee-revision-row input.fee-track-input {
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.fee-revision-row .fr-remove {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  align-self: center;
+  margin-bottom: 0.1rem;
+}
+.fee-revision-row .fr-remove:hover {
+  background: #f5d8d8;
+  color: var(--overdue);
+  border-color: var(--overdue);
+}
+.fee-revisions-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.fee-revisions-actions .hint {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+}
+@media (max-width: 760px) {
+  .fee-revision-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .fee-revision-row .fr-tag { grid-column: 1 / -1; padding-top: 0; }
+  .fee-revision-row .fr-remove { grid-column: 1 / -1; justify-self: end; }
+}
+
+/* Past Invoices totals — stacked layout */
+tr.invoices-totals-row td {
+  border-top: 2px solid var(--rule);
+  padding: 0.7rem 0.6rem 0.4rem;
+  background: var(--paper);
+}
+.invoices-totals {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+.invoices-count {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  font-weight: 600;
+  padding-bottom: 0.2rem;
+}
+.invoices-totals-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 220px;
+}
+.invoices-totals-stack .totals-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  gap: 0.75rem;
+}
+.invoices-totals-stack .totals-line .l {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  font-weight: 700;
+}
+.invoices-totals-stack .totals-line .v {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.invoices-totals-stack .totals-line.outstanding.has-outstanding .v,
+.invoices-totals-stack .totals-line.outstanding.has-outstanding .l {
+  color: var(--overdue);
+}
+.invoices-totals-stack .totals-line.outstanding.has-outstanding .v {
+  font-size: 1.05rem;
+}
+.invoices-totals-stack .totals-line.fee-remaining {
+  margin-top: 0.25rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid var(--rule, rgba(0,0,0,0.12));
+}
+.invoices-totals-stack .totals-line.fee-remaining .l,
+.invoices-totals-stack .totals-line.fee-remaining .v {
+  color: var(--ink);
+}
+.invoices-totals-stack .totals-line.fee-remaining.fully-billed .l,
+.invoices-totals-stack .totals-line.fee-remaining.fully-billed .v {
+  color: var(--ink-faint);
+}
+.invoices-totals-stack .totals-line.fee-remaining.over-billed .l,
+.invoices-totals-stack .totals-line.fee-remaining.over-billed .v {
+  color: var(--warn, var(--overdue));
+}
+
+
+/* ----- Session 8 / Build L: Past Invoices on Create Invoice + per-phase Complete ----- */
+
+/* Past Invoices block on the Create Invoice page.
+   2026-05-23: tightened top margin so it sits closer to the Fee Basis line
+   in the client-info block above. */
+.ib-past-wrap {
+  margin: 0.3rem 0 0.8rem;
+  padding: 0.1rem 0 0.4rem;
+}
+.ib-past-wrap > h3 {
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+/* Inline invoice-count badge, e.g. "5 invoices", shown next to the h3 title. */
+.ib-past-count {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.05rem 0.55rem;
+  background: var(--paper-2);
+}
+.ib-past-table tbody tr {
+  cursor: pointer;
+}
+.ib-past-table tbody tr:hover { background: #efece5; }
+
+/* Per-phase Complete checkbox cell */
+.ib-phase-complete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.phase-complete-lbl {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.phase-complete-lbl input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #4a8a3c;
+  cursor: pointer;
+}
+/* Phase fee direct-entry input */
+.ib-phase-fee-input {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  text-align: right;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  padding: 2px 4px;
+  border-radius: 3px;
+  cursor: text;
+  box-sizing: border-box;
+}
+.ib-phase-fee-input:hover { border-color: var(--border); }
+.ib-phase-fee-input:focus {
+  border-color: var(--accent, #4a8a3c);
+  background: var(--paper-1);
+  outline: none;
+}
+
+/* 2026-05-07: editable "this invoice" amount input — same look-and-feel as fee input */
+.ib-phase-this-input {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  text-align: right;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  color: inherit;
+  padding: 2px 4px;
+  border-radius: 3px;
+  cursor: text;
+  box-sizing: border-box;
+}
+.ib-phase-this-input:hover:not(:disabled) { border-color: var(--border); }
+.ib-phase-this-input:focus {
+  border-color: var(--accent, #4a8a3c);
+  background: var(--paper-1);
+  outline: none;
+}
+.ib-phase-this-input:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+.ib-phase-this-pct {
+  text-align: right;
+  margin-top: 1px;
+}
+
+/* Locked / completed row treatment (reuses existing deposit-done dim) */
+.ib-phase-row.phase-locked .ib-phase-name::after {
+  content: ' ✓';
+  color: #4a8a3c;
+}
+.ib-phase-row.phase-locked .ib-phase-fee-input {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* Session 9: punch through pointer-events block so checkbox + fee input remain clickable in locked rows */
+.ib-phase-row.deposit-done .ib-phase-complete,
+.ib-phase-row.deposit-done .ib-phase-fee-input {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+/* Tighten on phone — .ib-phase-complete's mobile position is now set once,
+   in the 780px breakpoint above (row 3, alongside .ib-phase-catchup), so
+   it stays consistent instead of two breakpoints disagreeing. */
+
+
+/* ----- Build O: Deposit Paid row ----- */
+.deposit-paid-row {
+  align-items: center;
+  padding: 0.4rem 0.6rem;
+  background: #f3f7f3;
+  border-left: 3px solid #4a8a3c;
+  border-radius: 3px;
+  margin-bottom: 0.6rem;
+}
+.deposit-paid-row .checkbox-label {
+  font-weight: 600;
+  color: var(--ink);
+}
+.deposit-paid-row .hint {
+  font-weight: 400;
+  color: var(--ink-faint);
+  margin-left: 0.3rem;
+}
+
+
+/* ============================================================
+   Session 26 (2026-08-15) — Concept A: contract true-up ledger,
+   wider phase sliders, fee-calculation reference panel.
+   ============================================================ */
+
+/* Phase sliders now own their row (the catch-up column moved out to the
+   ledger below), so they get the width Scott asked for. */
+.ib-phase-this .ib-phase-slider { width: 100%; }
+.ib-phase-this-row { display: flex; align-items: center; gap: 0.6rem; justify-content: flex-end; }
+.ib-phase-this-input { flex: 0 0 150px; width: 150px; }
+.ib-phase-this-pct { flex: 0 0 3.2em; text-align: right; }
+
+/* Tint the already-billed part of the track so the draggable range is
+   obvious — a phase at 90% prior only has the last tenth to move through. */
+input[type=range].has-prior::-webkit-slider-runnable-track {
+  background: linear-gradient(to right,
+      #ded8cc 0 var(--prior, 0%), var(--hairline, #d4d2cc) var(--prior, 0%) 100%);
+}
+input[type=range].has-prior::-moz-range-track {
+  background: linear-gradient(to right,
+      #ded8cc 0 var(--prior, 0%), var(--hairline, #d4d2cc) var(--prior, 0%) 100%);
+}
+
+/* ---- Contract True-Up ledger ---- */
+.cu-ledger-card { margin: 1.6rem 0 0; border: 1px solid var(--rule); background: var(--paper-2); }
+.cu-ledger-head { padding: 1rem 1.4rem 0.7rem; border-bottom: 1px solid var(--rule); }
+.cu-ledger-title {
+  font-family: var(--font-display); font-weight: 700; font-size: 1rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink);
+}
+.cu-ledger-title .amt {
+  font-family: var(--font-mono); font-weight: 700; color: var(--highlight);
+  letter-spacing: 0; text-transform: none; margin-left: 0.6rem;
+}
+.cu-ledger-sub {
+  font-family: var(--font-body); font-style: italic; color: var(--ink-faint);
+  font-size: 0.88rem; margin-top: 0.35rem; max-width: 62ch; line-height: 1.5;
+}
+.cu-ledger-table {
+  display: grid; grid-template-columns: 96px 120px 130px 120px minmax(320px, 1fr);
+  gap: 0 1rem; padding: 0.6rem 1.4rem 1rem;
+}
+.cu-ledger-table .lh {
+  font-family: var(--font-ui); font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint);
+  padding-bottom: 0.4rem; border-bottom: 1px solid var(--ink);
+}
+.cu-ledger-table .lh:not(:first-child) { text-align: right; }
+.cu-ledger-table .lr { display: contents; }
+.cu-ledger-table .lr > div {
+  padding: 0.65rem 0; border-bottom: 1px solid var(--rule);
+  display: flex; align-items: center;
+}
+.cu-ledger-table .lname { font-family: var(--font-display); font-weight: 700; color: var(--ink); }
+.cu-ledger-table .lname .lnote {
+  font-family: var(--font-body); font-style: italic; font-weight: 400;
+  color: var(--ink-faint); font-size: 0.78rem; margin-left: 0.3rem;
+}
+.cu-ledger-table .lfee,
+.cu-ledger-table .lbilled,
+.cu-ledger-table .lgap {
+  font-family: var(--font-mono); justify-content: flex-end; font-variant-numeric: tabular-nums;
+}
+.cu-ledger-table .lgap { font-weight: 700; color: var(--highlight); }
+.cu-ledger-table .lslide { justify-content: flex-end; gap: 0.6rem; }
+.cu-ledger-table .lslide input[type="range"] { flex: 1 1 auto; min-width: 180px; accent-color: var(--highlight); }
+.cu-ledger-table .lslide .lamt {
+  font-family: var(--font-mono); font-weight: 700; color: var(--highlight);
+  font-size: 0.85rem; min-width: 5em; text-align: right;
+}
+.cu-ledger-table .lslide .lpct {
+  font-family: var(--font-mono); color: var(--ink-faint);
+  font-size: 0.78rem; min-width: 2.8em; text-align: right;
+}
+.cu-ledger-foot {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.8rem 1.4rem; border-top: 1px solid var(--ink); background: var(--paper);
+}
+.cu-ledger-foot .lbl {
+  font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);
+}
+.cu-ledger-foot .val {
+  font-family: var(--font-mono); font-weight: 700; font-size: 1.05rem;
+  color: var(--highlight); margin-right: auto;
+}
+@media (max-width: 900px) {
+  .cu-ledger-table { grid-template-columns: 1fr 1fr; }
+  .cu-ledger-table .lh { display: none; }
+  .cu-ledger-table .lr { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+  .cu-ledger-table .lslide { grid-column: 1 / -1; }
+}
+
+/* ---- Fee Calculation reference panel ---- */
+.fee-calc { margin-top: 2.5rem; border: 1px solid var(--rule); background: var(--paper-2); padding: 1.4rem 1.6rem 1.6rem; }
+.fee-calc > h3 { margin: 0 0 0.3rem; }
+.fee-calc .fc-sub { font-family: var(--font-body); font-style: italic; color: var(--ink-faint); font-size: 0.88rem; margin: 0 0 1.2rem; }
+.fc-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1.6rem 2.4rem; }
+@media (max-width: 900px) { .fc-grid { grid-template-columns: 1fr; } }
+.fc-block h4 {
+  margin: 0 0 0.5rem; font-family: var(--font-ui); font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint);
+  border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem;
+}
+table.fc-tbl { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+table.fc-tbl td { padding: 0.28rem 0; vertical-align: baseline; }
+table.fc-tbl td.lbl { font-family: var(--font-body); color: var(--ink-soft); }
+table.fc-tbl td.op { font-family: var(--font-mono); color: var(--ink-faint); font-size: 0.78rem; text-align: right; white-space: nowrap; padding-right: 0.7rem; }
+table.fc-tbl td.num { font-family: var(--font-mono); text-align: right; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+table.fc-tbl tr.rule td { border-top: 1px solid var(--rule); }
+table.fc-tbl tr.sum td { font-weight: 700; }
+table.fc-tbl tr.sum td.num { color: var(--highlight); }
+table.fc-tbl tr.muted td { color: var(--ink-faint); font-style: italic; }
+.fc-when { font-size: 0.75rem; color: var(--ink-faint); font-family: var(--font-body); font-style: italic; }
+.fc-note { margin-top: 1.2rem; padding-top: 0.9rem; border-top: 1px solid var(--rule); font-family: var(--font-body); font-size: 0.82rem; color: var(--ink-faint); line-height: 1.55; }
+.fc-note b { color: var(--ink-soft); }

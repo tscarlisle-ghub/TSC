@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  
-  <rect width="64" height="64" rx="8" fill="#1f4d3a"></rect>
-  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-size="34" font-weight="400" letter-spacing="0.5" fill="#ffffff">CMA</text>
+  <rect width="64" height="64" rx="8" fill="#1f4d3a"/>
+  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="46" font-weight="700" fill="#ffffff">B</text>
 </svg>

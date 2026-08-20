@@ -1,0 +1,2003 @@
+/* ============================================================
+   CMA Design System — overlay for TSC-BILLING
+   ============================================================
+   Drop-in stylesheet. Load AFTER styles.css in index.html so the
+   redefinitions cascade. Reuses every existing class name so
+   app.js keeps working unchanged.
+
+   Phase 2 (this revision): adds sidebar shell layout. To use, also
+   apply the Phase-2 `index.html` (compact masthead + .shell wrapper
+   + .side aside + vertical tabs nav). All ids/classes preserved.
+
+   Required Typekit additions (load both in index.html <head>):
+     <link rel="stylesheet" href="https://use.typekit.net/tlj7yvl.css">
+     <link rel="stylesheet" href="https://use.typekit.net/wup0iix.css">
+   Existing kit (ikf0hkb) covers ff-meta-web-pro + correspondence.
+   ============================================================ */
+
+/* ============================================================
+   PHASE 2 — Sidebar shell layout
+   Requires the Phase-2 index.html (body.cma-shell + .shell + .side).
+   If still on Phase-1 markup (no .cma-shell on body), this block is
+   inert — none of the selectors match.
+   ============================================================ */
+
+body.cma-shell {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   Compact masthead — 90px tall, logo at 80px + titles
+   Session 11: replaced name/eyebrow/meta layout with logo +
+   "CMA BILLING / T. SCOTT CARLISLE" lockup.
+   ============================================================ */
+body.cma-shell .masthead {
+  flex-shrink: 0;
+  height: 90px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--cma-accent);
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+}
+body.cma-shell .masthead-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+body.cma-shell .masthead-logo {
+  height: 68px;   /* 15% smaller — more breathing room around the mark */
+  width: auto;
+  flex-shrink: 0;
+  display: block;
+}
+body.cma-shell .masthead-titles {
+  display: flex;
+  align-items: center;   /* vertically center the name with CMA BILLING */
+  gap: 1.5rem;
+  min-width: 0;
+}
+body.cma-shell .masthead h1 {
+  font-family: var(--font-trajan);
+  font-weight: 500;
+  font-size: 1.55rem;
+  letter-spacing: var(--letter-eng-t);
+  color: var(--cma-accent);
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+}
+body.cma-shell .masthead-name {
+  font-family: var(--font-trajan);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-eng-t);
+  font-size: 1.05rem;
+  color: var(--engraved);
+  line-height: 1;
+  /* subtle separator between CMA BILLING and the name */
+  border-left: 1px solid var(--rule);
+  padding-left: 1.5rem;
+}
+/* Legacy elements (eyebrow / meta) — hide if any old markup still ships. */
+body.cma-shell .masthead-eyebrow,
+body.cma-shell .masthead-meta,
+body.cma-shell .masthead-name-block { display: none; }
+
+/* Hide the old status row entirely on Phase-2 markup. Its contents
+   are reproduced inside the sidebar (.side .side-bottom). */
+body.cma-shell .masthead .status-row { display: none; }
+/* And hide the old horizontal masthead-row tabs nav if it's still in DOM. */
+body.cma-shell .masthead .tabs:not(.vertical) { display: none; }
+
+/* ----- Shell + sidebar + main ----- */
+body.cma-shell .shell {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+body.cma-shell .side {
+  width: 200px;
+  flex-shrink: 0;
+  background: var(--paper-2);
+  border-right: 1px solid var(--rule);
+  padding: 22px 0 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Vertical tabs — all-caps Meta Condensed, 11px, 0.14em tracking,
+   7px vertical padding, forest left rule on active. */
+body.cma-shell .tabs.vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+}
+body.cma-shell .tabs.vertical .tab {
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-left: 2px solid transparent;
+  border-bottom: 0;
+  padding: 7px 18px;
+  font-family: var(--font-strap);
+  font-size: 0.9rem;         /* 30% bigger per Scott */
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  width: 100%;
+  cursor: pointer;
+  margin: 0;
+}
+body.cma-shell .tabs.vertical .tab:hover { color: var(--ink); }
+body.cma-shell .tabs.vertical .tab.active {
+  background: var(--paper);
+  border-left-color: var(--collected);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Sidebar bottom: status info + save button + last-saved */
+body.cma-shell .side .side-bottom {
+  margin-top: auto;
+  padding: 14px 18px 0;
+  border-top: 0.5px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  line-height: 1.5;
+}
+body.cma-shell .side .side-bottom .status-row {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  font-family: inherit;
+  padding: 0;
+  align-items: baseline;
+}
+body.cma-shell .side .side-bottom .status-row .sync-status {
+  font-family: var(--font-strap);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+body.cma-shell .side .side-bottom .version-cluster {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  align-items: flex-start;
+}
+body.cma-shell .side .side-bottom .last-saved,
+body.cma-shell .side .side-bottom .last-update,
+body.cma-shell .side .side-bottom .build-stamp {
+  font-family: var(--font-mono);
+  font-size: 0.81rem;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+  text-transform: none;
+}
+body.cma-shell .side .side-bottom .save-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-top: 4px;
+}
+body.cma-shell .side .side-bottom #saveBtn {
+  font-family: var(--font-strap);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  padding: 5px 10px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 0;
+}
+body.cma-shell .side .side-bottom .last-saved-caption {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--collected);
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+body.cma-shell .side .side-bottom .save-feedback {
+  font-size: 0.78rem;
+  padding: 2px 6px;
+  margin-right: 0;
+  align-self: flex-start;
+}
+
+/* Main pane fills remaining space with vertical scroll, no width cap. */
+body.cma-shell main#main {
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 18px 28px 32px;
+  overflow-y: auto;
+  background: var(--paper);
+}
+
+/* Utility — hide the monthly billing chart block (wrapper added in
+   Phase-2 index.html). Remove the .cma-hide class on its wrapper
+   div to bring the chart back. */
+body.cma-shell .cma-hide { display: none !important; }
+
+/* Tighten the overview metric strip a touch under the new layout. */
+body.cma-shell .overview-summary {
+  margin-top: 0;
+  padding: 14px 0 16px;
+}
+body.cma-shell .overview-summary + .section-rule { margin-top: 6px; }
+
+:root {
+  /* --- Type --- */
+  --font-body:    "miller-text", Charter, Georgia, serif;
+  --font-display: "ff-meta-web-pro-condensed", "ff-meta-web-pro", "Helvetica Neue", Arial, sans-serif;
+  --font-strap:   "ff-meta-web-pro-condensed", "Helvetica Neue Condensed", "Arial Narrow", sans-serif;
+  --font-figure:  "ff-meta-correspondence-web-p", "SF Mono", Menlo, monospace;
+  --font-ui:      "ff-meta-web-pro", "Helvetica Neue", Arial, sans-serif;
+  --font-mono:    "ff-meta-correspondence-web-p", "SF Mono", Menlo, monospace;
+  --font-trajan:  "columbia-titling", "Trajan Pro 3", "Cormorant Garamond", "Times New Roman", serif;
+
+  /* --- Color (warm paper, warm ink, forest accent) --- */
+  --ink:        #14110d;
+  --ink-soft:   #4a4640;
+  --ink-faint:  #8a847b;
+  --rule:       #d5cfc3;
+  --rule-soft:  #ede8db;
+  --paper:      #fbfaf6;
+  --paper-2:    #f5f2ea;
+
+  --planned:    #b6b0a6;
+  --billed:     #14110d;
+  --collected:        #1f4d3a;
+  --collected-bright: #2f6b53;
+  --warn:       #8a2a1f;
+  --warn-deep:  #5a1d15;
+  --highlight:  #8b6a1a;
+
+  /* New semantic tokens (used by the overrides below) */
+  --engraved:      #1a1814;
+  --engraved-rule: #3b352c;
+  --forest-4:      #e8efe5;
+  --letter-tight:  0.005em;
+  --letter-label:  0.12em;
+  --letter-eng-t:  0.22em;
+  --letter-eng:    0.32em;
+
+  /* --- CMA brand accent (sampled from Carlisle Moore logo) ---
+     Session 11: introduced #a85c24 as the firm accent, used for
+     headings, hover states, active-tab indicator, and active row
+     highlights. Deep + soft + tint variants for backgrounds. */
+  --cma-accent:        #a85c24;
+  --cma-accent-deep:   #7d4319;
+  --cma-accent-soft:   #c47a48;
+  --cma-accent-tint:   #f6ece1;   /* ≈ accent at ~10% on paper */
+  --cma-accent-rule:   #d6b59a;   /* ≈ accent at ~25% on paper */
+}
+
+/* ============================================================
+   Masthead — engraved firm name in Columbia Titling.
+   The existing styles.css already uses --font-trajan here; we've
+   pointed that at columbia-titling above, but reinforce styling.
+   ============================================================ */
+.masthead h1 {
+  font-family: var(--font-trajan);
+  font-weight: 400;
+  letter-spacing: var(--letter-eng-t);
+  font-size: 1.75rem;
+  color: var(--engraved);
+}
+.masthead-sub {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.masthead { border-bottom: 1px solid var(--engraved-rule); }
+
+/* Tabs — caps, tighter rhythm, forest underline on active */
+.tab {
+  font-family: var(--font-strap);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  padding: 0.4rem 0.9rem;
+  text-transform: uppercase;
+}
+.tab.active {
+  color: var(--ink);
+  border-bottom-color: var(--collected);
+  font-weight: 700;
+}
+.tab:hover { color: var(--ink); }
+
+/* Status row */
+.status-row { font-family: var(--font-mono); font-size: 0.72rem; }
+.sync-status { font-family: var(--font-strap); letter-spacing: 0.14em; }
+.last-saved-caption { font-family: var(--font-mono); color: var(--collected); }
+
+/* ============================================================
+   Section headers — engraved caps
+   ============================================================ */
+.section-header h2,
+h2 {
+  font-family: var(--font-trajan);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-eng-t);
+  font-weight: 600;            /* bolder — was 400 */
+  color: var(--engraved);
+  font-size: 1.38rem;          /* +20% — was 1.15rem */
+}
+.section-header .section-note {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--ink-faint);
+}
+
+h3 {
+  font-family: var(--font-strap);
+  font-weight: 600;
+  letter-spacing: var(--letter-label);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+/* ============================================================
+   Overview metric cards (KPI strip)
+   - Numbers in mono (already wired via --font-figure remap).
+   - Outstanding A/R turns alert-rust when non-zero via existing
+     .metric-value.warn class — already in app.js logic.
+   ============================================================ */
+.metric-label {
+  font-family: var(--font-strap);
+  font-size: 0.74rem;
+  letter-spacing: var(--letter-label);
+  font-weight: 600;
+  color: var(--ink-faint);
+}
+.metric-value {
+  font-family: var(--font-figure);
+  font-variation-settings: normal;       /* DIN had wght 500 var setting; not used now */
+  font-weight: 400;
+  font-size: 1.98rem;                    /* +20% — was 1.65rem */
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.metric-value.warn { color: var(--warn); }
+.metric-sub { font-family: var(--font-body); font-style: italic; color: var(--ink-faint); }
+
+/* ============================================================
+   Tables — Outstanding Invoices, Roster, Invoices
+   Lighter dotted row dividers; single 2px solid rule on totals;
+   "Outstanding A/R" totals label sits adjacent to the amount.
+   The latter requires a small markup hint app.js already supports
+   via colSpan, OR can be done purely with CSS by widening the
+   last-but-one cell — handled below.
+   ============================================================ */
+table.outstanding-invoices tbody tr,
+table.invoices tbody tr,
+table.roster tbody tr,
+table.client-invoices tbody tr {
+  border-bottom: 1px dotted var(--rule-soft);
+}
+table.outstanding-invoices tbody tr.overdue { background: #f7ece9; }
+
+table.outstanding-invoices tfoot td,
+table.invoices tfoot td,
+table.client-invoices tfoot td,
+table.fee-revision-table tfoot td {
+  border-top: 2px solid var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+/* Right-align the totals label and let it sit next to the amount.
+   In the live app.js, the Outstanding totals foot is built as:
+     <tr><td colspan="4">TOTAL OUTSTANDING · N INVOICES:</td><td class="col-num">$X</td><td/></tr>
+   App.js already appends a colon, so we don't synthesize one. We do
+   right-align the label cell + tighten its right padding so the
+   text and the total visually pair. */
+table.outstanding-invoices tfoot td:not(.col-num) {
+  font-family: var(--font-strap);
+  font-weight: 600;
+  letter-spacing: var(--letter-label);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  text-align: right;
+  padding-right: 0.25rem;
+}
+table.outstanding-invoices tfoot td.col-num { padding-left: 0.25rem; }
+/* The trailing empty <td/> in the totals row — collapse it so nothing renders. */
+table.outstanding-invoices tfoot td:last-child:empty {
+  padding: 0;
+  width: 0;
+}
+
+/* Roster totals row (the first <tr id="rosterTotalsRow">) — same treatment */
+.roster-totals-row td {
+  border-top: 2px solid var(--ink) !important;
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+/* ============================================================
+   Outstanding Invoices — client name (override any earlier
+   uppercase / Interstate-Condensed treatment from styles.css)
+   ============================================================ */
+table.outstanding-invoices tbody td.col-name {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;             /* was none — per user request */
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+/* Invoice # and Days Out columns — keep on a single line. */
+table.outstanding-invoices th.col-num,
+table.outstanding-invoices td.col-num {
+  white-space: nowrap;
+}
+
+/* ============================================================
+   Client roster — semibold client names, drop the all-caps
+   Interstate Condensed treatment in favor of Meta Web Pro semibold.
+   Leave the small italic full-name below as is.
+   ============================================================ */
+table.roster .col-name {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  text-transform: uppercase;             /* was none — per user request */
+  letter-spacing: 0.02em;
+  font-size: 1rem;
+  color: var(--ink);
+}
+table.roster .col-name .full-name {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+table.roster thead th { color: var(--ink-soft); font-family: var(--font-strap); }
+
+/* Inline italic-serif "date" in outstanding row prefix */
+.outstanding-date {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* ============================================================
+   Modals — engraved title
+   ============================================================ */
+.modal { border: 1px solid var(--engraved-rule); border-radius: 2px; }
+/* Client editor — slightly darker paper than other modals (matches Scott's mockup, sampled ≈ #f5f2eb) */
+.modal.client-modal { background: var(--paper-2); }
+.modal-header { border-bottom: 1px solid var(--engraved-rule); }
+.modal-header h2 {
+  font-family: var(--font-trajan);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-eng);
+  font-weight: 700;            /* bolder per Scott's mockup */
+  color: var(--engraved);
+  font-size: 1.3rem;           /* nudged up to match mockup */
+}
+
+/* Shared bottom row of FEE TYPE section: Computed | Current Year | Bill in phases.
+   The two inputs flex, the checkbox sits compact and bottom-aligned. */
+.fee-summary-row .checkbox-label.phases-checkbox-inline {
+  flex: 0 0 auto;
+  align-self: flex-end;
+  padding-bottom: 0.4rem;
+}
+
+/* ============================================================
+   Buttons — quieter; primary stays ink, save = forest, cancel = rust
+   ============================================================ */
+.action {
+  font-family: var(--font-strap);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+.action.save        { background: var(--collected);        border-color: var(--collected); }
+.action.save:hover  { background: var(--collected-bright); border-color: var(--collected-bright); }
+.action.cancel      { background: var(--warn);             border-color: var(--warn); }
+.action.cancel:hover{ background: var(--warn-deep);        border-color: var(--warn-deep); }
+
+/* "Create Invoice" subtle button — fold into our system rather than tiffany blue */
+.action.subtle {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+.action.subtle:hover { background: var(--paper-2); }
+
+/* Secondary cluster (Close Out / Archive / Delete) — quiet earth, not pale green */
+.modal-footer .footer-secondary .action {
+  background: var(--paper-2);
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  border-radius: 0;
+}
+.modal-footer .footer-secondary .action:hover {
+  background: var(--rule-soft);
+  color: var(--ink);
+  border-color: var(--ink-faint);
+}
+
+/* ============================================================
+   Save feedback pill — green tint, set in mono caps
+   ============================================================ */
+.save-feedback {
+  font-family: var(--font-strap);
+  letter-spacing: var(--letter-label);
+  background: var(--forest-4);
+  border-color: var(--collected);
+  color: var(--collected);
+}
+.save-feedback.error {
+  background: #f4e3df;
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+/* ============================================================
+   Forms — quieter borders, focus = forest
+   ============================================================ */
+input[type="text"], input[type="number"], input[type="date"],
+input[type="password"], textarea, select {
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  background: var(--paper);
+  font-family: var(--font-ui);
+}
+input:focus, textarea:focus, select:focus {
+  outline: 1px solid var(--collected);
+  outline-offset: 0;
+  border-color: var(--collected);
+}
+
+/* ============================================================
+   Cash Flow matrix — quieter rules, forest sent/paid dots
+   ============================================================ */
+.matrix-dot.paid { background: var(--collected); box-shadow: 0 0 0 1px var(--collected-bright) inset; }
+.matrix-dot.sent { background: var(--highlight); box-shadow: 0 0 0 1px #6d530f inset; }
+.matrix-dot.overdue { background: var(--warn); box-shadow: 0 0 0 1px var(--warn-deep) inset; }
+
+/* ============================================================
+   Toast
+   ============================================================ */
+.toast { background: var(--ink); color: var(--paper); border-radius: 2px; font-family: var(--font-ui); }
+.toast.success { background: var(--collected); }
+.toast.error   { background: var(--warn); }
+
+/* ============================================================
+   Progress bars (per-client billing progress in roster + cards)
+   ============================================================ */
+.progress-bar > span.collected { background: var(--collected); }
+.progress-bar > span            { background: var(--ink); }
+.progress-bar                   { background: var(--paper-2); }
+
+/* ============================================================
+   Misc — neutralize a few defaults the old design pinned
+   ============================================================ */
+.metric-clickable:hover { background: rgba(31,77,58,0.04); }   /* forest tint */
+.section-rule { border-top: 1px solid var(--rule); }
+
+
+/* Client card name — 25% larger + bolder (user override) */
+.client-card h3 {
+  font-size: 1.5625rem;   /* +25% — was 1.25rem in styles.css */
+  font-weight: 800;       /* bolder — was 700 in styles.css */
+}
+
+
+/* ============================================================
+   Overview "Fee Summary" tiles — bold the big numbers (per Scott).
+   ============================================================ */
+.overview-summary .metric-value {
+  font-weight: 800;
+}
+
+
+/* ============================================================
+   CLIENT MODAL — Scott's second-pass visual pickups
+   ============================================================ */
+
+/* 1. Lose the box border around inputs/selects/textarea inside the client
+      modal. Just a soft bottom rule.  Phase-amounts table values keep their
+      own treatment.  Inputs already use --paper-2 background when readonly;
+      we set everything transparent so it reads as paper. */
+.modal.client-modal input[type="text"],
+.modal.client-modal input[type="number"],
+.modal.client-modal input[type="date"],
+.modal.client-modal input[type="password"],
+.modal.client-modal textarea,
+.modal.client-modal select {
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  padding-left: 0;
+  padding-right: 0;
+}
+.modal.client-modal input[readonly] {
+  background: transparent;
+  color: var(--ink);
+}
+.modal.client-modal input:focus,
+.modal.client-modal textarea:focus,
+.modal.client-modal select:focus {
+  outline: none;
+  border-bottom-color: var(--ink);
+}
+
+/* 2. Shared bottom row in FEE TYPE: Computed Fee + Current Year Fee equal
+      width, with the phases checkbox compact on the right. */
+.fee-summary-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: nowrap;
+}
+.fee-summary-row > label:not(.phases-checkbox-inline) {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.fee-summary-row > label:not(.phases-checkbox-inline) input {
+  width: 100%;
+}
+
+/* 3. "Bill fee in phases" — bold caps + bigger checkbox. */
+.checkbox-label.phases-checkbox-inline {
+  flex: 0 0 auto;
+  align-self: flex-end;
+  padding-bottom: 0.45rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.checkbox-label.phases-checkbox-inline input[type="checkbox"] {
+  transform: scale(1.4);
+  transform-origin: center;
+  margin: 0 0.25rem 0 0;
+}
+
+/* 4. "Deposit paid…" row — all caps label, inline helper on the same line. */
+.form-row.deposit-paid-row {
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.form-row.deposit-paid-row .checkbox-label {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ink);
+  flex: 0 0 auto;
+}
+.form-row.deposit-paid-row .checkbox-label input[type="checkbox"] {
+  transform: scale(1.25);
+  margin-right: 0.45rem;
+}
+.form-row.deposit-paid-row .inline-helper {
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  flex: 1 1 auto;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* 5. Fee Tracking — open look (no box), values line up under titles;
+      Current Fee value is 30% larger and bold. */
+.modal.client-modal .fee-track-input {
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  padding: 0.25rem 0 0.25rem 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+.modal.client-modal .fee-track-input[readonly] {
+  background: transparent;
+  color: var(--ink);
+  border-bottom-color: var(--rule);
+}
+.modal.client-modal #cf_current_fee_calc {
+  font-size: 1.43rem;   /* 1.1rem * 1.3 */
+  font-weight: 800;
+}
+
+/* Make the fee-tracking grid breathe a touch tighter so labels align cleanly. */
+.modal.client-modal .fee-track-box {
+  gap: 0.2rem;
+}
+.modal.client-modal .fee-track-label {
+  padding-left: 0;
+}
+
+/* ============================================================
+   Session 11 — Brand accent (Carlisle Moore logo color)
+   The --cma-accent token (#a85c24) ties the UI back to the
+   firm's logo. Used for headings, active/hover states, table
+   row highlights, and a subtle band under section rules.
+   Forest --collected is left alone where it carries semantic
+   meaning (paid status, save buttons, "collected" dots).
+   ============================================================ */
+
+/* 1 · Section headings — engraved → accent for emphasis. */
+.section-header h2,
+body.cma-shell .section-header h2,
+body.cma-shell h2 {
+  color: var(--cma-accent);
+}
+.section-header .section-note {
+  color: var(--ink-faint);
+}
+
+/* 2 · Sidebar — active tab uses the accent left-rule; hover
+      gets an accent left peek and slight tint background. */
+body.cma-shell .tabs.vertical .tab:hover {
+  color: var(--cma-accent);
+  background: var(--cma-accent-tint);
+}
+body.cma-shell .tabs.vertical .tab.active {
+  border-left-color: var(--cma-accent);
+  background: var(--paper);
+  color: var(--ink);
+}
+body.cma-shell .tabs.vertical .tab.active:hover {
+  background: var(--paper);
+}
+
+/* 3 · Old horizontal tab strip (used on Phase-1 markup) —
+      switch underline + hover to accent too. */
+.tab:hover { color: var(--cma-accent); }
+.tab.active {
+  border-bottom-color: var(--cma-accent);
+}
+
+/* 4 · Table row hover — universal subtle accent tint. Avoid
+      hijacking rows that already carry a status background
+      (e.g. outstanding/warn rows). */
+table.roster tbody tr:hover,
+table.outstanding-invoices tbody tr:hover,
+.invoices-table tbody tr:hover,
+table.client-invoices tbody tr:hover {
+  background: var(--cma-accent-tint);
+  cursor: pointer;
+}
+
+/* 5 · Clickable metric card hover — replace forest tint with
+      accent tint to match the rest of the rollover behavior. */
+.metric-clickable:hover {
+  background: var(--cma-accent-tint);
+}
+
+/* 6 · Section rule — a thin accent band under the H2 row gives
+      a subtle "engraved" feel without screaming. */
+.section-rule {
+  border-top: 1px solid var(--cma-accent-rule);
+}
+
+/* 7 · Roster totals row — promote the totals strip with a
+      faint accent underline so the user's eye lands there. */
+table.roster thead .roster-totals-row th {
+  border-bottom: 2px solid var(--cma-accent);
+}
+
+/* 8 · Sidebar SAVE button — keep forest fill (it means "save")
+      but give it an accent focus ring for keyboard nav clarity. */
+body.cma-shell #sideSaveBtn:focus-visible,
+body.cma-shell #saveBtn:focus-visible {
+  outline: 2px solid var(--cma-accent);
+  outline-offset: 2px;
+}
+
+/* 9 · Selected/hover state for action buttons that are "subtle"
+      (Close Out, Archive, Cancel-style). */
+.action.subtle:hover {
+  background: var(--cma-accent-tint);
+  border-color: var(--cma-accent-rule);
+  color: var(--cma-accent-deep);
+}
+
+/* ============================================================
+   Year-End Projection table (Overview tab, Session 11)
+   Reuses .roster table styling — only the editable cells need
+   bespoke treatment.
+   ============================================================ */
+table.eoy-projection {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+}
+table.eoy-projection thead th {
+  font-family: var(--font-strap);
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--rule);
+  text-align: right;
+  white-space: nowrap;
+}
+table.eoy-projection thead th.col-name { text-align: left; }
+table.eoy-projection thead th.col-confidence { text-align: center; }
+
+table.eoy-projection tbody td {
+  font-family: var(--font-figure);
+  font-size: 0.92rem;
+  padding: 6px 8px;
+  border-bottom: 1px dotted var(--rule);
+  text-align: right;
+  vertical-align: middle;
+}
+table.eoy-projection tbody td.col-name {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  text-align: left;
+  color: var(--ink);
+}
+table.eoy-projection tbody tr:hover {
+  background: var(--cma-accent-tint);
+}
+
+/* Editable cells */
+table.eoy-projection .eoy-projected {
+  width: 100%;
+  max-width: 110px;
+  text-align: right;
+  font-family: var(--font-figure);
+  font-size: inherit;
+  padding: 2px 4px;
+  border: 0;
+  border-bottom: 1px dashed var(--rule);
+  background: transparent;
+  color: var(--ink);
+  outline: none;
+}
+table.eoy-projection .eoy-projected:focus {
+  border-bottom-color: var(--cma-accent);
+  background: var(--cma-accent-tint);
+}
+table.eoy-projection .eoy-confidence {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  padding: 2px 6px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+table.eoy-projection .eoy-confidence:hover {
+  border-color: var(--cma-accent);
+}
+table.eoy-projection .eoy-override-mark {
+  display: inline-block;
+  margin-left: 4px;
+  color: var(--cma-accent);
+  font-weight: 700;
+}
+table.eoy-projection .eoy-year-total {
+  font-weight: 700;
+  color: var(--cma-accent-deep);
+}
+
+/* Roster totals row treatment carries over for the totals row */
+table.eoy-projection thead .roster-totals-row th {
+  font-family: var(--font-figure);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  padding: 4px 8px 8px;
+  letter-spacing: 0;
+  text-transform: none;
+  border-bottom: 2px solid var(--cma-accent);
+}
+table.eoy-projection thead .roster-totals-row th.roster-total-label {
+  font-family: var(--font-strap);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+}
+
+
+/* ============================================================
+   Session 12 — Scott's client-card pickups (2026-05-25)
+     · Subtitles (form-row labels) bolded so they read clearly.
+     · All text fields use a white background, including the
+       Fee Tracking row, so they read as filled inputs rather
+       than washed into the paper.
+   ============================================================ */
+.modal.client-modal .form-row label,
+.modal.client-modal .form-row label.grow {
+  font-weight: 700;
+  color: var(--ink);
+}
+.modal.client-modal .fee-track-label {
+  font-weight: 700;
+  color: var(--ink);
+}
+/* Override the Session 11 transparent inputs with explicit white. */
+.modal.client-modal input[type="text"],
+.modal.client-modal input[type="number"],
+.modal.client-modal input[type="date"],
+.modal.client-modal input[type="password"],
+.modal.client-modal textarea,
+.modal.client-modal select {
+  background: #ffffff;
+  border: 1px solid var(--rule);
+  padding: 0.4rem 0.5rem;
+}
+.modal.client-modal input[readonly] {
+  background: #ffffff;
+}
+.modal.client-modal .fee-track-input,
+.modal.client-modal .fee-track-input[readonly] {
+  background: #ffffff;
+  border: 1px solid var(--rule);
+  padding: 0.4rem 0.6rem;
+}
+
+/* ============================================================
+   Session 12 — iPhone / small-screen layout
+   2026-05-27: Scott asked for the dashboard to be formatted for
+   his iPhone so he can see Overview and Invoices on the go.
+   Strategy: at <=720px, collapse the .cma-shell sidebar into a
+   horizontal tab strip pinned beneath a compact masthead, then
+   let the main pane scroll the page normally. Overview +
+   Invoices are reordered to the front of the tab strip so they
+   appear without horizontal scrolling.
+   ============================================================ */
+/* ============================================================
+   Tablet — iPad (portrait ~1024px) and large landscape phones
+   (2026-06-26). Between the desktop sidebar layout and the
+   <=720px phone collapse there was NO handling, so iPad 13"
+   portrait inherited the full desktop layout: the 5-metric KPI
+   strip clipped on the right edge and the 12-month "Billed This
+   Month" matrix collided into an unreadable run of digits.
+   This block keeps the sidebar (good for navigation) but narrows
+   it, wraps the KPI strip to a clean 3 + 2, stacks the two-column
+   builder/cash-flow bodies, and lets the wide matrices scroll.
+   ============================================================ */
+@media (min-width: 721px) and (max-width: 1100px) {
+
+  /* Narrow the sidebar to hand more width back to the content. */
+  body.cma-shell .side { width: 168px; }
+  body.cma-shell .tabs.vertical .tab {
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+  }
+  body.cma-shell main#main { padding: 16px 22px 28px; }
+
+  /* KPI strip — wrap the 5 metrics into a 3 + 2 grid so the
+     right-most figures stop clipping. Re-draw the dividers so the
+     wrapped second row reads as its own band. */
+  body.cma-shell .overview-summary {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 0;
+  }
+  body.cma-shell .overview-summary .metric {
+    padding: 10px 1rem;
+    border-right: 1px solid var(--rule-soft);
+  }
+  body.cma-shell .overview-summary .metric:nth-child(3n) { border-right: 0; }
+  body.cma-shell .overview-summary .metric:nth-child(n+4) {
+    border-top: 1px solid var(--rule-soft);
+  }
+  .metric-value { font-size: 1.6rem; }
+
+  /* Wide matrices — scroll horizontally inside their wrappers
+     instead of overlapping. The min-width keeps every figure at a
+     legible size; the table simply scrolls if it can't all fit. */
+  .billed-by-month-wrap,
+  .matrix-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* The base table is table-layout:fixed + width:100%, which makes the
+     12-month matrix compress and collide rather than overflow. Switch to
+     content sizing + nowrap so columns stay legible and the wrapper scrolls. */
+  table.billed-by-month,
+  table.matrix {
+    table-layout: auto;
+    width: max-content;
+    min-width: 100%;
+  }
+  table.billed-by-month th,
+  table.billed-by-month td,
+  table.matrix th,
+  table.matrix td { white-space: nowrap; }
+  table.eoy-projection {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Stack the two-column bodies on the narrower portrait width so
+     neither pane gets crushed. (Landscape iPad at 1366px is wider
+     than this block and keeps the side-by-side layout.) */
+  body.cma-shell .ib-body-grid,
+  body.cma-shell .cf-body-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+@media (max-width: 720px) {
+
+  /* Free the page to scroll vertically on iOS Safari. The desktop
+     layout pins the body and scrolls inside main; that breaks
+     momentum scrolling on phones and traps the user inside the
+     main pane. */
+  body.cma-shell {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  /* Masthead — shrink from 90px to 56px and tighten paddings.
+     The titles stack vertically and the principal name moves
+     below CMA BILLING (separator border removed). */
+  body.cma-shell .masthead {
+    height: 56px;
+    padding: 0 12px;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+  body.cma-shell .masthead-row { gap: 0.75rem; }
+  body.cma-shell .masthead-logo { height: 40px; }
+  body.cma-shell .masthead-titles {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  body.cma-shell .masthead h1 {
+    font-size: 1.05rem;
+    line-height: 1.1;
+  }
+  body.cma-shell .masthead-name {
+    font-size: 0.7rem;
+    padding-left: 0;
+    border-left: 0;
+    color: var(--ink-faint);
+  }
+
+  /* Shell — stack: tab strip above main. */
+  body.cma-shell .shell {
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  /* Sidebar becomes a horizontal tab strip pinned beneath the
+     masthead. It scrolls left-to-right when there are more tabs
+     than fit on screen. */
+  body.cma-shell .side {
+    width: 100%;
+    flex-shrink: 0;
+    padding: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--cma-accent-rule, var(--rule));
+    background: var(--paper-2);
+    overflow: visible;
+    position: sticky;
+    top: 56px;
+    z-index: 25;
+  }
+  body.cma-shell .tabs.vertical {
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  body.cma-shell .tabs.vertical::-webkit-scrollbar { display: none; }
+  body.cma-shell .tabs.vertical .tab {
+    text-align: center;
+    border-left: 0;
+    border-bottom: 2px solid transparent;
+    padding: 12px 14px;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  body.cma-shell .tabs.vertical .tab.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--cma-accent);
+    background: var(--paper);
+  }
+
+  /* Tab order on phone: Scott primarily wants Overview + Invoices,
+     so float those to the front and push the rest right. */
+  body.cma-shell .tabs.vertical .tab[data-tab="overview"]   { order: 1; }
+  body.cma-shell .tabs.vertical .tab[data-tab="invoices"]   { order: 2; }
+  body.cma-shell .tabs.vertical .tab[data-tab="clients"]    { order: 3; }
+  body.cma-shell .tabs.vertical .tab[data-tab="cashflow"]   { order: 4; }
+  body.cma-shell .tabs.vertical .tab[data-tab="newinvoice"] { order: 5; }
+  body.cma-shell .tabs.vertical .tab[data-tab="settings"]   { order: 6; }
+
+  /* Sidebar bottom (status + save) — hide on phone. */
+  body.cma-shell .side .side-bottom { display: none; }
+
+  /* Main pane — tighter padding, let the page itself scroll. */
+  body.cma-shell main#main {
+    padding: 12px 14px 80px;
+    overflow-y: visible;
+  }
+
+  /* Section headers — pull the section-note onto its own line so
+     the title isn't squeezed. */
+  .section-header {
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+  }
+  .section-header .section-note {
+    flex-basis: 100%;
+    font-size: 0.72rem;
+  }
+  body.cma-shell .section-header h2,
+  body.cma-shell h2 { font-size: 1rem; }
+
+  /* Overview metrics — 2-column grid; 5th card spans full width. */
+  body.cma-shell .overview-summary {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 10px 0 12px;
+  }
+  body.cma-shell .overview-summary .metric:nth-child(5) {
+    grid-column: 1 / -1;
+  }
+  .metric-value { font-size: 1.35rem; }
+
+  /* The "This Month" callout next to "Billed This Month" — let it
+     wrap onto its own line instead of squeezing the heading. */
+  .billed-month-header { flex-wrap: wrap; }
+  .billed-this-month-callout {
+    flex-basis: 100%;
+    justify-content: flex-start;
+  }
+
+  /* Wide tables — let them scroll horizontally inside their
+     wrappers, and bump touch targets so tapping a row to mark
+     Sent/Paid is reliable. */
+  .billed-by-month-wrap,
+  .matrix-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table.billed-by-month,
+  table.matrix {
+    font-size: 0.78rem;
+    /* content-sized + nowrap so the matrix scrolls instead of colliding
+       (base table is table-layout:fixed + width:100%). */
+    table-layout: auto;
+    width: max-content;
+    min-width: 100%;
+  }
+  table.billed-by-month th,
+  table.billed-by-month td,
+  table.matrix th,
+  table.matrix td { white-space: nowrap; }
+  table.outstanding-invoices,
+  table.invoices,
+  table.roster { font-size: 0.85rem; }
+  table.outstanding-invoices tbody tr,
+  table.invoices tbody tr,
+  table.roster tbody tr { min-height: 44px; }   /* iOS touch target */
+  table.outstanding-invoices tbody td,
+  table.invoices tbody td { padding: 0.55rem 0.55rem; }
+
+  /* Year-end projection table can be very wide — let it scroll. */
+  table.eoy-projection {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.8rem;
+  }
+
+  /* Invoices tab controls — wrap nicely on phone. */
+  #tab-invoices .section-header label.filter,
+  #tab-invoices .section-header select { font-size: 0.82rem; }
+  #tab-invoices .section-header .spacer { display: none; }
+  #tab-invoices #addInvoiceBtn { margin-left: auto; }
+  .year-filter-row {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  /* Modals — fill the screen with a small inset and scroll
+     internally; the desktop centered card is too small to
+     interact with on a phone. */
+  .modal-backdrop .modal {
+    width: calc(100vw - 16px);
+    max-width: none;
+    max-height: calc(100vh - 32px);
+    margin: 8px;
+  }
+  .cf-body-grid,
+  .ib-body-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Buttons — bump tap area without changing visual weight. */
+  .action, button.action {
+    min-height: 38px;
+    padding: 0.5rem 0.85rem;
+  }
+
+  /* Status pills in the invoice editor — easier to tap. */
+  .status-pill { padding: 0.4rem 0.6rem; }
+
+  /* Toast — keep it within the visible area above the home indicator. */
+  .toast { bottom: 24px; left: 12px; right: 12px; max-width: none; }
+}
+
+/* Extra squeeze for narrow iPhones (iPhone SE = 375px wide). */
+@media (max-width: 400px) {
+  body.cma-shell .masthead-name { display: none; }
+  body.cma-shell .tabs.vertical .tab {
+    padding: 12px 10px;
+    font-size: 0.75rem;
+  }
+  body.cma-shell main#main { padding: 10px 10px 80px; }
+  .metric-value { font-size: 1.2rem; }
+}
+
+/* ============================================================
+   Phone — New Invoice action bar (2026-06-26).
+   At 440px the six-button .ib-footer crushed the long primary
+   "Generate Word Document & Save Invoice" button into a sliver.
+   Reflow it: primary button goes full-width and prominent;
+   Preview + Save-as-Draft share a row; Reset/Cancel stay compact.
+   Also enlarge the flat-fee amount slider thumb for touch.
+   ============================================================ */
+@media (max-width: 720px) {
+  .ib-footer {
+    flex-wrap: wrap;
+    gap: 0.5rem 0.5rem;
+  }
+  .ib-footer .spacer { display: none; }
+  #ib_generate {
+    flex: 1 1 100%;
+    order: 5;
+    min-height: 48px;
+    font-weight: 700;
+  }
+  #ib_preview,
+  #ib_draft {
+    flex: 1 1 calc(50% - 0.25rem);
+    order: 4;
+    min-height: 42px;
+  }
+  #ib_reset,
+  #ib_cancel {
+    flex: 0 0 auto;
+    order: 3;
+    min-height: 42px;
+  }
+  /* Bigger touch target for the fixed-fee 5% slider on phones. */
+  .ib-flat-slider { height: 32px; }
+  .ib-flat-slider-row { gap: 0.75rem; }
+}
+
+
+/* ============================================================
+   Session 13 — Client modal mockup pass (2026-06-02)
+   Carlisle Moore design-system overlay on the EDIT CLIENT modal:
+     · Title in BioRhyme Expanded ExtraBold, 15% larger
+     · Section H3 in BioRhyme Expanded ExtraBold, smaller
+     · Section descriptions in Surveyor italic, 14px, title case
+     · Names / address / phone / email in Surveyor Text
+     · Phase % labels in Whitney Bold caps
+     · Fee Type radios in Whitney Medium uppercase
+     · Fee Tracking → equal-width metric strip, Interstate Compressed
+       numbers, Fee Remaining label +30% in terracotta
+     · "+ Add new estimate" → solid forest primary
+     · Create Invoice → forest-3 tint
+     · Left column ~40% wider via grid override
+     · Deposit Paid → editable amount input wired beside checkbox
+   ============================================================ */
+
+/* Title — BioRhyme Expanded ExtraBold, +15% */
+.modal.client-modal .modal-header h2 {
+  font-family: "BioRhyme Expanded", var(--font-trajan);
+  font-weight: 800;
+  font-size: 1.495rem;          /* 1.3rem × 1.15 */
+  letter-spacing: var(--letter-eng-t);
+  color: var(--cma-accent);
+}
+
+/* Section H3 — BioRhyme ExtraBold, smaller, accent rule beneath */
+.modal.client-modal .modal-body h3 {
+  font-family: "BioRhyme Expanded", var(--font-trajan);
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: var(--letter-eng-t);
+  text-transform: uppercase;
+  color: var(--cma-accent);
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--cma-accent-rule);
+  margin: 0 0 0.85rem;
+}
+
+/* Section descriptions (.hint inside H3 / inline) — Surveyor italic, 14px, title case */
+.modal.client-modal .modal-body h3 .hint,
+.modal.client-modal .modal-body .form-row > .hint,
+.modal.client-modal .fee-revisions-actions .hint,
+.modal.client-modal .form-row.deposit-paid-row .inline-helper {
+  font-family: var(--font-body);   /* Miller / Surveyor / Warnock — serif body */
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-faint);
+}
+
+/* Body grid — left column 40% wider than right */
+.modal.client-modal .cf-body-grid {
+  grid-template-columns: 1.4fr 1fr;
+}
+
+/* Name / address / phone / email → Surveyor Text */
+.modal.client-modal #cf_name,
+.modal.client-modal #cf_full_name,
+.modal.client-modal #cf_address,
+.modal.client-modal #cf_phone,
+.modal.client-modal #cf_email,
+.modal.client-modal #cf_project_address {
+  font-family: var(--font-body);   /* Miller Text / Surveyor / Warnock fallback */
+  font-size: 1.025rem;
+  letter-spacing: 0.005em;
+}
+
+/* Phase % labels — Whitney Bold caps */
+.modal.client-modal .form-row.phases > label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* Fee Type radios — Whitney Medium uppercase */
+.modal.client-modal .radios .radio {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.modal.client-modal .radios .radio input[type="radio"]:checked + span,
+.modal.client-modal .radios .radio:has(input[type="radio"]:checked) {
+  color: var(--cma-accent);
+}
+
+/* ============ FEE TRACKING — metric strip ============ */
+.modal.client-modal .fee-tracking-row.fee-tracking-row--5 {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: stretch;
+  column-gap: 0;
+  row-gap: 0.7rem;
+  margin-top: 0.4rem;
+}
+/* 2026-06-22: two-row arrangement so wide currency figures stop clipping.
+   Row 1 (3 boxes x2col): Orig. Estimate | Fee % | Orig. Fee
+   Row 2 (2 boxes x3col): Current Fee | Fee Remaining */
+.modal.client-modal .fee-tracking-row--5 .fee-track-box:nth-child(1),
+.modal.client-modal .fee-tracking-row--5 .fee-track-box:nth-child(2),
+.modal.client-modal .fee-tracking-row--5 .fee-track-box:nth-child(3) { grid-column: span 2; }
+.modal.client-modal .fee-tracking-row--5 .fee-track-box:nth-child(4),
+.modal.client-modal .fee-tracking-row--5 .fee-track-box:nth-child(5) { grid-column: span 3; }
+.modal.client-modal .fee-tracking-row--5 .fee-track-box:nth-child(3) { border-right: none; padding-right: 0; }
+.modal.client-modal .fee-tracking-row--5 .fee-track-box:nth-child(4) { padding-left: 0; }
+.modal.client-modal .fee-tracking-row--5 .fee-track-box:nth-child(4),
+.modal.client-modal .fee-tracking-row--5 .fee-track-box:nth-child(5) { border-top: 1px solid var(--rule); padding-top: 0.6rem; }
+.modal.client-modal .fee-track-box {
+  display: grid;
+  grid-template-rows: 24px 38px auto;
+  row-gap: 0.4rem;
+  padding: 0.4rem 0.5rem;
+  border-right: 1px solid var(--rule);
+  background: transparent;
+  min-width: 0;
+}
+.modal.client-modal .fee-track-box:first-child { padding-left: 0; }
+.modal.client-modal .fee-track-box:last-child  { border-right: none; padding-right: 0; }
+
+.modal.client-modal .fee-track-label {
+  font-family: var(--font-strap);
+  font-weight: 700;
+  font-size: 0.70rem;
+  letter-spacing: var(--letter-label);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  line-height: 1.1;
+  align-self: end;
+  padding-left: 0;
+}
+
+/* Fee Remaining label — +30% larger, terracotta to read as the headline metric */
+.modal.client-modal .fee-track-box:has(#cf_fee_remaining_calc) .fee-track-label {
+  font-size: 0.91rem;            /* 0.70 × 1.30 */
+  letter-spacing: 0.14em;
+  color: var(--cma-accent);
+}
+
+/* Big mono number — Interstate Compressed Regular, sized to the cell */
+.modal.client-modal .fee-track-input,
+.modal.client-modal .fee-track-input[readonly] {
+  font-family: "Interstate Condensed", "Interstate Compressed", "Interstate", var(--font-figure);
+  font-weight: 400;
+  font-size: 1.3rem;
+  letter-spacing: 0.005em;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  align-self: end;
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.modal.client-modal #cf_fee_remaining_calc {
+  color: var(--collected);       /* forest — positive working figure */
+}
+/* Override the Session 11 override that bumped Current Fee specifically */
+.modal.client-modal #cf_current_fee_calc {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.modal.client-modal .fee-track-hint {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-faint);
+  line-height: 1.3;
+}
+
+/* ============ ADD NEW ESTIMATE — solid forest primary ============ */
+.modal.client-modal .fee-revisions-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0 1rem;
+}
+.modal.client-modal #cf_addRevision {
+  background: var(--collected);
+  border: 1px solid var(--collected);
+  color: #fff;
+  font-family: var(--font-strap);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.6rem;
+  border-radius: 2px;
+}
+.modal.client-modal #cf_addRevision:hover {
+  background: var(--collected-bright);
+  border-color: var(--collected-bright);
+  color: #fff;
+}
+
+/* ============ CREATE INVOICE — forest-3 tint background ============ */
+.modal.client-modal .modal-footer #cf_create_invoice.action.subtle {
+  background: #b8cdb9;            /* forest-3 from CMA design system */
+  border: 1px solid var(--collected);
+  color: var(--collected-deep, #103627);
+  font-weight: 700;
+}
+.modal.client-modal .modal-footer #cf_create_invoice.action.subtle:hover {
+  background: var(--forest-4);
+  border-color: var(--collected);
+  color: var(--collected);
+}
+
+/* ============ DEPOSIT PAID — editable amount slot ============ */
+.modal.client-modal .form-row.deposit-paid-row {
+  background: var(--forest-4);
+  border-left: 2px solid var(--collected);
+  border-radius: 2px;
+  padding: 0.55rem 0.75rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+.modal.client-modal .form-row.deposit-paid-row .checkbox-label .dp-note {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.78rem;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink-faint);
+}
+.modal.client-modal .dp-amount-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-strap);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  flex: 0 0 auto;
+}
+.modal.client-modal .dp-amount-label .dp-amount-input {
+  width: 110px;
+  font-family: var(--font-figure);
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  background: #fff;
+  border: 1px solid var(--rule);
+  padding: 0.3rem 0.5rem;
+  color: var(--ink);
+}
+/* Hide the amount slot when checkbox not checked, via CSS-only :has() */
+.modal.client-modal .form-row.deposit-paid-row:not(:has(#cf_deposit_paid:checked)) .dp-amount-label {
+  display: none;
+}
+
+
+/* ============================================================
+   Session 14 — Mobile & tablet revamp (2026-06-26)
+   ------------------------------------------------------------
+   Goal: a phone-first Overview that leads with the numbers Scott
+   actually checks on the go — Outstanding A/R ("who owes me")
+   and Remaining-to-bill — and turns every wide table into
+   tappable cards instead of a sideways-scrolling grid.
+   Tuned for iPhone 17 Pro Max (~440pt) and the 13" iPad
+   (~1024pt portrait, which keeps the desktop layout — we only
+   bump touch targets there).
+
+   Overlay pattern (per house style): appended at the end; it
+   intentionally overrides parts of the earlier max-width:720px
+   block. Later-wins + matched specificity, no refactors above.
+   ============================================================ */
+
+/* ============ PHONE (<= 720px) ============ */
+@media (max-width: 720px) {
+
+  /* ---- Tab strip: more tactile, terracotta active state ---- */
+  body.cma-shell .side {
+    box-shadow: 0 2px 8px rgba(20, 17, 13, 0.07);
+  }
+  body.cma-shell .tabs.vertical {
+    padding: 0 4px;
+    gap: 2px;
+  }
+  body.cma-shell .tabs.vertical .tab {
+    padding: 13px 16px;
+    font-size: 0.78rem;
+    letter-spacing: 0.13em;
+    border-bottom-width: 3px;
+    color: var(--ink-soft);
+  }
+  body.cma-shell .tabs.vertical .tab.active {
+    background: var(--cma-accent-tint);
+    border-bottom-color: var(--cma-accent);
+    color: var(--cma-accent-deep);
+    font-weight: 700;
+  }
+
+  /* ---- Tighten section rhythm ---- */
+  body.cma-shell main#main { padding: 14px 14px 96px; }
+  .section-rule { margin: 1.1rem 0 0.6rem; }
+
+  /* ============================================================
+     OVERVIEW HERO — metric cards
+     Each metric is a rounded card. Outstanding A/R is promoted
+     to a full-width hero at the very top (terracotta), the rest
+     fall into a tidy 2x2 grid below it.
+     ============================================================ */
+  body.cma-shell .overview-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    border: 0;
+    padding: 12px 0 4px;
+    margin-top: 4px;
+  }
+  body.cma-shell .overview-summary .metric {
+    border: 1px solid var(--rule);
+    border-radius: 11px;
+    background: var(--paper-2);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    min-height: 82px;
+  }
+  body.cma-shell .overview-summary .metric-label {
+    font-size: 0.64rem;
+    letter-spacing: 0.09em;
+    color: var(--ink-faint);
+    margin-bottom: 0.35rem;
+  }
+  body.cma-shell .overview-summary .metric-value {
+    font-size: 1.55rem;
+    line-height: 1.04;
+  }
+  body.cma-shell .overview-summary .metric-sub {
+    font-size: 0.7rem;
+    margin-top: 0.3rem;
+  }
+
+  /* Hero: Outstanding A/R (#metricOutstandingCard = 4th DOM child) */
+  body.cma-shell .overview-summary #metricOutstandingCard {
+    order: -1;
+    grid-column: 1 / -1;
+    background: var(--cma-accent-tint);
+    border: 1px solid var(--cma-accent-rule);
+    border-left: 5px solid var(--cma-accent);
+    min-height: 0;
+    padding: 15px 17px;
+  }
+  body.cma-shell .overview-summary #metricOutstandingCard .metric-label {
+    color: var(--cma-accent-deep);
+    font-weight: 800;
+    font-size: 0.7rem;
+  }
+  body.cma-shell .overview-summary #metricOutstandingCard .metric-label::after {
+    content: " \2192";
+    color: var(--cma-accent-soft);
+  }
+  body.cma-shell .overview-summary #metricOutstandingCard .metric-value {
+    font-size: 2.2rem;
+    color: var(--cma-accent-deep);
+  }
+  /* Undo the earlier "5th card spans full width" rule; tint Remaining green */
+  body.cma-shell .overview-summary .metric:nth-child(5) { grid-column: auto; }
+  body.cma-shell .overview-summary .metric:nth-child(5) .metric-value { color: var(--collected); }
+
+  /* ============================================================
+     WIDE TABLES -> STACKED CARDS
+     Roster, Outstanding Invoices, and the Invoices tab become
+     one card per row. Cells turn into label/value lines; the
+     JS emits no data-labels, so labels are injected per-column
+     with ::before. Card title + key figure are reordered to the
+     top via flex order.
+     ============================================================ */
+  body.cma-shell table.roster,
+  body.cma-shell table.outstanding-invoices,
+  body.cma-shell table.invoices {
+    display: block;
+    width: 100%;
+    border: 0;
+  }
+  body.cma-shell table.roster tbody,
+  body.cma-shell table.outstanding-invoices tbody,
+  body.cma-shell table.invoices tbody { display: block; }
+
+  /* Hide desktop sort-header rows (keep roster TOTAL summary row) */
+  body.cma-shell table.roster thead { display: block; }
+  body.cma-shell table.roster thead tr:not(.roster-totals-row),
+  body.cma-shell table.outstanding-invoices thead,
+  body.cma-shell table.invoices thead { display: none; }
+
+  /* The card shell */
+  body.cma-shell table.roster tbody tr,
+  body.cma-shell table.outstanding-invoices tbody tr,
+  body.cma-shell table.invoices tbody tr {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 11px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(20, 17, 13, 0.05);
+    cursor: pointer;
+    min-height: 0;
+  }
+  body.cma-shell table.roster tbody tr:active,
+  body.cma-shell table.outstanding-invoices tbody tr:active,
+  body.cma-shell table.invoices tbody tr:active {
+    background: var(--cma-accent-tint);
+  }
+
+  /* Each data cell -> a label/value line */
+  body.cma-shell table.roster tbody td,
+  body.cma-shell table.outstanding-invoices tbody td,
+  body.cma-shell table.invoices tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 4px 0;
+    border: 0;
+    text-align: right;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.95rem;
+    min-height: 0;
+    white-space: nowrap;
+  }
+  /* Injected label (formatting only; content set per-table below) */
+  body.cma-shell table.roster tbody td::before,
+  body.cma-shell table.outstanding-invoices tbody td::before,
+  body.cma-shell table.invoices tbody td::before {
+    font-family: var(--font-ui);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  /* Card title = client name (the .col-name cell) */
+  body.cma-shell table.roster tbody td.col-name,
+  body.cma-shell table.outstanding-invoices tbody td.col-name,
+  body.cma-shell table.invoices tbody td.col-name {
+    display: block;
+    order: -3;
+    text-align: left;
+    white-space: normal;
+    font-family: var(--font-ui);
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    padding: 0 0 7px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--rule);
+  }
+  body.cma-shell table.roster tbody td.col-name::before,
+  body.cma-shell table.outstanding-invoices tbody td.col-name::before,
+  body.cma-shell table.invoices tbody td.col-name::before { content: none; }
+
+  /* ---- ROSTER labels (Client, Total Fee, Billed, Collected, Outstanding, Remaining) ---- */
+  body.cma-shell table.roster tbody td:nth-child(2)::before { content: "Total Fee"; }
+  body.cma-shell table.roster tbody td:nth-child(3)::before { content: "Billed YTD"; }
+  body.cma-shell table.roster tbody td:nth-child(4)::before { content: "Collected YTD"; }
+  body.cma-shell table.roster tbody td:nth-child(5)::before { content: "Outstanding"; }
+  body.cma-shell table.roster tbody td:nth-child(6)::before { content: "Remaining"; }
+  body.cma-shell table.roster tbody td:nth-child(5).warn { color: var(--warn); font-weight: 700; }
+  body.cma-shell table.roster tbody td:nth-child(6) {
+    color: var(--cma-accent-deep);
+    font-weight: 700;
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 7px;
+    margin-top: 3px;
+  }
+
+  /* Roster TOTAL summary row -> highlighted card at the top */
+  body.cma-shell table.roster .roster-totals-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--forest-4, #e8efe5);
+    border: 1px solid var(--cma-accent-rule);
+    border-radius: 11px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  body.cma-shell table.roster .roster-totals-row th {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border: 0;
+    padding: 4px 0;
+    text-align: right;
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+  body.cma-shell table.roster .roster-totals-row th:first-child {
+    display: block;
+    text-align: left;
+    font-family: var(--font-trajan);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.95rem;
+    color: var(--collected);
+    padding-bottom: 6px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--cma-accent-rule);
+  }
+  body.cma-shell table.roster .roster-totals-row th:nth-child(2)::before { content: "Total Fee"; }
+  body.cma-shell table.roster .roster-totals-row th:nth-child(3)::before { content: "Billed YTD"; }
+  body.cma-shell table.roster .roster-totals-row th:nth-child(4)::before { content: "Collected YTD"; }
+  body.cma-shell table.roster .roster-totals-row th:nth-child(5)::before { content: "Outstanding"; }
+  body.cma-shell table.roster .roster-totals-row th:nth-child(6)::before { content: "Remaining"; }
+  body.cma-shell table.roster .roster-totals-row th:nth-child(n+2)::before {
+    font-family: var(--font-ui);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ---- OUTSTANDING INVOICES: Date,#,Client,Description,Amount,DaysOut ---- */
+  body.cma-shell table.outstanding-invoices tbody td.amount-due {
+    order: -2;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--cma-accent-deep);
+    padding-bottom: 6px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  body.cma-shell table.outstanding-invoices tbody td.amount-due::before {
+    content: "Amount due";
+    align-self: center;
+  }
+  body.cma-shell table.outstanding-invoices tbody td:nth-child(6) { order: -1; } /* Days out near top */
+  body.cma-shell table.outstanding-invoices tbody td:nth-child(1)::before { content: "Date"; }
+  body.cma-shell table.outstanding-invoices tbody td:nth-child(2)::before { content: "Invoice #"; }
+  body.cma-shell table.outstanding-invoices tbody td:nth-child(6)::before { content: "Days out"; }
+  body.cma-shell table.outstanding-invoices tbody td.col-note {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+    white-space: normal;
+    gap: 2px;
+  }
+  body.cma-shell table.outstanding-invoices tbody td.col-note::before { content: "Description"; }
+  body.cma-shell table.outstanding-invoices tbody td:nth-child(6).warn { color: var(--warn); font-weight: 700; }
+  body.cma-shell table.outstanding-invoices tbody tr.overdue { border-left: 4px solid var(--warn); }
+  body.cma-shell table.outstanding-invoices tbody td.outstanding-empty {
+    display: block; text-align: center; color: var(--ink-faint); font-style: italic;
+  }
+  body.cma-shell table.outstanding-invoices tbody td.outstanding-empty::before { content: none; }
+  /* Outstanding total -> footer summary card */
+  body.cma-shell table.outstanding-invoices tfoot { display: block; }
+  body.cma-shell table.outstanding-invoices tfoot tr {
+    display: flex; justify-content: space-between; align-items: baseline;
+    background: var(--cma-accent-tint); border: 1px solid var(--cma-accent-rule);
+    border-radius: 11px; padding: 13px 15px; margin-top: 2px;
+  }
+  body.cma-shell table.outstanding-invoices tfoot td {
+    border: 0; padding: 0; font-family: var(--font-mono);
+    font-weight: 700; text-align: left;
+  }
+  body.cma-shell table.outstanding-invoices tfoot td:empty { display: none; }
+  body.cma-shell table.outstanding-invoices tfoot td.warn { color: var(--warn); font-size: 1.15rem; text-align: right; }
+
+  /* ---- INVOICES tab: Date,#,Client,Amount,Description,Sent,Paid,Actions ---- */
+  body.cma-shell table.invoices tbody td:nth-child(4) {
+    order: -2;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ink);
+    padding-bottom: 6px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  body.cma-shell table.invoices tbody td:nth-child(4)::before { content: "Amount"; align-self: center; }
+  body.cma-shell table.invoices tbody td:nth-child(1)::before { content: "Date"; }
+  body.cma-shell table.invoices tbody td:nth-child(2)::before { content: "Invoice #"; }
+  body.cma-shell table.invoices tbody td:nth-child(5)::before { content: "Description"; }
+  body.cma-shell table.invoices tbody td:nth-child(6)::before { content: "Sent"; }
+  body.cma-shell table.invoices tbody td:nth-child(7)::before { content: "Paid"; }
+  body.cma-shell table.invoices tbody td.col-note {
+    flex-direction: column; align-items: stretch; text-align: left;
+    white-space: normal; gap: 2px;
+  }
+  body.cma-shell table.invoices tbody td.col-actions { display: none; }
+  body.cma-shell table.invoices tfoot { display: block; }
+  body.cma-shell table.invoices tfoot tr {
+    display: flex; justify-content: space-between; align-items: baseline;
+    background: var(--paper-2); border: 1px solid var(--rule);
+    border-radius: 11px; padding: 12px 14px;
+  }
+  body.cma-shell table.invoices tfoot td { border: 0; padding: 0; font-family: var(--font-mono); }
+  body.cma-shell table.invoices tfoot td:empty { display: none; }
+
+  /* ---- Wide scroll-only tables: clearer "swipe" affordance ---- */
+  .billed-by-month-wrap,
+  .matrix-wrap,
+  #tab-overview table.eoy-projection {
+    position: relative;
+    -webkit-mask-image: linear-gradient(to right, #000 92%, transparent 100%);
+            mask-image: linear-gradient(to right, #000 92%, transparent 100%);
+  }
+  .billed-month-header::after {
+    content: "swipe \2192";
+    font-family: var(--font-ui);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    align-self: center;
+  }
+}
+
+/* ============ TABLET / TOUCH (13" iPad, >720px, coarse pointer) ============ */
+@media (pointer: coarse) and (min-width: 721px) {
+  /* Keep the desktop layout, just make everything comfortably tappable. */
+  body.cma-shell main#main { -webkit-overflow-scrolling: touch; }
+  body.cma-shell .tabs.vertical .tab { padding: 0.7rem 1rem; }
+  .action, button.action { min-height: 42px; }
+  .status-pill { padding: 0.55rem 0.95rem; }
+  table.roster tbody tr,
+  table.invoices tbody tr,
+  table.outstanding-invoices tbody tr { min-height: 46px; }
+  table.roster tbody td,
+  table.invoices tbody td,
+  table.outstanding-invoices tbody td { padding-top: 0.6rem; padding-bottom: 0.6rem; }
+  .ib-phase-slider, .ib-flat-slider { height: 30px; }
+  input[type="date"], select, .currency-input { min-height: 40px; }
+}
+
+
+/* ============================================================
+   Phase Amounts — editable $ column (2026-06-26)
+   The Amount cell now holds an input so a phase can be set by
+   dollar amount (back-computes its %). Keep it looking like the
+   read-only figure until focused, matching the invoice builder's
+   inline-edit feel.
+   ============================================================ */
+table.phase-table td.pa-amt { padding-right: 0.5rem; }
+.cf-phase-amt-input {
+  width: 100%;
+  max-width: 9em;
+  margin-left: auto;
+  display: block;
+  border: 1px solid transparent;
+  background: transparent;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--ink);
+  padding: 2px 5px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  cursor: text;
+}
+.cf-phase-amt-input:hover { border-color: var(--rule); background: var(--paper); }
+.cf-phase-amt-input:focus {
+  border-color: var(--cma-accent, #a85c24);
+  background: var(--paper);
+  outline: none;
+}
+table.phase-table td.pa-pct { color: var(--ink-soft); }

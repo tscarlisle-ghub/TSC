@@ -1,0 +1,870 @@
+{
+  "version": "1.0",
+  "updated_at": "2026-08-20T12:37:46.000Z",
+  "fiscal_year": 2026,
+  "_build_O_migration": true,
+  "invoice_counter": 1050,
+  "firm": {
+    "name": "Carlisle Moore Architects",
+    "principal1_name": "T Scott Carlisle",
+    "principal1_phone": "(205) 587-4868",
+    "principal2_name": "Bill Moore",
+    "principal2_phone": "(205) 966-2554",
+    "address_line1": "2814 Petticoat Lane, 2nd Floor",
+    "address_line2": "Mountain Brook, AL 35223",
+    "bank_name": "Example Bank & Trust",
+    "bank_routing": "000000000",
+    "bank_account": "0000000000",
+    "beneficiary": "Carlisle Moore Architects, Inc.",
+    "website": "carlislemoorearchitects.com"
+  },
+  "clients": [
+    {
+      "id": "demo-appleseed",
+      "name": "Appleseed",
+      "full_name": "John & Jane Appleseed",
+      "archived": false,
+      "closed_out": false,
+      "address": "410 Magnolia Ridge Rd",
+      "phone": "(205) 555-0101",
+      "email": "jjappleseed@example.com",
+      "project_address": "410 Magnolia Ridge Rd, Mountain Brook, AL 35223",
+      "notes": "New construction, single-family residence. Demo client \u2014 not a real project.",
+      "fee_type": "fixed",
+      "fee_fixed_amount": 45000,
+      "fee_percentage": 0,
+      "fee_estimate": 0,
+      "fee_tier1_pct": 0,
+      "fee_tier_threshold": 0,
+      "fee_tier2_pct": 0,
+      "is_phased": true,
+      "phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_fee": 45000,
+      "current_fee": 45000,
+      "original_estimate": 0,
+      "original_phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_set_at": "",
+      "total_fee_2026": 45000,
+      "monthly_planned_2026": [
+        {
+          "month": 3,
+          "amount": 2250
+        },
+        {
+          "month": 4,
+          "amount": 6750
+        },
+        {
+          "month": 5,
+          "amount": 6750
+        },
+        {
+          "month": 6,
+          "amount": 4000
+        }
+      ],
+      "phase_locks": {
+        "DEPOSIT": {
+          "locked": true,
+          "amount": 2250,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "SD": {
+          "locked": true,
+          "amount": 9000,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "DD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "CD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "CA": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        }
+      },
+      "invoices": [
+        {
+          "id": "demo-a1",
+          "number": "1001",
+          "date": "2026-03-05",
+          "amount": 2250,
+          "note": "Deposit \u2014 Retainer",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100
+          }
+        },
+        {
+          "id": "demo-a2",
+          "number": "1008",
+          "date": "2026-04-18",
+          "amount": 9000,
+          "note": "Schematic Design \u2014 through 100%",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 100
+          }
+        },
+        {
+          "id": "demo-a3",
+          "number": "1015",
+          "date": "2026-06-10",
+          "amount": 5400,
+          "note": "Design Development \u2014 through 60%",
+          "sent": true,
+          "paid": false,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 100,
+            "DD": 60
+          }
+        }
+      ]
+    },
+    {
+      "id": "demo-samplehollow",
+      "name": "Sample Hollow",
+      "full_name": "Sam & Sally Sample",
+      "archived": false,
+      "closed_out": false,
+      "address": "88 Hollow Creek Trail",
+      "phone": "(205) 555-0155",
+      "email": "sample.hollow@example.com",
+      "project_address": "88 Hollow Creek Trail, Vestavia Hills, AL 35243",
+      "notes": "Custom home, construction estimate revised upward mid-project. Demo client \u2014 not a real project.",
+      "fee_type": "percentage",
+      "fee_fixed_amount": 0,
+      "fee_percentage": 7.0,
+      "fee_estimate": 2000000,
+      "fee_tier1_pct": 0,
+      "fee_tier_threshold": 0,
+      "fee_tier2_pct": 0,
+      "is_phased": true,
+      "phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_fee": 140000.0,
+      "current_fee": 140000.0,
+      "original_estimate": 2000000,
+      "original_phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_set_at": "2025-11-01",
+      "estimate_revisions": [
+        {
+          "id": "demo-rev1",
+          "estimate": 2800000,
+          "date": "2026-07-15"
+        }
+      ],
+      "revised_estimate": 2800000,
+      "total_fee_2026": 140000.0,
+      "monthly_planned_2026": [
+        {
+          "month": 2,
+          "amount": 7000
+        },
+        {
+          "month": 5,
+          "amount": 28000
+        },
+        {
+          "month": 6,
+          "amount": 28000
+        }
+      ],
+      "phase_locks": {
+        "DEPOSIT": {
+          "locked": true,
+          "amount": 7000.0,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "SD": {
+          "locked": true,
+          "amount": 28000.0,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "DD": {
+          "locked": true,
+          "amount": 28000.0,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "CD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "CA": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        }
+      },
+      "invoices": [
+        {
+          "id": "demo-s1",
+          "number": "1002",
+          "date": "2025-11-10",
+          "amount": 7000.0,
+          "note": "Deposit \u2014 Retainer",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100
+          }
+        },
+        {
+          "id": "demo-s2",
+          "number": "1011",
+          "date": "2026-02-20",
+          "amount": 28000.0,
+          "note": "Schematic Design \u2014 through 100%",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 100
+          }
+        },
+        {
+          "id": "demo-s3",
+          "number": "1019",
+          "date": "2026-05-01",
+          "amount": 28000.0,
+          "note": "Design Development \u2014 through 100%",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 100,
+            "DD": 100
+          }
+        },
+        {
+          "id": "demo-s4",
+          "number": "1027",
+          "date": "2026-07-28",
+          "amount": 28000.0,
+          "note": "Construction Documents \u2014 through 40%",
+          "sent": true,
+          "paid": false,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 100,
+            "DD": 100,
+            "CD": 40
+          }
+        }
+      ]
+    },
+    {
+      "id": "demo-doefarmhouse",
+      "name": "Doe Farmhouse",
+      "full_name": "Richard & Diane Doe",
+      "archived": false,
+      "closed_out": false,
+      "address": "2200 County Road 12",
+      "phone": "(205) 555-0177",
+      "email": "doe.farmhouse@example.com",
+      "project_address": "2200 County Road 12, Leeds, AL 35094",
+      "notes": "Farmhouse renovation + addition, tiered percentage fee. Demo client \u2014 not a real project.",
+      "fee_type": "tiered_percentage",
+      "fee_fixed_amount": 0,
+      "fee_percentage": 0,
+      "fee_estimate": 1500000,
+      "fee_tier1_pct": 5.0,
+      "fee_tier_threshold": 1000000,
+      "fee_tier2_pct": 3.5,
+      "is_phased": true,
+      "phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_fee": 67500.0,
+      "current_fee": 67500.0,
+      "original_estimate": 1500000,
+      "original_phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_set_at": "",
+      "total_fee_2026": 67500.0,
+      "monthly_planned_2026": [
+        {
+          "month": 4,
+          "amount": 3375
+        },
+        {
+          "month": 7,
+          "amount": 13500
+        }
+      ],
+      "phase_locks": {
+        "DEPOSIT": {
+          "locked": true,
+          "amount": 3375.0,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "SD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "DD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "CD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "CA": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        }
+      },
+      "invoices": [
+        {
+          "id": "demo-d1",
+          "number": "1005",
+          "date": "2026-04-02",
+          "amount": 3375.0,
+          "note": "Deposit \u2014 Retainer",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100
+          }
+        },
+        {
+          "id": "demo-d2",
+          "number": "1017",
+          "date": "2026-07-01",
+          "amount": 6750.0,
+          "note": "Schematic Design \u2014 through 50%",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 50
+          }
+        }
+      ]
+    },
+    {
+      "id": "demo-testerman",
+      "name": "Testerman Pool House",
+      "full_name": "Pat Testerman",
+      "archived": true,
+      "closed_out": true,
+      "closed_out_at": "2026-05-20T14:00:00.000Z",
+      "address": "77 Overlook Ln",
+      "phone": "(205) 555-0199",
+      "email": "pat.testerman@example.com",
+      "project_address": "77 Overlook Ln, Homewood, AL 35209",
+      "notes": "Small detached pool house, single lump-sum fee, project complete. Demo client \u2014 not a real project.",
+      "fee_type": "fixed",
+      "fee_fixed_amount": 12000,
+      "fee_percentage": 0,
+      "fee_estimate": 0,
+      "fee_tier1_pct": 0,
+      "fee_tier_threshold": 0,
+      "fee_tier2_pct": 0,
+      "is_phased": false,
+      "phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_fee": 12000,
+      "current_fee": 12000,
+      "original_estimate": 0,
+      "original_phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_set_at": "",
+      "total_fee_2026": 0,
+      "monthly_planned_2026": [],
+      "phase_locks": {
+        "DEPOSIT": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "SD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "DD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "CD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "CA": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        }
+      },
+      "invoices": [
+        {
+          "id": "demo-t1",
+          "number": "0987",
+          "date": "2026-02-10",
+          "amount": 12000,
+          "note": "Full Service \u2014 Lump Sum",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": null
+        }
+      ]
+    },
+    {
+      "id": "demo-placeholder",
+      "name": "Placeholder Estates",
+      "full_name": "Alex Placeholder",
+      "archived": false,
+      "closed_out": false,
+      "address": "15 New Beginnings Way",
+      "phone": "(205) 555-0133",
+      "email": "alex.placeholder@example.com",
+      "project_address": "15 New Beginnings Way, Hoover, AL 35244",
+      "notes": "Just signed. Deposit collected slightly under the contract amount. Demo client \u2014 not a real project.",
+      "fee_type": "fixed",
+      "fee_fixed_amount": 60000,
+      "fee_percentage": 0,
+      "fee_estimate": 0,
+      "fee_tier1_pct": 0,
+      "fee_tier_threshold": 0,
+      "fee_tier2_pct": 0,
+      "is_phased": true,
+      "phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_fee": 60000,
+      "current_fee": 60000,
+      "original_estimate": 0,
+      "original_phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_set_at": "",
+      "total_fee_2026": 60000,
+      "monthly_planned_2026": [
+        {
+          "month": 8,
+          "amount": 2500
+        }
+      ],
+      "deposit_paid": true,
+      "deposit_paid_at": "2026-08-05",
+      "deposit_paid_amount": 2500,
+      "phase_locks": {
+        "DEPOSIT": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "SD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "DD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "CD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "CA": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        }
+      },
+      "invoices": []
+    },
+    {
+      "id": "demo-prototype",
+      "name": "Prototype Cottage",
+      "full_name": "Morgan Prototype",
+      "archived": false,
+      "closed_out": false,
+      "address": "930 Lakeshore Dr",
+      "phone": "(205) 555-0166",
+      "email": "morgan.prototype@example.com",
+      "project_address": "930 Lakeshore Dr, Trussville, AL 35173",
+      "notes": "Lake house, DD invoice went out and has not been paid \u2014 good example for Outstanding A/R / Cash Flow. Demo client \u2014 not a real project.",
+      "fee_type": "fixed",
+      "fee_fixed_amount": 85000,
+      "fee_percentage": 0,
+      "fee_estimate": 0,
+      "fee_tier1_pct": 0,
+      "fee_tier_threshold": 0,
+      "fee_tier2_pct": 0,
+      "is_phased": true,
+      "phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_fee": 85000,
+      "current_fee": 85000,
+      "original_estimate": 0,
+      "original_phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_set_at": "",
+      "total_fee_2026": 85000,
+      "monthly_planned_2026": [
+        {
+          "month": 3,
+          "amount": 4250
+        },
+        {
+          "month": 5,
+          "amount": 17000
+        },
+        {
+          "month": 6,
+          "amount": 17000
+        }
+      ],
+      "phase_locks": {
+        "DEPOSIT": {
+          "locked": true,
+          "amount": 4250.0,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "SD": {
+          "locked": true,
+          "amount": 17000.0,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "DD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "CD": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        },
+        "CA": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        }
+      },
+      "invoices": [
+        {
+          "id": "demo-p1",
+          "number": "1003",
+          "date": "2026-03-12",
+          "amount": 4250.0,
+          "note": "Deposit \u2014 Retainer",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100
+          }
+        },
+        {
+          "id": "demo-p2",
+          "number": "1013",
+          "date": "2026-05-15",
+          "amount": 17000.0,
+          "note": "Schematic Design \u2014 through 100%",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 100
+          }
+        },
+        {
+          "id": "demo-p3",
+          "number": "1022",
+          "date": "2026-06-18",
+          "amount": 12750.0,
+          "note": "Design Development \u2014 through 75%",
+          "sent": true,
+          "paid": false,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 100,
+            "DD": 75
+          }
+        }
+      ]
+    },
+    {
+      "id": "demo-exampleton",
+      "name": "Exampleton",
+      "full_name": "Taylor Exampleton",
+      "archived": false,
+      "closed_out": false,
+      "address": "5 Ridgeview Cir",
+      "phone": "(205) 555-0188",
+      "email": "taylor.exampleton@example.com",
+      "project_address": "5 Ridgeview Cir, Mountain Brook, AL 35223",
+      "notes": "Started as a Proof-of-Concept study before full contract; PoC fee credited toward the deposit. Now in Construction Administration. Demo client \u2014 not a real project.",
+      "fee_type": "percentage",
+      "fee_fixed_amount": 0,
+      "fee_percentage": 6.5,
+      "fee_estimate": 3200000,
+      "fee_tier1_pct": 0,
+      "fee_tier_threshold": 0,
+      "fee_tier2_pct": 0,
+      "is_phased": true,
+      "phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_fee": 208000.0,
+      "current_fee": 208000.0,
+      "original_estimate": 3200000,
+      "original_phases": {
+        "DEPOSIT": 0.05,
+        "SD": 0.2,
+        "DD": 0.2,
+        "CD": 0.5,
+        "CA": 0.05
+      },
+      "original_set_at": "",
+      "poc_amount": 4000,
+      "poc_at": "2025-09-10",
+      "total_fee_2026": 208000.0,
+      "monthly_planned_2026": [
+        {
+          "month": 2,
+          "amount": 10400
+        },
+        {
+          "month": 6,
+          "amount": 20800
+        }
+      ],
+      "phase_locks": {
+        "DEPOSIT": {
+          "locked": true,
+          "amount": 10400.0,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "SD": {
+          "locked": true,
+          "amount": 41600.0,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "DD": {
+          "locked": true,
+          "amount": 41600.0,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "CD": {
+          "locked": true,
+          "amount": 104000.0,
+          "locked_at": "2026-06-01T09:00:00.000Z"
+        },
+        "CA": {
+          "locked": false,
+          "amount": 0,
+          "locked_at": ""
+        }
+      },
+      "invoices": [
+        {
+          "id": "demo-e1",
+          "number": "0912",
+          "date": "2025-09-10",
+          "amount": 4000,
+          "note": "Proof of Concept \u2014 credited toward Deposit",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": null
+        },
+        {
+          "id": "demo-e2",
+          "number": "0940",
+          "date": "2025-10-05",
+          "amount": 6400.0,
+          "note": "Deposit \u2014 balance after PoC credit",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100
+          }
+        },
+        {
+          "id": "demo-e3",
+          "number": "0988",
+          "date": "2026-01-14",
+          "amount": 41600.0,
+          "note": "Schematic Design \u2014 through 100%",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 100
+          }
+        },
+        {
+          "id": "demo-e4",
+          "number": "1024",
+          "date": "2026-04-22",
+          "amount": 41600.0,
+          "note": "Design Development \u2014 through 100%",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 100,
+            "DD": 100
+          }
+        },
+        {
+          "id": "demo-e5",
+          "number": "1033",
+          "date": "2026-06-30",
+          "amount": 104000.0,
+          "note": "Construction Documents \u2014 through 100%",
+          "sent": true,
+          "paid": true,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 100,
+            "DD": 100,
+            "CD": 100
+          }
+        },
+        {
+          "id": "demo-e6",
+          "number": "1041",
+          "date": "2026-08-05",
+          "amount": 3120.0,
+          "note": "Construction Administration \u2014 through 30%",
+          "sent": true,
+          "paid": false,
+          "reimbursable": 0,
+          "outstanding_prior": 0,
+          "phase_progress": {
+            "DEPOSIT": 100,
+            "SD": 100,
+            "DD": 100,
+            "CD": 100,
+            "CA": 30
+          }
+        }
+      ]
+    }
+  ]
+}
