@@ -388,6 +388,10 @@ say('Created gist '+r.body.id+' with '+Object.keys(current()).length+' assignmen
 $('btnPull').addEventListener('click',async function(){
 if(!gistId()) return say('Enter a gist ID first.','bad');
 say('Pulling…','work');
+/* scan first so every repo has a tile in the DOM — otherwise a gist entry for a
+repo this device hasn't discovered yet (e.g. one only found by a live scan)
+has no matching .cell and applyArrangement silently skips it */
+if(window.lpScan){ try{ await window.lpScan(); }catch(e){} }
 var r=await api('/gists/'+gistId());
 if(!r) return;
 if(r.status===404) return say('Gist not found (404). Check the ID, and that the token can read it.','bad');
