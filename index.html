@@ -1,147 +1,193 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="color-scheme" content="light"><meta name="theme-color" content="#EFE7DA"><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20fill%3D%27%23EFE7DA%27%2F%3E%3Crect%20x%3D%278%27%20y%3D%2714%27%20width%3D%2748%27%20height%3D%272%27%20fill%3D%27%2317140F%27%2F%3E%3Crect%20x%3D%278%27%20y%3D%2746%27%20width%3D%2748%27%20height%3D%272%27%20fill%3D%27%2317140F%27%2F%3E%3Cpath%20d%3D%27M20%2040V24h5v12h9v4z%27%20fill%3D%27%23A6391C%27%2F%3E%3Cpath%20d%3D%27M38%2040V24h6a6%206%200%200%201%200%2012h-1v4zm5-8h1a2%202%200%200%200%200-4h-1z%27%20fill%3D%27%2317140F%27%2F%3E%3C%2Fsvg%3E"><title>Launch Pad</title>
-<link rel="stylesheet" href="https://use.typekit.net/icp5haj.css">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="color-scheme" content="light"><meta name="theme-color" content="#FBF6EE"><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20fill%3D%27%23FBF6EE%27%2F%3E%3Crect%20x%3D%278%27%20y%3D%2714%27%20width%3D%2748%27%20height%3D%272%27%20fill%3D%27%232A2520%27%2F%3E%3Crect%20x%3D%278%27%20y%3D%2746%27%20width%3D%2748%27%20height%3D%272%27%20fill%3D%27%232A2520%27%2F%3E%3Cpath%20d%3D%27M20%2040V24h5v12h9v4z%27%20fill%3D%27%23A2512D%27%2F%3E%3Cpath%20d%3D%27M38%2040V24h6a6%206%200%200%201%200%2012h-1v4zm5-8h1a2%202%200%200%200%200-4h-1z%27%20fill%3D%27%232A2520%27%2F%3E%3C%2Fsvg%3E"><title>Launch Pad</title>
+<link rel="stylesheet" href="https://use.typekit.net/wup0iix.css">
 <link rel="stylesheet" href="https://tscarlisle-ghub.github.io/fonts/tsc-fonts.css">
 <style>
-:root{--paper:#EFE7DA;--ink:#0b0e10;--rust:#c63c17;
---rusty:#ae320f;--port:#92260a;--paprika:#c63c17;--masala:#ca890c;
---rule:rgba(11,14,16,.26);--rule2:rgba(11,14,16,.14);--mute:#8B8375;}
-.sec[data-k="ACTIVE"]{--a:var(--paprika)}
-.sec[data-k="PERSONAL"]{--a:var(--rusty)}
-.sec[data-k="IN-PROGRESS"]{--a:var(--masala)}
-.sec[data-k="ARCHIVE"]{--a:var(--port);--s:.5}
+:root{
+--rust:#A2512D;--rust-mid:#B57340;--rust-soft:#E2BFA7;--rust-wash:#F2E2D2;
+--ink:#2A2520;--ink-soft:#6E5E52;--ink-mute:#8E7E72;
+--paper:#FBF6EE;--paper-edge:#F1E9DA;--paper-deep:#ECE3D0;
+--hairline:rgba(162,81,45,.32);--hairline-strong:rgba(162,81,45,.65);--hairline-ink:rgba(42,37,32,.16);
+--forest:#3F6B4E;--gold:#C99A2E;--alert:#8A2A1F;
+--display:'aviano-sans',Optima,serif;
+--titling:'columbia-titling','Trajan Pro',serif;
+--serif:'urw-antiqua','Iowan Old Style',Georgia,serif;
+--num:'franklin-gothic-condensed','Franklin Gothic',Arial,sans-serif;
+--num-big:'franklin-gothic-compressed','franklin-gothic-condensed',Arial,sans-serif;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;
-font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;font-style:normal;
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;
 -webkit-text-size-adjust:100%;overflow-wrap:anywhere}
 a{color:inherit;text-decoration:none}
-.pg{max-width:1180px;margin:0 auto;
-padding:44px max(32px,env(safe-area-inset-right)) calc(90px + env(safe-area-inset-bottom))
-max(32px,env(safe-area-inset-left))}
-/* masthead */
+.pg{max-width:1120px;margin:0 auto;
+padding:0 max(26px,env(safe-area-inset-right)) calc(60px + env(safe-area-inset-bottom))
+max(26px,env(safe-area-inset-left))}
+
+/* ---------- head ---------- */
+.head{position:sticky;top:0;z-index:30;background:rgba(251,246,238,.92);
+-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+border-bottom:1px solid var(--hairline-ink);margin:0 max(-26px,calc(-1 * env(safe-area-inset-right) - 26px)) 0
+max(-26px,calc(-1 * env(safe-area-inset-left) - 26px));padding:20px max(26px,env(safe-area-inset-right)) 0
+max(26px,env(safe-area-inset-left))}
+.head-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
 a.home{color:inherit;text-decoration:none;border:0}
-a.home:hover{color:var(--paprika)}
-h1{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-weight:700;font-size:clamp(23px,3.5vw,36px);line-height:1;margin:0;
-letter-spacing:.055em;text-transform:uppercase}
-.meta{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline;margin-top:16px;
-font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:15px;letter-spacing:.07em;text-transform:uppercase}
-.meta .r{text-align:right}
-.meta a{border-bottom:1px solid transparent}
-.meta .sep{color:var(--mute)}
-.meta a:hover{border-bottom-color:var(--ink)}
-/* section */
-.sec{margin-top:44px}
-.sec h2{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-weight:700;font-size:19px;letter-spacing:.16em;
-text-transform:uppercase;margin:0 0 9px;color:var(--a,var(--ink))}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--a,var(--rule))}
-.cell{position:relative;border-bottom:1px solid var(--rule);
-padding:calc(22px * var(--s,1)) 26px calc(18px * var(--s,1));
-min-height:calc(214px * var(--s,1));display:flex;flex-direction:column}
-/* vertical rules inset top and bottom */
-.cell::after{content:"";position:absolute;right:0;top:20px;bottom:20px;width:1px;background:var(--rule2)}
-.cell:nth-child(3n)::after{display:none}
-.cell.empty{border-bottom-color:transparent}
-/* last row of every section carries no bottom rule */
-.cell:nth-last-child(-n+3){border-bottom:0}
-.nm{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-weight:700;font-size:calc(26px * var(--s,1));line-height:1.2;
-letter-spacing:.018em;text-transform:uppercase;display:block}
-.pa{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:max(9px,calc(14px * var(--s,1)));line-height:1.42;color:var(--ink);
-margin-top:calc(11px * var(--s,1));word-break:break-all;text-transform:uppercase;letter-spacing:.045em}
-.foot{margin-top:auto;padding-top:calc(22px * var(--s,1));display:flex;align-items:center;
-justify-content:space-between;gap:12px}
-.repo{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:max(9px,calc(12px * var(--s,1)));letter-spacing:.09em;text-transform:uppercase;
-color:var(--mute);border-bottom:1px solid transparent;cursor:pointer;white-space:nowrap}
-.repo:hover{color:var(--a,var(--ink));border-bottom-color:var(--a,var(--ink))}
-.st{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-size:14px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
-.cell:hover .nm{color:var(--a,var(--rust))}
-.cell.priv .pa{color:var(--port)}
-.cell.nosite .pa{color:var(--mute)}
-/* assignment — quiet until you reach for it */
-select.mv{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:max(9px,calc(12px * var(--s,1)));letter-spacing:.06em;text-transform:uppercase;
-color:var(--ink);background-color:transparent;border:1px solid var(--rule2);
-padding:6px 24px 6px 9px;cursor:pointer;line-height:1;border-radius:0;
--webkit-appearance:none;appearance:none;transition:color .15s,border-color .15s;
-background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2010%207%27%3E%3Cpath%20d%3D%27M1%201l4%204%204-4%27%20fill%3D%27none%27%20stroke%3D%27%230b0e10%27%20stroke-width%3D%271.4%27%2F%3E%3C%2Fsvg%3E");
-background-repeat:no-repeat;background-position:right 8px center;background-size:9px 6px}
-.cell:hover select.mv{border-color:var(--a,var(--rule))}
-select.mv:hover{color:var(--a,var(--ink))}
-select.mv:focus{outline:none;border-color:var(--a,var(--rust));color:var(--a,var(--rust))}
-.sec+.sec{margin-top:52px}
-/* settings */
-.set{margin-top:26px;border-top:1px solid var(--rule)}
-.set h3{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-weight:700;font-size:22px;letter-spacing:.02em;text-transform:uppercase;
-margin:22px 0 6px}
-.set .note{color:var(--mute)}
-#status.ok{color:#2E6B45}
-#status.bad{color:var(--rust)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(21px,3vw,29px);line-height:1;margin:0;
+letter-spacing:.03em;text-transform:uppercase}
+a.home:hover h1{color:var(--rust)}
+.head-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.head-owner{font-family:var(--titling);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rust)}
+.head-role{font-family:var(--titling);font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-mute)}
+.head-save{font-family:var(--titling);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+background:var(--forest);color:#fff;border:1px solid var(--forest);padding:6px 14px;cursor:pointer;margin-top:3px;border-radius:0}
+.head-save:hover{background:#345c40;border-color:#345c40}
+.head-saved{font-family:var(--titling);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin-top:1px}
+.nav{display:flex;gap:22px;margin-top:14px;padding-top:10px;border-top:1px solid var(--hairline-ink);flex-wrap:wrap}
+.tab{background:none;border:none;cursor:pointer;padding:0 0 6px;margin:0;
+font-family:var(--titling);font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;
+color:var(--ink);border-bottom:2px solid transparent;transition:color .12s,border-color .12s}
+.tab:hover{color:var(--rust)}
+.tab.active{color:var(--rust);border-bottom-color:var(--rust);font-weight:700}
+
+/* ---------- KPI ribbon ---------- */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--hairline-strong);
+border-bottom:1px solid var(--hairline);margin-top:18px}
+.kpi{border-left:1px solid var(--hairline);padding:14px 16px 14px}
+.kpi:first-child{border-left:none;padding-left:0}
+.kpi .lab{font-family:var(--titling);font-size:8.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-mute)}
+.kpi .val{font-family:var(--num-big);font-size:27px;line-height:1.1;margin-top:8px;color:var(--ink)}
+.kpi.total .val{color:var(--rust)}
+.kpi .sub{font-family:var(--display);font-weight:700;font-size:10px;letter-spacing:.04em;
+text-transform:uppercase;margin-top:6px;color:var(--ink)}
+.kpi .note{font-family:var(--serif);font-style:italic;font-size:11px;color:var(--ink-soft);margin-top:3px}
+
+/* ---------- sections ---------- */
+.sec{margin-top:48px}
+.sec .kicker{font-family:var(--titling);font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:var(--ink-mute)}
+.sec .head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin-top:6px}
+.sec h2{font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:.02em;
+text-transform:uppercase;margin:0;color:var(--ink)}
+.sec .count{font-family:var(--num);font-weight:700;font-size:21px;color:var(--rust);flex-shrink:0}
+.sec .note{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--ink-soft);
+line-height:1.4;margin-top:6px}
+
+/* ---------- rows (formerly cards) ---------- */
+.grid{border-top:1px solid var(--hairline);margin-top:14px}
+.cell{display:flex;align-items:center;justify-content:space-between;gap:14px;
+border-bottom:1px solid var(--hairline);padding:9px 0}
+.cell.empty{display:none}
+.cell .info{min-width:0;position:relative;padding-left:15px}
+.cell .info::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;
+border-radius:50%;background:var(--rust-soft);transition:background .12s}
+.cell:hover .info::before{background:var(--rust)}
+.nm{font-family:var(--display);font-weight:700;font-size:14.5px;line-height:1.25;
+letter-spacing:.02em;text-transform:uppercase;display:block}
+.pa{font-family:var(--serif);font-style:italic;font-size:11.5px;line-height:1.3;color:var(--ink-soft);
+margin-top:2px;word-break:break-all}
+.foot{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.repo{font-family:var(--titling);font-size:8px;letter-spacing:.14em;text-transform:uppercase;
+color:var(--ink);border:1px solid var(--hairline);padding:4px 9px;cursor:pointer;white-space:nowrap;
+transition:color .12s,border-color .12s}
+.repo:hover{color:var(--rust);border-color:var(--rust)}
+.cell:hover .nm{color:var(--rust)}
+.cell.priv .pa{color:var(--alert)}
+.cell.nosite .pa{color:var(--ink-mute)}
+
+select.mv{font-family:var(--titling);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+color:var(--ink);background-color:transparent;border:1px solid var(--hairline);
+padding:4px 20px 4px 8px;cursor:pointer;line-height:1;border-radius:0;
+-webkit-appearance:none;appearance:none;transition:color .12s,border-color .12s;
+background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2010%207%27%3E%3Cpath%20d%3D%27M1%201l4%204%204-4%27%20fill%3D%27none%27%20stroke%3D%27%232A2520%27%20stroke-width%3D%271.4%27%2F%3E%3C%2Fsvg%3E");
+background-repeat:no-repeat;background-position:right 7px center;background-size:8px 6px}
+select.mv:hover{color:var(--rust);border-color:var(--rust)}
+select.mv:focus{outline:none;border-color:var(--rust);color:var(--rust)}
+
+/* ---------- footer ---------- */
+.foot-bar{margin-top:56px;padding-top:16px;padding-bottom:8px;border-top:1px solid var(--hairline-ink);
+text-align:center;font-family:var(--titling);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+color:var(--ink-mute)}
+
+/* ---------- settings ---------- */
+.set{margin-top:22px;border-top:1px solid var(--hairline-ink)}
+.set h3{font-family:var(--titling);font-weight:400;font-size:16px;letter-spacing:.06em;text-transform:uppercase;
+margin:20px 0 4px}
+.set .note{color:var(--ink-mute)}
+#status.ok{color:var(--forest)}
+#status.bad{color:var(--alert)}
 #status.work{color:var(--ink)}
-.set input[type=text]{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:15px;padding:9px 11px;border:1px solid var(--rule);
-background:transparent;color:var(--ink);width:100%;max-width:430px;letter-spacing:.03em}
-.set .row{display:grid;grid-template-columns:250px 1fr;gap:26px;align-items:center;padding:18px 0;
-border-bottom:1px solid var(--rule2)}
-.set label{font-family:'colt-soft','Whitney','Rotis Semi Sans',sans-serif;font-size:14px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
-.set .v{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:16px;line-height:1.45}
-.set input[type=password]{font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:15px;padding:9px 11px;
-border:1px solid var(--rule);background:transparent;color:var(--ink);width:100%;max-width:430px}
-.set label.opt{text-transform:none;letter-spacing:0;font-family:'fairplex-narrow','Surveyor Text',Georgia,serif;font-size:16px;color:var(--ink)}
-.btn{font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:13px;letter-spacing:.09em;text-transform:uppercase;
-border:1px solid var(--rule);background:transparent;color:var(--ink);padding:8px 14px;cursor:pointer}
+.set input[type=text],.set input[type=password]{font-family:var(--serif);font-size:14px;padding:7px 9px;
+border:1px solid var(--hairline-ink);background:#fff;color:var(--ink);width:100%;max-width:400px}
+.set .row{display:grid;grid-template-columns:180px 1fr;gap:20px;align-items:center;padding:13px 0;
+border-bottom:1px solid var(--hairline-ink)}
+.set label{font-family:var(--titling);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-mute)}
+.set .v{font-family:var(--serif);font-size:14px;line-height:1.45}
+.set label.opt{text-transform:none;letter-spacing:0;font-family:var(--serif);font-size:14px;color:var(--ink)}
+.btn{font-family:var(--titling);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+border:1px solid var(--hairline-ink);background:transparent;color:var(--ink);padding:7px 12px;cursor:pointer}
 .btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 button,select,input{font-family:inherit}
 
 /* ---------- tablet ---------- */
-@media (max-width:1024px){
-.pg{padding-top:34px}
-.grid{grid-template-columns:repeat(2,1fr)}
-.cell.empty{display:none}
-.cell{min-height:0;padding:20px 22px 16px}
-.cell::after{display:none}
-a.cell:nth-of-type(odd)::after{display:block}
-.cell:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
-a.cell:last-of-type{border-bottom:0}
+@media (max-width:900px){
+.kpis{grid-template-columns:repeat(3,1fr)}
+.kpi:nth-child(3n+1){border-left:none}
+.kpi{padding:10px 12px 10px}
+.kpi .note{display:none}
 }
-/* ---------- phone: iPhone 17 Pro Max and down ---------- */
+/* ---------- phone ---------- */
 @media (max-width:700px){
-.pg{padding-top:26px;
-padding-left:max(20px,env(safe-area-inset-left));
-padding-right:max(20px,env(safe-area-inset-right));
-padding-bottom:calc(56px + env(safe-area-inset-bottom))}
-h1{font-size:26px;letter-spacing:.05em}
-.meta{display:flex;flex-wrap:wrap;gap:5px 14px;justify-content:space-between;
-font-family:'roma-solid','roma','Sentinel',Georgia,serif;font-size:9px;letter-spacing:.07em;margin-top:11px}
-.meta .r{text-align:right}
-.meta a{padding:2px 0}
-.sec{margin-top:32px}
-.sec+.sec{margin-top:38px}
-.sec h2{font-size:14px;letter-spacing:.13em;margin-bottom:7px}
-.grid{grid-template-columns:1fr}
-.cell{padding:calc(9px * var(--s,1)) 0 calc(8px * var(--s,1));min-height:0}
-a.cell::after,.cell::after{display:none}
-a.cell:nth-of-type(odd)::after{display:none}
-.cell:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
-a.cell:last-of-type{border-bottom:0}
-.nm{font-size:calc(21px * var(--s,1));line-height:1.16}
-.pa{font-size:max(9px,calc(12.5px * var(--s,1)));margin-top:8px;letter-spacing:.04em}
-.foot{padding-top:calc(7px * var(--s,1));align-items:center}
-.st{font-size:12.5px}
-/* 16px stops iOS zooming the page when a control takes focus */
-/* 40% smaller than the desktop control; a <select> opens the iOS picker,
-so a sub-16px size here does not trigger the page zoom that text inputs do */
-select.mv{font-size:9.6px;letter-spacing:.05em;padding:5px 17px 5px 7px;
-background-position:right 6px center;background-size:7px 5px;border-color:var(--rule2)}
-.set .row{grid-template-columns:1fr;gap:8px;padding:16px 0}
-.set h3{font-size:19px}
-.set input[type=password],.set input[type=text]{max-width:none;font-size:16px;padding:12px 12px}
-.set .v,.set .note{font-size:15px;line-height:1.45}
-.btn{min-height:44px;padding:12px 15px;margin:6px 8px 0 0;display:inline-block}
+.pg{padding-left:max(18px,env(safe-area-inset-left));padding-right:max(18px,env(safe-area-inset-right));
+padding-bottom:calc(48px + env(safe-area-inset-bottom))}
+.head{margin-left:max(-18px,calc(-1 * env(safe-area-inset-left) - 18px));
+margin-right:max(-18px,calc(-1 * env(safe-area-inset-right) - 18px));
+padding-left:max(18px,env(safe-area-inset-left));padding-right:max(18px,env(safe-area-inset-right));
+padding-top:12px}
+h1{font-size:18px}
+.head-owner{font-size:9.5px}
+.head-role{font-size:7px}
+.head-save{font-size:8px;padding:5px 11px}
+.nav{gap:14px;margin-top:10px;padding-top:8px}
+.tab{font-size:9px;letter-spacing:.2em}
+.kpis{grid-template-columns:repeat(2,1fr);margin-top:12px}
+.kpi:nth-child(odd){border-left:none}
+.kpi{padding:10px 10px 10px}
+.kpi .val{font-size:21px}
+.kpi .sub{font-size:9px}
+.kpi .note{display:none}
+.sec{margin-top:28px}
+.sec h2{font-size:17px}
+.sec .count{font-size:17px}
+.sec .note{display:none}
+.cell{padding:7px 0}
+.nm{font-size:13px}
+.pa{font-size:10.5px}
+.foot{gap:7px}
+select.mv{font-size:9.4px;padding:5px 18px 5px 7px;background-position:right 6px center}
+.repo{font-size:7.5px;padding:4px 8px}
+.foot-bar{margin-top:36px;font-size:8px}
+.set .row{grid-template-columns:1fr;gap:6px;padding:11px 0}
+.set input[type=password],.set input[type=text]{max-width:none;font-size:16px;padding:10px 10px}
+.btn{min-height:40px;padding:9px 13px;margin:5px 6px 0 0;display:inline-block}
 .btn+.btn{margin-left:0}
-.set div[style*="margin-top:11px"]{margin-top:4px!important}
 }
-/* touch devices: never rely on hover to reveal a control */
 @media (hover:none){
-select.mv{border-color:var(--rule2);color:var(--ink)}
-.cell:hover .nm,.cell:hover .pa{color:inherit}
+select.mv{border-color:var(--hairline);color:var(--ink)}
+.cell:hover .nm{color:inherit}
+.cell:hover .info::before{background:var(--rust-soft)}
 }
-</style></head><body><div class="pg"><h1><a class="home" id="homelink" href="#">Launch Pad</a></h1><div class="meta"><span>AUGUST 16, 2026</span><span><a href="#" id="setlink">Settings</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="rescanTop">Rescan</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="pullTop">Load latest</a><span class="sep"> &nbsp;·&nbsp; </span><a href="#" id="pushTop">Save layout</a></span><span class="r" id="tot">19 REPOS TOTAL</span></div><div id="settings" hidden>
+</style></head><body><div class="pg">
+<div class="head"><div class="head-top"><a class="home" id="homelink" href="#"><h1>Launch Pad</h1></a>
+<div class="head-right"><div class="head-owner">tscarlisle-ghub</div><div class="head-role">GitHub Pages Index</div>
+<button class="head-save" type="button" id="pushTop">Save Layout</button>
+<div class="head-saved" id="lastSaved">Not saved yet</div></div></div>
+<div class="nav"><a class="tab" href="#" id="setlink">Settings</a><a class="tab" href="#" id="rescanTop">Rescan</a><a class="tab" href="#" id="pullTop">Load latest</a></div>
+<div class="kpis">
+<div class="kpi"><div class="lab">Active</div><div class="val" id="kpi-ACTIVE">0</div><div class="sub">In Rotation</div><div class="note">Live tools in daily use</div></div>
+<div class="kpi"><div class="lab">Personal</div><div class="val" id="kpi-PERSONAL">0</div><div class="sub">Off The Clock</div><div class="note">Yours, not the firm's</div></div>
+<div class="kpi"><div class="lab">In Progress</div><div class="val" id="kpi-IN-PROGRESS">0</div><div class="sub">Being Built</div><div class="note">Not yet shipped</div></div>
+<div class="kpi"><div class="lab">Archive</div><div class="val" id="kpi-ARCHIVE">0</div><div class="sub">Retired</div><div class="note">Superseded or shelved</div></div>
+<div class="kpi total"><div class="lab">Total</div><div class="val" id="tot">19</div><div class="sub">All Repos</div><div class="note">Across four groups</div></div>
+</div></div>
+<div id="settings" hidden>
 <section class="set">
 <h3>Settings</h3>
 <div class="row"><label>GitHub token</label><div>
@@ -149,7 +195,7 @@ select.mv{border-color:var(--rule2);color:var(--ink)}
 placeholder="ghp_… or github_pat_… — read-only token">
 <div class="v note">Scopes: <b>repo</b> (read) for private repositories, <b>gist</b> to sync sections.
 Public repos scan without a token. Stored in this browser only — never sent anywhere but api.github.com.</div>
-<div style="margin-top:11px"><button class="btn" type="button" id="btnTest">Test connection</button>
+<div style="margin-top:9px"><button class="btn" type="button" id="btnTest">Test connection</button>
 <button class="btn" type="button" id="btnForget" style="margin-left:8px">Forget token</button></div></div></div>
 
 <div class="row"><label>Gist ID</label><div>
@@ -157,13 +203,13 @@ Public repos scan without a token. Stored in this browser only — never sent an
 placeholder="id from the gist URL — holds launchpad-sections.json">
 <div class="v note">One secret gist holds a single JSON file, <b>launchpad-sections.json</b>, mapping each
 repo to Active / Personal / In Progress / Archive.</div>
-<div style="margin-top:11px"><button class="btn" type="button" id="btnCreate">Create a new gist</button>
+<div style="margin-top:9px"><button class="btn" type="button" id="btnCreate">Create a new gist</button>
 <button class="btn" type="button" id="btnPull" style="margin-left:8px">Pull from gist</button>
 <button class="btn" type="button" id="btnPush" style="margin-left:8px">Push to gist</button></div></div></div>
 
 <div class="row"><label>Status</label><div class="v"><span id="status" class="note">Not connected —
 assignments are saved in this browser only.</span>
-<div class="v note" style="margin-top:7px">Everything on this page saves as you type, in this browser.
+<div class="v note" style="margin-top:6px">Everything on this page saves as you type, in this browser.
 It survives a reload. Clearing site data, or opening it in another browser, starts empty — use the gist
 to carry settings across devices.</div></div></div>
 
@@ -176,85 +222,87 @@ to carry settings across devices.</div></div></div>
 <div class="row"><label>Index</label><div>
 <button class="btn" type="button" id="btnRescan">Rescan now</button>
 <a class="btn" style="margin-left:8px" href="https://github.com/tscarlisle-ghub" target="_blank" rel="noopener">View profile</a>
-<div class="v note" style="margin-top:10px">Two flagged — SPECS has no single entry point,
+<div class="v note" style="margin-top:9px">Two flagged — SPECS has no single entry point,
 FONTS has no Pages.</div></div></div>
-</section></div><div id="index"><section class="sec" data-k="ACTIVE"><h2>ACTIVE PROJECTS</h2><div class="grid" id="grid-ACTIVE"><a class="cell" data-key="CA" href="https://tscarlisle-ghub.github.io/TSC/CA/index.html" target="_blank" rel="noopener">
-<span class="nm">CA Task Ledger</span><span class="pa">/TSC/CA/index.html</span>
+</section></div><div id="index"><section class="sec" data-k="ACTIVE"><div class="kicker">In Rotation</div><div class="head-row"><h2>Active Projects</h2><span class="count">11</span></div><div class="note">Live tools in daily use.</div><div class="grid" id="grid-ACTIVE"><a class="cell" data-key="CA" href="https://tscarlisle-ghub.github.io/TSC/CA/index.html" target="_blank" rel="noopener">
+<span class="info"><span class="nm">CA Task Ledger</span><span class="pa">/TSC/CA/index.html</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/CA">Repo</span></span></a><a class="cell" data-key="SPECS" href="https://tscarlisle-ghub.github.io/TSC/SPECS" target="_blank" rel="noopener">
-<span class="nm">Specifications</span><span class="pa">/TSC/SPECS</span>
+<span class="info"><span class="nm">Specifications</span><span class="pa">/TSC/SPECS</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/SPECS">Repo</span></span></a><a class="cell" data-key="TSC-CON" href="https://tscarlisle-ghub.github.io/TSC/TSC-CON/index.html" target="_blank" rel="noopener">
-<span class="nm">Supplementary Conditions Builder</span><span class="pa">/TSC/TSC-CON/index.html</span>
+<span class="info"><span class="nm">Supplementary Conditions Builder</span><span class="pa">/TSC/TSC-CON/index.html</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-CON">Repo</span></span></a><a class="cell" data-key="TSC-PR" href="https://tscarlisle-ghub.github.io/TSC/TSC-PR/index.html" target="_blank" rel="noopener">
-<span class="nm">Proposal Generator</span><span class="pa">/TSC/TSC-PR/index.html</span>
+<span class="info"><span class="nm">Proposal Generator</span><span class="pa">/TSC/TSC-PR/index.html</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-PR">Repo</span></span></a><a class="cell" data-key="TSC-QUEST" href="https://tscarlisle-ghub.github.io/TSC/TSC-QUEST/index.html" target="_blank" rel="noopener">
-<span class="nm">Design Questionnaire</span><span class="pa">/TSC/TSC-QUEST/index.html</span>
+<span class="info"><span class="nm">Design Questionnaire</span><span class="pa">/TSC/TSC-QUEST/index.html</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-QUEST">Repo</span></span></a><a class="cell" data-key="TSC-SQF" href="https://tscarlisle-ghub.github.io/TSC/TSC-SQF/index.html" target="_blank" rel="noopener">
-<span class="nm">Square Foot Cost Estimator</span><span class="pa">/TSC/TSC-SQF/index.html</span>
+<span class="info"><span class="nm">Square Foot Cost Estimator</span><span class="pa">/TSC/TSC-SQF/index.html</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-SQF">Repo</span></span></a><a class="cell" data-key="CFO" href="https://tscarlisle-ghub.github.io/TSC/CFO/index.html" target="_blank" rel="noopener">
-<span class="nm">CFO Dashboard</span><span class="pa">/TSC/CFO/index.html</span>
+<span class="info"><span class="nm">CFO Dashboard</span><span class="pa">/TSC/CFO/index.html</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/CFO">Repo</span></span></a><a class="cell" data-key="CMA-YEAREND" href="https://tscarlisle-ghub.github.io/cma-yearend/" target="_blank" rel="noopener">
-<span class="nm">Year-End Cash Flow Estimator</span><span class="pa">/cma-yearend/</span>
+<span class="info"><span class="nm">Year-End Cash Flow Estimator</span><span class="pa">/cma-yearend/</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/cma-yearend">Repo</span></span></a><a class="cell" data-key="CMAOFFICE" href="https://tscarlisle-ghub.github.io/cmaoffice/" target="_blank" rel="noopener">
-<span class="nm">Mtn Brook Village Office Finances</span><span class="pa">/cmaoffice/</span>
+<span class="info"><span class="nm">Mtn Brook Village Office Finances</span><span class="pa">/cmaoffice/</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/cmaoffice">Repo</span></span></a><a class="cell" data-key="TSC-PB" href="https://tscarlisle-ghub.github.io/TSC/TSC-PB/index.html" target="_blank" rel="noopener">
-<span class="nm">CMA Project Board</span><span class="pa">/TSC/TSC-PB/index.html</span>
+<span class="info"><span class="nm">CMA Project Board</span><span class="pa">/TSC/TSC-PB/index.html</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-PB">Repo</span></span></a><a class="cell" data-key="DESIGN" href="https://tscarlisle-ghub.github.io/design/" target="_blank" rel="noopener">
-<span class="nm">Carlisle Design System</span><span class="pa">/design/</span>
+<span class="info"><span class="nm">Carlisle Design System</span><span class="pa">/design/</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE" selected>ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/design">Repo</span></span></a><div class="cell empty"></div></div></section><section class="sec" data-k="PERSONAL"><h2>PERSONAL PROJECTS</h2><div class="grid" id="grid-PERSONAL"><a class="cell" data-key="FIN" href="https://tscarlisle-ghub.github.io/fin/" target="_blank" rel="noopener">
-<span class="nm">TSC-Finances</span><span class="pa">/fin/</span>
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/design">Repo</span></span></a><div class="cell empty"></div></div></section><section class="sec" data-k="PERSONAL"><div class="kicker">Off The Clock</div><div class="head-row"><h2>Personal Projects</h2><span class="count">2</span></div><div class="note">Yours, not the firm's.</div><div class="grid" id="grid-PERSONAL"><a class="cell" data-key="FIN" href="https://tscarlisle-ghub.github.io/fin/" target="_blank" rel="noopener">
+<span class="info"><span class="nm">TSC-Finances</span><span class="pa">/fin/</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL" selected>PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/fin">Repo</span></span></a><a class="cell" data-key="CHESS" href="https://tscarlisle-ghub.github.io/chess/" target="_blank" rel="noopener">
-<span class="nm">The Second Year — Chess Guide</span><span class="pa">/chess/</span>
+<span class="info"><span class="nm">The Second Year — Chess Guide</span><span class="pa">/chess/</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL" selected>PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/chess">Repo</span></span></a><div class="cell empty"></div></div></section><section class="sec" data-k="IN-PROGRESS"><h2>IN PROGRESS</h2><div class="grid" id="grid-IN-PROGRESS"><a class="cell" data-key="FILEORG" href="https://tscarlisle-ghub.github.io/TSC/fileorg/index.html" target="_blank" rel="noopener">
-<span class="nm">Folder Reorganizer</span><span class="pa">/TSC/fileorg/index.html</span>
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/chess">Repo</span></span></a><div class="cell empty"></div></div></section><section class="sec" data-k="IN-PROGRESS"><div class="kicker">Being Built</div><div class="head-row"><h2>In Progress</h2><span class="count">3</span></div><div class="note">Not yet shipped.</div><div class="grid" id="grid-IN-PROGRESS"><a class="cell" data-key="FILEORG" href="https://tscarlisle-ghub.github.io/TSC/fileorg/index.html" target="_blank" rel="noopener">
+<span class="info"><span class="nm">Folder Reorganizer</span><span class="pa">/TSC/fileorg/index.html</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/fileorg">Repo</span></span></a><a class="cell" data-key="TSC-CLAUDE" href="https://tscarlisle-ghub.github.io/TSC/TSC-CLAUDE/index.html" target="_blank" rel="noopener">
-<span class="nm">TSC-Claude</span><span class="pa">/TSC/TSC-CLAUDE/index.html</span>
+<span class="info"><span class="nm">TSC-Claude</span><span class="pa">/TSC/TSC-CLAUDE/index.html</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/TSC/tree/main/TSC-CLAUDE">Repo</span></span></a><a class="cell" data-key="PROJECT-BOARD" href="https://tscarlisle-ghub.github.io/Project-Board/" target="_blank" rel="noopener">
-<span class="nm">Project Board — To-Do</span><span class="pa">/Project-Board/</span>
+<span class="info"><span class="nm">Project Board — To-Do</span><span class="pa">/Project-Board/</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS" selected>IN PROGRESS</option><option value="ARCHIVE">ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/Project-Board">Repo</span></span></a></div></section><section class="sec" data-k="ARCHIVE"><h2>ARCHIVE</h2><div class="grid" id="grid-ARCHIVE"><a class="cell" data-key="CATALOG" href="https://tscarlisle-ghub.github.io/catalog/" target="_blank" rel="noopener">
-<span class="nm">House Archive</span><span class="pa">/catalog/</span>
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/Project-Board">Repo</span></span></a></div></section><section class="sec" data-k="ARCHIVE"><div class="kicker">Retired</div><div class="head-row"><h2>Archive</h2><span class="count">3</span></div><div class="note">Retired or superseded.</div><div class="grid" id="grid-ARCHIVE"><a class="cell" data-key="CATALOG" href="https://tscarlisle-ghub.github.io/catalog/" target="_blank" rel="noopener">
+<span class="info"><span class="nm">House Archive</span><span class="pa">/catalog/</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/catalog">Repo</span></span></a><a class="cell" data-key="CMA" href="https://tscarlisle-ghub.github.io/cma/" target="_blank" rel="noopener">
-<span class="nm">CMA</span><span class="pa">/cma/</span>
+<span class="info"><span class="nm">CMA</span><span class="pa">/cma/</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select>
 <span class="repo" data-href="https://github.com/tscarlisle-ghub/cma">Repo</span></span></a><a class="cell nosite" data-key="FONTS" href="https://tscarlisle-ghub.github.io/tscarlisle-ghub/fonts" target="_blank" rel="noopener">
-<span class="nm">Fonts</span><span class="pa">/tscarlisle-ghub/fonts</span>
+<span class="info"><span class="nm">Fonts</span><span class="pa">/tscarlisle-ghub/fonts</span></span>
 <span class="foot">
 <select class="mv" onclick="event.preventDefault();event.stopPropagation()"><option value="ACTIVE">ACTIVE</option><option value="PERSONAL">PERSONAL</option><option value="IN-PROGRESS">IN PROGRESS</option><option value="ARCHIVE" selected>ARCHIVE</option></select>
-<span class="repo" data-href="https://github.com/tscarlisle-ghub/fonts">Repo</span></span></a></div></section></div></div>
+<span class="repo" data-href="https://github.com/tscarlisle-ghub/fonts">Repo</span></span></a></div></section></div>
+<div class="foot-bar" id="footBar">tscarlisle-ghub · 19 repos</div>
+</div>
 <script>
 window.lp = (function(){
 var MEM={}, KEY='lp_arr';
@@ -297,13 +345,28 @@ function stamp(){ var a=saved(); return (a&&a.updated)||null; }
 
 function recount(){
 var n=document.querySelectorAll('.cell[data-key]').length;
-var t=document.getElementById('tot'); if(t) t.textContent=n+' REPOS TOTAL';
+var t=document.getElementById('tot'); if(t) t.textContent=n;
 document.querySelectorAll('.grid').forEach(function(g){
 g.querySelectorAll('.cell.empty').forEach(function(e){e.remove();});
 var c=g.querySelectorAll('.cell').length, pad=(3-(c%3))%3;
 for(var i=0;i<pad;i++){var d=document.createElement('div');d.className='cell empty';g.appendChild(d);}
-g.closest('.sec').style.display=c?'':'none';
+var sec=g.closest('.sec'); sec.style.display=c?'':'none';
+var cnt=sec.querySelector('.count'); if(cnt) cnt.textContent=c;
+var kpiKey=g.id.replace('grid-',''), kpiEl=document.getElementById('kpi-'+kpiKey);
+if(kpiEl) kpiEl.textContent=c;
 });
+var fb=document.getElementById('footBar');
+if(fb) fb.textContent='tscarlisle-ghub · '+n+' repo'+(n===1?'':'s')+
+' · index last built '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+function touchSaved(){
+var el=document.getElementById('lastSaved'); if(!el) return;
+var s=stamp(); if(!s){el.textContent='Not saved yet';return;}
+try{
+var d=new Date(s);
+el.textContent='Last saved '+(d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear()+' '+
+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+}catch(e){el.textContent='Last saved';}
 }
 document.addEventListener('click',function(e){
 var ext=e.target.closest('a[href^="http"]');
@@ -315,14 +378,15 @@ window.open(r.dataset.href,'_blank','noopener');}
 document.addEventListener('change',function(e){
 if(!e.target.matches('select.mv')) return;
 var cell=e.target.closest('.cell'), host=document.getElementById('grid-'+e.target.value);
-if(cell&&host){host.appendChild(cell);recount();save();}
+if(cell&&host){host.appendChild(cell);recount();save();touchSaved();}
 });
-document.addEventListener('DOMContentLoaded',function(){ applyArrangement(saved()); recount(); });
+document.addEventListener('DOMContentLoaded',function(){ applyArrangement(saved()); recount(); touchSaved(); });
 return {arrangement:arrangement, applyArrangement:applyArrangement, save:save, saved:saved,
-stamp:stamp, recount:recount, get:get, put:put,
+stamp:stamp, recount:recount, touchSaved:touchSaved, get:get, put:put,
 current:arrangement, apply:applyArrangement};
 })();
 window.recount=function(){window.lp.recount();};
+window.lpTouchSaved=function(){window.lp.touchSaved();};
 </script>
 <script>
 (function(){
@@ -402,7 +466,8 @@ var text=f.content;
 if(f.truncated&&f.raw_url){ text=await (await fetch(f.raw_url)).text(); }
 var map; try{map=JSON.parse(text);}catch(e){return say(FILE+' is not valid JSON.','bad');}
 put('lp_gist',gistId());
-say('Pulled '+Object.keys(map).length+' assignments — '+apply(map)+' moved.','ok');
+var moved=apply(map); if(window.lpTouchSaved) window.lpTouchSaved();
+say('Pulled '+Object.keys(map).length+' assignments — '+moved+' moved.','ok');
 });
 
 $('btnPush').addEventListener('click',async function(){
@@ -414,6 +479,7 @@ if(!r) return;
 if(r.status===404) return say('Gist not found, or the token lacks gist scope.','bad');
 if(!r.ok) return say('GitHub returned '+r.status+'.','bad');
 put('lp_gist',gistId()); window.lp.save();
+if(window.lpTouchSaved) window.lpTouchSaved();
 say('Saved '+count(current())+' tiles to the gist.','ok');
 });
 
@@ -435,6 +501,7 @@ var pay; try{pay=JSON.parse(text);}catch(e){return;}
 var mine=window.lp.stamp(), theirs=pay.updated||null;
 if(theirs && (!mine || theirs>mine)){
 var n=window.lp.applyArrangement(pay); window.lp.save();
+if(window.lpTouchSaved) window.lpTouchSaved();
 say('Loaded the newer arrangement from the gist — '+n+' tiles repositioned.','ok');
 } else if(mine && theirs && mine>theirs){
 say('This device has newer changes than the gist. Save layout to publish them.','note');
@@ -541,8 +608,8 @@ a.className='cell'+(e.priv?' priv':'')+(e.status==='NO SITE'?' nosite':'');
 a.dataset.key=e.key; a.href=e.href; a.target='_blank'; a.rel='noopener';
 var opts=secs.map(function(x){
 return '<option value="'+x[1]+'"'+(x[1]===sec?' selected':'')+'>'+x[0]+'</option>';}).join('');
-a.innerHTML='<span class="nm">'+e.name+'</span>'+
-'<span class="pa">'+e.path.toUpperCase()+'</span>'+
+a.innerHTML='<span class="info"><span class="nm">'+e.name+'</span>'+
+'<span class="pa">'+e.path.toUpperCase()+'</span></span>'+
 '<span class="foot">'+
 '<select class="mv" onclick="event.preventDefault();event.stopPropagation()">'+opts+'</select>'+
 '<span class="repo" data-href="'+(e.repo||'')+'">Repo</span></span>';
@@ -562,6 +629,7 @@ host.appendChild(build(e,sec,secs));
 });
 window.lp.applyArrangement(window.lp.saved());
 window.lp.recount(); window.lp.save();
+if(window.lpTouchSaved) window.lpTouchSaved();
 var np=entries.filter(function(e){return e.priv;}).length;
 say('Scanned '+entries.length+' entries'+(tok()
 ?' — '+np+' private included.'
@@ -591,7 +659,7 @@ if(hl) hl.addEventListener('click',function(e){
 var s=document.getElementById('settings'), i=document.getElementById('index');
 if(s&&i&&!s.hasAttribute('hidden')){
 e.preventDefault(); s.setAttribute('hidden',''); i.removeAttribute('hidden');
-var sl=document.getElementById('setlink'); if(sl) sl.textContent='Settings';
+var sl=document.getElementById('setlink'); if(sl){sl.textContent='Settings';sl.classList.remove('active');}
 window.scrollTo(0,0);
 }
 });
@@ -599,8 +667,8 @@ document.getElementById('setlink').addEventListener('click',function(e){
 e.preventDefault();
 var s=document.getElementById('settings'), i=document.getElementById('index');
 var open=s.hasAttribute('hidden');
-if(open){s.removeAttribute('hidden');i.setAttribute('hidden','');this.textContent='Index';}
-else{s.setAttribute('hidden','');i.removeAttribute('hidden');this.textContent='Settings';}
+if(open){s.removeAttribute('hidden');i.setAttribute('hidden','');this.textContent='Index';this.classList.add('active');}
+else{s.setAttribute('hidden','');i.removeAttribute('hidden');this.textContent='Settings';this.classList.remove('active');}
 window.scrollTo(0,0);
 });
 </script></body></html>
